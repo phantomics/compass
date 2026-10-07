@@ -95,6 +95,17 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
    Invariants) and suggest `compass-review` before acceptance and, once it
    exists, the §22 toolchain.
 
+9. **Offer the AGENTS snippet (first document in a corpus).** When scaffolding a
+   project's *first* Compass document, offer to install
+   `../../templates/AGENTS.snippet.md` (the Compass documentation block) into the
+   project's root `AGENTS.md`, so a fresh OpenCode session routes doc work to the
+   `compass-*` skills. If the project has no `AGENTS.md`, create it from the
+   snippet; if one exists, **append** the Compass section rather than
+   overwriting. Fill the project-specific facts (namespace, `doc/` location,
+   federation index). If the project also uses the Square testing standard,
+   `square-author` installs the matching testing block; the two sections
+   concatenate in one `AGENTS.md`.
+
 ## Invariants
 
 - This skill **proposes**; the §22 toolchain **disposes**. Until
