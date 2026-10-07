@@ -44,7 +44,6 @@ cites:
     external: true
 decisions:
   - PSYCHE-D16
-  - PSYCHE-O1                          # (open-questions listed under open-questions:)
 open-questions:
   - PSYCHE-O1
 glossary:      Glossary.PsycheTerms

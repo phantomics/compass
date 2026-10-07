@@ -70,7 +70,7 @@ resolving cross-references across a federated corpus (§9, §10).
 
 ## Settled Decisions
 
-### D1 — Four skills, split by shape
+### COMPASS-D1 — Four skills, split by shape
 
 **Status:** Accepted
 **Context:** The layer must serve drafting, review, retrieval, and derivation.
@@ -84,7 +84,7 @@ and `compass-derive` are tool-shaped (portable to MCP).
 distinct trigger conditions and dependency profiles, and the §23 S9 harness
 mapping already assumes the four-way split).
 
-### D2 — Advisory-only until the toolchain exists
+### COMPASS-D2 — Advisory-only until the toolchain exists
 
 **Status:** Accepted
 **Context:** The §22 toolchain (`COMPASS-DRAFT-toolchain`) is the deterministic
@@ -98,7 +98,7 @@ the near-term drafting/review value that needs no deterministic backstop);
 reimplement validation inside the skills (rejected: duplicates the §22 authority
 and invites drift).
 
-### D3 — Build author/review/lookup now; defer derive
+### COMPASS-D3 — Build author/review/lookup now; defer derive
 
 **Status:** Accepted
 **Context:** `compass-derive` wraps deterministic backends — the toolchain and
@@ -114,7 +114,7 @@ to wrap and would be hollow); build only `compass-author` (rejected:
 `compass-review` and `compass-lookup` are viable today and independently
 useful).
 
-### D4 — Harness-neutral core plus shared reference bundle
+### COMPASS-D4 — Harness-neutral core plus shared reference bundle
 
 **Status:** Accepted
 **Context:** §23 S9 requires the skills' substance to be authored once and
@@ -178,6 +178,8 @@ LLM help (§7, §22). What granularity should the skills record — assistant na
 only, model version, session id, per-section attribution (cf. §23 P2)?
 
 ## Prior Art
+
+Table: Prior systems and what this plan draws from each.
 
 | System | What to draw from |
 |---|---|

@@ -21,6 +21,12 @@ One architectural/design decision, ADR-shaped, with a namespaced id
 **Alternatives:** …what was rejected, and why…
 ```
 
+> **Pending amendment — heading form.** §8's example uses the short heading
+> `### D16 — …`. COMPASS-DRAFT-toolchain-D16 requires the full identifier,
+> `### PSYCHE-D16 — …` (or a provisional `### <NS>-DRAFT-<slug>-D<n> — …`), and
+> the toolchain warns on the short form. The genre templates already use the
+> full form; skills write it.
+
 The `decisions:` front-matter field lists the IDs a document introduces or
 amends. IDs are stable and namespaced, so one document may cite another's `D`.
 

@@ -16,6 +16,8 @@ relates-to:
   - COMPASS-DRAFT-authoring-assistance
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-source-headers
+  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-DRAFT-agent-context-eval
 cites:
   - title:     "Agents Don't Need Memory. They Need Documentation. (Kevin Liao, 2026-10-03)"
     locator:   https://liao.gg/blog/agents-dont-need-memory
@@ -400,7 +402,7 @@ defined boundary: private partition for working knowledge, Compass `doc/` for
 the published record, no `.operator-shared/`? Or both, with coexistence as the
 interim arrangement until native delivery exists?
 
-**Resolution (2026-10-06):** Import only. Compass adopts the parts of Operator
+**Resolution (2026-10-07):** Import only. Compass adopts the parts of Operator
 Memory that serve its goals, in Compass's own form, and does not recommend
 running the two side by side, since parallel models of project truth would
 diverge. No `.operator*` directories or `operator.md` are adopted. Recorded in
@@ -416,7 +418,7 @@ what a given session needs: by the current repository's namespace, by
 components named in the task, or by authority level? Excluding `Excluded`
 documents is the obvious first cut.
 
-**Resolution (2026-10-06):** Entries carry id, title, genre, status, component,
+**Resolution (2026-10-07):** Entries carry id, title, genre, status, component,
 size, and a `read-if:` line. The catalog lists metadata only, never document
 bodies. It covers the current namespace plus documents one hop out, leaves out
 Excluded documents, has a compact section of accepted decisions, and has a
@@ -433,7 +435,7 @@ navigation-oriented `Ref` subtype (agent-maintained, validated against the file
 tree)? Or should it treat the map as out of scope and point to tools such as
 Operator Memory's index?
 
-**Resolution (2026-10-06):** A per-file navigation map is in scope;
+**Resolution (2026-10-07):** A per-file navigation map is in scope;
 symbol-level API reference stays ceded (§2). The map is generated
 deterministically, never by an LLM, from a standard header comment in each
 source file and optional directory READMEs. It is not a `Ref` subtype. The
@@ -452,6 +454,17 @@ the layer entirely to an Operator-style private partition? Or should it let
 such notes accumulate and be promoted into typed documents through the
 maturity ladder?
 
+**Resolution (2026-10-07):** Add a **Memo** genre (prefix `Memo.`, code `ME`)
+for verified, present-tense properties of existing software whose understanding
+is key to working on it. It is not a scratchpad: a memo must be durable,
+consequential, not evident from the code, and grounded in checkable evidence.
+Memos are numbered records (`<NS>-M<n>`) in a host document, normally one per
+component, so each keeps its own identity, status, routing line, catalog entry,
+and supersession without one file per memo. A `Current` memo is Authoritative,
+and memos may later be folded into a `Ref`. Recorded in
+[COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) as
+COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4.
+
 ### COMPASS-DRAFT-operator-memory-O5 — Agent authority to update typed documents
 
 If an agent proposes revisions to a `Ref` with status `Current` or a `Spec`
@@ -459,6 +472,19 @@ after its work, who applies them? A component-scope `Log` may be self-accepted
 (§6). Project- and program-scope documents need a second reviewer. Is
 there a lighter review path for agent-proposed corrections to reference
 documents? And how does `provenance:` record per-edit assistance (cf. §23 P2)?
+
+**Resolution (2026-10-07):** No lighter path. Changes to project- and
+program-scope documents are always reviewed by a human: an agent proposes, and a
+human commits or approves the change. Moving any document or memo into an
+authoritative status needs a human `approved-by`, and an agent never sets it.
+Purely mechanical rewrites (identifier assignment, link repair) pass review
+without reopening acceptance. A namespace's steward, declared in the manifest as
+a solo maintainer, may approve their own documents. Per-edit assistance is
+recorded in `Assisted-by:` commit trailers and derived from Git, leaving
+`provenance:` to record a document's origin. Agents' permissions are tabulated
+by scope, and a `compass-maintain` skill proposes the updates a change implies.
+Recorded in [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) as
+COMPASS-DRAFT-agent-workflow-D5 to COMPASS-DRAFT-agent-workflow-D9.
 
 ### COMPASS-DRAFT-operator-memory-O6 — Measuring whether any of this works
 
@@ -468,3 +494,15 @@ without the injected catalog, measuring exploration cost, decision-record
 consultation, correctness with respect to superseded documents, and whether
 updates were made. Could that evaluation be the first rigorous account of
 "documentation as LLM context" that §23 says does not yet exist?
+
+**Status (2026-10-07):** Open. Carried forward as
+COMPASS-DRAFT-agent-workflow-O1 in
+[COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), as a documented,
+repeatable test to be committed to the Compass repository. The protocol is
+[COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md). Since this survey was
+written, three 2026 studies have evaluated repository context files
+(Gloaguen et al.; Khatri; Chatlatanagulchai et al.) and found no measurable gain
+in task success, at over 20% added cost. The premise that no rigorous account
+exists, here and in §23, is therefore out of date. Those studies are snapshot
+studies of single sessions; the evaluation's primary track tests quality over
+many sessions, which they do not measure.

@@ -16,6 +16,8 @@ relates-to:
   - COMPASS-DRAFT-authoring-assistance
   - COMPASS-DRAFT-operator-memory
   - COMPASS-DRAFT-source-headers
+  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-DRAFT-agent-context-eval
 cites:
   - title:     ocicl README
     locator:   "Lisp Usage; ocicl Scope (Local-Only Mode)"
@@ -48,6 +50,7 @@ decisions:
   - COMPASS-DRAFT-toolchain-D13
   - COMPASS-DRAFT-toolchain-D14
   - COMPASS-DRAFT-toolchain-D15
+  - COMPASS-DRAFT-toolchain-D16
 open-questions:
   - COMPASS-DRAFT-toolchain-O1
   - COMPASS-DRAFT-toolchain-O2
@@ -199,6 +202,8 @@ that document. The slug grammar is `[a-z0-9]+(-[a-z0-9]+)*`, lowercase only,
 which keeps the uppercase `-D`/`-O` suffix unambiguous. `compass assign` gives
 the document its canonical number and each of its provisional register entries a
 canonical `<NS>-D<n>`/`<NS>-O<n>`, in a single operation. Amends §8 and §13.
+The same form applies to memo records (`<NS>-DRAFT-<slug>-M<n>`, assigned
+`<NS>-M<n>`) introduced by COMPASS-DRAFT-agent-workflow-D2.
 
 **Alternatives:**
 - Allocate canonical `D`/`O` numbers while writing. Rejected: it reintroduces
@@ -436,7 +441,10 @@ data), containing, in order:
 4. **Documents**, grouped by weight. Each entry gives the id, title, genre (with
    subtype), status, component, size, and the `read-if:` line if present;
 5. **Accepted decisions**: one line per `D`-record of weight Authoritative,
-   giving its id, title, and host document.
+   giving its id, title, and host document;
+6. **Current memos**: one line per M-record of weight Authoritative
+   (COMPASS-DRAFT-agent-workflow-D4), giving its id, title, and `**Read-if:**`
+   line. Memo host documents are not listed as documents.
 
 Scope and filtering:
 - The catalog covers the repository's own namespaces, plus federated documents
@@ -472,14 +480,16 @@ keeps history but needs to tell an agent how much each document counts for
 current behaviour. The survey sketched a ranking. Making it computable exposes
 the §6 gaps listed under [Problem](#problem).
 
-**Decision:** Every document and `D`-record has a derived **weight**: one of
+**Decision:** Every document, `D`-record, and M-record
+(COMPASS-DRAFT-agent-workflow-D2) has a derived **weight**: one of
 Authoritative, Directive, Contextual, Provisional, or Excluded, defined in
 [Authority weight](#authority-weight). Weight is computed, never written in
 front-matter. Two rules close the §6 gaps:
 - **Status sets for Glossary and Ideation.** `Glossary` uses the reference-genre
   statuses (`Current`, `Draft`, `Deprecated`). `Ideation` uses the
   proposal-and-record statuses. Amends §6 (patch).
-- **Register entries.** A `D`-record's weight comes from its own `**Status:**`.
+- **Register entries.** A `D`- or M-record's weight comes from its own
+  `**Status:**`.
   Its host document's *lifecycle* then caps it: if the host is Provisional, the
   record is at most Provisional, and if the host is Excluded, so is the record.
   The host's *genre* does not cap it, so a decision recorded in an `Accepted`
@@ -557,7 +567,7 @@ API reference remains ceded.
 - YAML front-matter in source files. Rejected: easily confused with §7, and every
   language would need a YAML-aware extractor.
 
-### COMPASS-DRAFT-toolchain-D15 — Manifest keys for commands, map, and catalog
+### COMPASS-DRAFT-toolchain-D15 — Manifest keys for commands, map, catalog, and stewards
 
 **Status:** Proposed
 
@@ -565,21 +575,56 @@ API reference remains ceded.
 to build and test a project. In Operator Memory they live in prose instructions.
 Many Common Lisp projects have no shell command topology at all: they are built
 and tested from the REPL. The map and catalog also need per-repository settings.
+Solo-steward approval (COMPASS-DRAFT-agent-workflow-D6) needs each namespace's
+steward and approval mode written down where the validator can read them.
 
-**Decision:** The project manifest (D4) gains three optional keys:
+**Decision:** The project manifest (D4) gains four optional keys:
 - `:commands`: a list of named commands. Each is `:shell` (a command line) or
   `:repl` (a form to evaluate), with an optional `:doc`. The catalog lists them.
 - `:map`: `:exclude`, a list of glob patterns for vendored or third-party code.
 - `:catalog`: `:budget`, in bytes (default 8192).
+- `:stewards`: one entry per owned namespace, giving `:steward` (the identity as
+  it appears in `authors` and `approved-by`, canonicalised through `.mailmap`)
+  and `:approval`, either `:second-reviewer` (the default, the §6 rule) or
+  `:solo`. The rule `review/approver` reads it.
 
-All three fit the restricted reader of [The ledger and manifest](#the-ledger-and-manifest)
-without change.
+All four fit the restricted reader of [The ledger and manifest](#the-ledger-and-manifest)
+without change; `:approval` takes keywords rather than `t` for that reason.
 
 **Alternatives:**
 - Commands as prose in `AGENTS.md`. Rejected: unchecked, and not reachable by
   the catalog generator.
 - Shell commands only. Rejected: most of the federation's projects are
   REPL-driven.
+
+### COMPASS-DRAFT-toolchain-D16 — Register record headings carry the full identifier
+
+**Status:** Proposed
+
+**Context:** The register scanner finds `D`, `O`, and M records by their
+headings, so the heading form must be unambiguous. The corpus uses three forms.
+§8's example uses a short form (`### D16 — …`), which names no namespace. This
+Plan, COMPASS-DRAFT-agent-workflow, and the genre templates use the full
+identifier (`### COMPASS-DRAFT-toolchain-D1 — …`). COMPASS-DRAFT-authoring-assistance
+mixes the two, with short decision headings and full open-question headings. A
+short heading cannot express a provisional identifier, cannot be found by a
+corpus-wide search for its identifier, and leaves the scanner to guess the
+namespace from the host.
+
+**Decision:** A register record heading MUST be an H3 of the form
+`### <ID> — <title>`, where `<ID>` is the record's full canonical or provisional
+identifier and the separator is an em dash. The scanner recognises the short
+form `### D<n> — …` / `### O<n> — …` only to report it (`register/heading-form`,
+warning), and reads it as `<host namespace>-D<n>` meanwhile. Amends §8 (minor):
+the §8 example changes to the full form. The headings of
+COMPASS-DRAFT-authoring-assistance are corrected in the same change as this
+decision.
+
+**Alternatives:**
+- Allow both forms permanently. Rejected: two forms double the scanner's
+  grammar and the reviewer's burden, and only one works for provisional IDs.
+- Require the short form, deriving the namespace from the host. Rejected: it
+  breaks grep-based lookup and federated citation.
 
 ## The uniqueness guarantee
 
@@ -658,6 +703,9 @@ allocated without a provisional alias. The second is a document whose
 provisional ID `COMPASS-DRAFT-authoring-assistance` is kept as an alias. The
 third is a decision record linked to its host document.
 
+`:kind` is one of `:document`, `:decision`, `:open-question`, or `:memo`
+(COMPASS-DRAFT-agent-workflow-D2). Register entries of every kind carry `:host`.
+
 The project manifest:
 
 ```lisp
@@ -669,15 +717,16 @@ The project manifest:
             (:name :check :shell "make check DEPS=ocicl"
              :doc "Validate this repository's corpus"))
  :map (:exclude ("ocicl/**"))
- :catalog (:budget 8192))
+ :catalog (:budget 8192)
+ :stewards ((:namespace "COMPASS" :steward "Sloane" :approval :solo)))
 ```
 
 Description: the manifest declares that this repository owns the COMPASS
 namespace and keeps its documents in `doc/`. It lists two federated
 repositories by local path. The optional keys of
 COMPASS-DRAFT-toolchain-D15 add one REPL command and one shell command,
-exclude the ocicl dependency directory from the source map, and set the catalog
-budget.
+exclude the ocicl dependency directory from the source map, set the catalog
+budget, and declare Sloane the solo steward of the COMPASS namespace.
 
 Both files are read with `*read-eval*` bound to false and a reader restricted to
 strings, integers, keywords, and lists. Reading them can neither run code nor
@@ -694,12 +743,15 @@ are checked top to bottom; the first match applies.
 |---|---|---|
 | Excluded | Any document or record with status `Deprecated`, `Superseded`, `Rejected`, or `Withdrawn` | Not used for current behaviour; follow `superseded-by` instead. Left out of the catalog |
 | Provisional | Any document or record with status `Draft`, `Proposed`, or `In-Review`; any record whose host is Provisional | Work in progress; cite with caution |
-| Authoritative | `Ref`, `Guide`, `Spec` with status `Current`; `Arch` with status `Accepted` or `Design-Record` (for design intent); `D`-records with status `Accepted` or `Implemented` | Present truth; the code should agree, and disagreement is a finding to raise |
+| Authoritative | `Ref`, `Guide`, `Spec` with status `Current`; `Arch` with status `Accepted` or `Design-Record` (for design intent); `D`-records with status `Accepted` or `Implemented`; M-records with status `Current` | Present truth; the code should agree, and disagreement is a finding to raise |
 | Directive | `Plan` with status `Accepted`; `Glossary` with status `Current` | Intended direction and binding terminology |
 | Contextual | `Log`, `Eval`, `Survey`, `Ideation` with status `Accepted` or `Implemented`; `Plan` and `Arch` with status `Implemented` | History and rationale; explains *why*, never overrides an Authoritative document |
 
-Any combination the table does not list is Contextual. `O`-records carry no status (§8) and therefore no weight. The catalog does not
-list them; `compass show` and `compass-lookup` resolve them on request.
+Any combination the table does not list is Contextual. A `Memo` host document
+with status `Current` is therefore Contextual, but the catalog lists its
+records rather than the host (COMPASS-DRAFT-agent-workflow-D4). `O`-records
+carry no status (§8) and therefore no weight. The catalog does not list them;
+`compass show` and `compass-lookup` resolve them on request.
 
 ### The session catalog
 
@@ -732,14 +784,19 @@ one section with `compass show ID#anchor`, or list its sections with
 ## Accepted decisions
 - COMPASS-D3   The allocation ledger holds immutable facts only (COMPASS-0003)
 - COMPASS-D12  Authority weight is derived from genre and status (COMPASS-0003)
+
+## Current memos
+- COMPASS-M1  The ledger is read with a restricted reader that interns no symbols
+  Read-if: changing ledger or manifest parsing
 ```
 
 Description: the excerpt shows a catalog in the order D11 fixes. A banner with
 an input digest comes first, then a short preamble, the manifest's commands, the
 top level of the source map, documents grouped by weight with their `read-if:`
-lines, and one line per accepted decision. The identifiers, statuses, and sizes
-are illustrative, as if this Plan and the source-header Spec had been accepted
-and assigned numbers.
+lines, one line per accepted decision, and one line per current memo. The
+identifiers, statuses, sizes, and the memo are illustrative, as if this Plan,
+the source-header Spec, and a COMPASS memo host had been accepted and assigned
+numbers.
 
 ## Architecture
 
@@ -749,9 +806,9 @@ Table: Toolchain components and their responsibilities.
 |---|---|
 | Front-matter | Split the YAML block, parse it with `cl-yaml`, check types strictly, map it onto the model |
 | Body scanner | Line-oriented scan into positioned nodes (headings, tables, captions, fences, links, images, code spans, comments) |
-| Model | CLOS classes: `document`, `decision-record`, `open-question`, `code-ref`, `citation`, `ledger-entry`, `namespace`, `corpus`, `federation` |
+| Model | CLOS classes: `document`, `decision-record`, `open-question`, `memo-record`, `code-ref`, `citation`, `ledger-entry`, `namespace`, `corpus`, `federation` |
 | Vocabularies | §4/§6 controlled values, the extension-key registry, the source-header label and value registries, and the weight function, as Lisp data. A test checks them against `skills/reference/vocabularies.md` so the skills cannot drift |
-| Git layer | Run `git` through `uiop:run-program`. Derive authors and dates (`git log --follow`, `.mailmap`), read the ledger at a base revision, check commit-pinned references |
+| Git layer | Run `git` through `uiop:run-program`. Derive authors and dates (`git log --follow`, `.mailmap`), read the ledger at a base revision, check commit-pinned references, collect `Assisted-by:` trailers into each document's assistance history (COMPASS-DRAFT-agent-workflow-D7), and classify changed documents as mechanical or substantive (COMPASS-DRAFT-agent-workflow-D5) |
 | Rules | One named rule per check, each with a severity and the § it enforces |
 | Ledger and allocation | Read and append the ledger; `next`, `assign`, `renumber`; rewrite provisional IDs across the repository |
 | Index generation | Per-namespace and federated `INDEX.md`, with a drift check |
@@ -776,6 +833,39 @@ tests/               ; FiveAM suites, fixture corpora, git-repo harness
 .github/workflows/   ; compass-check (QL + ocicl matrix)
 ```
 
+### Front-matter types
+
+`fm/types` checks each field against the type below after YAML parsing. YAML 1.1
+coerces some unquoted scalars (`no` to false, `0.10` to the float 0.1, dates to
+timestamps); the checker rejects a coercion that loses information and accepts
+one that does not.
+
+Table: Front-matter field types checked by `fm/types`.
+
+| Field | Type | Notes |
+|---|---|---|
+| `id` | string | Matches the canonical or provisional grammar (§5, §13; D2) |
+| `title` | non-empty string | Single line |
+| `genre`, `subtype`, `scope`, `status` | string from the controlled vocabulary | `status` vocabulary depends on the genre family (§6; D5, D12) |
+| `program`, `project`, `component` | string | |
+| `language` | string, BCP-47 | A YAML boolean (`no`, `yes`) is an error, not a language |
+| `api-version`, `schema-version` | string | A YAML number is an error; write `"0.1"`, since `0.10` would read as 0.1 |
+| `created`, `updated`, `reviewed` | date, `YYYY-MM-DD` | A YAML date or a string of that form; anything else is an error |
+| `authors`, `reviewers` | list of strings | A single string is an error, so that a second author cannot be added as a mistyped scalar |
+| `approved-by` | string | |
+| `provenance` | map | `assistant` (string) is required inside it; `session` (string) is optional; other keys warn |
+| `supersedes` | identifier, or list of identifiers | |
+| `superseded-by` | identifier | |
+| `relates-to` | list of identifiers | |
+| `cites` | list of maps | Each with `title` (string), `locator` (string), and `external: true` (`cite/well-formed`) |
+| `decisions`, `open-questions`, `memos` | list of register identifiers | Kinds must match the field (`D`, `O`, M) |
+| `glossary` | string | An identifier, or a document name pending migration (warning) |
+| `read-if` | string | Registered extension (D13); single line, within 160 characters |
+
+A field whose value is null (`~`, or empty) is treated as absent. A required
+field that is absent and not Git-derivable is an error (`fm/required`,
+`git/derivable`).
+
 ### Validation rules
 
 Table: Initial rule set, with severity and the section each rule enforces.
@@ -791,8 +881,14 @@ Table: Initial rule set, with severity and the section each rule enforces.
 | `fm/read-if` | warning | COMPASS-DRAFT-toolchain-D13 single-line `read-if:` within 160 characters |
 | `id/format`, `id/unique` | error | §5, §13 |
 | `ledger/coverage`, `ledger/append-only`, `ledger/no-union-merge`, `ledger/owned-namespace` | error | COMPASS-DRAFT-toolchain-D1, D3, D4 |
-| `register/mirrored` | error | §8: register entries declared in front-matter exist in the body, and the reverse |
-| `register/status` | error | §8; COMPASS-DRAFT-toolchain-D12: every `D`-record has a `**Status:**` line with a controlled value |
+| `register/mirrored` | error | §8: every record defined in the body (by its heading) is listed in front-matter; every listed record is defined in the body or, for a record the document amends, defined elsewhere in the corpus |
+| `register/unique` | error | §8, §13: no record identifier is defined by a heading in more than one place |
+| `register/heading-form` | warning | COMPASS-DRAFT-toolchain-D16: record headings use the full identifier |
+| `register/status` | error | §8; COMPASS-DRAFT-toolchain-D12: every `D`- and M-record has a `**Status:**` line with a controlled value |
+| `memo/host` | error | COMPASS-DRAFT-agent-workflow-D2: M-records appear only in `Memo` documents, which hold only M-records |
+| `memo/fields` | error | COMPASS-DRAFT-agent-workflow-D2, D4: every M-record has `**Read-if:**` and `**Basis:**`; `**Superseded-by:**` appears with, and only with, `Superseded` |
+| `memo/basis` | error | COMPASS-DRAFT-agent-workflow-D3: `**Basis:**` holds a commit-pinned code reference, a resolving Compass identifier, or a `cites:` title |
+| `review/approver` | error | §6; COMPASS-DRAFT-agent-workflow-D6: `approved-by` is never an assistant, and self-approval occurs only by the declared steward of a `:solo` namespace |
 | `ref/doc-resolves` | error | §9 document links resolve to real IDs |
 | `ref/prose-mention` | warning | §9 document named without a link |
 | `ref/code-pinned` | error in Log/Plan, else warning | §9 commit-pinned code references |
@@ -812,10 +908,17 @@ Table: Initial rule set, with severity and the section each rule enforces.
   returns 0 if clean (warnings allowed unless `--strict`), 1 if any error was
   found, and 2 for a usage or internal failure.
 - `compass assign FILE [--base REV]` and `compass renumber ID`.
-- `compass next NAMESPACE [--kind document|decision|open-question]` previews the
-  next number without allocating it.
+- `compass next NAMESPACE [--kind document|decision|open-question|memo]` previews
+  the next number without allocating it. Before the ledger exists (baseline
+  v0.1), it computes the preview from the highest number found by scanning the
+  corpus, and says that the result is advisory.
 - `compass index [--check]` and `compass show ID[#anchor]`, which
-  `compass-lookup` uses. With an anchor, `show` prints one section.
+  `compass-lookup` uses. With an anchor, `show` prints one section. Given a
+  register ID (`D`, `O`, or M), it prints that record alone. For a document it
+  also reports the assistance history derived from `Assisted-by:` trailers.
+- `compass diff [--base REV]` lists the documents changed since `REV`, each
+  classified as mechanical or substantive, for the reviewer
+  (COMPASS-DRAFT-agent-workflow-D5).
 - `compass outline ID` lists a document's headings with the size of each
   section, so an agent can open only the part it needs.
 - `compass catalog [--check] [--all] [--json]` writes the session catalog;
@@ -823,6 +926,41 @@ Table: Initial rule set, with severity and the section each rule enforces.
 - `compass map [PATH] [--file FILE] [--check] [--json]` writes the source map,
   prints one subtree, or prints one file's effective header.
 - `compass manifest --json`.
+
+## Baseline releases
+
+The full plan is large, and its agent-context half waits on an evaluation
+([COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)). A usable baseline
+comes first, so that the toolchain can check the corpora of projects in
+development now. Each release is a subset of the [Roadmap](#roadmap) and is
+designed so that later steps extend it rather than rewrite it.
+
+**v0.1 — corpus checking without a ledger** (from roadmap steps 2 and 3):
+- Front-matter splitting, parsing, and the [type checks](#front-matter-types);
+  the controlled vocabularies, implementing D5's `Superseded` form.
+- The body scanner, including register headings (`D`, `O`, and M kinds from the
+  start) and each record's `**Status:**` line.
+- Rules: `fm/present`, `fm/required`, `fm/types`, `fm/language`, `vocab/*`,
+  `status/superseded-agrees`, `fm/unknown-key` (D13; a warning from the start),
+  `id/format`, `id/unique`, `register/mirrored`, `register/unique`,
+  `register/status`, `register/heading-form`, `ref/doc-resolves`,
+  `cite/well-formed`.
+- Commands: `check` (text and JSON), `show ID`, `index` (without `--check`),
+  and `next` in its advisory, scan-based form.
+- A `--skip-unmarked` option that skips files without front-matter and reports
+  how many it skipped, so the checker can run over partly migrated corpora. This
+  is an interim answer to O5, not its resolution.
+- Builds under `DEPS=ql`; FiveAM tests over fixture corpora.
+
+**v0.2 — identity and CI** (roadmap step 4, part of step 7):
+- The ledger reader and its rules; `assign` and `renumber`; the concurrency
+  tests.
+- Git-derived fields (`git/derivable`) and commit-pinned reference checks.
+- `index --check`; the GitHub Actions job; `DEPS=ocicl`.
+
+**Not in either:** the catalog, the weight function, source headers and the map
+(gated on the evaluation), the §12 rules, `shape/sections`, and the memo rules,
+which follow in the order of the roadmap.
 
 ## Dependency management: Quicklisp and ocicl
 
@@ -874,12 +1012,22 @@ locally, and CI installs it from the distribution's package manager.
 
 - **In scope (v1):** everything above, plus integration with the authoring
   skills and the bootstrap of the COMPASS namespace.
-- **Outside this plan, in the authoring-assistance layer (S9):**
+- **Outside this plan, in the authoring-assistance layer (S9)**, planned in
+  [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md):
   - the harness adapter (an OpenCode plugin) that injects `doc/CATALOG.md` at
     session start;
   - the consult → build → update protocol text;
-  - a maintenance skill that proposes `Log` entries and `Ref`/`Spec` revisions
-    after a change.
+  - the `compass-maintain` skill, which proposes `Log` entries, memos, header
+    updates, and `Ref`/`Spec` corrections after a change.
+
+  This plan builds the toolchain support those depend on: M-records, memo
+  rules, `review/approver`, the `:stewards` key, `compass diff`, and trailer
+  derivation.
+- **Gated on evaluation:** the session catalog (D11), the authority weight
+  (D12), and source-header extraction with the source map (D14) are not built
+  until the pilot of [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)
+  has run. Its decision rules may change or remove them. Everything else in
+  this plan proceeds independently.
 - **Not in v1:**
   - the Markdown→Lexis importer (S2), which builds on the scanner;
   - mapping to RDF/Classic (§17);
@@ -985,6 +1133,9 @@ Table: Prior systems and what this plan draws from each.
 
 ## Roadmap
 
+Steps 2 and 3 yield baseline v0.1, and step 4 with the CI part of step 7 yields
+v0.2 (see [Baseline releases](#baseline-releases)).
+
 1. **This Plan.** Record the decisions and gaps. No change to `Compass.md` yet.
 2. **Skeleton, front end, and model.**
    - `compass.asd`, `compass.sexp`, `ocicl.csv`, the `Makefile`, and `.gitignore`.
@@ -1003,18 +1154,27 @@ Table: Prior systems and what this plan draws from each.
    - **Concurrency tests** in temporary Git repositories: both allocation
      orders, conflict on merge, the duplicate-keeping resolution failing
      `check`, and recovery through `renumber`.
-   - Amend §8 and §13 (D2, D3, D4).
+   - Amend §8 and §13 (D2, D3, D4, D16).
 5. **Index generation.** Namespace and federated `INDEX.md`, with
    `index --check`.
-6. **Agent context.**
-   - The weight function and `register/status` (D12); the §6 and §8 amendments.
-   - Extension-key handling and `read-if:` (D13); the §18 registration.
-   - `compass catalog`, `compass outline`, and `show ID#anchor` (D11).
-   - The source-header extractor, `compass map`, and the Spec's rules (D14); the
-     §2 clarification.
-   - Manifest keys `:commands`, `:map`, `:catalog` (D15).
+6. **Agent context.** Split by whether the evaluation gates it.
+   - **Not gated:**
+     - extension-key handling and `read-if:` (D13); the §18 registration;
+     - `compass outline` and `show ID#anchor`;
+     - manifest keys `:commands` and `:stewards` (D15);
+     - agent-workflow support (COMPASS-DRAFT-agent-workflow): M-records in the
+       ledger and `assign`; the `memo/*` and `review/approver` rules;
+       `compass diff`; `Assisted-by:` trailer derivation.
+   - **Gated on the pilot of
+     [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md),** and subject to
+     its decision rules:
+     - the weight function (D12) and the §6 and §8 amendments it carries;
+     - `compass catalog` and the manifest's `:catalog` key (D11);
+     - the source-header extractor, `compass map`, the `:map` key, and the
+       Spec's rules (D14); the §2 clarification.
    - Fixture repositories covering inheritance, ASDF load order, budget
-     truncation, and one-hop federation.
+     truncation, one-hop federation, memo hosts, and solo and second-reviewer
+     namespaces.
 7. **CLI, CI, and hooks.**
    - The executable.
    - The GitHub Actions matrix (Quicklisp + ocicl, both required).
