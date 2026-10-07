@@ -19,6 +19,7 @@ relates-to:
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-source-headers
   - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-DRAFT-secure-development
 cites:
   - title:     "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (Gloaguen, Mündler, Müller, Raychev, Vechev; MemAgents @ ICLR 2026)"
     locator:   "arXiv:2602.11988v2, §4 and abstract"
@@ -173,6 +174,7 @@ Table: Track 1 (snapshot) hypotheses.
 | T1-H3 | Session-start delivery of the catalog helps beyond having the corpus on disk (A3 vs A2), net of its cost | G1, G3, G8 |
 | T1-H4 | Source headers and the map help beyond the catalog (A4 vs A3) | G1, G8 |
 | T1-H5 | No harm on ordinary tasks: A2–A4 are equivalent to A1 on control tasks | G1 (equivalence test), G8 |
+| T1-H6 | Typed context helps agents keep security invariants: A2–A4 trigger fewer security traps than A1 | G3 on security-invariant tasks |
 
 ### Decision rules
 
@@ -276,8 +278,8 @@ opencode export <session-id> > runs/<run-id>/session.json
 4. **Pilot** (gates Toolchain roadmap step 6):
    - Track 2: relay steps 1–5, conditions R1, R2, and R4, Claude Opus 5.5 only,
      anchored mode, 5 runs: 15 relays, 75 step sessions.
-   - Track 1: 8 trap tasks, setups A1 and A3, Claude Opus 5.5 only, 5 runs:
-     80 sessions.
+   - Track 1: 8 trap tasks, at least 2 of them security-invariant tasks, setups
+     A1 and A3, Claude Opus 5.5 only, 5 runs: 80 sessions.
    - Purpose: check the harness, the graders, and judge calibration; estimate
      tokens and cost per step; obtain first effect estimates.
 5. **Full study, anchored mode.** All relay steps, R1–R4, all three models;
@@ -293,7 +295,7 @@ pilot.
 |---|---|---|---|
 | Track 2, anchored | 4 conditions × 3 models | 5 relays of 19 steps | 1,140 step sessions (R1: 15 long sessions) |
 | Track 2, free-running | 4 conditions × 3 models | 5 relays of 19 steps | up to 1,140 |
-| Track 1 | about 14 tasks × 4 setups × 3 models | 5 | 840 |
+| Track 1 | about 18 tasks × 4 setups × 3 models | 5 | 1,080 |
 
 ## The Shared Scenario
 
@@ -415,9 +417,11 @@ Table: Track 1 task categories.
 | Rejected alternative | Implementing an option a recorded decision rejected | Judge against the decision record |
 | System property | Ignoring a cross-file property, such as how deletion propagates to containers and peers | Targeted tests |
 | Navigation | Finding the right place to change in a 67-file tree | Correct files changed; exploration cost |
+| Security invariant | Weakening or bypassing an existing security check while adding a feature (see below) | Negative tests that attempt the bypass; diff check that the guard is still on the path |
 | Control | Ordinary features and fixes where documentation should not matter | Tests |
 
-Proposed mix: about 8 trap tasks, at least half written by Sloane, and about 6
+Proposed mix: about 8 trap tasks and about 4 security-invariant tasks, at least
+half of each written by Sloane, and about 6
 control tasks written by an LLM that sees only the code. Each task consists of a
 statement written as an issue; its category; where the needed knowledge lives
 and whether it can be recovered from the code; hidden checks; and a reference
@@ -425,6 +429,29 @@ solution, verified to pass while a trap-violating solution and the untouched
 snapshot fail. Task authors follow one rule above all: write the task from
 development experience ("what would a capable new collaborator get wrong
 here?") before re-reading how the corpus words it.
+
+**Security-invariant tasks** test whether an agent preserves the security checks
+Classic already has while extending the system near them. They were added at the
+recommendation of [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md).
+Classic's security model is immature (its own analysis, `securityPoints.md`,
+mostly lists what is missing), so these tasks test preservation rather than
+construction. Illustrative candidates, to be confirmed against the code at
+`bad2094`:
+- a new content operation that must change state through `attempt-transition`,
+  with its role check, rather than setting the state directly;
+- a new account-facing operation that must call `account-has-permission-p`
+  rather than assume the caller is permitted;
+- an extension of federation receipt that must keep `receive-from-peer`'s
+  requirement that the source be a registered peer;
+- a convenience constructor for URIs that must keep the type validation of
+  `make-classic-uri` and `parse-classic-uri`.
+
+Each has a negative test that attempts the bypass, alongside the functional
+tests. Where the guarding rule is documented only in `securityPoints.md` or a
+development log, the task also measures whether the corpus delivered it. If
+Classic's security analysis is migrated to Compass form before the protocol is
+frozen (COMPASS-DRAFT-secure-development-O6), A1 carries the original and
+A2–A4 the migrated form, as for every other document.
 
 Table: Track 1 setups.
 
@@ -459,7 +486,7 @@ Table: Measures, how each is graded, and which hypotheses use it.
 |---|---|---|---|
 | G1 | Step or task correctness: hidden tests pass | Tests | T2-H1, T1-H1, T1-H3–H5 |
 | G2 | No regression: the parent commit's suite still passes | Tests | All |
-| G3 | Invariant conformance: invariant traps not triggered | Negative tests | T2-H1, T2-H2, T1-H1 |
+| G3 | Invariant conformance: invariant traps, including security-invariant traps, not triggered | Negative tests | T2-H1, T2-H2, T1-H1, T1-H6 |
 | G4 | Decision conformance: accepted decisions respected, rejected alternatives avoided | Judge, blind, against the decision records | T2-H1–H3 |
 | G5 | Terminology: the project's terms used, not invented synonyms | Judge against the glossary and documents | T2-H2 |
 | G6 | Design consistency with the codebase's conventions | Judge, blind | T2-H2 |
@@ -596,3 +623,4 @@ Table: Sections of this evaluation and the primary sources each draws on.
 | Statistics | Schuirmann (1987); Khatri (2026) on equivalence testing in this setting |
 | The Shared Scenario | Classic repository history, surveyed at `6e4f02d` |
 | Track 1 setups | Gloaguen et al. (2026) and Khatri (2026) settings, adapted |
+| Security-invariant tasks | COMPASS-DRAFT-secure-development; Classic's `securityPoints.md` |

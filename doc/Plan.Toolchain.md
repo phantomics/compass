@@ -18,6 +18,7 @@ relates-to:
   - COMPASS-DRAFT-source-headers
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-agent-context-eval
+  - COMPASS-DRAFT-semantic-binding
 cites:
   - title:     ocicl README
     locator:   "Lisp Usage; ocicl Scope (Local-Only Mode)"
@@ -51,6 +52,7 @@ decisions:
   - COMPASS-DRAFT-toolchain-D14
   - COMPASS-DRAFT-toolchain-D15
   - COMPASS-DRAFT-toolchain-D16
+  - COMPASS-DRAFT-toolchain-D17
 open-questions:
   - COMPASS-DRAFT-toolchain-O1
   - COMPASS-DRAFT-toolchain-O2
@@ -626,6 +628,49 @@ decision.
 - Require the short form, deriving the namespace from the host. Rejected: it
   breaks grep-based lookup and federated citation.
 
+### COMPASS-DRAFT-toolchain-D17 — RDF export implements the semantic binding
+
+**Status:** Proposed
+
+**Context:** §7 and §17 promise that every front-matter field maps to an RDF
+predicate and that a corpus can feed a triplestore, but the mapping they give
+is incomplete, disagrees with the predicates Classic actually uses, and
+provides no identity rule that yields valid IRIs.
+[COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) now specifies the
+binding: the `compass:` vocabulary under `https://w3id.org/compass/vocab#`,
+`tag:` IRIs minted from a per-namespace authority, the mapping of front-matter,
+registers, body structure, and source headers, and SHACL shapes. SPARQL over a
+corpus, and later ingestion by Classic and a Classic-based forge, depend on a
+toolchain that produces it.
+
+**Decision:**
+- `compass export --rdf FORMAT` writes the binding's triples, with N-Triples
+  and Turtle required and N-Quads, TriG, and JSON-LD to follow. Output is
+  deterministic and contains no blank nodes. `--derived`, `--history`,
+  `--with-text`, and `--federation` are opt-ins, as the Spec defines.
+- The exporter writes RDF text directly from the model; it needs no RDF library,
+  and adds no dependency to the check path.
+- The project manifest gains a key, `:authorities`, giving each owned
+  namespace's RFC 4151 tagging authority. A new rule, `manifest/authority`
+  (warning in `check`), reports a namespace without one; `export` refuses to run
+  for it.
+- The vocabulary file, the JSON-LD context, and the SHACL shapes are generated
+  from the toolchain's vocabulary data (`compass export --vocab`), so the shapes
+  cannot drift from the validator.
+- Delivered in baseline v0.3, after v0.2, because identity needs the manifest
+  and provisional aliases need the ledger.
+
+**Alternatives:**
+- Generate RDF through an RDF library (for example cl-rdfxml or a SPARQL client).
+  Rejected for the exporter: serialising N-Triples and Turtle from a known model
+  is simple, and the dependency would buy nothing. A library may still be used
+  in tests to parse the output.
+- Export JSON only and leave RDF to consumers. Rejected: each consumer would
+  reinvent the mapping and the identity rule, which is the drift the Spec exists
+  to prevent.
+- Defer the export until Classic can ingest it. Rejected: any SPARQL store can
+  use the export now, and Classic is one consumer among several.
+
 ## The uniqueness guarantee
 
 The guarantee is a set of invariants. The validator enforces them, and the
@@ -718,7 +763,8 @@ The project manifest:
              :doc "Validate this repository's corpus"))
  :map (:exclude ("ocicl/**"))
  :catalog (:budget 8192)
- :stewards ((:namespace "COMPASS" :steward "Sloane" :approval :solo)))
+ :stewards ((:namespace "COMPASS" :steward "Sloane" :approval :solo))
+ :authorities ((:namespace "COMPASS" :authority "example.net,2026")))
 ```
 
 Description: the manifest declares that this repository owns the COMPASS
@@ -726,7 +772,9 @@ namespace and keeps its documents in `doc/`. It lists two federated
 repositories by local path. The optional keys of
 COMPASS-DRAFT-toolchain-D15 add one REPL command and one shell command,
 exclude the ocicl dependency directory from the source map, set the catalog
-budget, and declare Sloane the solo steward of the COMPASS namespace.
+budget, and declare Sloane the solo steward of the COMPASS namespace. The
+`:authorities` key of COMPASS-DRAFT-toolchain-D17 gives the namespace's tagging
+authority for RDF export; the authority shown is illustrative.
 
 Both files are read with `*read-eval*` bound to false and a reader restricted to
 strings, integers, keywords, and lists. Reading them can neither run code nor
@@ -814,6 +862,7 @@ Table: Toolchain components and their responsibilities.
 | Index generation | Per-namespace and federated `INDEX.md`, with a drift check |
 | Source headers | Per-comment-family extractors for file headers and directory README blocks; effective-header inheritance; ASDF `:description` and `:serial` reading |
 | Agent context | The session catalog (D11) and source map (D14), as Markdown and JSON, with drift checks and the input digest |
+| RDF export | The semantic binding (D17): IRI minting, triple generation, deterministic serialisation, and generation of the vocabulary, context, and shapes |
 | Report | Human-readable text and JSON (`shasht`) with file, line, rule, severity, and message |
 | CLI | Executable entry point, built with `asdf:make` |
 
@@ -826,7 +875,9 @@ ocicl.csv            ; ocicl lockfile (committed); ocicl/ is git-ignored
 Makefile             ; deps / build / test / check, DEPS=ql|ocicl
 src/                 ; package, frontmatter, scanner, model, vocab, git,
                      ; ledger, rules/, index, headers, catalog, map,
-                     ; report, cli
+                     ; rdf, report, cli
+vocab/               ; generated compass.ttl, compass-shapes.ttl,
+                     ; context.jsonld (D17)
 doc/                 ; COMPASS documents, plus generated INDEX.md,
                      ; CATALOG.md, and MAP.md (committed)
 tests/               ; FiveAM suites, fixture corpora, git-repo harness
@@ -898,6 +949,7 @@ Table: Initial rule set, with severity and the section each rule enforces.
 | `shape/sections` | warning | §14 spine sections present and in order |
 | `a11y/alt-text`, `a11y/table-caption`, `a11y/diagram-description`, `a11y/heading-nesting`, `a11y/link-text` | error | §12, COMPASS-DRAFT-toolchain-D6 |
 | `index/current` | error | COMPASS-DRAFT-toolchain-D6 generated index matches |
+| `manifest/authority` | warning | COMPASS-DRAFT-toolchain-D17: every owned namespace declares a tagging authority |
 | `catalog/current` | error | COMPASS-DRAFT-toolchain-D10 generated catalog matches |
 | `catalog/budget` | warning | COMPASS-DRAFT-toolchain-D11 catalog fits its budget without truncation |
 | `header/*`, `dir/header-syntax`, `map/current` | as specified | [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md#validation-rules); COMPASS-DRAFT-toolchain-D14 |
@@ -926,6 +978,9 @@ Table: Initial rule set, with severity and the section each rule enforces.
 - `compass map [PATH] [--file FILE] [--check] [--json]` writes the source map,
   prints one subtree, or prints one file's effective header.
 - `compass manifest --json`.
+- `compass export --rdf ntriples|turtle|nquads|trig|jsonld [--derived]
+  [--history] [--with-text] [--federation]` writes the semantic binding
+  (D17); `compass export --vocab` writes the vocabulary, context, and shapes.
 
 ## Baseline releases
 
@@ -958,7 +1013,19 @@ designed so that later steps extend it rather than rewrite it.
 - Git-derived fields (`git/derivable`) and commit-pinned reference checks.
 - `index --check`; the GitHub Actions job; `DEPS=ocicl`.
 
-**Not in either:** the catalog, the weight function, source headers and the map
+**v0.3 — RDF export** (part of roadmap step 5):
+- The `:authorities` manifest key and `manifest/authority`.
+- `compass export --rdf` in N-Triples and Turtle, covering front-matter,
+  registers, ledger facts and aliases, sections, links, and code references
+  ([COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md)).
+- `compass export --vocab`: the vocabulary, JSON-LD context, and SHACL shapes,
+  generated from the vocabulary data.
+- Tests that parse the output with an independent RDF parser and run the shapes
+  over fixture corpora.
+- Source-map triples follow once source headers exist (gated on the
+  evaluation); derived weight follows D12.
+
+**Not in any of these:** the catalog, the weight function, source headers and the map
 (gated on the evaluation), the §12 rules, `shape/sections`, and the memo rules,
 which follow in the order of the roadmap.
 
@@ -1030,7 +1097,8 @@ locally, and CI installs it from the distribution's package manager.
   this plan proceeds independently.
 - **Not in v1:**
   - the Markdown→Lexis importer (S2), which builds on the scanner;
-  - mapping to RDF/Classic (§17);
+  - ingestion into Classic, and the forge integration that would build on it
+    (RDF export itself is in scope, D17);
   - eager reservation (`compass reserve`, option B of
     COMPASS-DRAFT-toolchain-D1);
   - fixture compilation (S7), audience projection (S5), and the site build (S8);
@@ -1130,11 +1198,13 @@ Table: Prior systems and what this plan draws from each.
 | Operator Memory | A catalog delivered at session start, `Read If` routing, and a codebase index (D10–D14). Its agent-maintained, untyped, present-tense-only model is not imported ([COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md)) |
 | Emacs library headers | The `;;; file.el --- description` first line that the source-header summary line generalises (D14) |
 | `llms.txt` | A compact, LLM-oriented summary of a site; a static precursor of the session catalog |
+| DCTERMS, PROV-O, SKOS, SHACL, DOAP, SIOC | The vocabularies the semantic binding reuses (D17) |
 
 ## Roadmap
 
-Steps 2 and 3 yield baseline v0.1, and step 4 with the CI part of step 7 yields
-v0.2 (see [Baseline releases](#baseline-releases)).
+Steps 2 and 3 yield baseline v0.1, step 4 with the CI part of step 7 yields
+v0.2, and the export part of step 5 yields v0.3 (see
+[Baseline releases](#baseline-releases)).
 
 1. **This Plan.** Record the decisions and gaps. No change to `Compass.md` yet.
 2. **Skeleton, front end, and model.**
@@ -1155,8 +1225,9 @@ v0.2 (see [Baseline releases](#baseline-releases)).
      orders, conflict on merge, the duplicate-keeping resolution failing
      `check`, and recovery through `renumber`.
    - Amend §8 and §13 (D2, D3, D4, D16).
-5. **Index generation.** Namespace and federated `INDEX.md`, with
-   `index --check`.
+5. **Index generation and RDF export.** Namespace and federated `INDEX.md`,
+   with `index --check`; `compass export --rdf` and `--vocab` (D17), yielding
+   baseline v0.3; amend §5, §7, and §17 as the semantic binding requires.
 6. **Agent context.** Split by whether the evaluation gates it.
    - **Not gated:**
      - extension-key handling and `read-if:` (D13); the §18 registration;
