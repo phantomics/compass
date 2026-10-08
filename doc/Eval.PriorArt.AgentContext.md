@@ -72,6 +72,24 @@ cites:
   - title:     "Documenting Architecture Decisions (Nygard, 2011)"
     locator:   "Blog post introducing ADRs"
     external:  true
+  - title:     "The Specification Gap: Coordination Failure Under Partial Knowledge in Code Agents (2026)"
+    locator:   "arXiv:2603.24284v1, abstract and §4"
+    external:  true
+  - title:     "Grounding AI Agents in Contracts: An Empirical Evaluation of Spec-Driven Test Generation (Tufano et al.; SpecOps '26)"
+    locator:   "arXiv:2608.17177v2, abstract"
+    external:  true
+  - title:     "Spec Kit Agents: Context-Grounded Agentic Workflows (2026)"
+    locator:   "arXiv:2604.05278v1 (title and opening only; not yet read)"
+    external:  true
+  - title:     "Evaluating Large Language Models for Detecting Architectural Decision Violations (2026)"
+    locator:   "arXiv:2602.07609v1, abstract"
+    external:  true
+  - title:     "Context Matters: Evaluating Context Strategies for Automated ADR Generation (2026)"
+    locator:   "arXiv:2604.03826 (title and abstract opening only)"
+    external:  true
+  - title:     "Can LLMs Generate Architectural Design Decisions? An Exploratory Empirical Study (2024)"
+    locator:   "arXiv:2403.01709, abstract"
+    external:  true
   - title:     "Issues as Elements of Information Systems (Kunz, Rittel; 1970)"
     locator:   "IBIS"
     external:  true
@@ -110,7 +128,9 @@ This document is meant to be revised as the search is extended
   multi-session and long-context degradation of coding agents; handoff and
   continuity across agent sessions; spec-driven development tools; project
   memory for coding agents; linked data for software lifecycle artefacts; and
-  ontologies or knowledge graphs for design decisions. Results were read at the
+  ontologies or knowledge graphs for design decisions. A second round searched
+  for evaluations of structured documentation and specification formats, and
+  for studies of agents and architecture decision records. Results were read at the
   level of abstracts, documentation excerpts, and, where available, project
   READMEs. Operator Memory was read at source level for
   [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md).
@@ -146,7 +166,7 @@ Table: Elements of the Compass agent-context work assessed in this evaluation.
 | E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-DRAFT-agent-workflow-D5 to D9 |
 | E5 | Source headers whose typed fields link files to decisions, memos, and tests, compiled into a source map | COMPASS-DRAFT-source-headers |
 | E6 | A derived RDF binding of the corpus, with an open vocabulary, `tag:` identity, SHACL shapes, and federation | COMPASS-DRAFT-semantic-binding |
-| E7 | Evaluation of quality and design-intent conformance across a relay of fresh sessions over real development history (the "annual crop" thesis) | COMPASS-DRAFT-agent-context-eval |
+| E7 | Evaluation of quality and design-intent conformance across a relay of fresh sessions over real development history (the "annual crop" thesis), with single-feature ablation of the scheme and tasks that put supersession and rejected alternatives under pressure | COMPASS-DRAFT-agent-context-eval |
 
 Each element is scored on one scale:
 - **Established:** the idea is in common use or standardised.
@@ -209,6 +229,31 @@ Each element is scored on one scale:
   degradation as sessions and context grow. **Touch E7** as evidence for the
   premise, not the remedy.
 
+### Studies of documentation structure
+
+These are the studies found that vary the *structure or form* of what agents
+are given, rather than only its presence. They were found in a second round of
+searching, after the first version of this evaluation.
+
+Table: Studies that vary the structure of documentation given to agents.
+
+| Study | What it varies | Finding | Difference from what Compass needs |
+|---|---|---|---|
+| *The Specification Gap* (2026) | Completeness of a specification, in four levels from full docstrings with data structures (L0) to bare signatures (L3) | Integration success of two agents' outputs falls steadily from 58% to 25% as detail is removed; a merging agent given the full specification restores 89% | Single tasks; documentation inside the code; the variable is how much, not what kind |
+| *Handoff Debt* (2026) | Summary notes against structured notes in a handoff | Both reduce effort; small effects on success | One handoff; a fixed note format; resumption cost |
+| *Spec-Driven Test Generation* (Google; SpecOps '26) | An agent first writes a semi-formal contract specification, then tests, against writing tests directly | +9.8 percentage points in bug detection (p = 0.035) | The specification is written by the agent within the task, not a maintained project record |
+| *Spec Kit Agents* (2026) | Spec-driven workflow artefacts | Not yet read beyond the title and opening | Possibly the closest evaluation of a named scheme; must be read (O1) |
+| ADR studies (2024–2026) | LLMs generating architecture decision records, choosing context for generation, or detecting violations of them | Violation detection works for decisions visible in code | The record is the output under study, not the context that helps an agent develop |
+| Gloaguen et al. (2026), with other documentation removed | Context file present or absent when no other documentation exists | Generated context files then help by about 2.7% | Supports the view that context helps when it supplies knowledge not available elsewhere |
+
+A workshop devoted to this area now exists: SpecOps '26, the 1st International
+Workshop on Specification-Driven Development Life Cycle (ACM, October 2026).
+
+What none of these does, as far as found: treat a named, multi-genre
+documentation scheme with stated design goals as the independent variable;
+ablate the scheme's features one at a time; measure conformance to design intent
+rather than task success alone; or include a time dimension.
+
 ### Standards and older traditions
 
 - **OSLC** (IBM, then OASIS). Lifecycle artefacts (requirements, changes, tests,
@@ -234,7 +279,7 @@ Table: Assessment of each element against the prior art found.
 | E4 | Human-gated maintenance loop with assistance trailers | Operator Memory's loop; Spec Kit's review checkpoints; Git trailers (DCO) | **Refinement.** The loop is precedented; separating change, acceptance, and mechanical gates, solo-steward approval, and derived assistance history are the additions |
 | E5 | Typed source headers linked to records and tests | Emacs headers; design-rationale traceability; CODEOWNERS | **No direct prior art found** for the specific combination of typed header fields, identifier links to decision and memo records, and a compiled, checked map. Each component is old. This was not searched specifically, so the finding is weak |
 | E6 | Derived, open, federated RDF binding | OSLC; MOOSEDev; OpenMetadata | **Precedented** for lifecycle data as RDF (OSLC) and for agent-queryable design knowledge graphs (MOOSEDev). **Refinement**: one-way derivation from human-reviewed Markdown in Git, `tag:` identity across a federation of repositories, and an open vocabulary |
-| E7 | Relay evaluation of the "annual crop" thesis | Handoff Debt; Codified Context; EvoCode-Bench; the snapshot studies | **No prior art found** for a controlled comparison, over a sequence of real historical development steps, of one long session against fresh sessions carrying nothing, untyped notes, or a typed and maintained corpus, measured on design-intent conformance. Handoff Debt is the nearest (single handoff, resumption cost) |
+| E7 | Relay evaluation of the "annual crop" thesis, with feature ablation and pressure tasks | Handoff Debt; Codified Context; EvoCode-Bench; the snapshot studies; The Specification Gap | **No prior art found** for a controlled comparison, over a sequence of real historical development steps, of one long session against fresh sessions carrying nothing, untyped notes, or a typed and maintained corpus, measured on design-intent conformance. Handoff Debt is the nearest (single handoff, resumption cost). **No prior art found** for ablating the features of a documentation scheme; The Specification Gap is the nearest (completeness levels only). Seeded supersession and rejected-alternative recall have no direct precedent found; MOOSEDev tests supersession for retrieval only |
 
 ## Synthesis
 
@@ -252,7 +297,12 @@ Table: Assessment of each element against the prior art found.
      ladder, permanent federated identifiers, human-gated governance, reviewed
      Markdown in Git as the single source of truth, and deterministic derivation
      to both an agent catalog and an RDF graph;
-   - the **evaluation design** (E7), which no prior study found matches;
+   - the **evaluation design** (E7), which no prior study found matches. Three
+     parts of it look individually publishable: the relay over real history,
+     single-feature ablation of a documentation scheme, and the supersession
+     and rejected-alternative pressure tasks. The research agenda appended to
+     [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md) lists these and
+     eight further studies;
    - the **source-header chain** (E5), weakly, pending a targeted search.
 4. **Queryability is distinctive in its source, not in itself.** SPARQL over
    lifecycle and design data exists (OSLC, MOOSEDev, OpenMetadata). What Compass
@@ -277,8 +327,12 @@ This evaluation rests on an informal search. A systematic one would define
 search strings and databases (ACM Digital Library, IEEE Xplore, arXiv cs.SE and
 cs.AI, Semantic Scholar), follow citations forward and backward from MOOSEDev,
 Handoff Debt, and Codified Context, survey design-rationale research since IBIS,
-and inventory agent-memory tools released in 2026. Who undertakes it, and should
-it be complete before any public claim of novelty is made?
+and inventory agent-memory tools released in 2026. Several items found but not
+yet read must be read in full first: *Spec Kit Agents* (arXiv 2604.05278), which
+may evaluate a named documentation scheme directly; *Context Matters* on ADR
+generation (2604.03826); and the papers of the SpecOps '26 workshop. Who
+undertakes the search, and should it be complete before any public claim of
+novelty is made?
 
 ### COMPASS-DRAFT-agent-context-prior-art-O2 — Contact with closest work
 
@@ -303,5 +357,6 @@ Table: Sections of this evaluation and the primary sources each draws on.
 |---|---|
 | Agent memory and context systems | MOOSEDev; Operator Memory; Spec Kit; Kiro; Cline Memory Bank; ESAA-Conversational; Codified Context; OpenMetadata |
 | Studies of context and sessions | Gloaguen et al.; Khatri; Chatlatanagulchai et al.; Handoff Debt; EvoCode-Bench; Xue; Agent Drift |
+| Studies of documentation structure | The Specification Gap; Handoff Debt; Spec-Driven Test Generation; Spec Kit Agents; ADR studies (2403.01709, 2602.07609, 2604.03826); Gloaguen et al. |
 | Standards and older traditions | OSLC Core 3.0; Nygard (2011); Kunz and Rittel (1970) |
 | Element-by-element comparison | All of the above |

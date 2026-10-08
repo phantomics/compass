@@ -55,6 +55,15 @@ cites:
   - title:     "Ontology-Grounded Project Memory for Coding Agents (Adam; NeSy 2026)"
     locator:   "arXiv:2608.13662, abstract"
     external:  true
+  - title:     "The Specification Gap: Coordination Failure Under Partial Knowledge in Code Agents (2026)"
+    locator:   "arXiv:2603.24284v1, §3–§4 (specification levels L0–L3)"
+    external:  true
+  - title:     "Grounding AI Agents in Contracts: An Empirical Evaluation of Spec-Driven Test Generation (Tufano et al.; SpecOps '26)"
+    locator:   "arXiv:2608.17177v2, abstract and §5"
+    external:  true
+  - title:     "Evaluating Large Language Models for Detecting Architectural Decision Violations (2026)"
+    locator:   "arXiv:2602.07609v1, abstract"
+    external:  true
   - title:     "Which test is the best for equivalence? Two one-sided tests (Schuirmann, 1987)"
     locator:   "J. Pharmacokinetics and Biopharmaceutics 15(6)"
     external:  true
@@ -173,7 +182,10 @@ The evaluation has two tracks.
 - **Track 1, snapshot tasks (secondary).** Single-session tasks at one commit,
   under four documentation setups that differ only in form and delivery. This
   checks whether the published null results hold for typed documents, and
-  isolates the contribution of each delivery mechanism.
+  isolates the contribution of each delivery mechanism. Three ablation setups
+  each remove one feature of the scheme, and two task categories put the
+  scheme's handling of superseded guidance and rejected alternatives under
+  deliberate pressure.
 
 The tracks share the repository, the models, the harness, the rubric, and the
 grading procedure.
@@ -204,6 +216,9 @@ Table: Track 1 (snapshot) hypotheses.
 | T1-H4 | Source headers and the map help beyond the catalog (A4 vs A3) | G1, G8 |
 | T1-H5 | No harm on ordinary tasks: A2–A4 are equivalent to A1 on control tasks | G1 (equivalence test), G8 |
 | T1-H6 | Typed context helps agents keep security invariants: A2–A4 trigger fewer security traps than A1 | G3 on security-invariant tasks |
+| T1-H7 | Status typing protects against seeded supersession: A2–A4 rely less than A1 on a superseded document that contradicts its successor, and removing status and supersession (A2−S) loses the gain | G7 on seeded-supersession tasks |
+| T1-H8 | Recorded rejected alternatives reduce design churn: A2 re-proposes a rejected design less often than A1 and than A2 with Alternatives sections removed (A2−R) | G11 on rejected-alternative tasks |
+| T1-H9 | Each tested feature of the scheme contributes: removing status and supersession (A2−S), rejected alternatives (A2−R), or identifiers and typed links (A2−L) from A2 lowers trap-task performance | G1, G3, G7, G11 on trap tasks |
 
 ### Decision rules
 
@@ -220,6 +235,9 @@ Table: Pre-registered decision rules and the decisions they act on.
 | A4 does not beat A3 | Keep the source map for human navigation; remove its top level from the catalog | COMPASS-DRAFT-toolchain-D11, COMPASS-DRAFT-toolchain-D14 |
 | A2–A4 are not equivalent to A1 on control tasks within ±10 points | Treat the corpus as harmful to ordinary work; reduce what the catalog carries | COMPASS-DRAFT-toolchain-D11 |
 | R4 corpus accuracy falls below 80%, or agents set authoritative statuses | Revise `compass-maintain` and the protocol before any adoption | COMPASS-DRAFT-agent-workflow-D9 |
+| A2−S is not worse than A2 on seeded-supersession tasks | Status typing does not help agents directly; as for R4 vs R3, simplify the weight function to an Excluded filter | COMPASS-DRAFT-toolchain-D12 |
+| A2−R is not worse than A2 on rejected-alternative tasks | Recorded Alternatives do not reach agents; keep them for human review, but stop including them in agent-facing views and reconsider the maintenance skill's emphasis on them | COMPASS-0001 §8 record shape; COMPASS-DRAFT-agent-workflow-D9 |
+| A2−L is not worse than A2 | Agents do not use identifiers and typed links directly; identity is unchanged, since the toolchain depends on it, but the catalog may drop identifier-heavy fields | COMPASS-DRAFT-toolchain-D11 |
 
 ### Models
 
@@ -307,12 +325,14 @@ opencode export <session-id> > runs/<run-id>/session.json
 4. **Pilot** (gates Toolchain roadmap step 6):
    - Track 2: relay steps 1–5, conditions R1, R2, and R4, Claude Opus 5.5 only,
      anchored mode, 5 runs: 15 relays, 75 step sessions.
-   - Track 1: 8 trap tasks, at least 2 of them security-invariant tasks, setups
-     A1 and A3, Claude Opus 5.5 only, 5 runs: 80 sessions.
+   - Track 1: 8 trap tasks, including at least 2 security-invariant, 1
+     seeded-supersession, and 1 rejected-alternative task; setups A1 and A3,
+     Claude Opus 5.5 only, 5 runs: 80 sessions.
    - Purpose: check the harness, the graders, and judge calibration; estimate
      tokens and cost per step; obtain first effect estimates.
 5. **Full study, anchored mode.** All relay steps, R1–R4, all three models;
-   Track 1 with all tasks, A1–A4, all three models.
+   Track 1 with all tasks, A1–A4, all three models; the ablation setups
+   A2−S, A2−R, and A2−L on the trap tasks with Claude Opus 5.5 and GPT-6 Sol.
 6. **Full study, free-running mode** (Track 2 only), after the anchored results.
 7. **Python phase**, when a suitable Python project exists (see
    COMPASS-DRAFT-agent-context-eval-O5).
@@ -325,6 +345,7 @@ pilot.
 | Track 2, anchored | 4 conditions × 3 models | 5 relays of 19 steps | 1,140 step sessions (R1: 15 long sessions) |
 | Track 2, free-running | 4 conditions × 3 models | 5 relays of 19 steps | up to 1,140 |
 | Track 1 | about 18 tasks × 4 setups × 3 models | 5 | 1,080 |
+| Track 1 ablations | about 12 trap tasks × 3 ablation setups × 2 models | 5 | 360 |
 
 ## The Shared Scenario
 
@@ -455,13 +476,15 @@ Table: Track 1 task categories.
 |---|---|---|
 | Invariant | Breaking a rule the code relies on but does not state, such as a federation consistency guarantee | Negative tests |
 | Supersession | Following an older document or design that a later decision replaced, such as a pre-refactor schema layout | Tests plus transcript check for reliance on superseded content |
-| Rejected alternative | Implementing an option a recorded decision rejected | Judge against the decision record |
+| Seeded supersession | Following a superseded document placed in the corpus that directly contradicts its current successor (see below) | Tests that pass only under the current guidance; transcript check for which document was relied on |
+| Rejected-alternative temptation | Implementing, or proposing, the design a recorded decision rejected, where that design is the most natural solution to the task as stated | Judge, blind, against the decision record; a test where the rejected design is observable in behaviour |
 | System property | Ignoring a cross-file property, such as how deletion propagates to containers and peers | Targeted tests |
 | Navigation | Finding the right place to change in a 67-file tree | Correct files changed; exploration cost |
 | Security invariant | Weakening or bypassing an existing security check while adding a feature (see below) | Negative tests that attempt the bypass; diff check that the guard is still on the path |
 | Control | Ordinary features and fixes where documentation should not matter | Tests |
 
-Proposed mix: about 8 trap tasks and about 4 security-invariant tasks, at least
+Proposed mix: about 8 trap tasks (at least 2 of them seeded-supersession and 2
+rejected-alternative tasks) and about 4 security-invariant tasks, at least
 half of each written by Andrew Sengul, and about 6
 control tasks written by an LLM that sees only the code. Each task consists of a
 statement written as an issue; its category; where the needed knowledge lives
@@ -494,6 +517,30 @@ Classic's security analysis is migrated to Compass form before the protocol is
 frozen (COMPASS-DRAFT-secure-development-O6), A1 carries the original and
 A2–A4 the migrated form, as for every other document.
 
+**Seeded-supersession tasks** test the claim that typing keeps history from
+being treated as current truth, under deliberate pressure. Each places in the
+corpus a pair of documents: an earlier one whose guidance the task would follow
+naturally, and its successor, which reverses that guidance. Wherever Classic's
+history contains a real superseded document (for example, schema documentation
+written before the schema refactor of `e9f2af1`–`e0c3b72`), that document is
+used; a document is constructed only where history offers none, and is written
+as a plausible earlier version in the corpus's own voice. The pair is present in
+every setup, with the same facts. In A1 both are ordinary untyped documents,
+each carrying its date; in A2–A4 the earlier one has status `Superseded` and a
+`superseded-by` link, and its decision records are marked accordingly; in A2−S
+those markers are removed. This is the one place where Track 1's corpus departs
+from the form-only rule of [Seed corpora](#seed-corpora): a constructed
+document adds content, so it is identified as such in the protocol and its
+results are reported separately from those using real history.
+
+**Rejected-alternative tasks** test whether recorded alternatives prevent
+design churn: an agent re-proposing, or implementing, a design the project
+already considered and rejected. Each task is chosen so that the rejected
+design is the most natural answer to the task as stated, and the decision
+record's Alternatives section explains why it was rejected. Candidates come from
+Classic's development logs, which record several considered-and-rejected
+designs. The measure is G11, design churn.
+
 Table: Track 1 setups.
 
 | Setup | What the agent gets | What it isolates |
@@ -507,6 +554,24 @@ All four setups carry **the same facts**; only form and delivery change, so a
 difference between setups is attributable to form and delivery, not content.
 There is no code-only setup in Track 1; R2 supplies the code-only baseline in
 Track 2. An Operator Memory setup is deferred.
+
+**Ablation setups.** To learn *which* properties of the scheme matter, three
+further setups each remove one feature from A2. A2 is used rather than A3 or A4
+so that the result concerns the form of the corpus, not its delivery.
+
+Table: Track 1 ablation setups.
+
+| Setup | A2 with this removed | Tests |
+|---|---|---|
+| A2−S | Status and supersession: `status`, `supersedes`, and `superseded-by` fields, and the `**Status:**` lines of records | T1-H7, T1-H9 |
+| A2−R | Rejected alternatives: the `**Alternatives:**` part of every decision record | T1-H8, T1-H9 |
+| A2−L | Identity and typed links: `id` fields, record identifiers (headings keep their titles), `relates-to`, and identifier-keyed links, which become plain file-name links | T1-H9 |
+
+Each ablation removes information that the corresponding Compass feature
+carries, so a difference from A2 measures the effect of having that
+information in typed form; it does not separate typing from content. The
+ablations run on trap tasks only, since control tasks are not expected to
+depend on any of these features.
 
 ### Seed corpora
 
@@ -531,10 +596,11 @@ Table: Measures, how each is graded, and which hypotheses use it.
 | G4 | Decision conformance: accepted decisions respected, rejected alternatives avoided | Judge, blind, against the decision records | T2-H1–H3 |
 | G5 | Terminology: the project's terms used, not invented synonyms | Judge against the glossary and documents | T2-H2 |
 | G6 | Design consistency with the codebase's conventions | Judge, blind | T2-H2 |
-| G7 | Supersession errors: acting on superseded or historical content | Transcript and diff, judged | T2-H3, T1-H2 |
+| G7 | Supersession errors: acting on superseded or historical content | Transcript and diff, judged | T2-H3, T1-H2, T1-H7, T1-H9 |
 | G8 | Cost: steps, tool calls, input, cached and output tokens, wall time; injected tokens counted separately | Harness | T2-H4, T1-H3–H5 |
 | G9 | Corpus accuracy: the maintained corpus or notes capture the step's answer-key facts and contain no false claims | Judge against the answer key; `compass check` for R4 | T2-H5 |
 | G10 | Protocol compliance (R4): no authoritative status or `approved-by` set; new memos `Draft`; proposals included in the same change | Diff inspection, automatic | T2-H5 |
+| G11 | Design churn: implementing, or proposing in the transcript, a design that a recorded decision rejected | Judge, blind, against the decision records; tests where observable | T1-H8, T1-H9 |
 
 **Ethos conformance** is the composite of G3–G6. Each component is reported
 separately as well as combined.
@@ -569,6 +635,10 @@ The conditions, their hypotheses, and their expected outcomes under the thesis.
   control tasks; the thesis predicts a gain on trap tasks only.
 - **A4 — plus source headers and the map.** Tests navigation support (T1-H4),
   the component closest to what the published studies found unhelpful.
+- **A2−S, A2−R, A2−L — single-feature ablations.** Test which properties of the
+  scheme carry its effect (T1-H7 to T1-H9). The closest published design varies
+  only how complete a specification is (*The Specification Gap*, 2026); no study
+  found ablates the features of a documentation scheme.
 
 ## Threats to Validity
 
@@ -595,6 +665,10 @@ The conditions, their hypotheses, and their expected outcomes under the thesis.
   design they stand in for; their generation procedure is recorded.
 - **One language, one repository, one developer's style.** Results may not
   generalise. The Python phase and later repositories address this.
+- **Constructed superseded documents.** A document written for the study may be
+  easier, or harder, to recognise as outdated than a real one. Real superseded
+  documents are preferred, and results from constructed ones are reported
+  separately.
 - **Anchored mode is artificial.** Resetting the code to history each step is
   not how development proceeds; it isolates the corpus's contribution at the cost
   of realism. Free-running mode follows to restore realism.
@@ -651,6 +725,33 @@ one namespace constraining work in another. A later phase could use
 `classic.composer`, which depends on Classic, with Classic's corpus as a
 federated read-only namespace. Is that worth a separate relay, and when?
 
+## Appendix — Research Agenda
+
+The evaluation is one instance of a wider set of studies that a Compass corpus
+makes possible, most with little published precedent (see
+[COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md)). Listed
+here so that the protocol's data can be planned to serve later studies.
+
+Table: Studies a Compass corpus could support, their closest precedent, and
+where this protocol covers them.
+
+| # | Study | Question | Closest precedent found | Covered by |
+|---|---|---|---|---|
+| 1 | Relay over real history | Does a typed, maintained corpus keep quality and design intent steady across fresh sessions, against one long session? | Handoff Debt (one handoff); EvoCode-Bench (one session) | Track 2 |
+| 2 | Feature ablation | Which properties of a documentation scheme help agents? | The Specification Gap (completeness only) | Track 1 ablations (T1-H9) |
+| 3 | Supersession robustness | Does status typing stop agents acting on outdated guidance? | MOOSEDev (retrieval, not actions) | Track 1 seeded supersession (T1-H7) |
+| 4 | Rejected-alternative recall | Do recorded alternatives prevent design churn? | None found | Track 1 rejected-alternative tasks (T1-H8) |
+| 5 | Agent-maintained corpus accuracy | Does a corpus maintained by agents stay correct, and at what review cost? | Chatlatanagulchai et al. (observational) | Track 2 maintenance steps (G9, G10); review time not yet measured |
+| 6 | Structured query versus search in tasks | Does SPARQL or structured lookup beat search or vector retrieval on development tasks? | MOOSEDev (retrieval only) | Not covered; needs the RDF export (COMPASS-DRAFT-toolchain-D17) |
+| 7 | Cross-model corpus use | Does a corpus maintained with one model serve others equally? | Handoff Debt (cross-model, one handoff) | Not covered; a relay variant swapping models between steps |
+| 8 | Security-invariant preservation | Does typed context reduce security regressions? | None found with documentation as the variable | Track 1 security tasks (T1-H6) |
+| 9 | Coordination between parallel agents | Does a shared corpus reduce design-intent conflicts between parallel branches? | The Specification Gap (single task, docstrings) | Not covered |
+| 10 | Cost-benefit of documentation | When does the cost of authoring pay off in agent performance? | None found | Derivable from studies 1–4 if authoring time is recorded |
+| 11 | Federation | Do decisions recorded in another repository constrain agents correctly? | None found | Not covered; see COMPASS-DRAFT-agent-context-eval-O6 |
+
+To keep studies 5 and 10 possible, the harness records the time humans spend
+authoring and reviewing corpus changes during the study.
+
 ## Appendix — Source Map
 
 Table: Sections of this evaluation and the primary sources each draws on.
@@ -665,3 +766,5 @@ Table: Sections of this evaluation and the primary sources each draws on.
 | The Shared Scenario | Classic repository history, surveyed at `6e4f02d` |
 | Track 1 setups | Gloaguen et al. (2026) and Khatri (2026) settings, adapted |
 | Security-invariant tasks | COMPASS-DRAFT-secure-development; Classic's `securityPoints.md` |
+| Seeded-supersession and rejected-alternative tasks; ablation setups | The Specification Gap (2026); MOOSEDev (2026); ADR violation detection (2026); COMPASS-DRAFT-agent-context-prior-art |
+| Research Agenda | COMPASS-DRAFT-agent-context-prior-art; Spec-Driven Test Generation (SpecOps '26) |

@@ -9,6 +9,8 @@ language:      en
 status:        Draft
 authors:
   - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-07
 provenance:
   assistant:   opencode
 relates-to:
@@ -175,7 +177,7 @@ as its first worked example.
 
 ### COMPASS-DRAFT-toolchain-D1 — Merge-time ledger plus required CI as the uniqueness authority
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Uniqueness needs a single point where allocations are put in
 sequence, one per namespace. A Git-based corpus has two candidates: (A) the
@@ -208,7 +210,7 @@ under [The uniqueness guarantee](#the-uniqueness-guarantee).
 
 ### COMPASS-DRAFT-toolchain-D2 — Provisional identifiers for register entries
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** §13 gives documents a provisional `<NS>-DRAFT-<slug>` that needs no
 coordination. `D`/`O` records have no equivalent, yet they are numbered across
@@ -234,7 +236,7 @@ The same form applies to memo records (`<NS>-DRAFT-<slug>-M<n>`, assigned
 
 ### COMPASS-DRAFT-toolchain-D3 — The allocation ledger holds immutable facts only
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** §13 says the registry lists "every allocated identifier with its
 current title, genre, scope, and status." All of those values except the
