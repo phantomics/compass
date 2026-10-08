@@ -6,7 +6,7 @@ closed vocabularies — adding a value requires an accepted amendment (§13).
 
 ## Genres (§4)
 
-Ten genres. The `genre` field carries the full name; the prefix names the file
+Eleven genres. The `genre` field carries the full name; the prefix names the file
 (§10); the code is a two-letter mnemonic for indexes/facets only (never in the
 identifier).
 
@@ -18,6 +18,7 @@ identifier).
 | Plan | `Plan` | `Plan.` | PL | Forward design plus roadmap for a buildable unit |
 | Log | `Log` | `Log.` | LG | Engineering journal of work done and verified |
 | Ref | `Ref` | `Ref.` | RF | Reference manual for running software |
+| Memo | `Memo` | `Memo.` | ME | Verified, present-tense properties of running software, as numbered M-records |
 | Guide | `Guide` | `Guide.` | GD | Task walkthrough or demonstration |
 | Spec | `Spec` | `Spec.` | SP | Normative contract for running software |
 | Glossary | `Glossary` | `Glossary.` | GL | Canonical terms and backronym registry |
@@ -29,6 +30,14 @@ Notes:
   current prefixes and to id-keyed links (§9).
 - `Ideation` is for the *exceptional* curated seed discussion only; routine
   transcripts and scratch are **not** Compass documents (§2, §4).
+- `Memo` holds durable knowledge about existing software as M-records (§8),
+  one host document per major component (`Memo.<Topic>.md`). A memo is
+  admitted only if it is **durable** (outlives the session and branch),
+  **consequential** (misunderstanding it causes wrong code or wasted work),
+  **not evident** (not readable from the code, a source header, or an existing
+  document), and **grounded** (its `**Basis:**` names a commit-pinned code
+  reference, a Compass identifier, or a `cites:` title). The first three are
+  judgment; the fourth is checked.
 
 ## Subtypes (§4)
 
@@ -93,12 +102,24 @@ in progress.
 Reference genres additionally carry `api-version` (`Ref`/`Guide`) or
 `schema-version` (`Spec`) recording the software version described.
 
+### Memo genre (`Memo`): hosts and M-records
+
+| Status | Meaning |
+|---|---|
+| `Draft` | Recorded, not yet accepted |
+| `Current` | Accepted, and still holds |
+| `Deprecated` | No longer true or no longer relevant |
+| `Superseded` | Replaced; the successor is named in `superseded-by:` (host) or `**Superseded-by:**` (record), required with and only with this status |
+
+The same four values apply to the host document and to each record. A host is
+`Current` while it is maintained, however many of its records are drafts.
+
 ## The normativity grid (§4)
 
 |  | Non-normative | Normative |
 |---|---|---|
 | **Aspirational** (not yet built) | `Survey` | `Arch` |
-| **Existing** (running code) | — | `Ref` / `Spec` |
+| **Existing** (running code) | `Memo` | `Ref` / `Spec` |
 
 `Eval` sits beside `Survey` as its sharper evidential companion.
 
@@ -110,15 +131,26 @@ Reference genres additionally carry `api-version` (`Ref`/`Guide`) or
 
 Not every unit visits every rung. Because the identifier does not encode genre
 (§5), a document may change genre as it matures without breaking its identity.
+`Memo` stands beside the later rungs: memos accumulate as a system is built and
+used, and are eventually folded into its `Ref` or `Spec`.
 
 ## Editorial review (§6)
 
 - `In-Review` is the status marking a document under review.
-- `reviewers:` lists who reviewed it; `approved-by:` names the reviewer who
-  authorized `Accepted` (or `Design-Record` for an `Arch`); `reviewed:` records
-  the date.
+- `reviewers:` lists who reviewed it; `approved-by:` names the person who
+  authorized the move into an authoritative status (`Accepted`,
+  `Design-Record`, or `Current`); `reviewed:` records the date.
 - For `project`- and `program`-scope documents the approver MUST NOT be the sole
-  author. `component`-scope `Log`s MAY be self-accepted.
+  author, unless the namespace's steward has declared solo approval and is the
+  approver. `component`-scope `Log`s MAY be self-accepted (`approved-by` the
+  author).
+- `approved-by` is always a person, never an assistant. **Skills never set
+  `approved-by`, `reviewers`, or an authoritative status**; a person does.
+- Review gates: project- and program-scope changes reach the main branch only
+  through a person's commit or approved pull request; mechanical changes (ID
+  rewrites, link updates, supersession mirroring, regenerated output) do not
+  reopen acceptance. An M-record has no approval field; its host's
+  `approved-by`/`reviewed` record the latest acceptance among its records.
 
 ## The `external` flag (§6)
 

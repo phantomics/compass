@@ -36,6 +36,37 @@ A known unresolved issue, id `<NAMESPACE>-O<n>` (e.g. `ORIGIN-O9`). Appears unde
 `## Open Questions` and is listed in `open-questions:`. Cross-referable across
 repositories.
 
+### Memo records (`M`)
+
+One durable, verified property of existing software, id `<NAMESPACE>-M<n>`
+(e.g. `CLASSIC-M3`). M-records appear **only** in `Memo` documents, which hold
+**only** M-records, under a single `## Memos` section in identifier order. The
+host lists them in `memos:`, mirrored against the body.
+
+```
+### CLASSIC-M3 — Federation outbox delivery is at-least-once
+
+**Status:** Current
+**Read-if:** writing a federation receiver, or changing outbox flush or retry
+**Basis:** `mod/classic.engine.ref/federation/delivery.lisp:receive@a1b3f9c`; duplicate delivery reproduced after a forced retry
+
+A batch can be delivered more than once after a timeout. Receivers must be
+idempotent; the stale-content check in `delivery.lisp` is the current guard.
+```
+
+Table: M-record fields.
+
+| Field | Required | Value |
+|---|---|---|
+| `**Status:**` | yes | `Draft`, `Current`, `Deprecated`, or `Superseded` |
+| `**Read-if:**` | yes | When the memo matters, within 160 characters |
+| `**Basis:**` | yes | A commit-pinned code reference, Compass identifier, or `cites:` title, then how it was established |
+| `**Recorded:**` | no | `YYYY-MM-DD` |
+| `**Superseded-by:**` | with `Superseded` only | The successor's identifier |
+
+Keep the heading a claim about the system and the body under about 200 words,
+in the present tense.
+
 ## Document-to-document references (§9)
 
 Use a Markdown link keyed on the target's `id`:
@@ -101,6 +132,9 @@ An Compass document MUST:
 - Each namespace keeps a checked-in **registry** (its local `INDEX`) listing
   every allocated id with current title, genre, scope, status. The registry is
   the authority for which numbers are taken.
+- An M-record in an unassigned host uses `<NAMESPACE>-DRAFT-<slug>-M<n>`, with
+  `<n>` counting within the host; it is assigned `<NAMESPACE>-M<n>` with or
+  after its host. Retired records keep their identifier and their place.
 - A document under construction uses a **provisional** `<NAMESPACE>-DRAFT-<slug>`
   identifier (no coordination needed).
 - The namespace steward assigns the canonical `<NAMESPACE>-<NNNN>` at

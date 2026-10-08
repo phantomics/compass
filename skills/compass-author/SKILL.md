@@ -1,6 +1,6 @@
 ---
 name: compass-author
-description: Scaffold and draft Compass documents. Use when creating a new Survey, Eval, Plan, Log, Ref, Guide, Spec, Arch, or Glossary document in a Compass corpus — prompts for genre, scope, and namespace, generates the YAML front-matter block and per-genre section skeleton from templates/, and assigns a provisional DRAFT identifier.
+description: Scaffold and draft Compass documents. Use when creating a new Survey, Eval, Plan, Log, Ref, Guide, Spec, Arch, Glossary, or Memo document in a Compass corpus — prompts for genre, scope, and namespace, generates the YAML front-matter block and per-genre section skeleton from templates/, and assigns a provisional DRAFT identifier.
 ---
 
 # compass-author
@@ -12,10 +12,14 @@ stop-flag work" into a conformant document skeleton the author then fills in.
 
 ## When to use
 
-Use when the user wants to **create a new Compass document** — any of the ten
-genres (§4) — or convert notes into one. Triggers include "new Log/Plan/Survey…",
-"scaffold a Compass doc", "start an ADR/decision record", "write up this work as
-a Log".
+Use when the user wants to **create a new Compass document** — any of the
+eleven genres (§4) — or convert notes into one. Triggers include "new
+Log/Plan/Survey…", "scaffold a Compass doc", "start an ADR/decision record",
+"write up this work as a Log", "record this as a memo".
+
+For a **memo**, first look for the component's existing `Memo.<Topic>.md` host
+(hosts are divided by the project's major components) and add a record to it;
+scaffold a new host only when the component has none.
 
 Do **not** use to review an existing document (that is `compass-review`), to look
 up ids or cross-references (that is `compass-lookup`), or to run derivation
@@ -55,15 +59,19 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
    - `id: <NAMESPACE>-DRAFT-<slug>` (provisional; the steward assigns the
      canonical `<NAMESPACE>-<NNNN>` at merge — never invent a serial number).
    - Set `title`, `genre`, `scope`, `language` (default `en`), `status`
-     (`Draft` for new proposal/record genres; `Current`/`Draft` for reference
-     genres), and the program/project/component grouping fields.
+     (`Draft` for new proposal/record genres; `Draft` for reference genres
+     and new memo records; a new Memo host is `Current` while it is
+     maintained), and the program/project/component grouping fields.
    - **Omit `authors`, `created`, `updated`** and let them derive from Git
      (§7), unless the user wants explicit values.
    - Set `provenance: { assistant: <this assistant> }` — required for
      LLM-assisted authoring (§7). Add `session:` if meaningful.
    - Only include optional fields (`relates-to`, `decisions`, `open-questions`,
-     `cites`, `glossary`, review fields) when they have real values; remove
-     empty ones rather than leaving `~`.
+     `memos`, `cites`, `glossary`) when they have real values; remove empty ones
+     rather than leaving `~`.
+   - **Never set `approved-by`, `reviewers`, or `reviewed`, and never set an
+     authoritative status** (`Accepted`, `Design-Record`, `Current` on a
+     record or reference document). A person does that (§6).
 
 5. **Seed genre-specific content.**
    - `Log` — seed the Files table from `git diff --stat` (or `git status`) of
@@ -79,6 +87,17 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
      `open-questions:`. Use provisional `<NAMESPACE>-D<n>`/`-O<n>` numbers and
      flag that final numbers come from the registry (§13).
    - `Eval` — set `subtype`; scaffold Method / Shared Scenario / Rubric.
+   - `Memo` — add one M-record per durable property under `## Memos`, with
+     status `Draft` and a provisional `<host-id>-M<n>` (next unused `<n>` in the
+     host), and mirror it into `memos:`. Before writing, check the four
+     admission tests (§4) and tell the user which each memo passes and why:
+     durable, consequential, not evident from the code or an existing document,
+     and grounded. Write a `**Basis:**` with a commit-pinned reference
+     (`path:symbol@revision`), a Compass id, or a `cites:` title, then how the
+     property was established; without one, do not propose the memo. Write the
+     heading as a claim and the body in the present tense, under about 200
+     words. If the knowledge is a single file's rule, suggest a source-header
+     `Invariant:` instead; if it is a choice between alternatives, a `D`-record.
    - `Ref`/`Guide`/`Spec`/`Glossary` — follow the attested shapes in
      `section-shapes.md` (Ref: layered API + Project Structure; Guide: choose
      tutorial vs howto body; Spec: Required… + Afterword, RFC-2119 uppercase;

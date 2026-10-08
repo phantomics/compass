@@ -8,7 +8,7 @@ component:     security
 language:      en
 status:        Draft
 authors:
-  - Sloane
+  - Andrew Sengul
 provenance:
   assistant:   opencode
 relates-to:
@@ -253,11 +253,13 @@ Delivering a corpus into agents' context creates risks Compass must own.
    should never be injected.
 3. **The toolchain on untrusted input.** In CI the toolchain reads pull requests,
    including ones from forks. The ledger and manifest already use a restricted
-   reader with `*read-eval*` bound to false. Front-matter passes through libyaml
-   by way of CFFI, a native parsing surface, which adds a security argument to
-   COMPASS-DRAFT-toolchain-O1. The pinned, sigstore-verified ocicl dependencies
-   of COMPASS-DRAFT-toolchain-D8 already align with SSDF's toolchain practices
-   and SLSA's build track.
+   reader with `*read-eval*` bound to false. Front-matter was to pass through
+   libyaml by way of CFFI, a native parsing surface. That argument helped
+   resolve COMPASS-DRAFT-toolchain-O1: front-matter is now read by a strict
+   YAML-subset parser written in Lisp (COMPASS-DRAFT-toolchain-D18), so no
+   native code parses pull-request input. The pinned, sigstore-verified ocicl
+   dependencies of COMPASS-DRAFT-toolchain-D8 already align with SSDF's
+   toolchain practices and SLSA's build track.
 4. **Disclosure timing.** A public corpus must not describe an unfixed
    vulnerability. Embargoed issues belong in the forge's private advisory
    mechanism; they enter the corpus, as a `Log` or a resolved `O`-record, only

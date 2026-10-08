@@ -8,7 +8,7 @@ component:     authoring-assistance
 language:      en
 status:        Draft
 authors:
-  - Sloane
+  - Andrew Sengul
 provenance:
   assistant:   opencode
 relates-to:
@@ -18,6 +18,7 @@ relates-to:
   - COMPASS-DRAFT-source-headers
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-agent-context-eval
+  - COMPASS-DRAFT-agent-context-prior-art
 cites:
   - title:     "Agents Don't Need Memory. They Need Documentation. (Kevin Liao, 2026-10-03)"
     locator:   https://liao.gg/blog/agents-dont-need-memory
@@ -36,6 +37,21 @@ cites:
     external:  true
   - title:     Operator Memory architecture and troubleshooting docs
     locator:   "docs/architecture.md, docs/troubleshooting.md@e394f1c"
+    external:  true
+  - title:     "GitHub Spec Kit — Spec-Driven Development"
+    locator:   "spec-driven.md; .specify/memory/constitution.md"
+    external:  true
+  - title:     "Kiro documentation — Specs"
+    locator:   "kiro.dev/docs/specs (requirements.md, design.md, tasks.md)"
+    external:  true
+  - title:     "Cline Memory Bank"
+    locator:   "Memory Bank pattern (projectbrief, systemPatterns, activeContext, progress)"
+    external:  true
+  - title:     "ESAA-Conversational: An Event-Sourced Memory Layer for Continuity, Handoff, and Curation Across Heterogeneous LLM Coding Agents (Brito dos Santos Filho, 2026)"
+    locator:   "arXiv:2606.23752v1, §2–§3"
+    external:  true
+  - title:     "Ontology-Grounded Project Memory for Coding Agents (Adam; NeSy 2026)"
+    locator:   "arXiv:2608.13662, abstract"
     external:  true
 open-questions:
   - COMPASS-DRAFT-operator-memory-O1
@@ -391,6 +407,31 @@ correct.
   - `AGENTS.md` and Cursor rules (static instruction files).
   - `llms.txt` (LLM-oriented site summaries).
   - The RAG memory plugins that the blog post argues against.
+- Further prior art, found after this survey was first written and examined in
+  [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md). The
+  search behind it has not been exhaustive.
+  - **MOOSEDev** (Adam, NeSy 2026) is the closest system found. It gives coding
+    agents an ontology-grounded project memory: decisions, constraints,
+    rationales, and lessons as typed records with lifecycle status, provenance,
+    and supersession links, validated by SHACL and queried over MCP. That is the
+    combination of typed records and status-aware retrieval this survey
+    recommends. It differs from Compass in keeping the graph as the source of
+    truth, in a proprietary engine, for one project, rather than deriving it from
+    reviewed Markdown in Git across a federation.
+  - **GitHub Spec Kit** and **Kiro specs** carry a project "constitution" and
+    per-feature specification, plan, and task files across agent sessions.
+    Their documents are task- or feature-scoped and untyped beyond their file
+    role: no permanent identifiers, no status per document, no authority
+    ranking.
+  - **Cline's Memory Bank** is a fixed set of context files (project brief,
+    system patterns, active context, progress) that the agent reads at the start
+    of each session and updates as it works: the same loop as Operator Memory,
+    with a smaller, fixed layout.
+  - **ESAA-Conversational** (2026) captures conversation as an append-only event
+    log and projects handoff, state, decision, and task files from it for the
+    next agent, across different agent tools. Its "decisions are durable
+    knowledge; turns are evidence" rule parallels the distinction between a
+    Compass record and disposable scratch.
 
 ## Open Questions
 

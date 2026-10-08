@@ -26,7 +26,7 @@ schema-version: ~                      # Spec only
 created:       2026-06-19
 updated:       2026-06-29
 authors:
-  - Sloane
+  - Andrew Sengul
 reviewers:
   - Ada
 approved-by:   Ada
@@ -46,6 +46,7 @@ decisions:
   - PSYCHE-D16
 open-questions:
   - PSYCHE-O1
+memos:         ~                       # Memo genre only: M-register (§8)
 glossary:      Glossary.PsycheTerms
 ---
 ```
@@ -68,7 +69,8 @@ illustration only).
 | `project` | project/component-scope documents |
 | `api-version` | `Ref`, `Guide` |
 | `schema-version` | `Spec` |
-| `approved-by`, `reviewers`, `reviewed` | any under editorial review (§6) |
+| `memos` | `Memo` only: the host's M-records, mirrored against the body (§8) |
+| `approved-by`, `reviewers`, `reviewed` | any under editorial review (§6); set by a person, never by a skill |
 
 ## Git-derived fields (§7, §22)
 
@@ -87,7 +89,7 @@ when neither is available.
 ## Hand-maintained (never Git-derived)
 
 `reviewers`, `approved-by`, `reviewed`, `provenance`, `decisions`,
-`open-questions`, `relates-to`, `cites`, `supersedes`, `superseded-by`,
+`open-questions`, `memos`, `relates-to`, `cites`, `supersedes`, `superseded-by`,
 `glossary`, and all classification fields (`genre`, `subtype`, `scope`,
 `program`, `project`, `component`).
 

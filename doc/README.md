@@ -18,6 +18,7 @@ and the documents that support them, live here as they are written:
 - `COMPASS-DRAFT-agent-context-eval` — Eval protocol: agent quality over time with Compass context
 - `COMPASS-DRAFT-secure-development` — Survey of Compass's role in secure development
 - `COMPASS-DRAFT-semantic-binding` — RDF vocabulary, identity, and shapes (Spec)
+- `COMPASS-DRAFT-agent-context-prior-art` — Prior-art Eval for the agent-context work (non-exhaustive)
 
 Files follow the standard's naming (`Plan.*.md`, `Log.*.md`, `Ref.*.md`, …)
 and front-matter (§7). Provisional identifiers use `COMPASS-DRAFT-<slug>` until

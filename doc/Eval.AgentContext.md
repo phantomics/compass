@@ -9,7 +9,7 @@ component:     agent-context
 language:      en
 status:        Draft
 authors:
-  - Sloane
+  - Andrew Sengul
 provenance:
   assistant:   opencode
 relates-to:
@@ -20,6 +20,7 @@ relates-to:
   - COMPASS-DRAFT-source-headers
   - COMPASS-DRAFT-authoring-assistance
   - COMPASS-DRAFT-secure-development
+  - COMPASS-DRAFT-agent-context-prior-art
 cites:
   - title:     "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (Gloaguen, Mündler, Müller, Raychev, Vechev; MemAgents @ ICLR 2026)"
     locator:   "arXiv:2602.11988v2, §4 and abstract"
@@ -44,6 +45,15 @@ cites:
     external:  true
   - title:     "Don't Blame the Large Language Model: How Agent Harness Evolution Shapes Coding Agent Quality (Ben Sghaier, Li, Adams, Hassan; 2026)"
     locator:   "arXiv:2607.03691, results across 35 releases"
+    external:  true
+  - title:     "Handoff Debt: The Rediscovery Cost When Coding Agents Take Over Interrupted Tasks (KC, Budathoki; 2026)"
+    locator:   "arXiv:2606.02875v2, abstract and handoff views"
+    external:  true
+  - title:     "Codified Context: Infrastructure for AI Agents in a Complex Codebase (2026)"
+    locator:   "arXiv:2602.20478v1, abstract; 283 development sessions"
+    external:  true
+  - title:     "Ontology-Grounded Project Memory for Coding Agents (Adam; NeSy 2026)"
+    locator:   "arXiv:2608.13662, abstract"
     external:  true
   - title:     "Which test is the best for equivalence? Two one-sided tests (Schuirmann, 1987)"
     locator:   "J. Pharmacokinetics and Biopharmaceutics 15(6)"
@@ -125,8 +135,27 @@ implementation choices that have become liabilities." Xue finds that context rot
 in coding agents usually appears as a silently dropped requirement or "applying
 an obsolete rule" inside otherwise plausible output. ContextEcho and LOCA-bench
 measure drift and degradation as context grows. Together they support the
-premise that sessions decay. None tests the remedy proposed here: replacing the
-session while carrying intent forward in maintained, typed documents.
+premise that sessions decay.
+
+Three 2026 studies come closer still to the remedy. *Handoff Debt* (KC and
+Budathoki) interrupts a coding agent partway through a task and hands it to a
+successor, which receives the repository only, the predecessor's raw trace,
+summary notes, or structured notes. Context-bearing handoffs cut the successor's
+agent events by 20–59% and prompt tokens by 42–63%; effects on task success were
+smaller and model-dependent. *Codified Context* reports a project knowledge base
+of conventions, architectural decisions, and known failure modes used across 283
+development sessions, observationally rather than as a controlled comparison.
+*MOOSEDev* (Adam) gives agents an ontology-grounded store of decisions with
+status and supersession, and shows that structured queries recover supersession
+and completeness answers almost fully where vector retrieval recovers 6–27%; it
+evaluates retrieval, not development outcomes. So the separate parts of the
+remedy have been studied: one handoff at a time, observationally, or as
+retrieval. What none of them measures, as far as the literature examined
+(see [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md))
+shows, is whether output quality and conformance to design intent hold across a
+long sequence of real development steps when each step is taken by a fresh
+session carrying a maintained, typed corpus. That is the gap this evaluation
+addresses. The search behind this claim has not been exhaustive.
 
 One consequence for the standard: [COMPASS-0001](../Compass.md) §23 says that "no
 rigorous account of 'documentation as LLM context' has yet been published." That
@@ -246,7 +275,7 @@ opencode export <session-id> > runs/<run-id>/session.json
   any corpus changes removed from what it sees. Code diffs and corpus diffs are
   graded separately, so a corpus edit cannot reveal the condition to the code
   grader.
-- **Human calibration.** Sloane blind-grades a stratified random sample of at
+- **Human calibration.** Andrew Sengul blind-grades a stratified random sample of at
   least 10% of judged items. The judge is accepted only if its agreement with the
   human grades reaches Cohen's κ ≥ 0.6 per measure; otherwise that measure is
   graded by hand or dropped. Agreement is reported.
@@ -372,7 +401,7 @@ For each build step:
   step's intent. It names the public interface the hidden tests call (function
   and macro names, argument lists) but not the implementation. Statements are
   drafted by an LLM that sees only the commit's diff and tests, never the
-  documents, and reviewed by Sloane for leaks of document content.
+  documents, and reviewed by Andrew Sengul for leaks of document content.
 - **Hidden checks** are the tests the commit added or changed, withheld from the
   worktree; the full test suite of the parent commit, as a regression check; and
   the step's invariant checks, where it has them.
@@ -392,7 +421,7 @@ Table: Relay conditions.
 |---|---|---|
 | R1 | One long session for the whole relay, compacted by OpenCode as it grows | The session's own history only |
 | R2 | A fresh session per step | Nothing: each session starts from the code alone |
-| R3 | A fresh session per step | Untyped notes, maintained by the agents under an Operator-style instruction ("consult before you build; update after you build"), seeded with Classic's historical documents in their original form |
+| R3 | A fresh session per step | Untyped notes, maintained by the agents under an Operator-style instruction ("consult before you build; update after you build"), seeded with Classic's historical documents in their original form; comparable to Handoff Debt's "summary notes" view, but accumulated across steps |
 | R4 | A fresh session per step | The full Compass stack: a typed corpus, source headers, the session catalog and source map delivered at start, and the maintenance protocol with `compass-maintain`, seeded with the same documents migrated to Compass form |
 
 In anchored mode, R1's code is reset to the historical state before each step,
@@ -402,6 +431,18 @@ own previous step, not from history: what persists is what the agents
 maintained. Between steps in R4, the harness regenerates the catalog and map as
 the toolchain would (by hand or with v0.1 where it suffices), and records
 whether the agent's proposals would pass `compass check`.
+
+The conditions can be read against *Handoff Debt*'s four handoff views, which
+are the nearest published reference point. R2 corresponds to its
+"repository only" view and R3 to its "summary notes" view; R4 extends its
+"structured notes" view from a fixed per-handoff contract to a typed corpus
+maintained across many handoffs. Its "raw trace" view has no counterpart here,
+since carrying the whole previous transcript is what the thesis proposes to
+avoid; R1 is the limiting case of keeping the trace in a single session. Unlike
+Handoff Debt, which hands over an interrupted task, each relay step here is a new
+task, so the measure of interest is retained design intent rather than the cost
+of resuming. Its efficiency measures (agent events and prompt tokens) are
+nevertheless reported in G8 in comparable form.
 
 ### Track 1: snapshot tasks
 
@@ -421,7 +462,7 @@ Table: Track 1 task categories.
 | Control | Ordinary features and fixes where documentation should not matter | Tests |
 
 Proposed mix: about 8 trap tasks and about 4 security-invariant tasks, at least
-half of each written by Sloane, and about 6
+half of each written by Andrew Sengul, and about 6
 control tasks written by an LLM that sees only the code. Each task consists of a
 statement written as an issue; its category; where the needed knowledge lives
 and whether it can be recovered from the code; hidden checks; and a reference
@@ -617,7 +658,7 @@ Table: Sections of this evaluation and the primary sources each draws on.
 | Section | Primary sources |
 |---|---|
 | Thesis | COMPASS-DRAFT-operator-memory; Xue (2026); ContextEcho; LOCA-bench |
-| What the published studies do and do not show | Gloaguen et al. (2026); Khatri (2026); Chatlatanagulchai et al.; EvoCode-Bench; Xue (2026) |
+| What the published studies do and do not show | Gloaguen et al. (2026); Khatri (2026); Chatlatanagulchai et al.; EvoCode-Bench; Xue (2026); Handoff Debt (2026); Codified Context (2026); MOOSEDev (2026); COMPASS-DRAFT-agent-context-prior-art |
 | Decision rules | COMPASS-DRAFT-toolchain-D10 to D14; COMPASS-DRAFT-agent-workflow-D9, D10 |
 | Harness | OpenCode CLI (`run`, `export`); Ben Sghaier et al. (2026) on harness drift |
 | Statistics | Schuirmann (1987); Khatri (2026) on equivalence testing in this setting |

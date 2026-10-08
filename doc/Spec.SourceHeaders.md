@@ -9,7 +9,7 @@ language:      en
 status:        Draft
 schema-version: "0.1"
 authors:
-  - Sloane
+  - Andrew Sengul
 provenance:
   assistant:   opencode
 relates-to:

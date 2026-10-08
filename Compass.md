@@ -105,11 +105,16 @@ artifact) rather than to absorb the concern into Compass.
   requirement-to-test traceability. Compass's decision and open-question
   registers (§8) are not a requirements register.
 - **Knowledge-base, support, and FAQ content** — searchable help-center
-  articles with their own categorization and feedback loops.
+  articles with their own categorization and feedback loops. This is distinct
+  from the `Memo` genre (§4): a memo records a verified engineering property of
+  a system for the people and agents who change it, not an answer for its
+  users.
 - **Disposable scratch** — routine assistant transcripts, working notes, and
   throwaway experiments. These are not Compass documents; see the `Ideation`
   genre (§4) for the narrow exception of a curated, foundational discussion
-  worth preserving.
+  worth preserving. A finding that outlives the session or branch it came from
+  is not scratch: if it passes the admission tests of §4, it belongs in a
+  `Memo`.
 
 Finally, a note on honesty about value. In its **near term** Compass delivers
 *disciplined, federated, semantically-typed Markdown* — a real but modest
@@ -136,8 +141,8 @@ of one bug fix and a program-spanning hardware architecture record.
 
 Compass defines a **binding-independent information model**. The
 normative content of a document is its *information model*: its genre,
-scope, status, metadata fields, decision and open-question registers, body
-structure, and its typed relationships to other documents. That model can
+scope, status, metadata fields, decision, open-question, and memo registers,
+body structure, and its typed relationships to other documents. That model can
 be *serialized* in more than one way — each serialization is a **binding**.
 
 - The **reference binding** is Markdown with a YAML front-matter block,
@@ -155,7 +160,7 @@ reference binding; §§13–15 cover governance, templates, and rationale.
 ## 4. Genre Vocabulary
 
 A document's genre is declared in front-matter and echoed in its filename
-prefix. There are ten genres, each with a two-letter code used as a short
+prefix. There are eleven genres, each with a two-letter code used as a short
 mnemonic in indexes and tooling facets — not in the permanent identifier
 (§5).
 
@@ -167,6 +172,7 @@ mnemonic in indexes and tooling facets — not in the permanent identifier
 | Plan | `Plan.` | PL | Forward design plus roadmap for a buildable unit |
 | Log | `Log.` | LG | Engineering journal of work done and verified |
 | Ref | `Ref.` | RF | Reference manual for running software |
+| Memo | `Memo.` | ME | Verified, present-tense properties of running software; numbered M-records (§8) |
 | Guide | `Guide.` | GD | Task walkthrough or demonstration; `subtype: tutorial \| howto` |
 | Spec | `Spec.` | SP | Normative contract for running software |
 | Glossary | `Glossary.` | GL | Canonical terms and backronym registry |
@@ -190,21 +196,44 @@ Routine assistant transcripts, working notes, and throwaway experiments are
 disposable scratch and are **not** Compass documents (§2); promoting one to
 `Ideation` is a considered editorial act, not a default.
 
+The `Memo` genre records durable knowledge about existing software: properties
+whose understanding is key to working on a system, observed and verified rather
+than designed. A memo records a lasting property of a system; it is not a dated
+message to a reader. Memos are short, so they are kept as numbered **M-records**
+in a host document (§8), normally one host per major component, named
+`Memo.<Topic>.md`. A memo is admitted only if it passes four tests:
+
+1. **Durable** — it should remain true for the expected life of the code it
+   concerns, not only for one session or one branch;
+2. **Consequential** — misunderstanding it leads to wrong code or wasted work;
+3. **Not evident** — it cannot be read from the code, a source header, or an
+   existing document;
+4. **Grounded** — it states how it is known, in a form a reader could check.
+
+Tests 1–3 are editorial judgment. Test 4 is checked: every M-record's
+`**Basis:**` names at least one commit-pinned code reference (§9), a Compass
+identifier, or the title of an entry in the host's `cites:`. A memo is not a
+scratchpad (§2) and not a substitute for a `Ref`: when a component's memos
+amount to a comprehensive description, they are folded into a `Ref` or `Spec`
+and marked `Superseded`.
+
 ### The normativity grid
 
-Three genres describe systems rather than journal work, and they divide
+Four genres describe systems rather than journal work, and they divide
 along two lines — whether the system yet exists, and whether the document
 is normative about it:
 
 |  | Non-normative | Normative |
 |---|---|---|
 | **Aspirational** (not yet built) | `Survey` | `Arch` |
-| **Existing** (running code) | — | `Ref` / `Spec` |
+| **Existing** (running code) | `Memo` | `Ref` / `Spec` |
 
 `Survey` assesses whether something *should* exist by mapping the design
 territory; `Arch` specifies, comprehensively and normatively, a system that
 *does not yet* exist (a hardware architecture, a system-of-systems); `Ref`
-and `Spec` describe software that *does* exist. `Eval` sits beside `Survey`
+and `Spec` describe software that *does* exist, normatively and
+comprehensively; `Memo` records individual properties of existing software as
+they are observed, without prescribing them. `Eval` sits beside `Survey`
 as its sharper evidential companion — Survey maps the territory broadly,
 while Eval systematically compares alternatives against a rubric to inform
 a design.
@@ -223,6 +252,10 @@ and a stable subsystem only a `Ref`. Because the permanent identifier does
 not encode genre (§5), a document may change genre as it matures — a
 `Survey` promoted to a `Plan` — without breaking its identity or any
 inbound reference.
+
+`Memo` stands beside the later rungs rather than on the ladder: memos
+accumulate while a system is built and used, and the memos of a component are
+eventually folded into its `Ref` or `Spec`.
 
 
 ## 5. Identity, Scope, and Numbering
@@ -311,6 +344,22 @@ lifecycle:
 They additionally carry an `api-version` (for `Ref`/`Guide`) or
 `schema-version` (for `Spec`) recording the software version described.
 
+### The memo genre (`Memo`) and its records
+
+A `Memo` host document and each of its M-records (§8) carry one of four
+statuses:
+
+- **`Draft`** — recorded, not yet accepted.
+- **`Current`** — accepted, and still holds.
+- **`Deprecated`** — no longer true or no longer relevant.
+- **`Superseded`** — replaced by another record or document. The successor is
+  named in `superseded-by:` (for a host) or `**Superseded-by:**` (for a
+  record), which is required with, and only with, this status.
+
+A host is `Current` while it is maintained, however many of its records are
+still drafts. Records are recorded, accepted, and retired independently of one
+another; a retired record keeps its place and its identifier (§13).
+
 ### Editorial review
 
 `status` records a document's *authorial* lifecycle. Editorial review is a
@@ -319,15 +368,50 @@ state above:
 
 - **`In-Review`** — the status that marks a document as under review.
 - **`reviewers:`** — the people or roles who reviewed the document.
-- **`approved-by:`** — the reviewer who authorized the transition to
-  `Accepted` (or, for an `Arch`, to `Design-Record`), with `reviewed`
-  recording the date.
+- **`approved-by:`** — the reviewer who authorized the transition into an
+  authoritative status — `Accepted`, `Design-Record`, or `Current` — with
+  `reviewed` recording the date.
 
 For `project`- and `program`-scope documents the approver MUST NOT be the
 sole author: review is a genuine second pair of eyes. `component`-scope
 `Log`s, being lightweight records of completed work, MAY be self-accepted
-(`approved-by` the author, or omitted). This maps directly onto Classic's
-editorial workflow of writer and editor roles.
+(`approved-by` the author). This maps directly onto Classic's editorial
+workflow of writer and editor roles.
+
+**Solo stewards.** In a namespace with a single maintainer, the second-reviewer
+rule cannot be met. The namespace steward (§13) MAY therefore declare the
+namespace's approval mode *solo*, in the repository's project configuration;
+in a solo namespace the steward MAY be the `approved-by` of a document they
+also authored. The declaration is visible and reversible: when a second
+maintainer joins, the mode reverts and the second-reviewer rule applies to new
+acceptances. In every namespace, `approved-by` names a person, never an
+assistant: not the assistant recorded in `provenance:`, and not any tool that
+assisted the change.
+
+### Review gates
+
+Review covers three distinct acts, with different rules:
+
+1. **The change gate.** A change to a `project`- or `program`-scope document
+   reaches the main branch only in a commit made by a person, or through a pull
+   request a person approves. An assistant never makes the final commit to the
+   main branch by itself. For `component`-scope documents the gate is
+   RECOMMENDED.
+2. **The acceptance gate.** A transition into an authoritative status
+   (`Accepted`, `Design-Record`, `Current`, including an M-record's `Current`)
+   requires a person's `approved-by`, at every scope. An assistant never sets
+   `approved-by` or `reviewers`. An M-record has no approval field of its own:
+   its host's `approved-by` and `reviewed` record the most recent acceptance of
+   any of the host's records, and the change that accepts a record passes the
+   change gate.
+3. **Mechanical changes.** A change consisting only of identifier rewrites,
+   link-target updates, supersession mirroring, and regenerated outputs passes
+   the change gate without reopening acceptance. The toolchain (§22) classifies
+   changed documents as mechanical or substantive, so that review effort goes
+   to the substantive ones.
+
+A substantive edit to an accepted document passes through the change gate and
+keeps its status; the person who approves the change is reviewing it.
 
 ### The `external` flag
 
@@ -363,7 +447,7 @@ schema-version: ~                      # Spec only
 created:       2026-06-19              # → schema:dateCreated (PROV)
 updated:       2026-06-29              # → schema:dateModified (PROV)
 authors:                               # → dc:creator / schema:author
-  - Sloane
+  - Andrew Sengul
 reviewers:                             # → schema:reviewedBy (§6)
   - Ada
 approved-by:   Ada                     # → approver authorizing Accepted (§6)
@@ -384,6 +468,7 @@ decisions:                             # → D-register (§8)
   - PSYCHE-D23
 open-questions:                        # → O-register (§8)
   - PSYCHE-O1
+memos:         ~                       # → M-register (§8); Memo genre only
 glossary:      Glossary.PsycheTerms    # → term definitions consulted
 ---
 ```
@@ -420,7 +505,7 @@ values.
 
 The remaining front-matter fields are editorial or asserted acts that Git
 cannot supply — `reviewers`, `approved-by`, `reviewed`, `provenance`,
-`decisions`, `open-questions`, `relates-to`, `cites`, `supersedes`,
+`decisions`, `open-questions`, `memos`, `relates-to`, `cites`, `supersedes`,
 `superseded-by`, `glossary`, and the classification fields — and remain
 hand-maintained.
 
@@ -432,8 +517,9 @@ neither is available (an untracked file, an empty history).
 
 ## 8. Cross-Cutting Registers
 
-Two kinds of numbered record cross document boundaries and are referenced
-by stable ID from anywhere in the corpus.
+Three kinds of numbered record cross document boundaries and are referenced
+by stable ID from anywhere in the corpus: decisions (`D`), open questions
+(`O`), and memos (`M`).
 
 ### Decision records (`D`)
 
@@ -462,6 +548,40 @@ An open question is a known unresolved issue, assigned `<NAMESPACE>-O<n>`
 section and are listed in the `open-questions:` field. They are
 cross-referable across repositories, so a `program`-scope document may cite
 a `project`-scope open question by ID.
+
+### Memo records (`M`)
+
+A memo record states one durable, verified property of existing software
+(§4), assigned `<NAMESPACE>-M<n>` (e.g. `CLASSIC-M3`). M-records appear only in
+`Memo` documents, and a `Memo` document holds only M-records, under a single
+`## Memos` section in identifier order. The host lists its records in the
+`memos:` front-matter field, mirrored against the body. A record has a heading
+naming the property as a claim, a fixed set of bold-label fields, and a short
+body in the present tense:
+
+```
+### CLASSIC-M3 — Federation outbox delivery is at-least-once
+
+**Status:** Current
+**Read-if:** writing a federation receiver, or changing outbox flush or retry
+**Basis:** `mod/classic.engine.ref/federation/delivery.lisp:receive@a1b3f9c`; duplicate delivery reproduced after a forced retry
+
+A batch can be delivered more than once after a timeout. Receivers must be
+idempotent; the stale-content check in `delivery.lisp` is the current guard.
+```
+
+Table: M-record fields.
+
+| Field | Required | Value |
+|---|---|---|
+| `**Status:**` | yes | `Draft`, `Current`, `Deprecated`, or `Superseded` (§6) |
+| `**Read-if:**` | yes | The task or situation in which the memo matters, within 160 characters |
+| `**Basis:**` | yes | At least one commit-pinned code reference (§9), Compass identifier, or title of an entry in the host's `cites:`, then how the property was established |
+| `**Recorded:**` | no | The date the record was written (`YYYY-MM-DD`), which Git cannot supply per record |
+| `**Superseded-by:**` | with `Superseded` | The successor's identifier; required with, and only with, that status |
+
+The body should stay under about 200 words. A memo that grows larger is
+superseded by a document of its own.
 
 
 ## 9. Reference and Citation Rules
@@ -721,8 +841,17 @@ allocate on parallel branches, allocation follows one discipline:
   serializes number assignment at the one point — merge — where collisions
   can be resolved deterministically.
 
+**Memo records** follow the same discipline. An M-record is numbered
+`<NAMESPACE>-M<n>`, monotonic within the namespace and never reused. A record
+in a host that has not yet been assigned carries a provisional identifier
+formed from its host's, `<NAMESPACE>-DRAFT-<slug>-M<n>` (e.g.
+`CLASSIC-DRAFT-federation-M2`), where `<n>` counts within the host; the
+steward assigns the canonical `<NAMESPACE>-M<n>` in the same change that
+assigns the host, or that accepts the record into an assigned host.
+
 An identifier, once assigned, is permanent. A retired document is marked
-`Deprecated` or `Superseded-by` (§6) but keeps its identifier; a document
+`Deprecated` or `Superseded-by` (§6) but keeps its identifier, and a retired
+M-record keeps both its identifier and its place in its host; a document
 that genuinely migrates between namespaces (a rare re-homing, e.g. a
 component document promoted to a program) is re-minted in the new namespace
 with a `superseded-by` redirect from the old identifier, so no
@@ -823,6 +952,21 @@ Derived from ISO/IEC/IEEE 42010:
   numbered task procedure ending in the achieved result.
 - **Spec** — normative "Required …" sections using RFC 2119 language (MUST /
   SHOULD / MAY).
+
+### Memo
+
+```
+# <Component>: Memos              (H1; front-matter above, with memos:)
+
+<one paragraph: the system or component the memos concern, and where its
+ normative documentation lives (link the Ref/Spec by id)>
+
+## Memos                          (M-records, §8, in identifier order)
+### <ID> — <the property, stated as a claim>
+```
+
+A host holds only M-records. Hosts are divided by the major components of a
+project, one host per component, named `Memo.<Topic>.md`.
 
 
 ## 15. Inconsistency-Resolution Reference
@@ -982,6 +1126,7 @@ semantic model as follows. This table doubles as the ingestion specification.
 | `cites` (external) | Foreign-reference entities flagged non-corpus |
 | `D` decision records | `doc-decision` entities, individually addressable |
 | `O` open questions | `doc-open-question` entities, individually addressable |
+| `M` memo records | `doc-memo` entities, individually addressable |
 | Body | Lexis document tree (`:classic:*`-annotated) |
 | Master `INDEX` | A Classic federation space aggregating the corpus |
 | Genre infobox rendering | `:infobox` / `:label` lens specs per `doc-<genre>` class |
@@ -1207,6 +1352,9 @@ Closed items, retained as history.
 | R9 | Localization absent from the model | Extension appendix (§19) |
 | R10 | Accessibility unaddressed | Author-time rules normative (§12); render-time extension (§20) |
 | R11 | `authors` / `created` / `updated` duplicated Git metadata | MAY be Git-derived (§7); validator derives with `.mailmap` (§22) |
+| R12 | No home for durable, verified knowledge about running software; agents' findings lost between sessions | `Memo` genre (§4) with M-records (§8); admission tests keep it from becoming scratch (§2) |
+| R13 | Second-reviewer rule impossible to meet in a one-maintainer namespace | Solo-steward approval (§6) |
+| R14 | "Review" conflated committing, accepting, and mechanical rewrites | Three review gates (§6) |
 
 ### Specified, tooling deferred
 

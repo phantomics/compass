@@ -48,51 +48,71 @@ Assess each and record findings with severity (see report format):
    - a `Log` describing unbuilt work (a `Plan`), or a `Ref`/`Spec` describing
      code that does not yet exist (an `Arch`);
    - an `Eval` with no rubric or shared scenario (it is a `Survey`);
-   - a `Spec` written without RFC-2119 normative language (§14).
+   - a `Spec` written without RFC-2119 normative language (§14);
+   - a `Memo` record that states a design choice (a `D`-record), a known gap (an
+     `O`-record), or a rule about one file (a source-header `Invariant:`), or a
+     `Memo` host whose records amount to a comprehensive description (fold them
+     into a `Ref` and mark them `Superseded`).
    Use the normativity grid and maturity ladder to name the better-fitting genre
    when you flag a mismatch.
 
-2. **Section-shape adherence (§14).** Compare against `section-shapes.md`:
+2. **Memo admission (§4).** For each `Draft` or newly `Current` M-record,
+   judge the three tests the toolchain cannot check, and say which fail:
+   - **Durable** — will it hold for the life of the code, beyond this session
+     or branch?
+   - **Consequential** — would misunderstanding it lead to wrong code or wasted
+     work?
+   - **Not evident** — is it absent from the code, the source headers, and
+     existing documents?
+   Also check that the `**Basis:**` actually supports the claim (the toolchain
+   checks only that one is present), that the heading is a claim and the body
+   is present-tense and short, and that the record sits in the host for its
+   major component.
+
+3. **Section-shape adherence (§14).** Compare against `section-shapes.md`:
    - the required §14 spine sections are present and in order;
    - each section carries the *right content* (e.g. Verification states a
      test-run command and pass count for a `Log`; Prior Art is a real
      comparison, not a stub);
    - optional ancestral sections, where used, are placed correctly.
 
-3. **Decision-record quality (§8).** For each `D`-record: is the **Context** a
+4. **Decision-record quality (§8).** For each `D`-record: is the **Context** a
    real problem with forces (not a restatement of the decision)? Are the
    **Alternatives** genuinely considered options with reasons for rejection (not
    strawmen or empty)? Does the **Decision** follow from the context? Are the
    `D`-ids mirrored in the `decisions:` front-matter? Same scrutiny for
    `O`-records and `open-questions:`.
 
-4. **Cross-reference plausibility (§9).** For each `relates-to`/`cites`/`D`/`O`
+5. **Cross-reference plausibility (§9).** For each `relates-to`/`cites`/`D`/`O`
    citation and inline id-link: does the cited target actually concern what the
    citing text claims? (Use `compass-lookup` to resolve the target and confirm
    its subject.) Flag prose-only mentions of other documents that should be
    id-keyed links, and links to old `DevLog.`/`DevPlan.` names.
 
-5. **Code-reference discipline (§9).** In `Log`/`Plan`, are code references
+6. **Code-reference discipline (§9).** In `Log`/`Plan`, are code references
    commit-pinned (`path[:symbol]@revision`) rather than bare `file:line`? Prefer
    symbol anchors. (Existence/validity of the revision is a toolchain check;
    here judge whether the *form* is right and the reference is plausible.)
 
-6. **Prior-art coverage.** For `Survey`/`Eval`: is the prior art adequate for the
+7. **Prior-art coverage.** For `Survey`/`Eval`: is the prior art adequate for the
    claim, or are obvious comparators missing? For program-scope `Eval`/`Arch`
    leaning on foreign sources, is there a source-map appendix (§9)?
 
-7. **Accessibility (author-time, §12).** Tables have header cells and captions;
+8. **Accessibility (author-time, §12).** Tables have header cells and captions;
    diagrams have text-equivalent descriptions; headings nest without skipping;
    links use meaningful text; `language` is declared. (These are also toolchain
    checks; flag any you can see.)
 
-8. **README-transclusion drift (§10, S7).** For a compiled `README.md` with a
+9. **README-transclusion drift (§10, S7).** For a compiled `README.md` with a
    `README.md.compass` template, check whether committed content still matches
    what the transclusion directives would produce. This is best-effort until the
    fixture compiler (S7) exists; flag suspected drift for the editor.
 
-9. **Provenance (§7, §22).** If the document was authored/reviewed with LLM help,
-   is `provenance:` present?
+10. **Provenance and approval (§6, §7, §22).** If the document was
+   authored or reviewed with LLM help, is `provenance:` present? If it carries
+   `approved-by`, is that a person (never the `provenance:` assistant), and is
+   it someone other than the sole author unless the namespace has a declared
+   solo steward who is the approver?
 
 ## Report format
 

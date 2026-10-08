@@ -6,9 +6,11 @@ scope:         program
 program:       Compass
 component:     authoring-assistance
 language:      en
-status:        Draft
+status:        Accepted
 authors:
-  - Sloane
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-07
 provenance:
   assistant:   opencode
 relates-to:
@@ -113,11 +115,14 @@ still. Every decision below is weighed against that risk.
 
 ## Settled Decisions
 
-All decisions are **Proposed** until this Plan is accepted.
+This Plan was accepted on 2026-10-07 by its solo steward (D6). Decisions D1–D6
+were accepted with it, and their amendments to COMPASS-0001 have landed (see
+[Amendments to the standard](#amendments-to-the-standard)). D7–D10 remain
+**Proposed** until accepted individually.
 
 ### COMPASS-DRAFT-agent-workflow-D1 — A Memo genre for durable system knowledge
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** COMPASS-DRAFT-operator-memory-O4 asked where durable but
 unpublished knowledge belongs. The answer settled with the maintainer: a genre
@@ -148,7 +153,7 @@ and agents) from the knowledge-base and FAQ non-goal. Amends §2 (patch) and §4
 
 ### COMPASS-DRAFT-agent-workflow-D2 — Memos are numbered records in a host document
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A memo is often a few sentences long. One file per memo would
 proliferate files and make §7 front-matter longer than the content. Several
@@ -186,7 +191,7 @@ Amends §7 (minor: the `memos:` field), §8 (minor: the third register), and §1
 
 ### COMPASS-DRAFT-agent-workflow-D3 — Four admission tests, and a mandatory basis
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The value of the genre depends on keeping it from becoming the
 scratchpad the maintainer ruled out. An unverified memo is worse than none,
@@ -213,7 +218,7 @@ each proposed memo passes and why.
 
 ### COMPASS-DRAFT-agent-workflow-D4 — Memo status and authority weight
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The weight function of COMPASS-DRAFT-toolchain-D12 needs status
 values for the host and its records. Memos describe running software, so the
@@ -244,7 +249,7 @@ Amends §6 (minor).
 
 ### COMPASS-DRAFT-agent-workflow-D5 — Three review gates
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** COMPASS-DRAFT-operator-memory-O5 settled that changes to project-
 and program-scope documents are always reviewed by a human. Applied literally to
@@ -281,7 +286,7 @@ keeps its status; the human who approves the change is reviewing it. Amends §6
 
 ### COMPASS-DRAFT-agent-workflow-D6 — Solo stewards may approve their own documents
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** §6 forbids the sole author from approving project- and
 program-scope documents. For a namespace with one maintainer this is not
@@ -408,7 +413,8 @@ It never writes files. Adapters for other harnesses follow the same contract
 
 **Alternatives:**
 - Have the adapter run `compass catalog` itself. Rejected for the reasons in
-  COMPASS-DRAFT-toolchain-D10: every session would need the binary and libyaml.
+  COMPASS-DRAFT-toolchain-D10: every session would need the toolchain binary,
+  and session start would wait on Git.
 - Refuse to load anything if one input fails, as Operator Memory does. Adopted in
   spirit: the catalog is one generated file, so "fails to load" means the whole
   catalog, and the diagnostic replaces it.
@@ -418,8 +424,8 @@ It never writes files. Adapters for other harnesses follow the same contract
 ### Host document shape
 
 A host document opens with ordinary §7 front-matter and holds its records under
-a single `## Memos` section, in identifier order. The template shape, to become
-`templates/Memo.template.md` once the amendment is accepted:
+a single `## Memos` section, in identifier order. The template shape, now
+`templates/Memo.template.md`:
 
 ```markdown
 ---
@@ -527,12 +533,12 @@ human.
 A manifest declaring a solo steward (COMPASS-DRAFT-toolchain-D15):
 
 ```lisp
-:stewards ((:namespace "COMPASS" :steward "Sloane" :approval :solo))
+:stewards ((:namespace "COMPASS" :steward "Andrew Sengul" :approval :solo))
 ```
 
-With this declaration, Sloane may set `approved-by: Sloane` on a document
-Sloane authored. Without it, or with `:approval :second-reviewer`, the §6 rule
-applies unchanged.
+With this declaration, Andrew Sengul may set `approved-by: Andrew Sengul` on a
+document he authored. Without it, or with `:approval :second-reviewer`, the §6
+rule applies unchanged.
 
 ## The maintenance loop
 
@@ -587,9 +593,21 @@ under §13.
 | §13 | M-records in provisional and canonical allocation | minor | D2 |
 | §14 | Memo section shape | minor | D2 |
 
-Until these are accepted, `skills/reference/vocabularies.md`, the
-`compass-author` genre list, and `templates/` do not offer the Memo genre, so
-that skills never produce documents the standard does not yet define.
+**Status (2026-10-07):** the rows for D1–D6 have landed in COMPASS-0001, as a
+minor amendment under §13. COMPASS-0001 does not yet record a version number;
+it gains one with its front-matter (COMPASS-DRAFT-toolchain-D9). The
+`Assisted-by:` half of the §7 row waits on D7. `skills/reference/vocabularies.md`, the `compass-author` genre list, and
+`templates/Memo.template.md` now offer the Memo genre.
+
+The identifier grammar for M-records follows the D- and O-records. Their
+provisional form (`<NS>-DRAFT-<slug>-M<n>`) is the one
+COMPASS-DRAFT-toolchain-D2 proposes for all three registers; §13 adopts it for
+M-records now, and for D- and O-records when that decision is accepted.
+
+**Open detail:** an M-record has no `approved-by` of its own. Until the
+toolchain plan settles it, a record's move to `Current` is approved by the
+human who approves the change (D5), and the host's `approved-by` and `reviewed`
+record the most recent acceptance.
 
 ## Open Questions
 

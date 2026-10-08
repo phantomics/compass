@@ -9,7 +9,8 @@ One template per genre:
 
 - `Survey.template.md`, `Eval.template.md`, `Plan.template.md`,
   `Log.template.md`, `Ref.template.md`, `Guide.template.md`,
-  `Spec.template.md`, `Arch.template.md`, `Glossary.template.md`
+  `Spec.template.md`, `Arch.template.md`, `Glossary.template.md`,
+  `Memo.template.md`
 
 Each template carries the §7 front-matter block (with placeholder values) and
 the genre's canonical section headings from §14 as its normative spine. Beyond

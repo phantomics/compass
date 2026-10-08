@@ -9,7 +9,7 @@ language:      en
 status:        Draft
 schema-version: "0.1"
 authors:
-  - Sloane
+  - Andrew Sengul
 provenance:
   assistant:   opencode
 relates-to:
@@ -18,6 +18,7 @@ relates-to:
   - COMPASS-DRAFT-source-headers
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-secure-development
+  - COMPASS-DRAFT-agent-context-prior-art
 cites:
   - title:     "RFC 4151 — The 'tag' URI Scheme"
     locator:   "§2, Tag syntax and rules"
@@ -55,6 +56,15 @@ cites:
   - title:     "FOAF Vocabulary Specification"
     locator:   "foaf:Document, foaf:Person"
     external:  true
+  - title:     "OSLC Core Version 3.0 (OASIS Open Project)"
+    locator:   "Part 1: Overview; Part 6: Resource Shape"
+    external:  true
+  - title:     "OSLC Architecture Management Version 2.1, Part 2: Vocabulary (OASIS)"
+    locator:   "am: namespace, oslc_am:Resource"
+    external:  true
+  - title:     "Ontology-Grounded Project Memory for Coding Agents (Adam; NeSy 2026)"
+    locator:   "arXiv:2608.13662, abstract and §2"
+    external:  true
   - title:     "w3id.org — Permanent Identifiers for the Web"
     locator:   "README, registering a redirect (perma-id/w3id.org)"
     external:  true
@@ -63,6 +73,7 @@ open-questions:
   - COMPASS-DRAFT-semantic-binding-O2
   - COMPASS-DRAFT-semantic-binding-O3
   - COMPASS-DRAFT-semantic-binding-O4
+  - COMPASS-DRAFT-semantic-binding-O5
 ---
 
 # Semantic Binding Specification
@@ -187,7 +198,7 @@ project manifest (`compass.sexp`, COMPASS-DRAFT-toolchain-D4), under the
 `:authorities` key added by COMPASS-DRAFT-toolchain-D17. An authority follows
 RFC 4151: a DNS name or an email address that the steward controlled on a given
 date, followed by a comma and that date (`YYYY`, `YYYY-MM`, or `YYYY-MM-DD`).
-For example, `example.net,2026` or `sloane@example.net,2026-10`. The date is part
+For example, `example.net,2026` or `andrew@example.net,2026-10`. The date is part
 of the identity: it fixes whose name the authority was when minting began, so
 the IRIs stay unique even if the domain later changes hands. An authority, once
 used, MUST NOT change; a new authority would mint new IRIs for every document.
@@ -211,7 +222,7 @@ Table: IRI forms for each kind of resource.
 | Translation (§19) | `tag:<A>:<ns>/<ID>@<locale>` | `tag:example.net,2026:origin/ORIGIN-0012@fr` |
 | Section of a document | document IRI `#` anchor | `…/COMPASS-0003#the-uniqueness-guarantee` |
 | Component concept | `tag:<A>:<ns>/component/<component>` | `tag:example.net,2026:compass/component/toolchain` |
-| Person or software agent | `tag:<A>:agent/<slug>` | `tag:example.net,2026:agent/sloane` |
+| Person or software agent | `tag:<A>:agent/<slug>` | `tag:example.net,2026:agent/andrew-sengul` |
 | Source file or directory | `tag:<A>:<ns>/src/<path>` | `tag:example.net,2026:compass/src/src/ledger.lisp` |
 | Commit | `tag:<A>:<ns>/commit/<full SHA>` | |
 | Node owned by one document (citation, code reference, acceptance) | document IRI `#` local name | `…/COMPASS-0003#cite-4f1c2a9e` |
@@ -282,7 +293,7 @@ Table: Classes defined or reused by the binding.
 |---|---|---|
 | `compass:Document` | `prov:Entity`, `foaf:Document` | Every Compass document |
 | `compass:Survey`, `compass:Eval`, `compass:Architecture`, `compass:Plan`, `compass:Log`, `compass:Ref`, `compass:Guide`, `compass:Spec`, `compass:Glossary`, `compass:Ideation` | `compass:Document` | One class per §4 genre |
-| `compass:Memo` | `compass:Document` | Memo host documents; defined once COMPASS-DRAFT-agent-workflow-D1 is accepted |
+| `compass:Memo` | `compass:Document` | Memo host documents (COMPASS-0001 §4, by COMPASS-DRAFT-agent-workflow-D1) |
 | `compass:Record` | `prov:Entity` | Every register entry |
 | `compass:DecisionRecord`, `compass:OpenQuestion`, `compass:MemoRecord` | `compass:Record` | `D`, `O`, and M entries (§8; COMPASS-DRAFT-agent-workflow-D2) |
 | `compass:Section` | | A heading-delimited section of a document |
@@ -416,11 +427,11 @@ without changing the vocabulary:
 ```turtle
 <tag:example.net,2026:compass/COMPASS-0003>
     compass:acceptance <tag:example.net,2026:compass/COMPASS-0003#acceptance> ;
-    compass:approvedBy <tag:example.net,2026:agent/sloane> .
+    compass:approvedBy <tag:example.net,2026:agent/andrew-sengul> .
 
 <tag:example.net,2026:compass/COMPASS-0003#acceptance>
     a compass:Acceptance ;
-    prov:wasAssociatedWith <tag:example.net,2026:agent/sloane> ;
+    prov:wasAssociatedWith <tag:example.net,2026:agent/andrew-sengul> ;
     dcterms:date "2026-10-20"^^xsd:date ;
     compass:approvalMode compass:SoloApproval .
 ```
@@ -557,6 +568,34 @@ carried by amendment when it is accepted:
 4. **§7 and §17:** the RDF column and the mapping table are replaced by
    references to this specification.
 
+## Prior Art
+
+The idea of software lifecycle artefacts as linked data is not new, and this
+binding should be read against two precedents. The search behind this section
+has not been exhaustive; see
+[COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md).
+
+- **OSLC** (Open Services for Lifecycle Collaboration; IBM, then OASIS, since
+  about 2008) represents requirements, change requests, test cases, and
+  architecture resources as RDF over the W3C Linked Data Platform, with
+  resource shapes that anticipated SHACL and a query capability. It is the
+  established standard for lifecycle data as linked data. It differs from this
+  binding in purpose: OSLC integrates tools, each of which remains the system of
+  record for its own resources, and it does not model design narrative, typed
+  documentation, decision records, or agent consumption. Its Architecture
+  Management vocabulary is the nearest overlap with Compass's `Arch` and
+  `Spec` genres. See COMPASS-DRAFT-semantic-binding-O5.
+- **MOOSEDev** (Adam, NeSy 2026) keeps a coding agent's project memory as
+  decisions, constraints, rationales, and lessons in a knowledge graph grounded
+  in two small OWL ontologies with SHACL shapes, carrying lifecycle status,
+  provenance, and supersession links, queried through MCP. Its evaluation found
+  that structured queries return the expected answers to supersession,
+  completeness, and negation questions almost fully, where vector retrieval
+  returns 6–27%: evidence for the value of the queries this binding enables. It
+  differs in keeping the graph as the source of truth, in a proprietary engine,
+  for one project; this binding derives the graph one-way from reviewed Markdown
+  in Git, across a federation, under an open vocabulary.
+
 ## Security Considerations
 
 - **Personal data.** Exports name authors, reviewers, and approvers, and with
@@ -617,9 +656,9 @@ c:COMPASS-0003
     compass:status cstatus:Accepted ;
     dcterms:language "en"^^xsd:language ;
     dcterms:created "2026-10-05"^^xsd:date ;
-    dcterms:creator ag:sloane ;
+    dcterms:creator ag:andrew-sengul ;
     compass:assistedBy ag:opencode ;
-    compass:approvedBy ag:sloane ;
+    compass:approvedBy ag:andrew-sengul ;
     sioc:has_space <tag:example.net,2026:compass> ;
     dcterms:subject <tag:example.net,2026:compass/component/toolchain> ;
     dcterms:relation c:COMPASS-0001 ;
@@ -730,6 +769,16 @@ The vocabulary is written in RDFS with a few OWL terms (`owl:sameAs`,
 `owl:versionInfo`). Should it declare an OWL 2 profile (for example OWL 2 RL)
 so that reasoners can infer superclass membership and inverse properties, or
 stay at RDFS and leave inference to queries?
+
+### COMPASS-DRAFT-semantic-binding-O5 — Alignment with OSLC
+
+OSLC already defines RDF vocabularies for lifecycle resources, notably
+Architecture Management and Change Management, and is supported by commercial
+lifecycle tools. Should Compass classes declare alignments to OSLC terms (for
+example `compass:Architecture rdfs:subClassOf oslc_am:Resource`), so that OSLC
+consumers can read Compass exports? Or should Compass stay independent and leave
+mappings to integrators, given that OSLC's tool-integration model and its HTTP
+service requirements do not match a derived, file-based corpus?
 
 ## Afterword: Limits
 

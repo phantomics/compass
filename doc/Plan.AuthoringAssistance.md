@@ -10,7 +10,7 @@ language:      en
 status:        Draft
 created:       2026-08-24
 authors:
-  - Sloane
+  - Andrew Sengul
 provenance:
   assistant:  opencode
 relates-to:

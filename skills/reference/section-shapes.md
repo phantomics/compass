@@ -174,6 +174,24 @@ used lowercase "must"; Compass Spec MUST use RFC-2119 uppercase. Carries
 
 ---
 
+## Memo (§4, §8, §14)
+
+**Spine:**
+```
+# <Component>: Memos
+<one paragraph: the component the memos concern; link its Ref/Spec by id>
+## Memos                        (M-records only, in identifier order)
+### <ID> — <the property, stated as a claim>
+**Status:** … / **Read-if:** … / **Basis:** … [/ **Recorded:** …] [/ **Superseded-by:** …]
+<present-tense body, under about 200 words>
+```
+
+One host per major component of a project (`Memo.<Topic>.md`); a host holds
+nothing but M-records. No ancestor corpus has this genre; it was added by
+amendment (COMPASS-DRAFT-agent-workflow-D1–D4).
+
+---
+
 ## Glossary (§4; net-new — no direct ancestor)
 
 No ancestor Glossary exists; the closest precedent is classic `Model.md`'s

@@ -10,7 +10,7 @@ Artifacts by Structural Standard). Use the `compass-*` skills rather than
 improvising documents:
 
 - `compass-author` — scaffold a new document (Survey/Eval/Plan/Log/Ref/Guide/
-  Spec/Arch/Glossary) with correct front-matter and per-genre section shape.
+  Spec/Arch/Glossary/Memo) with correct front-matter and per-genre section shape.
 - `compass-review` — judgment-level conformance review before accepting a doc.
 - `compass-lookup` — resolve identifiers, decisions, and cross-references.
 

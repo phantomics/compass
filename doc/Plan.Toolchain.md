@@ -8,7 +8,7 @@ component:     toolchain
 language:      en
 status:        Draft
 authors:
-  - Sloane
+  - Andrew Sengul
 provenance:
   assistant:   opencode
 relates-to:
@@ -35,6 +35,15 @@ cites:
   - title:     Operator Memory repository (aerovato/operator-memory)
     locator:   "README.md; packages/core/src/preamble.ts:renderPreamble@e394f1c"
     external:  true
+  - title:     SBCL User Manual
+    locator:   "Saving a Core Image (save-lisp-and-die)"
+    external:  true
+  - title:     GitHub Docs — Using artifact attestations
+    locator:   "Generating build provenance for binaries"
+    external:  true
+  - title:     ocicl repository (ocicl/ocicl)
+    locator:   ".github/workflows/ci.yaml; ocicl.asd (program-op build)"
+    external:  true
 decisions:
   - COMPASS-DRAFT-toolchain-D1
   - COMPASS-DRAFT-toolchain-D2
@@ -53,6 +62,8 @@ decisions:
   - COMPASS-DRAFT-toolchain-D15
   - COMPASS-DRAFT-toolchain-D16
   - COMPASS-DRAFT-toolchain-D17
+  - COMPASS-DRAFT-toolchain-D18
+  - COMPASS-DRAFT-toolchain-D19
 open-questions:
   - COMPASS-DRAFT-toolchain-O1
   - COMPASS-DRAFT-toolchain-O2
@@ -144,6 +155,9 @@ exposes further gaps in the standard:
   verify commit-pinned code references (§7, §9).
 - Ship a standalone executable and a GitHub Actions check. Build reproducibly
   under **both Quicklisp and ocicl**.
+- Make the toolchain usable by projects in any language, with no Lisp
+  installation: downloadable binaries for the common platforms, a setup action
+  for CI, and a container image (COMPASS-DRAFT-toolchain-D19).
 - Make the front-end reusable by the future Markdown→Lexis importer (S2, §16).
 - Let the authoring-assistance skills call the toolchain instead of guessing,
   which lifts COMPASS-D2.
@@ -315,7 +329,7 @@ Amends §11, §12, and §13.
 - HTML `<table><caption>`. Rejected: it gives up plain Markdown.
 - Treat these rules as unenforceable. Rejected: they are MUST rules.
 
-### COMPASS-DRAFT-toolchain-D7 — Common Lisp, cl-yaml, and a purpose-built body scanner
+### COMPASS-DRAFT-toolchain-D7 — Common Lisp, with purpose-built parsers
 
 **Status:** Proposed
 
@@ -325,9 +339,8 @@ end with the Markdown→Lexis importer (S2). Findings must cite line numbers.
 
 **Decision:**
 - The program is a Common Lisp ASDF system for SBCL.
-- Front-matter is parsed with `cl-yaml` (libyaml through CFFI) and then
-  type-checked strictly. For example, YAML 1.1 reads `language: no` as the
-  boolean false, and the validator must reject that rather than accept it.
+- Front-matter is parsed by the strict YAML-subset parser of
+  COMPASS-DRAFT-toolchain-D18 and then type-checked against the field schema.
 - The body is read by a line-oriented scanner written for this project. It
   produces headings, tables with their caption lines, fenced code, links,
   images, inline code, and HTML comments, each with its line number.
@@ -336,7 +349,8 @@ end with the Markdown→Lexis importer (S2). Findings must cite line numbers.
 
 **Alternatives:**
 - 3bmd. Rejected: no source positions, and a dependency on esrap.
-- A pure-Lisp YAML-subset parser. Kept open as COMPASS-DRAFT-toolchain-O1.
+- `cl-yaml` (libyaml through CFFI) for front-matter. Rejected by
+  COMPASS-DRAFT-toolchain-D18.
 
 ### COMPASS-DRAFT-toolchain-D8 — Manager-agnostic system, first-class on both Quicklisp and ocicl
 
@@ -417,8 +431,8 @@ carries a digest of its inputs, so an adapter can tell whether it is stale
 without running Lisp.
 
 **Alternatives:**
-- Generate at session start. Rejected: every session would need the binary and
-  the native libyaml library (O1, O2), and session start would wait on Git.
+- Generate at session start. Rejected: every session would need the binary
+  (COMPASS-DRAFT-toolchain-D19), and session start would wait on Git.
 - Generate inside each harness adapter. Rejected: a second implementation of the
   catalog logic would drift from the toolchain's.
 - Run Operator Memory alongside Compass. Rejected by the survey (O1): two
@@ -671,6 +685,160 @@ toolchain that produces it.
 - Defer the export until Classic can ingest it. Rejected: any SPARQL store can
   use the export now, and Classic is one consumer among several.
 
+### COMPASS-DRAFT-toolchain-D18 — A strict YAML-subset parser written in Lisp
+
+**Status:** Proposed
+
+**Context:** COMPASS-DRAFT-toolchain-O1 weighed `cl-yaml`, which parses full
+YAML 1.1 through the native libyaml library, against a parser for only the YAML
+that Compass front-matter uses. Three findings settle it:
+- **The subset is small.** A survey of every front-matter block in this
+  repository (documents, templates, and skills; 21 files) found only block
+  mappings, one level of nested mapping, block sequences, sequences of
+  mappings, double-quoted scalars, and trailing comments. There were no flow
+  mappings, block scalars, anchors, aliases, or tags.
+- **YAML 1.1 typing works against the validator.** It reads `language: no` as
+  the boolean false and `schema-version: 0.10` as the number 0.1. The validator
+  must then reject values it never wanted converted.
+- **The native parser is a liability.** In CI the toolchain reads pull
+  requests, including ones from forks. libyaml exposes a native parsing surface
+  to that input ([COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md)).
+  It also makes every binary depend on a shared library that must be bundled or
+  installed on each platform (COMPASS-DRAFT-toolchain-D19).
+
+**Decision:** Front-matter is parsed by a parser written for the toolchain, in
+Lisp. It accepts:
+- a top-level block mapping, with mappings nested to any depth that the field
+  schema allows;
+- block sequences of scalars or of mappings, and single-line flow sequences of
+  scalars;
+- plain, single-quoted, and double-quoted scalars;
+- `#` comments, and the null forms `~`, `null`, and an empty value.
+
+**Every scalar is kept as a string.** Types come from the field schema
+(see [Front-matter types](#front-matter-types)), so YAML 1.1's conversions
+cannot occur.
+
+The parser reports anything else as an error with a line and column. That
+includes tab indentation, duplicate keys, anchors, aliases, tags, block
+scalars, flow mappings, explicit `?` keys, and multiple documents, and also
+`: ` inside a plain scalar, as YAML itself does. Every value keeps its source
+position, so `fm/types` can report each finding at the value it concerns.
+
+Front-matter that uses YAML beyond the subset is non-conforming. Other YAML
+consumers, such as the S8 Astro collections, accept a superset, so every
+conforming document remains readable by them.
+
+Resolves COMPASS-DRAFT-toolchain-O1. Amends §7 (minor) to state the subset.
+
+**Alternatives:**
+- `cl-yaml` with strict type checks (the original D7). Rejected for the native
+  dependency, the parsing surface, and conversions that must then be undone.
+- Both, with `cl-yaml` as an optional backend. Rejected: two parsers would
+  disagree on edge cases, and the subset is the conformance definition either
+  way.
+
+### COMPASS-DRAFT-toolchain-D19 — Portable binary distribution
+
+**Status:** Proposed
+
+**Context:** Compass is meant for projects in any language. A project that is
+not written in Lisp should be able to run `compass check` without installing a
+Lisp, a dependency manager, or this repository. SBCL can save a complete image
+as a standalone executable. ocicl is built this way and is distributed as Linux
+packages, a Homebrew formula, and MacPorts. Its CI builds and tests on Linux,
+macOS, and Windows. Measured locally, the ocicl executable needs only the C
+library and its companions (`libc`, `libm`, `libdl`, `libpthread`) and answers
+`ocicl version` in about 20 ms. SBCL cannot cross-compile, so each platform has
+to be built on its own runner.
+
+**Decision:**
+
+Each release tag builds a standalone executable per target:
+
+Table: Release targets for the `compass` executable.
+
+| Target | Build environment | Note |
+|---|---|---|
+| Linux x86-64 (glibc) | A container with an old glibc, such as Debian 11 (glibc 2.31) or AlmaLinux 8 (2.28) | A binary runs on glibc versions at or after the one it was built against, so building on a current Ubuntu runner would exclude Debian 11 and RHEL 8 |
+| Linux arm64 (glibc) | An arm64 runner, using the same container | |
+| macOS arm64 | A macOS 14 or later runner | Intel macOS is optional |
+| Windows x86-64 | A Windows runner | |
+
+Each target job:
+- builds the executable with `asdf:make`;
+- runs the test suite;
+- runs `compass check` on this repository using the executable it just built,
+  not the development image;
+- uploads an archive (`.tar.gz`, or `.zip` for Windows).
+
+The release publishes the archives with a `SHA256SUMS` file and a GitHub build
+provenance attestation for each archive.
+
+Three distribution channels serve projects that are not written in Lisp, in
+order of priority:
+1. **A setup action** in this repository (`setup/action.yml`). It downloads the
+   archive for the runner's platform at a version the caller pins and verifies
+   it against `SHA256SUMS`. This answers COMPASS-DRAFT-toolchain-O2 for GitHub
+   CI.
+2. **A container image** on the GitHub container registry, built on a slim
+   Debian base. It covers GitLab and other CI systems, musl-based systems such
+   as Alpine, and platforms without a release binary.
+3. **A `pre-commit` hook definition** (`.pre-commit-hooks.yaml`), the usual
+   way projects in other languages run linters before commit.
+
+A Homebrew tap may follow. Lisp projects keep the Quicklisp and ocicl routes of
+COMPASS-DRAFT-toolchain-D8.
+
+**Code signing and notarization are deferred.** The first releases ship
+unsigned macOS and Windows executables. The release notes document installing
+through the setup action, the container, or `curl`, which avoid the macOS
+browser quarantine, and the Windows SmartScreen warning for downloaded
+executables. Signing and notarization follow once the toolchain has had more
+development and testing. Apple notarization needs a paid developer account.
+
+**Constraints on the code, from v0.1:**
+- **No native libraries.** All dependencies are pure Lisp; D18 removes the only
+  native one.
+- **Self-contained executable.** Nothing is loaded at run time from an init
+  file, from ASDF, or from this repository. Vocabularies, templates of generated
+  files, and the source-header registries are compiled into the image.
+- **Explicit encoding and line endings.** All files are read and written as
+  UTF-8, CRLF line endings are accepted on input, and paths are handled through
+  `uiop`, never by string concatenation.
+- **Git is optional.** Git is found on the `PATH` and invoked with an argument
+  list, never through a shell. Commands that need Git fail with exit code 2 and
+  a clear message when it is absent. v0.1 does not need Git.
+- **Build identity.** `compass version` reports the toolchain version, the
+  commit it was built from, and the target platform.
+- **Portable code.** Implementation-specific calls go through `uiop`, so that
+  ECL or CCL remain possible for platforms SBCL does not serve.
+
+**Consequences for projects not written in Lisp:**
+- **The manifest stays an s-expression** (D4). It is the one file such a
+  project writes in Lisp syntax. To spare authors from writing it by hand,
+  `compass init` writes a starting manifest from the repository's state and a
+  few questions.
+- **Some features are thinner outside Lisp:**
+  - Symbol checks in `ref/code-exists` rely on per-language patterns
+    (COMPASS-DRAFT-toolchain-O4).
+  - `asdf:` test locators, ASDF load order, and the ASDF `:description`
+    fallback have no equivalent in other build systems. The source map
+    degrades to name order and directory READMEs.
+  - `:repl` commands apply only to Lisp projects; `:shell` serves all others.
+- **Custom rules require Lisp** and a source build. The JSON report and per-rule
+  output let other tools consume findings without extending the toolchain.
+
+**Alternatives:**
+- Source builds only, through Quicklisp or ocicl. Rejected for projects not
+  written in Lisp: it asks every adopter to install and configure a Lisp.
+- Rewrite the toolchain in a language that ships binaries more easily (Go,
+  Rust). Rejected: it abandons the shared front end with the S2 importer and
+  Classic (§22), and SBCL's binaries are adequate, as ocicl and pgloader show.
+- Build all targets on current runners. Rejected for Linux: the glibc floor
+  would exclude long-term-support distributions still in wide use.
+- Sign and notarize from the first release. Deferred, as above.
+
 ## The uniqueness guarantee
 
 The guarantee is a set of invariants. The validator enforces them, and the
@@ -738,9 +906,9 @@ The ledger starts with a comment header, followed by one entry per line:
 ```lisp
 ;;; COMPASS allocation ledger. Append-only: one entry per line; never edit,
 ;;; reorder, or delete entries (Compass §13). Maintained by `compass assign`.
-(:id "COMPASS-0001" :kind :document :path "Compass.md" :date "2026-10-05" :by "Sloane")
-(:id "COMPASS-0002" :kind :document :draft "COMPASS-DRAFT-authoring-assistance" :path "doc/Plan.AuthoringAssistance.md" :date "2026-10-05" :by "Sloane")
-(:id "COMPASS-D1" :kind :decision :host "COMPASS-0002" :date "2026-10-05" :by "Sloane")
+(:id "COMPASS-0001" :kind :document :path "Compass.md" :date "2026-10-05" :by "Andrew Sengul")
+(:id "COMPASS-0002" :kind :document :draft "COMPASS-DRAFT-authoring-assistance" :path "doc/Plan.AuthoringAssistance.md" :date "2026-10-05" :by "Andrew Sengul")
+(:id "COMPASS-D1" :kind :decision :host "COMPASS-0002" :date "2026-10-05" :by "Andrew Sengul")
 ```
 
 Description: the example ledger shows three entries. The first is a document
@@ -763,7 +931,7 @@ The project manifest:
              :doc "Validate this repository's corpus"))
  :map (:exclude ("ocicl/**"))
  :catalog (:budget 8192)
- :stewards ((:namespace "COMPASS" :steward "Sloane" :approval :solo))
+ :stewards ((:namespace "COMPASS" :steward "Andrew Sengul" :approval :solo))
  :authorities ((:namespace "COMPASS" :authority "example.net,2026")))
 ```
 
@@ -772,7 +940,7 @@ namespace and keeps its documents in `doc/`. It lists two federated
 repositories by local path. The optional keys of
 COMPASS-DRAFT-toolchain-D15 add one REPL command and one shell command,
 exclude the ocicl dependency directory from the source map, set the catalog
-budget, and declare Sloane the solo steward of the COMPASS namespace. The
+budget, and declare Andrew Sengul the solo steward of the COMPASS namespace. The
 `:authorities` key of COMPASS-DRAFT-toolchain-D17 gives the namespace's tagging
 authority for RDF export; the authority shown is illustrative.
 
@@ -852,7 +1020,7 @@ Table: Toolchain components and their responsibilities.
 
 | Component | Responsibility |
 |---|---|
-| Front-matter | Split the YAML block, parse it with `cl-yaml`, check types strictly, map it onto the model |
+| Front-matter | Split the YAML block, parse it with the strict subset parser (D18), check types against the field schema, map it onto the model |
 | Body scanner | Line-oriented scan into positioned nodes (headings, tables, captions, fences, links, images, code spans, comments) |
 | Model | CLOS classes: `document`, `decision-record`, `open-question`, `memo-record`, `code-ref`, `citation`, `ledger-entry`, `namespace`, `corpus`, `federation` |
 | Vocabularies | §4/§6 controlled values, the extension-key registry, the source-header label and value registries, and the weight function, as Lisp data. A test checks them against `skills/reference/vocabularies.md` so the skills cannot drift |
@@ -881,15 +1049,18 @@ vocab/               ; generated compass.ttl, compass-shapes.ttl,
 doc/                 ; COMPASS documents, plus generated INDEX.md,
                      ; CATALOG.md, and MAP.md (committed)
 tests/               ; FiveAM suites, fixture corpora, git-repo harness
-.github/workflows/   ; compass-check (QL + ocicl matrix)
+setup/action.yml     ; setup action: download and verify a release (D19)
+Containerfile        ; container image for other CI systems (D19)
+.pre-commit-hooks.yaml ; pre-commit hook definition (D19)
+.github/workflows/   ; compass-check (QL + ocicl matrix); release (D19)
 ```
 
 ### Front-matter types
 
-`fm/types` checks each field against the type below after YAML parsing. YAML 1.1
-coerces some unquoted scalars (`no` to false, `0.10` to the float 0.1, dates to
-timestamps); the checker rejects a coercion that loses information and accepts
-one that does not.
+`fm/types` checks each field against the type below after YAML parsing. The
+subset parser (D18) keeps every scalar as a string, quoted or not, so the types
+below are the only interpretation a value receives: YAML 1.1's conversions
+(`no` to false, `0.10` to 0.1, dates to timestamps) never occur.
 
 Table: Front-matter field types checked by `fm/types`.
 
@@ -899,9 +1070,9 @@ Table: Front-matter field types checked by `fm/types`.
 | `title` | non-empty string | Single line |
 | `genre`, `subtype`, `scope`, `status` | string from the controlled vocabulary | `status` vocabulary depends on the genre family (§6; D5, D12) |
 | `program`, `project`, `component` | string | |
-| `language` | string, BCP-47 | A YAML boolean (`no`, `yes`) is an error, not a language |
-| `api-version`, `schema-version` | string | A YAML number is an error; write `"0.1"`, since `0.10` would read as 0.1 |
-| `created`, `updated`, `reviewed` | date, `YYYY-MM-DD` | A YAML date or a string of that form; anything else is an error |
+| `language` | string, BCP-47 | `no` is Norwegian, as written; it is never read as a boolean |
+| `api-version`, `schema-version` | string | Kept exactly as written, so `0.10` stays `0.10`; quoting is optional |
+| `created`, `updated`, `reviewed` | date, `YYYY-MM-DD` | A string of that form naming a real calendar date; anything else is an error |
 | `authors`, `reviewers` | list of strings | A single string is an error, so that a second author cannot be added as a mistyped scalar |
 | `approved-by` | string | |
 | `provenance` | map | `assistant` (string) is required inside it; `session` (string) is optional; other keys warn |
@@ -978,6 +1149,12 @@ Table: Initial rule set, with severity and the section each rule enforces.
 - `compass map [PATH] [--file FILE] [--check] [--json]` writes the source map,
   prints one subtree, or prints one file's effective header.
 - `compass manifest --json`.
+- `compass init` writes a starting `compass.sexp` from the repository's state
+  (the document directory found, the namespaces in use) and a few questions,
+  so that projects not written in Lisp need not write the manifest by hand
+  (D19). It refuses to overwrite an existing manifest.
+- `compass version` reports the toolchain version, the commit it was built
+  from, and the target platform (D19).
 - `compass export --rdf ntriples|turtle|nquads|trig|jsonld [--derived]
   [--history] [--with-text] [--federation]` writes the semantic binding
   (D17); `compass export --vocab` writes the vocabulary, context, and shapes.
@@ -1001,17 +1178,23 @@ designed so that later steps extend it rather than rewrite it.
   `register/status`, `register/heading-form`, `ref/doc-resolves`,
   `cite/well-formed`.
 - Commands: `check` (text and JSON), `show ID`, `index` (without `--check`),
-  and `next` in its advisory, scan-based form.
+  `next` in its advisory, scan-based form, and `version`.
 - A `--skip-unmarked` option that skips files without front-matter and reports
   how many it skipped, so the checker can run over partly migrated corpora. This
   is an interim answer to O5, not its resolution.
 - Builds under `DEPS=ql`; FiveAM tests over fixture corpora.
+- The code constraints of D19 hold from the first commit, so that the
+  executable built in v0.1 is already the one that v0.2 releases.
 
-**v0.2 — identity and CI** (roadmap step 4, part of step 7):
+**v0.2 — identity, CI, and release binaries** (roadmap step 4, part of step 7):
 - The ledger reader and its rules; `assign` and `renumber`; the concurrency
   tests.
 - Git-derived fields (`git/derivable`) and commit-pinned reference checks.
 - `index --check`; the GitHub Actions job; `DEPS=ocicl`.
+- `compass init`.
+- The release workflow for the D19 targets, unsigned; the setup action; the
+  container image; the `pre-commit` hook definition. A short spike on the macOS
+  and Windows runners comes first (see the [Roadmap](#roadmap)).
 
 **v0.3 — RDF export** (part of roadmap step 5):
 - The `:authorities` manifest key and `manifest/authority`.
@@ -1036,16 +1219,14 @@ dist and the ocicl registry.
 
 | System | Quicklisp (dist 2023-06-18) | ocicl registry (latest) | Role |
 |---|---|---|---|
-| `cl-yaml` | 20221106 | 20240503-049fe70 | front-matter parsing |
-| `cl-libyaml` | 20201220 | 20240503-a7fe9f6 | libyaml binding (via CFFI) |
 | `cl-ppcre` | available | 20250606-a2ea581 | ID and code-reference grammars |
 | `alexandria` | available | 20260812-f283e25 | utilities |
 | `shasht` | 20230618 | 20251015-40a4aee | JSON report and manifest output |
 | `fiveam` | 20220331 | 20240928-e43d6c8 | tests |
 | `cl-hamcrest` | 20230214 | not in registry | not used (COMPASS-DRAFT-toolchain-D8) |
 
-Both ecosystems need the native `libyaml` shared library. It is installed
-locally, and CI installs it from the distribution's package manager.
+Every dependency is pure Lisp. No native library is needed in either ecosystem,
+in CI, or in the release binaries (COMPASS-DRAFT-toolchain-D18, D19).
 
 **Quicklisp (today).**
 - The repository is made visible to ASDF either through the source registry or
@@ -1072,8 +1253,9 @@ locally, and CI installs it from the distribution's package manager.
 - Upgrade the local ocicl from v2.6.6. Current releases add `git+` installs and
   `ocicl lint`.
 - Run `ocicl lint` over the toolchain's own Lisp sources in CI.
-- Ask for `compass` to be added to the ocicl registry, so downstream
-  repositories can `ocicl install compass` (COMPASS-DRAFT-toolchain-O2).
+- Ask for `compass` to be added to the ocicl registry, so downstream Lisp
+  repositories can `ocicl install compass`. Repositories in other languages use
+  the release binaries (COMPASS-DRAFT-toolchain-D19).
 
 ## Scope and Non-Goals
 
@@ -1103,7 +1285,10 @@ locally, and CI installs it from the distribution's package manager.
     COMPASS-DRAFT-toolchain-D1);
   - fixture compilation (S7), audience projection (S5), and the site build (S8);
   - checking inline language spans (§12);
-  - editor and language-server integration (S9).
+  - editor and language-server integration (S9);
+  - code signing and notarization of the macOS and Windows executables,
+    deferred until the toolchain has had more development and testing
+    (COMPASS-DRAFT-toolchain-D19).
 
 ## Open Questions
 
@@ -1118,6 +1303,11 @@ surprises such as `no` meaning false by construction. It would also mean
 accepting less than other YAML consumers do, such as the S8 Astro collections.
 Which costs more?
 
+**Resolution (2026-10-08):** The pure-Lisp subset parser. Every front-matter
+block in this repository already fits the subset, the native parser exposes a
+parsing surface to pull-request input, and removing libyaml leaves the release
+binaries with no native dependencies. Recorded as COMPASS-DRAFT-toolchain-D18.
+
 ### COMPASS-DRAFT-toolchain-O2 — Distributing the checker to downstream repositories
 
 The CI of other repositories (origin, classic, lexter, psyche) needs `compass`.
@@ -1129,6 +1319,14 @@ The options are:
 
 Which is the supported path, and how is the toolchain version pinned per
 repository?
+
+**Resolution (2026-10-08):** Release executables, built per platform with no
+native dependencies, are the supported path for every repository. GitHub CI
+uses the setup action, which pins the toolchain version as an input and
+verifies the download against the release checksums. Other CI systems use the
+container image at a pinned tag. Lisp repositories may also build from source
+through Quicklisp or ocicl. Signing and notarization for macOS and Windows are
+deferred. Recorded as COMPASS-DRAFT-toolchain-D19.
 
 ### COMPASS-DRAFT-toolchain-O3 — Where the namespace table is authoritative
 
@@ -1147,6 +1345,12 @@ and misses forms generated by macros. Reading the file with the Lisp reader is
 more precise, but needs the right packages and read-time environment. Languages
 other than Lisp need their own heuristics. How strict should `ref/code-exists`
 be, and should a symbol it cannot find be an error or a warning?
+
+Release binaries make the toolchain available to projects in any language
+(COMPASS-DRAFT-toolchain-D19), which raises the stakes. A table of definition
+patterns per language (`def`, `fn`, `func`, `class`, and so on) is cheap but
+approximate. For a language with no patterns, the rule could check only the
+revision and path and report the symbol as unverified.
 
 ### COMPASS-DRAFT-toolchain-O5 — Treatment of pre-Compass documents
 
@@ -1195,6 +1399,8 @@ Table: Prior systems and what this plan draws from each.
 | Changelog fragment tools (e.g. towncrier) | The opposite design choice: they split entries into separate files to *avoid* conflicts, whereas the ledger keeps one file to *force* them |
 | Git non-fast-forward rejection | The atomic compare-and-swap behind deferred option B |
 | ocicl, Quicklisp | Dependency management (COMPASS-DRAFT-toolchain-D8); ocicl's lockfile and local-only mode for reproducible CI |
+| ocicl, pgloader | Command-line tools built with SBCL and distributed as standalone executables to users who need not know Lisp; ocicl's per-platform CI matrix (COMPASS-DRAFT-toolchain-D19) |
+| Linters distributed as binaries (e.g. ShellCheck, golangci-lint) | A setup action, a container image, and a `pre-commit` hook as the usual routes into other projects' CI (COMPASS-DRAFT-toolchain-D19) |
 | Operator Memory | A catalog delivered at session start, `Read If` routing, and a codebase index (D10–D14). Its agent-maintained, untyped, present-tense-only model is not imported ([COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md)) |
 | Emacs library headers | The `;;; file.el --- description` first line that the source-header summary line generalises (D14) |
 | `llms.txt` | A compact, LLM-oriented summary of a site; a static precursor of the session catalog |
@@ -1202,16 +1408,20 @@ Table: Prior systems and what this plan draws from each.
 
 ## Roadmap
 
-Steps 2 and 3 yield baseline v0.1, step 4 with the CI part of step 7 yields
-v0.2, and the export part of step 5 yields v0.3 (see
+Steps 2 and 3 yield baseline v0.1, step 4 with the CI and distribution parts of
+step 7 yields v0.2, and the export part of step 5 yields v0.3 (see
 [Baseline releases](#baseline-releases)).
 
 1. **This Plan.** Record the decisions and gaps. No change to `Compass.md` yet.
 2. **Skeleton, front end, and model.**
    - `compass.asd`, `compass.sexp`, `ocicl.csv`, the `Makefile`, and `.gitignore`.
-   - Front-matter parsing with strict typing; the body scanner; the model.
+   - The strict YAML-subset parser (D18) and front-matter typing; the body
+     scanner; the model.
    - Unit tests.
    - The project builds under both `DEPS=ql` and `DEPS=ocicl`.
+   - The code constraints of D19 from the first commit: no native libraries, a
+     self-contained executable, explicit UTF-8 and CRLF handling, Git invoked
+     only with argument lists, and a `compass version` that reports the build.
 3. **Validator.**
    - The schema, vocabulary, ID-format, reference, Git-derived-field, §12, and
      section-shape rules.
@@ -1246,11 +1456,21 @@ v0.2, and the export part of step 5 yields v0.3 (see
    - Fixture repositories covering inheritance, ASDF load order, budget
      truncation, one-hop federation, memo hosts, and solo and second-reviewer
      namespaces.
-7. **CLI, CI, and hooks.**
-   - The executable.
+7. **CLI, CI, hooks, and distribution.**
+   - The executable, and `compass init`.
    - The GitHub Actions matrix (Quicklisp + ocicl, both required).
    - An optional pre-commit hook that regenerates the index, catalog, and map.
    - Documented branch-protection and `CODEOWNERS` settings.
+   - **Distribution (D19)**, in this order:
+     - a spike of about a day on the macOS and Windows runners, to confirm that
+       an unsigned SBCL executable builds, runs, and invokes Git there, and to
+       measure the archive sizes;
+     - the release workflow for the four targets, with the old-glibc container
+       for Linux, `SHA256SUMS`, and build provenance attestations;
+     - the setup action, the container image, and the `pre-commit` hook
+       definition;
+     - installation instructions for unsigned executables on macOS and Windows.
+       Signing and notarization follow later.
 8. **Integration and bootstrap.**
    - Wire `compass-author` to `next`/`assign`, `compass-review` to `check`, and
      `compass-lookup` to `show` and `outline`.
