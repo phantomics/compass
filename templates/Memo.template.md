@@ -22,9 +22,11 @@ normative documentation lives (link the Ref/Spec by id, §9).>
 
 <!-- One M-record per durable property, in identifier order (§8).
      Admit a memo only if it is durable, consequential, not evident from the
-     code or an existing document, and grounded (§4). Records are never
-     deleted: retire one by changing its status. A person, never an
-     assistant, moves a record to Current (§6). -->
+     code or an existing document, and grounded (§4). Anyone, including an
+     assistant, may add a Draft record; Draft memos are listed for later
+     sessions as unreviewed. A person, never an assistant, moves a record to
+     Current (§6). Records are never deleted: retire one by changing its
+     status. -->
 
 ### <NAMESPACE>-DRAFT-<slug>-M1 — <The property, stated as a claim>
 

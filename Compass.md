@@ -349,8 +349,8 @@ They additionally carry an `api-version` (for `Ref`/`Guide`) or
 A `Memo` host document and each of its M-records (§8) carry one of four
 statuses:
 
-- **`Draft`** — recorded, not yet accepted.
-- **`Current`** — accepted, and still holds.
+- **`Draft`** — recorded, not yet reviewed.
+- **`Current`** — reviewed and accepted by a person, and still holds.
 - **`Deprecated`** — no longer true or no longer relevant.
 - **`Superseded`** — replaced by another record or document. The successor is
   named in `superseded-by:` (for a host) or `**Superseded-by:**` (for a
@@ -359,6 +359,14 @@ statuses:
 A host is `Current` while it is maintained, however many of its records are
 still drafts. Records are recorded, accepted, and retired independently of one
 another; a retired record keeps its place and its identifier (§13).
+
+Memos are meant to be written as work happens, by people or by assistants, so
+recording one needs no review: any author, human or machine, MAY add a `Draft`
+record. A `Draft` memo is a usable lead, not a hidden one. Tools that present
+the corpus to agents (§22) list it, marked as unreviewed, and an agent checks it
+against its `**Basis:**` before relying on it. Only the move to `Current`, which
+makes the memo count as verified present truth, passes the acceptance gate
+below.
 
 ### Editorial review
 

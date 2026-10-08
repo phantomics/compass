@@ -106,8 +106,8 @@ Reference genres additionally carry `api-version` (`Ref`/`Guide`) or
 
 | Status | Meaning |
 |---|---|
-| `Draft` | Recorded, not yet accepted |
-| `Current` | Accepted, and still holds |
+| `Draft` | Recorded, not yet reviewed. Any author, including an assistant, may write one; it is listed for agents as unreviewed |
+| `Current` | Reviewed and accepted by a person, and still holds |
 | `Deprecated` | No longer true or no longer relevant |
 | `Superseded` | Replaced; the successor is named in `superseded-by:` (host) or `**Superseded-by:**` (record), required with and only with this status |
 

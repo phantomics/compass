@@ -458,9 +458,13 @@ data), containing, in order:
    subtype), status, component, size, and the `read-if:` line if present;
 5. **Accepted decisions**: one line per `D`-record of weight Authoritative,
    giving its id, title, and host document;
-6. **Current memos**: one line per M-record of weight Authoritative
+6. **Memos**: one line per M-record of weight Authoritative
    (COMPASS-DRAFT-agent-workflow-D4), giving its id, title, and `**Read-if:**`
    line. Memo host documents are not listed as documents.
+7. **Unreviewed memos**: the same, for M-records of weight Provisional, under a
+   heading that marks them as not yet reviewed
+   (COMPASS-DRAFT-agent-workflow-D11). They are ordered last, so they are the
+   first entries dropped when the budget is exceeded.
 
 Scope and filtering:
 - The catalog covers the repository's own namespaces, plus federated documents
@@ -1001,16 +1005,21 @@ one section with `compass show ID#anchor`, or list its sections with
 - COMPASS-D3   The allocation ledger holds immutable facts only (COMPASS-0003)
 - COMPASS-D12  Authority weight is derived from genre and status (COMPASS-0003)
 
-## Current memos
+## Memos
 - COMPASS-M1  The ledger is read with a restricted reader that interns no symbols
   Read-if: changing ledger or manifest parsing
+
+## Unreviewed memos (recorded, not yet reviewed; verify against their Basis)
+- COMPASS-M2  Scanner anchors follow GitHub's slug rules, including duplicate suffixes
+  Read-if: changing heading anchors, `show ID#anchor`, or link resolution
 ```
 
 Description: the excerpt shows a catalog in the order D11 fixes. A banner with
 an input digest comes first, then a short preamble, the manifest's commands, the
 top level of the source map, documents grouped by weight with their `read-if:`
-lines, one line per accepted decision, and one line per current memo. The
-identifiers, statuses, sizes, and the memo are illustrative, as if this Plan,
+lines, one line per accepted decision, one line per current memo, and, last,
+one line per unreviewed memo under a heading that says so. The identifiers,
+statuses, sizes, and the memos are illustrative, as if this Plan,
 the source-header Spec, and a COMPASS memo host had been accepted and assigned
 numbers.
 

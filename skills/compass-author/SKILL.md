@@ -89,7 +89,9 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
    - `Eval` — set `subtype`; scaffold Method / Shared Scenario / Rubric.
    - `Memo` — add one M-record per durable property under `## Memos`, with
      status `Draft` and a provisional `<host-id>-M<n>` (next unused `<n>` in the
-     host), and mirror it into `memos:`. Before writing, check the four
+     host), and mirror it into `memos:`. Recording a `Draft` memo needs no
+     review: it reaches later sessions through the catalog, marked unreviewed.
+     Leave it `Draft`; a person moves it to `Current`. Before writing, check the four
      admission tests (§4) and tell the user which each memo passes and why:
      durable, consequential, not evident from the code or an existing document,
      and grounded. Write a `**Basis:**` with a commit-pinned reference

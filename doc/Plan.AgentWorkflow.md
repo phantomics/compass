@@ -10,7 +10,7 @@ status:        Accepted
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
-reviewed:      2026-10-07
+reviewed:      2026-10-08
 provenance:
   assistant:   opencode
 relates-to:
@@ -47,6 +47,7 @@ decisions:
   - COMPASS-DRAFT-agent-workflow-D8
   - COMPASS-DRAFT-agent-workflow-D9
   - COMPASS-DRAFT-agent-workflow-D10
+  - COMPASS-DRAFT-agent-workflow-D11
 open-questions:
   - COMPASS-DRAFT-agent-workflow-O1
   - COMPASS-DRAFT-agent-workflow-O2
@@ -117,8 +118,9 @@ still. Every decision below is weighed against that risk.
 
 This Plan was accepted on 2026-10-07 by its solo steward (D6). Decisions D1–D6
 were accepted with it, and their amendments to COMPASS-0001 have landed (see
-[Amendments to the standard](#amendments-to-the-standard)). D7–D10 remain
-**Proposed** until accepted individually.
+[Amendments to the standard](#amendments-to-the-standard)). D11, which amends
+the catalog rule of D4, was accepted by the steward on 2026-10-08. D7–D10
+remain **Proposed** until accepted individually.
 
 ### COMPASS-DRAFT-agent-workflow-D1 — A Memo genre for durable system knowledge
 
@@ -237,7 +239,9 @@ reference-genre statuses fit, with the addition of supersession.
   as for D-records: a `Draft` host makes every record at most Provisional, and a
   retired host makes them Excluded.
 - **Catalog:** each Authoritative memo gets one line in the session catalog,
-  with its `read-if:`. The host itself is not listed as a document.
+  with its `read-if:`. The host itself is not listed as a document. *Amended by
+  D11:* Provisional memos are listed too, in a separate section marked
+  unreviewed.
 
 Amends §6 (minor).
 
@@ -419,6 +423,54 @@ It never writes files. Adapters for other harnesses follow the same contract
   spirit: the catalog is one generated file, so "fails to load" means the whole
   catalog, and the diagnostic replaces it.
 
+### COMPASS-DRAFT-agent-workflow-D11 — Unreviewed memos are listed in the catalog
+
+**Status:** Accepted
+
+**Context:** Memos exist so that agents can store what they learn for later
+sessions, and agents may write them freely at any scope (D3, D8). Under D4 and
+D5 as accepted, however, an agent's memo stays `Draft` until a person moves it
+to `Current`, a `Draft` memo weighs as Provisional, and only Authoritative
+memos reach the session catalog. Machine-authored memos were therefore stored
+but invisible to the next session until reviewed, which defeated their purpose.
+Letting agents set `Current` themselves was considered and rejected below.
+
+**Decision:** Amends the catalog rule of D4. The session catalog lists memos in
+two sections:
+- **Memos:** M-records of weight Authoritative (status `Current`, accepted by a
+  person), as before;
+- **Unreviewed memos:** M-records of weight Provisional (status `Draft`), each
+  with its id, title, and `**Read-if:**` line, under a heading that marks them
+  as recorded but not yet reviewed.
+
+Nothing else changes. Memos are written as `Draft`, by agents or people, with
+no review needed to record them. A `Draft` memo's `**Basis:**` is still
+required and checked (D3), so every unreviewed memo can be verified by the
+agent that reads it. Moving a memo to `Current` still passes the acceptance
+gate (D5): a person approves it, and the host's `approved-by` and `reviewed`
+record the latest acceptance. The maintenance-loop text tells agents to treat
+unreviewed memos as leads to verify against their basis, never as present
+truth.
+
+Two limits keep unreviewed text from crowding out or masquerading as reviewed
+knowledge, which the injection concerns of
+[COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) call for:
+- unreviewed memos come after every Authoritative, Directive, and Contextual
+  entry, so they are the first entries dropped when the catalog exceeds its
+  budget (COMPASS-DRAFT-toolchain-D11);
+- the catalog shows only their title and `Read-if` line, both length-limited,
+  never their body.
+
+**Alternatives:**
+- Keep D4 unchanged: unreviewed memos stay out of the catalog until a person
+  accepts them. Rejected: machine-authored memos would wait unseen for review,
+  and the point of the genre is that later sessions find them.
+- Exempt memos from the acceptance gate, so that agents may set `Current` and
+  their memos weigh as Authoritative. Rejected: an agent's mistaken memo would
+  become present truth for every later session, and the distinction between
+  what an agent observed and what a person verified, which the weight function
+  exists to draw, would be lost.
+
 ## The Memo genre
 
 ### Host document shape
@@ -550,7 +602,8 @@ and memos whose Read-if matches your task, and the source-map entries for the
 files you will touch. Prefer `compass show ID#anchor` to reading whole files.
 
 While you build: treat Authoritative entries as present truth. If the code
-disagrees with one, raise it; do not silently follow either.
+disagrees with one, raise it; do not silently follow either. Treat unreviewed
+memos as leads: check one against its Basis before relying on it.
 
 After you build: run compass-maintain on your change. Include its proposals in
 the same change: corrections to claims your change made false, source-header
