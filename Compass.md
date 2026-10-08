@@ -1,3 +1,18 @@
+---
+id:            COMPASS-0001
+title:         "Compass: Common Ontological Model for Prose Artifacts by Structural Standard"
+genre:         Spec
+scope:         program
+program:       Compass
+language:      en
+status:        Draft
+schema-version: "0.2.0"
+authors:
+  - Andrew Sengul
+provenance:
+  assistant:   opencode
+---
+
 # Compass
 
 **Common Ontological Model for Prose Artifacts by Structural Standard**
@@ -1568,7 +1583,6 @@ derivation` (§21).
 
 ---
 
-*Compass is itself a `program`-scope document and should carry front-matter
-and the identifier `COMPASS-0001` once the standard is adopted; it is
-presented here without front-matter as the defining instance of the scheme
-it describes.*
+*Compass is itself a `program`-scope `Spec`, identifier `COMPASS-0001`, and
+its front-matter above is the defining instance of the scheme it describes.
+Its `schema-version` is the version of the standard (§13).*

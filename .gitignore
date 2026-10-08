@@ -1,0 +1,7 @@
+# Build outputs
+/bin/
+*.fasl
+
+# ocicl dependency tree (ocicl.csv is committed)
+/ocicl/
+/systems/

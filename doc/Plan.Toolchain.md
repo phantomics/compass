@@ -64,6 +64,8 @@ decisions:
   - COMPASS-DRAFT-toolchain-D17
   - COMPASS-DRAFT-toolchain-D18
   - COMPASS-DRAFT-toolchain-D19
+  - COMPASS-DRAFT-toolchain-D20
+  - COMPASS-DRAFT-toolchain-D21
 open-questions:
   - COMPASS-DRAFT-toolchain-O1
   - COMPASS-DRAFT-toolchain-O2
@@ -843,6 +845,82 @@ development and testing. Apple notarization needs a paid developer account.
   would exclude long-term-support distributions still in wide use.
 - Sign and notarize from the first release. Deferred, as above.
 
+### COMPASS-DRAFT-toolchain-D20 — Vocabulary values carry a standing
+
+**Status:** Proposed
+
+**Context:** The toolchain must recognise vocabulary that decisions have
+introduced but the standard has not yet adopted: the `Superseded` status (D5),
+status sets for `Glossary` and `Ideation` (D12), the `threat-model` subtype
+([COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md)), and the
+`read-if:` extension key (D13). Rejecting these values would fail documents the
+skills already write, since they write D5's form. Accepting them silently would
+let the toolchain run ahead of the standard.
+
+**Decision:** Every vocabulary value in the toolchain's data carries a
+**standing**, `:accepted` or `:pending`, and the decision that introduces it.
+A pending value validates, and produces a warning (`vocab/pending`) naming
+that decision. Accepting an amendment changes one entry in the data. The test
+that keeps the toolchain's vocabulary in step with
+`skills/reference/vocabularies.md` covers accepted values only. The Memo genre,
+its statuses, M-records, and the `memos:` field are accepted
+(COMPASS-DRAFT-agent-workflow-D1 to D4).
+
+**Alternatives:**
+- Treat proposed values as accepted. Rejected: the toolchain would define the
+  standard instead of checking it.
+- Make pending values errors unless the manifest enables a named profile.
+  Rejected: every repository would need the profile to accept documents the
+  skills produce.
+
+### COMPASS-DRAFT-toolchain-D21 — Implementation conventions for the baseline
+
+**Status:** Proposed
+
+**Context:** Building v0.1 requires several choices that the decisions above
+leave open. Each affects more than one command, or a later release, so they are
+recorded here rather than left to the code.
+
+**Decision:**
+- **Layered packages.** `compass.vocab`, `compass.model`, `compass.parse`,
+  `compass.corpus`, `compass.rules`, `compass.report`, and `compass.cli`, in
+  that order, each using only those before it. The `compass` package
+  re-exports the public interface. The parser and model can therefore be
+  reused by the Markdown→Lexis importer (S2) and the RDF exporter (D17) without
+  the rules or the command line.
+- **Heading anchors.** A heading's anchor follows GitHub's rule. The heading's
+  inline markup is removed first: code-span backticks, link and image syntax,
+  emphasis asterisks, and HTML tags. The text is then lowercased, every
+  character other than a letter, a digit, an underscore, a hyphen, or a space
+  is removed, and each space becomes a hyphen. A repeated anchor gets `-1`,
+  `-2`, and so on. `compass show ID#anchor`, `ref/doc-resolves`, and the
+  section IRIs of [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) use
+  this one rule.
+- **Corpus discovery.** The corpus is every `.md` file under the document
+  directory, except the non-documents of D10 (`README.md`, `INDEX.md`,
+  `CATALOG.md`, `MAP.md`), plus every `.md` file at the repository root that
+  opens with front-matter. Root fixtures such as `README.md` carry no
+  front-matter (§10), so `Compass.md` (COMPASS-0001) is found without a
+  manifest entry.
+- **Repository root.** The nearest enclosing directory containing
+  `compass.sexp`, else the nearest containing `.git`, else the working
+  directory; `--root` overrides.
+- **Syntax errors.** A front-matter block that the subset parser (D18) rejects
+  is reported once, under `fm/syntax` (error), and its document receives no
+  further front-matter checks.
+- **Unloaded namespaces.** Before federation loading (v0.2), a reference into a
+  namespace that no loaded document or manifest declares is counted as
+  *unverified* in the summary, not reported as a finding.
+- **`compass rules`.** Lists every rule with its severity, the section it
+  enforces, and a one-line summary, as text or JSON, so that skills can explain
+  findings without restating the rule set.
+
+**Alternatives:**
+- A single package. Rejected: nothing would keep the parser free of the rules,
+  which S2 and the exporter must not depend on.
+- A manifest key listing documents outside the document directory. Rejected for
+  v0.1: the front-matter test identifies them without configuration.
+
 ## The uniqueness guarantee
 
 The guarantee is a set of invariants. The validator enforces them, and the
@@ -1181,13 +1259,18 @@ designed so that later steps extend it rather than rewrite it.
   the controlled vocabularies, implementing D5's `Superseded` form.
 - The body scanner, including register headings (`D`, `O`, and M kinds from the
   start) and each record's `**Status:**` line.
-- Rules: `fm/present`, `fm/required`, `fm/types`, `fm/language`, `vocab/*`,
+- Rules: `fm/syntax` (D21), `fm/present`, `fm/required`, `fm/types`,
+  `fm/language`, `vocab/*` (including `vocab/pending`, D20),
   `status/superseded-agrees`, `fm/unknown-key` (D13; a warning from the start),
   `id/format`, `id/unique`, `register/mirrored`, `register/unique`,
   `register/status`, `register/heading-form`, `ref/doc-resolves`,
   `cite/well-formed`.
-- Commands: `check` (text and JSON), `show ID`, `index` (without `--check`),
-  `next` in its advisory, scan-based form, and `version`.
+- The memo rules `memo/host`, `memo/fields`, and `memo/basis`, now that the
+  Memo genre is accepted. Without Git, `memo/basis` checks the form of a
+  commit-pinned reference, not that its revision exists.
+- Commands: `check` (text and JSON), `show ID[#anchor]`, `index` (without
+  `--check`), `next` in its advisory, scan-based form, `rules` (D21), and
+  `version`.
 - A `--skip-unmarked` option that skips files without front-matter and reports
   how many it skipped, so the checker can run over partly migrated corpora. This
   is an interim answer to O5, not its resolution.
@@ -1218,7 +1301,7 @@ designed so that later steps extend it rather than rewrite it.
   evaluation); derived weight follows D12.
 
 **Not in any of these:** the catalog, the weight function, source headers and the map
-(gated on the evaluation), the §12 rules, `shape/sections`, and the memo rules,
+(gated on the evaluation), the §12 rules, and `shape/sections`,
 which follow in the order of the roadmap.
 
 ## Dependency management: Quicklisp and ocicl
@@ -1453,8 +1536,8 @@ step 7 yields v0.2, and the export part of step 5 yields v0.3 (see
      - `compass outline` and `show ID#anchor`;
      - manifest keys `:commands` and `:stewards` (D15);
      - agent-workflow support (COMPASS-DRAFT-agent-workflow): M-records in the
-       ledger and `assign`; the `memo/*` and `review/approver` rules;
-       `compass diff`; `Assisted-by:` trailer derivation.
+       ledger and `assign`; the `review/approver` rule (the `memo/*` rules
+       land in v0.1); `compass diff`; `Assisted-by:` trailer derivation.
    - **Gated on the pilot of
      [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md),** and subject to
      its decision rules:
