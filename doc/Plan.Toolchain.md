@@ -411,7 +411,7 @@ it rewrites citations already made from `skills/compass-derive/SKILL.md`.
 
 ### COMPASS-DRAFT-toolchain-D10 — Agent-context outputs are generated and committed
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The Operator Memory survey (COMPASS-DRAFT-operator-memory-O1)
 resolved to import the useful parts of Operator Memory into Compass rather than
@@ -444,7 +444,7 @@ without running Lisp.
 
 ### COMPASS-DRAFT-toolchain-D11 — Catalog contents, scope, and budget
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** An agent "can't search for what it doesn't know," so it needs a
 compact list of what exists. Injecting every document, or even every index
@@ -496,7 +496,7 @@ Budget:
 
 ### COMPASS-DRAFT-toolchain-D12 — Authority weight is derived from genre and status
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The blog post behind Operator Memory complains that "the past is
 treated as truth." Operator Memory solves this by deleting the past. Compass
@@ -532,7 +532,7 @@ vocabularies, and the test that keeps them in step with
 
 ### COMPASS-DRAFT-toolchain-D13 — Unknown front-matter keys warn; `read-if:` is a registered extension
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Routing by condition ("read if changing the ledger format") serves
 an agent better than routing by topic. The survey proposed a `read-if:` key,
@@ -559,7 +559,7 @@ fields strictly but does not say what happens to other keys.
 
 ### COMPASS-DRAFT-toolchain-D14 — The source map is extracted from source headers
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A repository documented with Compass still sends its agent into the
 source cold. Operator Memory's answer is an agent-maintained index, which is
@@ -593,7 +593,7 @@ API reference remains ceded.
 
 ### COMPASS-DRAFT-toolchain-D15 — Manifest keys for commands, map, catalog, and stewards
 
-**Status:** Proposed
+**Status:** Accept
 
 **Context:** After the catalog itself, the facts agents need most often are how
 to build and test a project. In Operator Memory they live in prose instructions.
@@ -623,7 +623,7 @@ without change; `:approval` takes keywords rather than `t` for that reason.
 
 ### COMPASS-DRAFT-toolchain-D16 — Register record headings carry the full identifier
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The register scanner finds `D`, `O`, and M records by their
 headings, so the heading form must be unambiguous. The corpus uses three forms.
