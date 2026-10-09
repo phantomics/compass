@@ -593,7 +593,7 @@ API reference remains ceded.
 
 ### COMPASS-DRAFT-toolchain-D15 — Manifest keys for commands, map, catalog, and stewards
 
-**Status:** Accept
+**Status:** Accepted
 
 **Context:** After the catalog itself, the facts agents need most often are how
 to build and test a project. In Operator Memory they live in prose instructions.
