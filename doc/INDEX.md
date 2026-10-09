@@ -20,6 +20,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) | Compass Semantic Binding — RDF Vocabulary, Identity, and Shapes | Spec | program | Draft | semantic-binding |
 | [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md) | Compass Source Headers and Source Map | Spec | program | Draft | source-map |
 | [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) | Compass Validation Toolchain | Plan | program | Draft | toolchain |
+| [COMPASS-DRAFT-toolchain-log](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Draft | toolchain |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
 
@@ -61,6 +62,10 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-toolchain-D19](Plan.Toolchain.md#compass-draft-toolchain-d19--portable-binary-distribution) | Decision | Portable binary distribution | Proposed | COMPASS-DRAFT-toolchain |
 | [COMPASS-DRAFT-toolchain-D20](Plan.Toolchain.md#compass-draft-toolchain-d20--vocabulary-values-carry-a-standing) | Decision | Vocabulary values carry a standing | Proposed | COMPASS-DRAFT-toolchain |
 | [COMPASS-DRAFT-toolchain-D21](Plan.Toolchain.md#compass-draft-toolchain-d21--implementation-conventions-for-the-baseline) | Decision | Implementation conventions for the baseline | Proposed | COMPASS-DRAFT-toolchain |
+| [COMPASS-DRAFT-toolchain-log-D1](Log.Toolchain.md#compass-draft-toolchain-log-d1--the-manifest-reader-never-creates-symbols) | Decision | The manifest reader never creates symbols | Proposed | COMPASS-DRAFT-toolchain-log |
+| [COMPASS-DRAFT-toolchain-log-D2](Log.Toolchain.md#compass-draft-toolchain-log-d2--problems-found-while-loading-are-rules-too) | Decision | Problems found while loading are rules too | Proposed | COMPASS-DRAFT-toolchain-log |
+| [COMPASS-DRAFT-toolchain-log-D3](Log.Toolchain.md#compass-draft-toolchain-log-d3--checking-one-path-still-checks-the-whole-corpus) | Decision | Checking one path still checks the whole corpus | Proposed | COMPASS-DRAFT-toolchain-log |
+| [COMPASS-DRAFT-toolchain-log-D4](Log.Toolchain.md#compass-draft-toolchain-log-d4--a-closed-output-stream-ends-the-command-quietly) | Decision | A closed output stream ends the command quietly | Proposed | COMPASS-DRAFT-toolchain-log |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-DRAFT-authoring-assistance |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-DRAFT-authoring-assistance |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-DRAFT-authoring-assistance |
