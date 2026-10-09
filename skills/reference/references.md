@@ -142,6 +142,14 @@ An Compass document MUST:
 - Identifiers are permanent and never reused. A re-homed document is re-minted in
   the new namespace with a `superseded-by` redirect from the old id.
 
+> **Toolchain status.** The registry above is the allocation ledger of
+> COMPASS-DRAFT-toolchain-D3, `doc/REGISTRY.sexp`, which arrives with toolchain
+> version 0.2 together with `compass assign`. Until then no namespace has one:
+> `compass index --stdout` gives the registry view (every document and record
+> with its title, genre, and status), `compass next` gives an advisory next
+> number, and documents and their records keep provisional identifiers. See
+> `toolchain.md`.
+
 ## Naming and layout (§10)
 
 Files are `<Genre-Prefix><Topic>.md` (e.g. `Log.StopFlag.md`, `Arch.Psyche.md`).

@@ -172,3 +172,44 @@ errors; the only warnings are for vocabulary pending acceptance."
                                  findings)))
         (is (null errors) (describe-findings errors))
         (is (null warnings) (describe-findings warnings))))))
+
+;;; Options
+
+(defparameter *option-scanner* (ppcre:create-scanner "(?<![A-Za-z0-9-])--([a-z][a-z-]*)")
+  "An option, such as --format, in code.")
+
+(defun command-invocations (code)
+  "The compass invocations in CODE, as (COMMAND OPTION...) lists. An invocation
+runs from `compass COMMAND` to the end of the line, a pipe, a ; or && or ||, or
+the next `compass`."
+  (let ((invocations '()))
+    (ppcre:do-scans (start end reg-starts reg-ends *command-scanner* code)
+      (let* ((command (subseq code (aref reg-starts 0) (aref reg-ends 0)))
+             (stop (or (ppcre:scan "[\\n|;&]|\\bcompass " code :start end) (length code)))
+             (options '()))
+        (ppcre:do-register-groups (option) (*option-scanner* (subseq code end stop))
+          (pushnew option options :test #'string=))
+        (push (cons command (nreverse options)) invocations)))
+    (nreverse invocations)))
+
+(test skills-use-only-real-options
+  "Every option a skill passes to an implemented command is one that command
+accepts, and every option written on its own exists on some command."
+  (let ((all-options (remove-duplicates (mapcan (lambda (name)
+                                                  (copy-list (command-option-names name)))
+                                                (command-names))
+                                        :test #'string=)))
+    (dolist (file (skill-files))
+      (dolist (code (code-texts file))
+        (dolist (invocation (command-invocations code))
+          (destructuring-bind (command &rest options) invocation
+            (multiple-value-bind (accepted exists) (command-option-names command)
+              (when exists
+                (dolist (option options)
+                  (is (member option accepted :test #'string=)
+                      "~a passes --~a to `compass ~a`, which does not accept it"
+                      (file-namestring file) option command))))))
+        (ppcre:do-register-groups (option) ("^--([a-z][a-z-]*)$" (trim-whitespace code))
+          (is (member option all-options :test #'string=)
+              "~a names the option --~a, which no command accepts"
+              (file-namestring file) option))))))

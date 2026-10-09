@@ -10,7 +10,8 @@ Artifacts by Structural Standard). Use the `compass-*` skills rather than
 improvising documents:
 
 - `compass-author` — scaffold a new document (Survey/Eval/Plan/Log/Ref/Guide/
-  Spec/Arch/Glossary/Memo) with correct front-matter and per-genre section shape.
+  Spec/Arch/Glossary/Memo) with correct front-matter and per-genre section
+  shape.
 - `compass-review` — the toolchain's checks plus a judgment-level review before
   accepting a doc.
 - `compass-lookup` — resolve identifiers, sections, records, and references.
@@ -28,6 +29,7 @@ Project-specific facts the skills cannot infer (fill these in):
 - Docs directory: doc/                       <!-- flat; grouping via front-matter -->
 - The `compass` command: <on the PATH, or a path to bin/compass>
 - Federated repositories (if any): <namespace and path of each, as in compass.sexp>
+- Migration (if any): <documents without front-matter remain; run checks with --skip-unmarked>
 
 Essentials (full rules in Compass.md): every document opens with a §7 YAML
 front-matter block; genre and status use the controlled vocabularies; decision

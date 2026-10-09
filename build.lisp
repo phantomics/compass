@@ -71,9 +71,14 @@
   (load-system "compass"))
 
 (defun build ()
-  "Build bin/compass."
+  "Build bin/compass. The old executable is deleted first: ASDF would otherwise
+keep it whenever no source file has changed, even though the commit it records
+has, and `compass version` would name the wrong commit."
   (load-compass)
   (stamp-build)
+  (let ((executable (merge-pathnames "bin/compass" *root*)))
+    (when (probe-file executable)
+      (delete-file executable)))
   (asdf:make "compass"))
 
 (defun test ()

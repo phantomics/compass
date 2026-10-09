@@ -75,7 +75,10 @@ every command takes both.
 5. **Inbound references.** `compass refs <ID>` (or `<ID>#<anchor>` for a
    section) lists, grouped by kind, every front-matter relation, register
    listing, link, memo basis, and prose mention that points at it, each with
-   its path and line. Use `--format json` to process the results.
+   its path and line. Use `--format json` to process the results. `refs` finds
+   only the identifier and links to the document; a text search may add
+   mentions by name (such as "the archival survey"), reported separately as
+   informal references that the toolchain cannot see.
 6. **A namespace.** `compass index --stdout --namespace <NS>` prints its
    documents (id, title, genre, scope, status, component) and its records (id,
    kind, title, status, host). Filter those tables to answer faceted questions,
@@ -125,7 +128,8 @@ produced by the toolchain:
 
 ## Invariants
 
-- **Read-only** over the corpus; make no changes.
+- **Read-only:** change nothing in the repository. Scratch files outside it
+  are fine.
 - Use the toolchain's answers rather than reparsing documents; fall back to
   searching only when no executable is found.
 - Report honestly when data is absent: many namespaces have no repository on

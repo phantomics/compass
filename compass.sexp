@@ -5,6 +5,9 @@
 
 (:namespaces ("COMPASS")
  :doc-directory "doc/"
+ :federation ((:namespace "CLASSIC" :path "../classic")
+              (:namespace "ORIGIN" :path "../origin")
+              (:namespace "LEXTER" :path "../../chat/lexter"))
  :commands ((:name :build :shell "make build"
              :doc "Build bin/compass")
             (:name :test :shell "make test"

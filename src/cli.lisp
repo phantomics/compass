@@ -144,6 +144,13 @@ file the corpus considered, or a directory containing one."
   "The names of the subcommands, in the order `compass help` lists them."
   (mapcar #'command-name *commands*))
 
+(defun command-option-names (name)
+  "The option names (without --) that the subcommand NAME accepts, or NIL with
+a second value of NIL if there is no such subcommand."
+  (let ((command (find-command name)))
+    (values (mapcar #'first (and command (command-options command)))
+            (and command t))))
+
 (define-command "check"
     (:synopsis "check [PATH...] [--root DIR] [--format text|json] [--strict] [--skip-unmarked] [--rule NAME...] [--exclude NAME...]"
      :summary "Check the corpus against the standard; report findings"

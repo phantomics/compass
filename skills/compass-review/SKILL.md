@@ -205,7 +205,9 @@ conformance was **not** checked by the toolchain, and recommend running
 - This skill **proposes**; it is **never the approval authority**. Human
   editorial review (§6) sets `approved-by`; the §22 toolchain determines
   mechanical conformance. Never edit `status`, `approved-by`, or `reviewed`.
-- Read only: never edit the documents under review, and never run a command
-  that writes, such as `compass index` without `--stdout`.
+- Read only: change nothing in the repository. Never edit the documents under
+  review, and never run a command that writes there, such as `compass index`
+  without `--stdout`. A scratch file outside the repository, such as saved
+  `--format json` output, is fine.
 - Complement, do not duplicate, the toolchain: report its findings as it gives
   them, and spend the review's judgment on what it does not check.

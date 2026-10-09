@@ -148,7 +148,8 @@
 (defpackage #:compass.cli
   (:use #:cl #:compass.util #:compass.vocab #:compass.model #:compass.parse
         #:compass.corpus #:compass.rules #:compass.report)
-  (:export #:main #:*build-commit* #:+version+ #:command-names))
+  (:export #:main #:*build-commit* #:+version+ #:command-names
+           #:command-option-names))
 
 (uiop:define-package #:compass
   (:use #:cl)
