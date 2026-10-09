@@ -916,6 +916,19 @@ recorded here rather than left to the code.
 - **`compass rules`.** Lists every rule with its severity, the section it
   enforces, and a one-line summary, as text or JSON, so that skills can explain
   findings without restating the rule set.
+- **`compass outline` and `compass refs` in the baseline.** The skills of
+  [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md) need to
+  open part of a large document and to find what refers to an identifier. A
+  search with `grep` misses links whose text is not the identifier, so
+  `outline` moves forward from roadmap step 6, and `refs` is added. `refs`
+  reports each referring line once, under the most specific of five kinds:
+  front-matter relation, register listing, link, memo basis, or prose
+  mention. It does not search fenced code or HTML comments, which hold examples
+  and guidance.
+- **Paths given to `check`.** A path that is not a file of the corpus (or a
+  directory containing one), or that lies outside the repository, is a usage
+  error, so that a document written in the wrong place is not reported as
+  passing. A corpus with no documents at all is reported on standard error.
 
 **Alternatives:**
 - A single package. Rejected: nothing would keep the parser free of the rules,
@@ -1231,8 +1244,14 @@ Table: Initial rule set, with severity and the section each rule enforces.
 - `compass diff [--base REV]` lists the documents changed since `REV`, each
   classified as mechanical or substantive, for the reviewer
   (COMPASS-DRAFT-agent-workflow-D5).
-- `compass outline ID` lists a document's headings with the size of each
-  section, so an agent can open only the part it needs.
+- `compass outline ID[#anchor] [--format text|json]` lists a document's
+  headings with their anchors and line ranges, so an agent can open only the
+  part it needs with `show ID#anchor`. A record identifier outlines its host;
+  an anchor limits the outline to that section and its subsections (D21).
+- `compass refs ID[#anchor] [--format text|json]` lists everything in the
+  corpus that refers to an identifier or a section, grouped by kind, each with
+  its path and line. It exits 1 only if the identifier is neither defined nor
+  referenced, so that dangling references are still listed (D21).
 - `compass catalog [--check] [--all] [--json]` writes the session catalog;
   `--all` ignores the budget.
 - `compass map [PATH] [--file FILE] [--check] [--json]` writes the source map,
@@ -1270,9 +1289,10 @@ designed so that later steps extend it rather than rewrite it.
 - The memo rules `memo/host`, `memo/fields`, and `memo/basis`, now that the
   Memo genre is accepted. Without Git, `memo/basis` checks the form of a
   commit-pinned reference, not that its revision exists.
-- Commands: `check` (text and JSON), `show ID[#anchor]`, `index` (without
-  `--check`), `next` in its advisory, scan-based form, `rules` (D21), and
-  `version`.
+- Commands: `check` (text and JSON), `show ID[#anchor]`, `outline` and `refs`
+  (D21), `index` (without `--check`), `next` in its advisory, scan-based form,
+  `rules` (D21), and `version`; `make install` copies the executable to
+  `~/.local/bin`, or to `PREFIX/bin`.
 - A `--skip-unmarked` option that skips files without front-matter and reports
   how many it skipped, so the checker can run over partly migrated corpora. This
   is an interim answer to O5, not its resolution.
@@ -1535,7 +1555,8 @@ step 7 yields v0.2, and the export part of step 5 yields v0.3 (see
 6. **Agent context.** Split by whether the evaluation gates it.
    - **Not gated:**
      - extension-key handling and `read-if:` (D13); the §18 registration;
-     - `compass outline` and `show ID#anchor`;
+     - `compass outline` and `show ID#anchor` (delivered in v0.1, with
+       `compass refs`; D21);
      - manifest keys `:commands` and `:stewards` (D15);
      - agent-workflow support (COMPASS-DRAFT-agent-workflow): M-records in the
        ledger and `assign`; the `review/approver` rule (the `memo/*` rules
@@ -1566,8 +1587,11 @@ step 7 yields v0.2, and the export part of step 5 yields v0.3 (see
      - installation instructions for unsigned executables on macOS and Windows.
        Signing and notarization follow later.
 8. **Integration and bootstrap.**
-   - Wire `compass-author` to `next`/`assign`, `compass-review` to `check`, and
-     `compass-lookup` to `show` and `outline`.
+   - Wire `compass-author` to `check`, `next`, and later `assign`;
+     `compass-review` to `check` and `rules`; and `compass-lookup` to `show`,
+     `outline`, `refs`, and `index --stdout`. The v0.1 commands this needs are
+     built; the skills are rewired in COMPASS-DRAFT-authoring-assistance's
+     roadmap step 6.
    - Lift COMPASS-D2.
    - Seed the COMPASS ledger (D9), add front-matter to `Compass.md`, relabel the
      §23 rows, and run `compass check` on this repository in CI.

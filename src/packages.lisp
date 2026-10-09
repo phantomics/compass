@@ -107,7 +107,7 @@
            #:code-reference-revision
            #:body #:scan-body #:body-sections #:body-records #:body-links
            #:body-images #:body-tables #:body-fences #:body-code-spans
-           #:read-document #:parse-document))
+           #:read-document #:parse-document #:document-line-kinds))
 
 (defpackage #:compass.corpus
   (:use #:cl #:compass.util #:compass.vocab #:compass.model #:compass.parse)
@@ -117,7 +117,18 @@
            #:find-repository-root #:load-corpus
            #:find-document #:find-documents #:find-record #:find-records
            #:resolve #:namespace-loaded-p #:note-unverified
-           #:markdown-anchors #:document-at-path
+           #:markdown-anchors #:document-at-path #:corpus-paths #:corpus-empty-p
+           #:link-destination #:path-directory #:record-anchor
+           #:outline #:outline-id #:outline-path #:outline-title #:outline-genre
+           #:outline-status #:outline-total-lines #:outline-front-matter-end
+           #:outline-focus #:outline-record #:outline-entries
+           #:outline-entry #:outline-entry-level #:outline-entry-text
+           #:outline-entry-anchor #:outline-entry-start #:outline-entry-end
+           #:outline-entry-record #:document-outline
+           #:inbound-reference #:inbound-reference-kind #:inbound-reference-path
+           #:inbound-reference-line #:inbound-reference-column
+           #:inbound-reference-field #:inbound-reference-text
+           #:inbound-reference-source #:find-references
            #:show
            #:generate-index #:write-index #:index-relative-path
            #:next-identifier))

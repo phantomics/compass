@@ -10,11 +10,13 @@
 (defun sort-findings (findings)
   (stable-sort (copy-list findings) #'compass.rules::finding<))
 
-(defun summarize (findings &optional corpus)
-  "A property list counting FINDINGS by severity, with corpus totals."
+(defun summarize (findings &optional corpus checked)
+  "A property list counting FINDINGS by severity, with corpus totals. CHECKED,
+if given, is the number of documents the check was limited to."
   (list :errors (count :error findings :key #'finding-severity)
         :warnings (count :warning findings :key #'finding-severity)
-        :documents (if corpus (length (corpus-documents corpus)) 0)
+        :documents (or checked (if corpus (length (corpus-documents corpus)) 0))
+        :loaded (if corpus (length (corpus-documents corpus)) 0)
         :skipped (if corpus (length (corpus-skipped corpus)) 0)
         :unverified (if corpus (length (corpus-unverified corpus)) 0)))
 
@@ -28,15 +30,16 @@
 (defun plural (n singular &optional (plural (concatenate 'string singular "s")))
   (format nil "~d ~a" n (if (= n 1) singular plural)))
 
-(defun write-text (findings stream corpus)
+(defun write-text (findings stream corpus checked)
   (dolist (f findings)
     (format stream "~a:~a:~@[~a:~] ~(~a~) ~a: ~a~%"
             (or (finding-path f) "-") (or (finding-line f) 1) (finding-column f)
             (finding-severity f) (finding-rule f) (finding-message f)))
-  (destructuring-bind (&key errors warnings documents skipped unverified)
-      (summarize findings corpus)
-    (format stream "~&Checked ~a: ~a, ~a.~%"
-            (plural documents "document") (plural errors "error") (plural warnings "warning"))
+  (destructuring-bind (&key errors warnings documents loaded skipped unverified)
+      (summarize findings corpus checked)
+    (format stream "~&Checked ~a~:[~*~; of ~d~]: ~a, ~a.~%"
+            (plural documents "document") (/= documents loaded) loaded
+            (plural errors "error") (plural warnings "warning"))
     (when (plusp skipped)
       (format stream "Skipped ~a without front-matter (--skip-unmarked).~%"
               (plural skipped "file")))
@@ -52,16 +55,16 @@
 
 (defun json-value (x) (or x :null))
 
-(defun write-json (findings stream corpus version)
-  (destructuring-bind (&key errors warnings documents skipped unverified)
-      (summarize findings corpus)
+(defun write-json (findings stream corpus version checked)
+  (destructuring-bind (&key errors warnings documents loaded skipped unverified)
+      (summarize findings corpus checked)
     (let ((shasht:*write-indent-string* "  ")
           (*print-pretty* t))
       (shasht:write-json
        (object "tool" "compass"
                "version" version
                "root" (if corpus (uiop:native-namestring (corpus-root corpus)) :null)
-               "summary" (object "documents" documents "errors" errors
+               "summary" (object "documents" documents "loaded" loaded "errors" errors
                                  "warnings" warnings "skipped" skipped
                                  "unverified" unverified)
                "findings" (coerce
@@ -86,8 +89,9 @@
        stream)
       (terpri stream))))
 
-(defun write-findings (findings stream &key (format :text) corpus (version ""))
-  "Write FINDINGS to STREAM as :TEXT or :JSON."
+(defun write-findings (findings stream &key (format :text) corpus (version "") checked)
+  "Write FINDINGS to STREAM as :TEXT or :JSON. CHECKED is the number of
+documents checked, when the check was limited to some paths."
   (ecase format
-    (:text (write-text findings stream corpus))
-    (:json (write-json findings stream corpus version))))
+    (:text (write-text findings stream corpus checked))
+    (:json (write-json findings stream corpus version checked))))

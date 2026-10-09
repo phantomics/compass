@@ -181,6 +181,52 @@ and the document containing it; or NIL."
         ((and record (null anchor)) (values record (record-document record)))
         (t nil)))))
 
+(defun corpus-paths (corpus)
+  "The repository-relative paths of every file the corpus considered: its
+documents, files without front-matter, files that could not be read, and the
+manifest."
+  (let ((paths '()))
+    (maphash (lambda (path document) (declare (ignore document)) (push path paths))
+             (corpus-by-path corpus))
+    (dolist (finding (corpus-load-findings corpus))
+      (when (finding-path finding) (pushnew (finding-path finding) paths :test #'string=)))
+    (when (uiop:file-exists-p (merge-pathnames +manifest-file-name+ (corpus-root corpus)))
+      (pushnew +manifest-file-name+ paths :test #'string=))
+    (sort paths #'string<)))
+
+(defun corpus-empty-p (corpus)
+  "True if the corpus found no candidate documents at all."
+  (and (zerop (hash-table-count (corpus-by-path corpus)))
+       (null (corpus-load-findings corpus))))
+
+;;; Link destinations
+
+(defparameter *url-scheme-scanner* (ppcre:create-scanner "^[A-Za-z][A-Za-z0-9+.-]*:"))
+
+(defun path-directory (path)
+  "The directory part of the repository-relative PATH, ending in /, or \"\"."
+  (let ((slash (position #\/ path :from-end t)))
+    (if slash (subseq path 0 (1+ slash)) "")))
+
+(defun link-destination (document target)
+  "Classify TARGET, the destination of a link in DOCUMENT. Return a keyword and,
+for local targets, the repository-relative path and the fragment (or NIL):
+:NONE for an empty target, :EXTERNAL for a URL, :OUTSIDE for a path that leaves
+the repository, and :LOCAL otherwise. A bare #fragment targets DOCUMENT itself."
+  (cond
+    ((string= target "") (values :none nil nil))
+    ((or (ppcre:scan *url-scheme-scanner* target) (starts-with-p "//" target))
+     (values :external nil nil))
+    (t
+     (let* ((hash (position #\# target))
+            (path-part (percent-decode (subseq target 0 hash)))
+            (fragment (and hash (subseq target (1+ hash)))))
+       (if (string= path-part "")
+           (values :local (document-path document) fragment)
+           (multiple-value-bind (path escapes)
+               (normalize-relative-path (path-directory (document-path document)) path-part)
+             (values (if escapes :outside :local) path fragment)))))))
+
 (defun markdown-anchors (corpus path)
   "The heading anchors of the Markdown file at the repository-relative PATH,
 whether or not it is a document; NIL if it cannot be read."

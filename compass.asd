@@ -34,7 +34,9 @@
       :serial t
       :components ((:file "corpus")
                    (:file "show")
-                   (:file "index")))
+                   (:file "index")
+                   (:file "outline")
+                   (:file "refs")))
      (:module "rules"
       :serial t
       :components ((:file "engine")

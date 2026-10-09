@@ -11,6 +11,13 @@
     (join-lines (coerce (subseq lines (max 0 (1- first)) (min (length lines) last))
                         'list))))
 
+(defun trim-trailing-blank-lines (document first last)
+  "LAST, moved back past blank lines, but not before FIRST."
+  (loop while (and (> last first)
+                   (blank-string-p (aref (document-lines document) (1- last))))
+        do (decf last))
+  last)
+
 (defun show (corpus reference)
   "The source text for REFERENCE: a whole document for \"ID\", one section for
 \"ID#anchor\", or one record for a record identifier. Return the text, the
@@ -22,8 +29,5 @@ document's path, and the first and last line numbers; or NIL."
             (document (values 1 (length (document-lines document))))
             (section (values (location-line object) (section-end-line object)))
             (register-record (values (location-line object) (record-end-line object))))
-        ;; Trim trailing blank lines from a section or record.
-        (loop while (and (> last first)
-                         (blank-string-p (aref (document-lines document) (1- last))))
-              do (decf last))
+        (setf last (trim-trailing-blank-lines document first last))
         (values (line-slice document first last) (document-path document) first last)))))

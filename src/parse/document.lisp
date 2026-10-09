@@ -83,3 +83,10 @@ file/read finding if the file cannot be read as UTF-8 text."
               (make-finding :rule "file/read" :severity :error :path path :line 1
                             :message (format nil "cannot read the file as UTF-8 text: ~a"
                                              (text-file-error-reason e)))))))
+
+(defun document-line-kinds (document)
+  "A vector giving each line of DOCUMENT a kind: :front-matter, :blank, :text,
+:heading, :fence (fenced code, including its fences), or :comment (block HTML
+comments)."
+  (values (classify-lines (document-lines document)
+                          (1- (document-body-start-line document)))))

@@ -85,3 +85,126 @@
       (is (equal "TEST-D4" (next-identifier corpus "TEST" :decision)))
       (is (equal "TEST-M1" (next-identifier corpus "TEST" :memo)))
       (is (equal "OTHER-0001" (next-identifier corpus "OTHER" :document))))))
+
+;;; outline and refs
+
+(defparameter *reference-files*
+  (list (list "doc/Plan.A.md"
+              (doc :id "TEST-0001"
+                   :extra '("decisions:" "  - TEST-D1")
+                   :body (lines "# Alpha" ""
+                                "## Settled Decisions" ""
+                                "### TEST-D1 — Use a ledger" ""
+                                "**Status:** Accepted" ""
+                                "See [the roadmap](#roadmap) and TEST-D1 again."
+                                "Alpha names TEST-0001, its own id." "" ""
+                                "## Roadmap" ""
+                                "1. Build.")))
+        (list "doc/Plan.B.md"
+              (doc :id "TEST-0002"
+                   :extra '("relates-to:" "  - TEST-0001" "decisions:" "  - TEST-D1")
+                   :body (lines "# Beta" ""
+                                "[TEST-0001](Plan.A.md) is the plan; TEST-0001 again."
+                                "See [the decision](Plan.A.md#test-d1--use-a-ledger)."
+                                "Mentions TEST-0001 in prose."
+                                "" "```" "TEST-0001 in a fence" "```" ""
+                                "<!-- TEST-0001 in a comment -->"
+                                "See TEST-0001#roadmap for the plan's steps.")))
+        (list "doc/Memo.C.md"
+              (doc :id "TEST-0003" :genre "Memo" :status "Current" :scope "component"
+                   :extra '("memos:" "  - TEST-M1")
+                   :body (lines "# C: Memos" "" "## Memos" ""
+                                "### TEST-M1 — The ledger is append-only" ""
+                                "**Status:** Draft"
+                                "**Read-if:** changing the ledger"
+                                "**Basis:** decided in TEST-0001; reviewed")))))
+
+(defun reference-kinds (references)
+  (mapcar (lambda (r) (list (inbound-reference-kind r) (inbound-reference-path r)))
+          references))
+
+(test outline-of-a-document
+  (with-temp-repository (root *reference-files*)
+    (let* ((corpus (load-corpus root))
+           (outline (document-outline corpus "TEST-0001")))
+      (is (equal "doc/Plan.A.md" (outline-path outline)))
+      (is (equal "Plan" (outline-genre outline)))
+      (is (= 12 (outline-front-matter-end outline)))
+      (is (equal '("alpha" "settled-decisions" "test-d1--use-a-ledger" "roadmap")
+                 (mapcar #'outline-entry-anchor (outline-entries outline))))
+      (let ((decisions (second (outline-entries outline)))
+            (record (third (outline-entries outline))))
+        (is (= 15 (outline-entry-start decisions)))
+        (is (= 22 (outline-entry-end decisions)) "trailing blank lines are trimmed")
+        (is (equal "TEST-D1" (outline-entry-record record)))
+        (is (equal "TEST-D1 — Use a ledger" (outline-entry-text record))))
+      ;; Line ranges agree with show.
+      (multiple-value-bind (text path first last) (show corpus "TEST-0001#settled-decisions")
+        (declare (ignore text path))
+        (is (= 15 first))
+        (is (= 22 last))))))
+
+(test outline-of-a-record-and-a-section
+  (with-temp-repository (root *reference-files*)
+    (let ((corpus (load-corpus root)))
+      (let ((outline (document-outline corpus "TEST-D1")))
+        (is (equal "TEST-0001" (outline-id outline)))
+        (is (equal "TEST-D1" (outline-record outline)))
+        (is (equal "test-d1--use-a-ledger" (outline-focus outline)))
+        (is (= 4 (length (outline-entries outline)))))
+      (let ((outline (document-outline corpus "TEST-0001#settled-decisions")))
+        (is (equal '("settled-decisions" "test-d1--use-a-ledger")
+                   (mapcar #'outline-entry-anchor (outline-entries outline)))))
+      (is (null (document-outline corpus "TEST-0001#nowhere")))
+      (is (null (document-outline corpus "TEST-0404"))))))
+
+(test refs-to-a-document
+  (with-temp-repository (root *reference-files*)
+    (multiple-value-bind (references definition)
+        (find-references (load-corpus root) "TEST-0001")
+      (is (equal "doc/Plan.A.md" (document-path definition)))
+      (is (equal '((:basis "doc/Memo.C.md")
+                   (:relation "doc/Plan.B.md")
+                   (:link "doc/Plan.B.md")
+                   (:link "doc/Plan.B.md")
+                   (:mention "doc/Plan.B.md")
+                   (:mention "doc/Plan.B.md"))
+                 (reference-kinds references))
+          "~s" (reference-kinds references))
+      (let ((relation (find :relation references :key #'inbound-reference-kind)))
+        (is (equal "relates-to" (inbound-reference-field relation)))
+        (is (equal "TEST-0002" (inbound-reference-source relation)))
+        (is (= 11 (inbound-reference-line relation)) "the line of the list item")))))
+
+(test refs-to-a-record
+  (with-temp-repository (root *reference-files*)
+    (multiple-value-bind (references definition)
+        (find-references (load-corpus root) "TEST-D1")
+      (is (equal "TEST-D1" (record-id definition)))
+      (is (equal '((:mention "doc/Plan.A.md")
+                   (:register "doc/Plan.B.md")
+                   (:link "doc/Plan.B.md"))
+                 (reference-kinds references))
+          "~s" (reference-kinds references))
+      (is (= 21 (inbound-reference-line (first references)))
+          "the host's mention, not its heading or its own listing"))))
+
+(test refs-to-a-section-and-undefined-ids
+  (with-temp-repository (root *reference-files*)
+    (let ((corpus (load-corpus root)))
+      (multiple-value-bind (references definition)
+          (find-references corpus "TEST-0001#roadmap")
+        (is (typep definition 'section))
+        (is (equal '((:link "doc/Plan.A.md") (:mention "doc/Plan.B.md"))
+                   (reference-kinds references))))
+      (multiple-value-bind (references definition) (find-references corpus "TEST-0404")
+        (is (null references))
+        (is (null definition))))))
+
+(test refs-to-an-undefined-but-referenced-id
+  (with-temp-repository (root (list (list "doc/Plan.A.md"
+                                          (doc :extra '("relates-to:" "  - TEST-0009")))))
+    (multiple-value-bind (references definition)
+        (find-references (load-corpus root) "TEST-0009")
+      (is (null definition))
+      (is (equal '((:relation "doc/Plan.A.md")) (reference-kinds references))))))

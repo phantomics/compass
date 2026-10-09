@@ -7,15 +7,6 @@
 
 (in-package #:compass.rules)
 
-(defparameter *url-scheme-scanner* (ppcre:create-scanner "^[A-Za-z][A-Za-z0-9+.-]*:"))
-
-(defun external-target-p (target)
-  (or (ppcre:scan *url-scheme-scanner* target) (starts-with-p "//" target)))
-
-(defun directory-of (path)
-  (let ((slash (position #\/ path :from-end t)))
-    (if slash (subseq path 0 (1+ slash)) "")))
-
 (defun check-identifier-reference (document corpus node id field)
   (let ((parsed (parse-identifier id)))
     (when parsed
@@ -57,34 +48,36 @@
 
 (defun check-link (document corpus link)
   (let ((target (link-target link)))
-    (unless (or (string= target "") (external-target-p target))
-      (let* ((hash (position #\# target))
-             (path-part (percent-decode (subseq target 0 hash)))
-             (fragment (and hash (subseq target (1+ hash)))))
-        (if (string= path-part "")
-            (progn
-              (when (and fragment (plusp (length fragment))
-                         (not (member fragment (document-anchors document) :test #'string=)))
-                (emit document link "no heading in this document has the anchor #~a" fragment))
-              (unless (link-image-p link)
-                (check-link-text document corpus link (document-path document) document)))
-            (multiple-value-bind (path escapes)
-                (normalize-relative-path (directory-of (document-path document)) path-part)
-              (if escapes
-                  (unverified document link target)
-                  (let ((kind (file-kind (corpus-root corpus) path)))
-                    (cond
-                      ((null kind)
-                       (emit document link "the link target ~a does not exist" path-part))
-                      ((and fragment (plusp (length fragment)) (eq kind :file)
-                            (ends-with-p ".md" (string-downcase path))
-                            (not (member fragment (markdown-anchors corpus path)
+    (multiple-value-bind (kind path fragment) (link-destination document target)
+      (let ((written (subseq target 0 (position #\# target)))
+            (fragment (and fragment (plusp (length fragment)) fragment)))
+        (case kind
+          ((:none :external))
+          (:outside (unverified document link target))
+          (:local
+           (if (string= written "")
+               (progn
+                 (when (and fragment
+                            (not (member fragment (document-anchors document)
                                          :test #'string=)))
-                       (emit document link "~a has no heading with the anchor #~a"
-                             path-part fragment)))
-                    (when (and kind (not (link-image-p link)))
-                      (check-link-text document corpus link path
-                                       (document-at-path corpus path)))))))))))
+                   (emit document link "no heading in this document has the anchor #~a"
+                         fragment))
+                 (unless (link-image-p link)
+                   (check-link-text document corpus link path document)))
+               (let ((file-kind (file-kind (corpus-root corpus) path)))
+                 (cond
+                   ((null file-kind)
+                    (emit document link "the link target ~a does not exist"
+                          (percent-decode written)))
+                   ((and fragment (eq file-kind :file)
+                         (ends-with-p ".md" (string-downcase path))
+                         (not (member fragment (markdown-anchors corpus path)
+                                      :test #'string=)))
+                    (emit document link "~a has no heading with the anchor #~a"
+                          (percent-decode written) fragment)))
+                 (when (and file-kind (not (link-image-p link)))
+                   (check-link-text document corpus link path
+                                    (document-at-path corpus path)))))))))))
 
 (define-rule "ref/doc-resolves" (:severity :error :section "§9" :front-matter nil
                                  :summary "Document references and links resolve")
