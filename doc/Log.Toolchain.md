@@ -6,9 +6,11 @@ scope:         component
 program:       Compass
 component:     toolchain
 language:      en
-status:        Draft
+status:        Accepted
 authors:
   - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-07
 provenance:
   assistant:   opencode
 relates-to:

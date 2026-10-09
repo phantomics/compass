@@ -265,7 +265,7 @@ resolve, with a warning, so none ever dangles. Amends §13.
 
 ### COMPASS-DRAFT-toolchain-D4 — A project manifest declares namespace ownership and federation
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A namespace must be minted by exactly one repository (§5, §13). The
 validator, `compass-lookup`, and the future site build (S8) all need a list of
@@ -288,7 +288,7 @@ for non-Lisp consumers (the S8 Astro build, the skills).
 
 ### COMPASS-DRAFT-toolchain-D5 — Supersession uses a plain status plus the existing field
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** `status: Superseded-by: PSYCHE-0002` fails to parse as YAML
 ("mapping values are not allowed here"). This was confirmed against a
@@ -309,7 +309,7 @@ conforming documents that use the old form exist yet.
 
 ### COMPASS-DRAFT-toolchain-D6 — Checkable conventions for §12, and generated indexes
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** §12 requires a caption for every table and a text-equivalent long
 description for every diagram. Markdown has no syntax for either, so a validator
@@ -335,7 +335,7 @@ Amends §11, §12, and §13.
 
 ### COMPASS-DRAFT-toolchain-D7 — Common Lisp, with purpose-built parsers
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** §22 intends a Common Lisp toolchain that shares its parsing front
 end with the Markdown→Lexis importer (S2). Findings must cite line numbers.
@@ -358,7 +358,7 @@ end with the Markdown→Lexis importer (S2). Findings must cite line numbers.
 
 ### COMPASS-DRAFT-toolchain-D8 — Manager-agnostic system, first-class on both Quicklisp and ocicl
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Quicklisp is what is used today: `~/.sbclrc` loads it, and its
 installed dist is 2023-06-18. ocicl is the way forward. It gives project-local
@@ -386,7 +386,7 @@ dist in current use.
 
 ### COMPASS-DRAFT-toolchain-D9 — Bootstrapping the COMPASS namespace
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The COMPASS namespace has no ledger. `Compass.md` has no
 front-matter. The authoring-assistance Plan already uses canonical-looking

@@ -6,9 +6,11 @@ scope:         component
 program:       Compass
 component:     authoring-assistance
 language:      en
-status:        Draft
+status:        Accepted
 authors:
   - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-08
 provenance:
   assistant:   opencode
 relates-to:
