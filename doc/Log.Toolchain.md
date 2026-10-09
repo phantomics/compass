@@ -16,6 +16,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-DRAFT-authoring-assistance
   - COMPASS-DRAFT-agent-workflow
+  - COMPASS-DRAFT-authoring-assistance-log
 decisions:
   - COMPASS-DRAFT-toolchain-log-D1
   - COMPASS-DRAFT-toolchain-log-D2
@@ -466,7 +467,8 @@ Table: Files added or changed in commit `4e4549a`.
 
 - **Wire the skills to the toolchain.** Roadmap step 6 of
   [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md#roadmap):
-  the four skills still describe advisory-only mode.
+  the four skills still describe advisory-only mode. *Done in `07b9643`; see
+  [Update 2026-10-08 — fresh executables and federation](#update-2026-10-08--fresh-executables-and-federation).*
 - **Baseline v0.2.** The ledger and its rules, `assign` and `renumber` with the
   concurrency tests, Git-derived fields, code-reference checks, `index --check`,
   CI, the `DEPS=ocicl` build (no `ocicl.csv` is committed yet), `compass init`,
@@ -475,7 +477,8 @@ Table: Files added or changed in commit `4e4549a`.
 - **A stale build stamp.** `make build` reuses `bin/compass` when no source
   file has changed, even if the commit has, so the executable can report the
   wrong commit (see the update below). The build should remove the old
-  executable first, or depend on the commit.
+  executable first, or depend on the commit. *Fixed in `fcdec0c`; see
+  [Update 2026-10-08 — fresh executables and federation](#update-2026-10-08--fresh-executables-and-federation).*
 - **Language tags are checked for form only.** Checking against the IANA
   subtag registry would need the registry's data in the executable.
 - **Classic's duplicate open questions.** The four Surveys should use
@@ -583,3 +586,57 @@ Table: Files added or changed in commit `ee5f765`.
 | `tests/test-cli.lisp` | Modified | Commands, paths, empty corpus |
 | `tests/test-corpus.lisp` | Modified | Outlines and references |
 | `doc/Plan.Toolchain.md` | Modified | D21, the command list, and roadmap steps 6 and 8 |
+
+## Update 2026-10-08 — fresh executables and federation
+
+The skills were wired to the toolchain in commit `07b9643`, which
+[COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md)
+chronicles. This update records the toolchain's part of that work and of the
+follow-up commit `fcdec0c`, and closes two items of the Outstanding Work above.
+Code references in this section are pinned to the commit named with each.
+
+### Problem
+
+- **A stale build stamp.** `make build` kept the old executable whenever no
+  source file had changed, so `compass version` could name the commit before
+  the one built. The skills now copy that string into review reports ("Checked
+  with"), so a wrong stamp would mislead a reader about which toolchain checked
+  a document.
+- **No federation.** This repository's manifest listed no other repository, so
+  a skill could not find Classic, Origin, or Lexter, which had no manifests of
+  their own either.
+- **The skills' tests needed the command line's own description of itself:**
+  which commands exist, and which options each accepts.
+
+### Implementation
+
+- `build.lisp:build@fcdec0c` deletes `bin/compass` before calling `asdf:make`,
+  so every build writes a fresh executable stamped with the current commit.
+- `src/cli.lisp:command-names@07b9643` lists the subcommands in the order
+  `compass help` gives them, and `src/cli.lisp:command-option-names@fcdec0c`
+  the options a subcommand accepts. Both are exported for the tests in
+  `tests/test-skills.lisp`.
+- `compass.sexp@fcdec0c` lists Classic (`../classic`), Origin (`../origin`), and
+  Lexter (`../../chat/lexter`) under `:federation`. Their own manifests,
+  written at the same time, are not committed in their repositories.
+
+### Verification
+
+- **The build stamp.** Two successive builds in a clean worktree of `fcdec0c`
+  each wrote a new executable, and both reported
+  `compass 0.1.0 (commit fcdec0c9b062, SBCL 2.3.4, linux x86-64)`, with no
+  `-dirty` suffix.
+- **Tests.** `make test` at `fcdec0c`: **625 checks, 100% pass.**
+- **Federation.** `compass show CLASSIC-DRAFT-x400 --root ../classic` from this
+  repository resolved, as did lookups between the other three repositories.
+
+### Files
+
+Table: Toolchain files changed in commits `07b9643` and `fcdec0c`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `build.lisp` | Modified | Deletes the old executable before building (`fcdec0c`) |
+| `src/cli.lisp` | Modified | `command-names` (`07b9643`), `command-option-names` (`fcdec0c`) |
+| `src/packages.lisp` | Modified | Exports both (`07b9643`, `fcdec0c`) |
+| `compass.sexp` | Modified | `:federation` entries (`fcdec0c`) |
