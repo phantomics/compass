@@ -24,6 +24,11 @@ The `Ideation` genre has no template: it is a rare, curated seed discussion with
 no fixed skeleton (§4), authored by hand.
 
 Placeholder conventions used throughout: `<NAMESPACE>-DRAFT-<slug>` for the
-provisional identifier (§13), `<angle-bracket>` tokens for values to fill in,
-and `~` only as a null illustration in the schema — remove it in real
-documents.
+provisional identifier (§13), and `<NAMESPACE>-DRAFT-<slug>-D1`, `-O1`, and
+`-M1` for the provisional identifiers of the records it holds, numbered from 1
+within the document (COMPASS-DRAFT-toolchain-D2); `<angle-bracket>` tokens for
+values to fill in; and `~` only as a null illustration in the schema — remove
+it in real documents.
+
+A filled-in template should pass `compass check` once it is placed in the
+document directory. The toolchain's tests fill in each template and check it.

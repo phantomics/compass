@@ -12,10 +12,13 @@ authoring-assistance layer; see `Compass.md` §22 and §23 S9, tracked as
 ## Status: deferred forward stub
 
 This skill is intentionally **not yet built**. It wraps deterministic backends
-that do not exist, so there is nothing for it to drive:
+that mostly do not exist yet:
 
 - **S1/S2** — the validation toolchain and Markdown→Lexis importer
-  (`COMPASS-DRAFT-toolchain`, §16, §22).
+  (`COMPASS-DRAFT-toolchain`, §16, §22). The toolchain's version 0.1 exists
+  (see `../reference/toolchain.md`); its one derivation is the namespace index,
+  `compass index`. RDF export is planned for version 0.3; the importer is not
+  built.
 - **S5** — audience projection / end-user derivation
   (`COMPASS-DRAFT-user-doc-derivation`, §21).
 - **S7** — fixture compilation / bounded README transclusion
@@ -40,8 +43,12 @@ last to complete, once the backends above land in their own Plans.
 ## Interim (advisory-only) behavior
 
 Until the backends exist, if invoked this skill should **not fabricate a
-pipeline run**. It may instead:
+pipeline run**. It may:
 
+- regenerate the namespace index when asked: `compass index` writes `INDEX.md`
+  in the document directory, and `compass index --stdout` previews it without
+  writing. Find `compass` as `../reference/toolchain.md` describes, and run
+  `compass help` first to see what the installed version can do;
 - explain what derivation *would* do for the requested artifact and which
   backend (S5/S7/S8) it depends on;
 - for a README, describe the intended transclusion (`<!-- compass:include
@@ -54,5 +61,5 @@ pipeline run**. It may instead:
 - This skill **proposes** derived drafts; the authoritative source remains the
   project docs, and derived artifacts are **never edited in place** (§16,
   one-way derivation).
-- Do not claim a derived artifact is validated/conformant while the §22 toolchain
-  and the relevant backend do not exist.
+- Do not claim a derived artifact is validated/conformant while the relevant
+  backend does not exist. A generated `INDEX.md` is regenerated, never edited.

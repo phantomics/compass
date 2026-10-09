@@ -140,6 +140,10 @@ file the corpus considered, or a directory containing one."
 (defun find-command (name)
   (find name *commands* :key #'command-name :test #'string=))
 
+(defun command-names ()
+  "The names of the subcommands, in the order `compass help` lists them."
+  (mapcar #'command-name *commands*))
+
 (define-command "check"
     (:synopsis "check [PATH...] [--root DIR] [--format text|json] [--strict] [--skip-unmarked] [--rule NAME...] [--exclude NAME...]"
      :summary "Check the corpus against the standard; report findings"

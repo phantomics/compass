@@ -1589,9 +1589,9 @@ step 7 yields v0.2, and the export part of step 5 yields v0.3 (see
 8. **Integration and bootstrap.**
    - Wire `compass-author` to `check`, `next`, and later `assign`;
      `compass-review` to `check` and `rules`; and `compass-lookup` to `show`,
-     `outline`, `refs`, and `index --stdout`. The v0.1 commands this needs are
-     built; the skills are rewired in COMPASS-DRAFT-authoring-assistance's
-     roadmap step 6.
+     `outline`, `refs`, and `index --stdout`. Done for v0.1 (2026-10-08), in
+     COMPASS-DRAFT-authoring-assistance's roadmap step 6; `assign` follows
+     with v0.2.
    - Lift COMPASS-D2.
    - Seed the COMPASS ledger (D9), add front-matter to `Compass.md`, relabel the
      §23 rows, and run `compass check` on this repository in CI.

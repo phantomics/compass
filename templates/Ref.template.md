@@ -12,7 +12,7 @@ provenance:
   assistant:   <assistant>
 relates-to:
   - <ID>
-glossary:      Glossary.<Topic>Terms   # optional
+glossary:      <ID>                 # optional: the Glossary document's identifier
 ---
 
 # <Topic> Reference

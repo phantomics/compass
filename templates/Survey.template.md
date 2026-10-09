@@ -12,7 +12,7 @@ provenance:
 relates-to:
   - <ID>
 open-questions:
-  - <NAMESPACE>-O<n>
+  - <NAMESPACE>-DRAFT-<slug>-O1
 ---
 
 # <Topic>: Survey
@@ -51,7 +51,7 @@ assumes (link by id, §9). Survey is exploratory and non-normative — it asks
 
 ## Open Questions
 
-### <NAMESPACE>-O<n> — <question title>
+### <NAMESPACE>-DRAFT-<slug>-O1 — <question title>
 
 <The unresolved issue.>
 

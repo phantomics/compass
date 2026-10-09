@@ -13,10 +13,10 @@ provenance:
 relates-to:
   - <ID>
 decisions:
-  - <NAMESPACE>-D<n>
+  - <NAMESPACE>-DRAFT-<slug>-D1
 open-questions:
-  - <NAMESPACE>-O<n>
-glossary:      Glossary.<Topic>Terms   # optional
+  - <NAMESPACE>-DRAFT-<slug>-O1
+glossary:      <ID>                 # optional: the Glossary document's identifier
 ---
 
 # The <Topic> Architecture
@@ -40,9 +40,9 @@ normatively) which does not yet exist (§4). Derived from ISO/IEC/IEEE 42010.>
 
 ## Settled Decisions
 
-### <NAMESPACE>-D<n> — <decision title>
+### <NAMESPACE>-DRAFT-<slug>-D1 — <decision title>
 
-**Status:** Accepted
+**Status:** Proposed         <!-- a person sets Accepted (§6) -->
 **Context:** <the problem and forces>
 **Decision:** <what was chosen>
 **Alternatives:** <what was rejected, and why>
@@ -54,7 +54,7 @@ viewpoint.>
 
 ## Open Questions
 
-### <NAMESPACE>-O<n> — <question title>
+### <NAMESPACE>-DRAFT-<slug>-O1 — <question title>
 
 <The unresolved issue.>
 

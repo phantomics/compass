@@ -13,7 +13,7 @@ provenance:
 relates-to:
   - <ID>                            # optional; remove if none
 decisions:
-  - <NAMESPACE>-D<n>                # IDs this log introduces/amends (§8); remove if none
+  - <NAMESPACE>-DRAFT-<slug>-D1     # records this log defines or amends (§8); remove if none
 ---
 
 # <Topic>: Development Log
@@ -34,9 +34,9 @@ This document chronicles <the work: what was built and verified>.
 
 <ADR-shaped D-records (§8). One ### per decision.>
 
-### <NAMESPACE>-D<n> — <decision title>
+### <NAMESPACE>-DRAFT-<slug>-D1 — <decision title>
 
-**Status:** Accepted
+**Status:** Proposed         <!-- a person sets Accepted (§6) -->
 **Context:** <the problem and forces>
 **Decision:** <what was chosen>
 **Alternatives:** <what was rejected, and why>

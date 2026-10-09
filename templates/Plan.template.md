@@ -12,9 +12,9 @@ provenance:
 relates-to:
   - <ID>
 decisions:
-  - <NAMESPACE>-D<n>
+  - <NAMESPACE>-DRAFT-<slug>-D1
 open-questions:
-  - <NAMESPACE>-O<n>
+  - <NAMESPACE>-DRAFT-<slug>-O1
 ---
 
 # <Topic>: Development Plan
@@ -34,9 +34,9 @@ open-questions:
 
 ## Settled Decisions
 
-### <NAMESPACE>-D<n> — <decision title>
+### <NAMESPACE>-DRAFT-<slug>-D1 — <decision title>
 
-**Status:** Accepted
+**Status:** Proposed         <!-- a person sets Accepted (§6) -->
 **Context:** <the problem and forces>
 **Decision:** <what was chosen>
 **Alternatives:** <what was rejected, and why>
@@ -54,7 +54,7 @@ open-questions:
 
 ## Open Questions
 
-### <NAMESPACE>-O<n> — <question title>
+### <NAMESPACE>-DRAFT-<slug>-O1 — <question title>
 
 <The unresolved issue and the current thinking.>
 

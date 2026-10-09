@@ -132,18 +132,26 @@ map to the concerns skills actually query).
 ## The skill set
 
 - **`compass-author`** — scaffolds a new document: gathers `genre`/`scope`/
-  `namespace`/`title`, validates against the controlled vocabularies, copies the
-  matching `templates/` skeleton, fills the §7 front-matter, assigns a
-  `<NAMESPACE>-DRAFT-<slug>` identifier (§13), records `provenance` (§7), and
-  seeds genre-specific content (prior-art notes for `Survey`/`Plan`; a Files
-  table from `git diff --stat` for `Log`).
-- **`compass-review`** — assesses genre fit (§4), §14 section-shape adherence,
-  `D`-record quality (§8), cross-reference plausibility (§9), and prior-art
-  coverage; emits a report for the §6 editor. Never sets `approved-by`.
-- **`compass-lookup`** — read-only retrieval across the federation: resolve an
-  `id` or section anchor, a `D`/`O` record, relationship queries
-  (`relates-to`/`supersedes`/`cites` and inbound backlinks), and namespace or
-  federated `INDEX` listings (§9, §10, §13).
+  `title`, reads the namespace from `compass.sexp`, copies the matching
+  `templates/` skeleton, fills the §7 front-matter, assigns a
+  `<NAMESPACE>-DRAFT-<slug>` identifier and provisional record identifiers
+  (§13), records `provenance` (§7), seeds genre-specific content (prior-art
+  notes for `Survey`/`Plan`; a Files table from `git diff --stat` for `Log`),
+  then runs `compass check` on the draft and fixes the errors it reports.
+- **`compass-review`** — reports the findings of `compass check` for the
+  documents under review, then assesses what the toolchain does not check:
+  genre fit (§4), §14 section-shape adherence, `D`-record quality (§8), memo
+  admission, cross-reference plausibility (§9), and prior-art coverage; emits a
+  report for the §6 editor. Never sets `approved-by`.
+- **`compass-lookup`** — read-only retrieval across the federation with
+  `compass show`, `outline`, `refs`, and `index --stdout`: resolve an `id` or
+  section anchor, a `D`/`O`/M record, relationship queries
+  (`relates-to`/`supersedes`/`cites` and inbound references), and namespace
+  listings (§9, §10, §13).
+
+All three find the `compass` executable, check which commands it has, and
+interpret its exit codes as `skills/reference/toolchain.md` describes, and fall
+back to working from the files, saying so, when it is absent.
 - **`compass-derive`** — deferred (D3). Wraps the derivation pipeline (§16) with
   LLM curation where required (§21); tracked as blocked on S1/S2/S5/S7/S8.
 
@@ -164,12 +172,27 @@ How should a skill mark output produced without the deterministic backstop so a
 downstream reader does not mistake advisory scaffolding for validated
 conformance? A front-matter marker, a review-report banner, or convention only?
 
+**Partly resolved (2026-10-08):** with the toolchain available, the skills
+report the result of `compass check` and the toolchain version (the review
+report's header says "Checked with"), and anyone can rerun the check, so no
+marker in the document is needed. Without the toolchain, the skills say the
+output was not checked. What remains open is the case of a document committed
+without either, which the required check of COMPASS-DRAFT-toolchain-D1 would
+catch at merge.
+
 ### COMPASS-O2 — Registry access before the toolchain exists
 
 `compass-lookup` and `compass-author` (identifier allocation) want a registry
 (§13) that is presently unbuilt and, for most namespaces, has no entries yet.
 What is the minimum registry/manifest shape the skills should assume, and how do
 they degrade when it is absent?
+
+**Partly resolved (2026-10-08):** the manifest is `compass.sexp`
+(COMPASS-DRAFT-toolchain-D4), from which the skills read the namespace, the
+document directory, and the federated repositories. Until the ledger exists,
+`compass index --stdout` gives the registry view, `compass next` gives an
+advisory next number, and documents keep provisional identifiers. The ledger
+itself arrives with toolchain version 0.2.
 
 ### COMPASS-O3 — Provenance depth for LLM assistance
 
@@ -193,11 +216,22 @@ Table: Prior systems and what this plan draws from each.
 1. **Registration + tracking (now).** `opencode.json`; this Plan.
 2. **Shared reference bundle (now).** `skills/reference/` extracted from the
    standard.
-3. **Genre templates (now).** The nine §14 templates in `templates/`.
+3. **Genre templates (now).** The §14 templates in `templates/`, one per genre
+   except Ideation.
 4. **Author / review / lookup skills (now).** Full `SKILL.md` for each.
 5. **Derive skill (deferred).** Sharpen the stub; build when S1/S2/S5/S7/S8 land.
-6. **Toolchain integration (future).** When `COMPASS-DRAFT-toolchain` exists,
-   wire each skill to call it (D2) instead of best-effort checking.
+6. **Toolchain integration (in progress).** Wire each skill to call
+   `COMPASS-DRAFT-toolchain` (D2) instead of checking by hand.
+   - **Done for toolchain version 0.1 (2026-10-08):** the shared
+     `skills/reference/toolchain.md`; `compass-author` checks its drafts,
+     `compass-review` reports the toolchain's findings, and `compass-lookup`
+     answers with `show`, `outline`, `refs`, and `index --stdout`; the
+     templates give records provisional identifiers; the AGENTS snippet asks
+     for `compass check`; and the toolchain's tests check that the skills name
+     only commands and rules that exist or are planned, and that every
+     template, filled in, passes `compass check`.
+   - **With version 0.2:** `compass-author` uses `compass assign` for canonical
+     numbers, and `compass-review` the ledger and code-reference rules.
 7. **Cross-harness adapters (future).** Re-envelope the neutral core for Claude
    Code, Cursor/Copilot, and MCP (§23 S9).
 
@@ -205,5 +239,5 @@ Table: Prior systems and what this plan draws from each.
 
 - Assign the canonical `COMPASS-<NNNN>` identifier at merge, replacing the
   provisional `COMPASS-DRAFT-authoring-assistance` (§13).
-- Resolve COMPASS-O1..O3.
+- Resolve COMPASS-O1..O3 (O1 and O2 are partly resolved).
 - Author the cross-harness adapters once the OpenCode reference set is proven.

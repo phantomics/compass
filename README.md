@@ -22,8 +22,10 @@ Use it from anywhere inside a repository:
 compass check [PATH...] [--format text|json] [--strict] [--skip-unmarked]
 compass show COMPASS-DRAFT-toolchain-D18
 compass show COMPASS-0001#7-yaml-front-matter-schema
+compass outline COMPASS-DRAFT-toolchain   # headings, anchors, line ranges
+compass refs COMPASS-DRAFT-toolchain-D18  # what refers to an identifier
 compass index      # writes doc/INDEX.md
 compass rules      # lists every rule, its severity, and the section it enforces
 ```
 
-`compass check` exits 0 when there are no errors, 1 when there are, and 2 on a usage or internal error.
+`compass check` exits 0 when there are no errors, 1 when there are, and 2 on a usage or internal error. `make install` copies the executable to `~/.local/bin`, which the `compass-*` skills in `skills/` expect when they are used outside this repository.
