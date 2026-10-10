@@ -16,6 +16,8 @@ relates-to:
 decisions:
   - COMPASS-DRAFT-ledger-log-D1
   - COMPASS-DRAFT-ledger-log-D2
+  - COMPASS-DRAFT-ledger-log-D3
+  - COMPASS-DRAFT-ledger-log-D4
 ---
 
 # Compass Ledger: Development Log
@@ -662,7 +664,8 @@ a scratch clone.
   `COMPASS-DRAFT-toolchain-D28` (code references, resolving
   COMPASS-DRAFT-toolchain-O4), and `COMPASS-DRAFT-toolchain-D29` (federation). Split the plan's
   [baseline releases](Plan.Toolchain.md#baseline-releases): v0.2 is this round,
-  and v0.2.1 the release binaries.
+  and v0.2.1 the release binaries. *Done in `a9c6dd9`; see
+  [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Stage 5: Git-derived fields and code references.** `git/derivable`,
   `ref/code-pinned`, and `ref/code-exists`; `memo/basis` then checks that the
   revision exists.
@@ -674,15 +677,20 @@ a scratch clone.
   - References into other repositories are checked through `--federation`, and
     a shallow clone reports them as unverified.
   - The Git layer gains `log --follow` with `.mailmap`, and `grep`.
+
+  *Done in `a9c6dd9`, without `grep`, which nothing needed; see
+  [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Stage 6: remaining checks.** `index --check` and the `index/current` rule;
   `check --federation`, which loads each repository listed under
   `:federation` and reports a namespace claimed by two of them
   (`COMPASS-DRAFT-toolchain-D29`, which partly answers
   COMPASS-DRAFT-toolchain-O3).
-  `check --base` was done in stage 2.
+  `check --base` was done in stage 2. *Done in `a9c6dd9`; see
+  [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Stage 7: new commands.** `compass init`, with non-interactive flags, writes
   a starting manifest, and `compass manifest --json`. `compass init --ledger`
-  was done in stage 3.
+  was done in stage 3. *Done in `a9c6dd9`; see
+  [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Stage 8: CI and dependencies.**
   - `ocicl.csv`, with `make test DEPS=ocicl` verified locally;
   - `.github/workflows/compass-check.yml`, run on pull requests and pushes under
@@ -692,6 +700,9 @@ a scratch clone.
     runs when pushed;
   - `.github/CODEOWNERS`, assigning the ledger to `@phantomics`;
   - `scripts/pre-commit` and `make hooks`.
+
+  *Done in `a9c6dd9`, except that the workflow has not yet run; see
+  [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Stage 9: bootstrap.** The ledger was seeded in stage 3. What remains:
   - relabel the rows of the §23 table, as `ND1`… and `GO1`…, per
     COMPASS-DRAFT-toolchain-D9;
@@ -739,7 +750,9 @@ Other work found along the way:
   in.
 - **Paths and `--root`.** Paths on the command line are relative to the current
   directory even with `--root`. Resolving them against `--root`, as `git -C`
-  does, would match what users expect.
+  does, would match what users expect. *Done in `a9c6dd9`: a relative path that
+  names nothing in the current directory is tried under `--root`; see
+  [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Guards against two recurring mistakes.** A test that no message contains a
   `~` followed by a newline, and a build that fails when a definition replaces
   another (pitfalls 3 and 4).
@@ -748,3 +761,469 @@ Other work found along the way:
 - **Acceptance.** This Log is `Draft`, and its two decisions, like
   COMPASS-DRAFT-toolchain-D22 through COMPASS-DRAFT-toolchain-D26, are
   `Proposed`.
+
+## Update 2026-10-10 — Git-derived fields, code references, federation, and CI
+
+Commit `a9c6dd9` carried out the rest of stage 0 and stages 5 to 8 of version
+0.2: Git-derived fields, the checking of code references, the generated index's
+check, federation, `compass init` and `compass manifest`, and the CI workflow,
+lockfile, and hooks. Code references in this section are pinned to `a9c6dd9`.
+
+### Problem
+
+After `a12a31c` the ledger kept numbers unique, but three other kinds of claim
+in a document were still unchecked, and nothing yet ran the checks on every
+change:
+
+- **Fields left to Git.** §7 lets `authors`, `created`, and `updated` be
+  omitted and derived from Git. Twelve of this repository's thirteen documents
+  omit `created`, and the toolchain could neither derive it nor say when it
+  could not be derived.
+- **Code references.** §9 makes commit-pinned references mandatory in a `Log`
+  and a `Plan`. The 160 in this repository's documents, 71 of them in this Log,
+  had been verified only by hand, and only `memo/basis` looked at their form.
+- **Other repositories.** References into Classic were counted as unverified,
+  and nothing could tell whether the repositories listed under `:federation`
+  existed or owned what they were listed for.
+- **The index and the ledger in CI.** `compass index` wrote `INDEX.md`, but
+  nothing reported a stale one, and no workflow ran `compass check` against the
+  branch a pull request merges into, on which `ledger/append-only` depends.
+- **Adoption.** A repository not written in Lisp had to write its manifest by
+  hand, and a program reading it had to parse an s-expression.
+
+### Design Decisions
+
+The work carried out the three decisions recorded in the plan as the rest of
+stage 0, all `Proposed`:
+
+- [COMPASS-DRAFT-toolchain-D27](Plan.Toolchain.md#compass-draft-toolchain-d27--git-derived-fields-including-for-files-not-yet-committed):
+  Git-derived fields, including for files not yet committed;
+- [COMPASS-DRAFT-toolchain-D28](Plan.Toolchain.md#compass-draft-toolchain-d28--which-code-references-are-checked-and-how-deeply):
+  which code references are checked, and how deeply. It resolves
+  COMPASS-DRAFT-toolchain-O4;
+- [COMPASS-DRAFT-toolchain-D29](Plan.Toolchain.md#compass-draft-toolchain-d29--federation-checks-are-opt-in-and-one-hop-deep):
+  federation checks are opt-in and one hop deep. It partly answers
+  COMPASS-DRAFT-toolchain-O3.
+
+The plan's [baseline releases](Plan.Toolchain.md#baseline-releases) now split
+version 0.2 from version 0.2.1, which holds the release binaries, the setup
+action, the container image, and the `.pre-commit-hooks.yaml` definition.
+
+Two further decisions were made while coding. They are recorded here as
+proposals for the steward, as records at the same level as this section, the
+level §8 gives a record's heading.
+
+### COMPASS-DRAFT-ledger-log-D3 — An uppercase prefix in a code span is a namespace only when known, or when a path follows
+
+**Status:** Proposed
+
+**Context:** In the §9 grammar a code reference into another repository starts
+with its namespace and a colon. A file whose name is uppercase, such as a
+`README` or a `Makefile`, followed by a colon and a symbol has the same shape.
+Read as a namespace, the file name would make the reference unverifiable
+forever; read as a path, a real reference into a namespace this repository
+does not list would be reported as a missing file.
+
+**Decision:** `src/corpus/code.lisp:parse-code-mention@a9c6dd9` reads the prefix
+as a namespace if this repository owns it, lists it under `:federation`, or has
+documents in it (`src/corpus/code.lisp:known-namespace-p@a9c6dd9`), or if what
+follows the colon is itself a path
+(`src/corpus/code.lisp:path-like-p@a9c6dd9`: it contains `/`, ends in a known
+extension, or names a file in the working tree). Otherwise the prefix is the
+path and what follows is the symbol. A reference into an unknown namespace is
+then counted as unverified, never reported.
+
+**Alternatives:**
+- Always read an uppercase prefix as a namespace. Rejected: a reference to a
+  symbol in a `Makefile` could never be checked.
+- Read it as a namespace only when known. Rejected: a pinned reference into a
+  repository not yet listed under `:federation` would become an error about a
+  missing file, where §9 asks only that it be pinned.
+
+### COMPASS-DRAFT-ledger-log-D4 — The index is checked only where one exists, and line endings do not count
+
+**Status:** Proposed
+
+**Context:** COMPASS-DRAFT-toolchain-D6 has each namespace's `INDEX.md`
+generated and verified with `compass index --check`. Classic and Origin have no
+index yet, nor has a corpus whose first document is still being written. A
+clone made with Git's `core.autocrlf` converts the committed index to CRLF line
+endings on checkout, though its content is current.
+
+**Decision:** The rule `src/rules/federation.lisp:index/current@a9c6dd9` runs
+only when `INDEX.md` exists; `compass index --check`, which a person or a
+workflow asks for explicitly, reports a missing index and exits 1. Both compare
+the index line by line (`src/rules/federation.lisp:index-difference@a9c6dd9`),
+so line endings do not count, and both name the first line that differs.
+
+**Alternatives:**
+- Require an index in every repository. Rejected: every new corpus would fail
+  its first check, before it had anything to index.
+- Compare the files byte for byte. Rejected: a checkout on Windows would report
+  a stale index that is not.
+
+### Implementation
+
+#### Git layer
+
+- **Input.** `src/git.lisp:run-git@a9c6dd9` accepts a string for Git's
+  standard input, and an external format, so that the batch commands below can
+  read file contents as bytes.
+- **Many objects in one process.** `src/git.lisp:git-object-types@a9c6dd9` asks
+  `git cat-file --batch-check` the type of every object name at once: a
+  revision's commit, or a path at a revision. `src/git.lisp:git-read-objects@a9c6dd9`
+  reads the contents of many files at once with `git cat-file --batch`, splitting
+  the output by the byte sizes Git reports, and decodes each file that is UTF-8
+  text (`src/git.lisp:octet-string-text@a9c6dd9`).
+- **The history of one file.** `src/git.lisp:git-log-follow@a9c6dd9` lists the
+  commits that touched a file, following renames, oldest first, each with its
+  author as `.mailmap` names them and its author date.
+  `src/git.lisp:git-file-status@a9c6dd9` says whether a file is untracked,
+  modified, or clean, and `src/git.lisp:git-committed-files@a9c6dd9` lists the
+  files in `HEAD`.
+
+The plan's stage 1 also listed `git grep`; nothing needed it.
+
+#### Git-derived fields
+
+- **What Git can say, asked once.** `src/corpus/corpus.lisp:corpus-cached@a9c6dd9`
+  keeps values for the life of a loaded corpus.
+  `src/corpus/history.lisp:corpus-git-state@a9c6dd9` asks once whether Git runs,
+  whether the root is in a work tree, who the current user is, which files are
+  committed, and whether the clone is shallow.
+  `src/corpus/history.lisp:repository-usable-p@a9c6dd9` caches the first two
+  answers for each repository root; the ledger rules use it too.
+- **Derivable or not.** `src/corpus/history.lisp:underivable-reason@a9c6dd9`
+  says why a document's fields cannot be derived: the file is outside a work
+  tree, or it has no commit and Git has no `user.name` to credit. The rule
+  `src/rules/frontmatter.lisp:git/derivable@a9c6dd9` reports that for the
+  required fields left out, `created` and `authors`; without Git it records a
+  note. It runs no `git log`: what it needs takes a fixed handful of Git
+  processes per check, however many documents there are.
+- **The values.** `src/corpus/history.lisp:document-derived-fields@a9c6dd9`
+  computes `authors`, `created`, and `updated` from the file's history, and
+  adds the current user and today's date for work not yet committed. A value in
+  front-matter wins. Each value carries its source, and in a shallow clone
+  `created` carries a note that it may be late.
+- **Shown in `outline`.** `src/corpus/outline.lisp:document-outline@a9c6dd9`
+  attaches the three fields, and `src/cli.lisp:write-outline-fields@a9c6dd9`
+  prints them under the document's title, as in "Created: 2026-10-10 (Git)".
+  The JSON outline (`src/cli.lisp:outline-json@a9c6dd9`) gains `fields`.
+
+#### Code references
+
+- **Finding them.** `src/corpus/code.lisp:document-code-mentions@a9c6dd9` reads
+  each code span of a document's text and headings with
+  `src/corpus/code.lisp:parse-code-mention@a9c6dd9`, and keeps those that are
+  pinned or name a place in a file. A bare file name, a rule name such as
+  `ledger/unique`, and an example of the grammar are left out
+  ([COMPASS-DRAFT-ledger-log-D3](#compass-draft-ledger-log-d3--an-uppercase-prefix-in-a-code-span-is-a-namespace-only-when-known-or-when-a-path-follows)).
+- **`ref/code-pinned`.** `src/rules/code.lisp:ref/code-pinned@a9c6dd9` reports a
+  reference that names a symbol or lines without a revision, at the severity
+  `src/rules/code.lisp:pinning-severity@a9c6dd9` gives: an error in a `Log` or
+  `Plan`, a warning elsewhere. A line written as a colon and a number is
+  reported in either case, with `#L` and the number as the form to write.
+- **Resolving them.** `src/corpus/code.lisp:resolve-code-mentions@a9c6dd9` groups
+  the pinned references by the repository they are read in
+  (`src/corpus/code.lisp:code-mention-root@a9c6dd9`). For each, one Git process
+  finds every revision, and the path of every reference that names no place in
+  its file (`src/corpus/code.lisp:ensure-revisions@a9c6dd9`); a second reads
+  only the files whose symbols or lines are to be found.
+  `src/corpus/code.lisp:check-code-object@a9c6dd9` then classifies each
+  reference: resolved, a missing revision or path, a directory where a file was
+  meant, lines past the end of the file, or a symbol not found. A revision
+  missing from a shallow clone, and a reference into a namespace that is not
+  loaded, are unverified.
+- **`ref/code-exists`.** `src/rules/code.lisp:ref/code-exists@a9c6dd9` reports
+  a missing revision or path as an error, and a missing symbol, lines past the
+  end, or a directory as a warning. It leaves a revision in a memo's
+  `**Basis:**` to `src/rules/memo.lisp:memo/basis@a9c6dd9`, which now requires a
+  pinned revision to exist where Git can tell
+  (`src/corpus/code.lisp:revision-status@a9c6dd9`).
+- **Finding a symbol.** `src/corpus/code.lisp:symbol-defined-p@a9c6dd9` scans
+  only the lines that contain the symbol
+  (`src/corpus/code.lisp:occurrences@a9c6dd9`), and accepts a line where a
+  definition pattern captures exactly that name
+  (`src/corpus/code.lisp:line-defines-p@a9c6dd9`):
+  - in Lisp files, the forms of `src/corpus/code.lisp:*lisp-definition-scanners*@a9c6dd9`:
+    a `(def…` or `(define-…` form, also with a quoted name, FiveAM's
+    `(test …`, and slot readers and accessors, compared without regard to case
+    and with any package prefix removed;
+  - in Python, JavaScript and TypeScript, Go, Rust, C and C++, and shell, the
+    patterns of `src/corpus/code.lisp:*definition-scanners*@a9c6dd9`;
+  - in any other file, the symbol as a whole token
+    (`src/corpus/code.lisp:token-at-p@a9c6dd9`).
+
+#### Federation and the index
+
+- **Loading.** `src/corpus/federation.lisp:load-federation@a9c6dd9` loads each
+  repository listed under `:federation`, at its path relative to this
+  repository's root (`src/corpus/federation.lisp:federation-directory@a9c6dd9`),
+  with files lacking front-matter skipped, and records a repository that is
+  missing, has no manifest, or does not own the namespace it is listed for.
+- **Resolving into it.** Once the federation is loaded,
+  `src/corpus/corpus.lisp:find-document@a9c6dd9`,
+  `src/corpus/corpus.lisp:find-record@a9c6dd9`,
+  `src/corpus/corpus.lisp:namespace-loaded-p@a9c6dd9`, and
+  `src/corpus/corpus.lisp:corpus-alias-target@a9c6dd9` also look in the
+  federated corpora and ledgers
+  (`src/corpus/corpus.lisp:federated-corpora@a9c6dd9`). A link that leaves the
+  repository is followed into the federated repository it lands in
+  (`src/corpus/federation.lisp:federated-location@a9c6dd9`) and checked there
+  for its file, anchor, and link text
+  (`src/rules/references.lisp:check-federated-link@a9c6dd9`). A code reference
+  prefixed with a federated namespace is read in that repository's Git
+  (`src/corpus/federation.lisp:namespace-root@a9c6dd9`).
+- **The rules.** `src/rules/federation.lisp:federation/path@a9c6dd9` reports
+  the federated repositories found missing, without a manifest, or not owning
+  their namespace, at the line of `compass.sexp` that lists them
+  (`src/rules/federation.lisp:manifest-entry-line@a9c6dd9`).
+  `src/rules/federation.lisp:federation/namespace@a9c6dd9` reports a namespace
+  owned both here and by a federated repository, or by two federated ones.
+  Neither runs without `--federation`.
+- **Aliases in front-matter.** `src/rules/references.lisp:check-identifier-reference@a9c6dd9`
+  accepts a `relates-to` written with an alias the ledger records; before, it
+  was reported as undefined on top of the `ref/stale-alias` warning, a gap left
+  by stage 2.
+- **The index.** `src/rules/federation.lisp:index/current@a9c6dd9`, and the new
+  `--check` of `compass index`, compare the index with what would be written
+  ([COMPASS-DRAFT-ledger-log-D4](#compass-draft-ledger-log-d4--the-index-is-checked-only-where-one-exists-and-line-endings-do-not-count)).
+  `src/util.lisp:first-difference@a9c6dd9`, which `ledger/append-only` already
+  used, moved to the utilities to name the first line that differs.
+
+#### Command line
+
+- **`compass check --federation`** loads the federation before checking, and
+  notes when `compass.sexp` lists none.
+- **`compass init`** without `--ledger` now writes a starting manifest
+  (`src/cli.lisp:init-manifest@a9c6dd9`). It infers the document directory, `doc/`
+  or `docs/` (`src/cli.lisp:infer-doc-directory@a9c6dd9`); the namespaces the
+  documents use, unless `--namespace` names them; and the steward, as the Git
+  user, unless `--steward` names one. `--federation NS=PATH`
+  (`src/cli.lisp:parse-federation-option@a9c6dd9`) adds federated repositories,
+  and `--solo` declares the steward's solo approval. The text comes from
+  `src/model/manifest.lisp:manifest-text@a9c6dd9`, and is read back before the
+  command reports success. It refuses to overwrite a manifest, and
+  `init --ledger` refuses the manifest's flags.
+- **`compass manifest --json`** prints the manifest's namespaces, document
+  directory, ledger path, federation, commands, stewards, and authorities
+  (`src/cli.lisp:manifest-json@a9c6dd9`), and reports a malformed manifest's
+  findings on standard error with exit 1.
+- **Paths and `--root`.** `src/cli.lisp:repository-path@a9c6dd9` takes a
+  relative path from the current directory when it names something there, and
+  otherwise from `--root`.
+
+#### CI, dependencies, and hooks
+
+- **`ocicl.csv@a9c6dd9`** pins, by digest, the four dependencies and the four
+  packages they depend on (ten systems in eight packages), as the local ocicl
+  v2.6.6 installed them.
+  `Makefile@a9c6dd9` gains `make deps`, which runs `ocicl install` under
+  `DEPS=ocicl`, and `make hooks`.
+- **`.github/workflows/compass-check.yml@a9c6dd9`** runs on pull requests and on
+  pushes to the default branch, in a matrix of Quicklisp (pinned to the
+  2023-06-18 dist) and ocicl (v2.6.6, built from source, with
+  `OCICL_LOCAL_ONLY=1`), with the full history checked out. It builds the
+  executable, runs `compass check --base` against the pull request's base
+  branch (or the commit a push replaced), then `compass index --check`, then
+  `make test`.
+- **`.github/CODEOWNERS@a9c6dd9`** assigns the ledger to `@phantomics`, so that
+  the steward approves every allocation once code-owner review is required.
+- **`scripts/pre-commit@a9c6dd9`** regenerates a stale `INDEX.md` and stages it,
+  then refuses the commit if `compass check` finds errors. It uses
+  `bin/compass`, a `compass` on the `PATH`, or the one `$COMPASS` names.
+- **`README.md`** describes the dependencies, the workflow, the branch-protection
+  settings the uniqueness guarantee depends on, and the hook.
+- **`skills/reference/toolchain.md`** lists `check --federation`,
+  `index --check`, `init`, and `manifest --json`, explains federation, and no
+  longer lists Git-derived fields and code references as unchecked.
+
+#### Tests
+
+- **Two new suites.** `tests/test-code-refs.lisp@a9c6dd9` (98 checks) covers the
+  Git queries, derived fields, `git/derivable`, what is and is not a code
+  reference, references that resolve and do not, pinning, unverified
+  references, memo bases, a shallow clone made with `git clone --depth 1`, and
+  symbol patterns. `tests/test-federation.lisp@a9c6dd9` (41 checks) covers
+  federated references, the two federation rules, federated code references,
+  `check --federation`, and the index check, in sibling temporary
+  repositories.
+- **Fixtures.** `tests/helpers.lisp:doc@a9c6dd9` writes `created` only when
+  asked, and `tests/helpers.lisp:check-files@a9c6dd9` can make its repository a
+  Git repository. The test of the genre templates commits a real file for the
+  Memo template's basis to cite.
+
+### Pitfalls Encountered
+
+1. **Fixtures outside Git.** Once the new rules existed, twelve checks in eight
+   tests failed. Most failed because the test document builder omits `created`,
+   and most fixtures are plain temporary directories, where nothing can be
+   derived. The rule was right. The tests that run every rule now give
+   `created`, or commit their files.
+2. **A revision that never existed.** The rest failed because the memo
+   fixtures, and the Memo template filled in by the skills test, cited code at a
+   made-up revision, which `memo/basis` now looks up. The template test now
+   commits a file and cites its real revision.
+3. **A note that vanished.** `compass check --federation` noted when the
+   manifest lists no federation, but before the check; the check begins by
+   clearing the notes (`src/rules/engine.lisp:check-corpus@a9c6dd9`), so the note
+   never appeared. It is now made after the check.
+4. **A function replaced, again.** The manifest's commands had an accessor named
+   `command-name`, and the command line's own `command` structure defines an
+   accessor of the same name in a package that uses the manifest's. Since v0.1
+   the second had silently replaced the first; nothing had read a manifest
+   command's name until `manifest --json`. This is the mistake of
+   [pitfall 3](#pitfalls-encountered) above, in another place; the manifest's
+   accessor was removed in favour of `manifest-command-name`. Neither the build
+   nor the tests had reported it.
+5. **A slow first version.** `ref/code-exists` first added about 135 ms to a
+   check of this repository. Profiling showed most of it in searching whole
+   files case-insensitively, decoding every file read through a vector of
+   bytes, and counting lines by splitting each file. It now reads only the files
+   whose symbols or lines are wanted, decodes UTF-8 in one pass, counts lines in
+   place, and runs patterns only over lines that contain the symbol: about 50 to
+   75 ms.
+6. **Edits by text substitution.** Twice a scripted edit left a form unbalanced
+   (`src/corpus/code.lisp`, then `src/corpus/federation.lisp`). The reader
+   reported the form's first line, so each was found by reading the form, not
+   the message.
+7. **Paths in two forms.** The manifest records its own location as a pathname,
+   and `federation/path` first passed it where a repository-relative string was
+   expected, failing with a type error in the first federation test.
+
+### Verification
+
+- **Tests.** `make test` at `a9c6dd9`, run from a separate worktree of that
+  commit: **1142 checks, 100% pass**, under both `DEPS=ql` and `DEPS=ocicl`
+  (with `OCICL_LOCAL_ONLY=1` and the dependencies of `ocicl.csv`).
+- **The executable**, built from that worktree, reports
+  `compass 0.1.0 (commit a9c6dd96e2ce, SBCL 2.3.4, linux x86-64)`, without
+  `-dirty`. It is 49,257,440 bytes (47.0 MiB), or 12.0 MiB with `gzip -9`.
+- **Self-check.** `compass check` of this repository at `a9c6dd9`: "Checked 13
+  documents: 0 errors, 234 warnings", all `ref/short-record`, with 3
+  references unverified. `compass index --check`: current.
+- **Code references.** The documents hold 160 pinned references, and no
+  located reference without a revision:
+
+  Table: Pinned code references in this repository's documents at `a9c6dd9`, by revision.
+
+  | Revision | References | Resolved |
+  |---|---|---|
+  | `a12a31c` | 71 | 71 |
+  | `4e4549a` | 46 | 46 |
+  | `07b9643` | 20 | 20 |
+  | `ee5f765` | 12 | 12 |
+  | `fcdec0c` | 8 | 8 |
+  | `6e4f02d`, in Classic | 3 | unverified; 3 with `--federation` |
+
+  They are in this Log (71), [COMPASS-DRAFT-toolchain-log](Log.Toolchain.md)
+  (62), [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md)
+  (24), and one each in three other documents. Every reference that names a
+  symbol or lines names a Lisp file, and every symbol was found by a definition
+  form; the patterns for other languages are so far exercised only by the
+  tests.
+- **Federation.** With `--federation`, from this repository's place beside
+  Classic, Origin, and Lexter: 0 errors, and no reference left unverified. From
+  the worktree, whose siblings do not exist, `--federation` reports the three
+  repositories under `federation/path`, as it should; CI therefore checks
+  without it.
+- **Derived fields.** Every document derives `created` and `updated` from Git;
+  this Log, which omits `authors`, derives "Andrew Sengul" from commits made as
+  `phantomics`, through `.mailmap`.
+- **The other repositories**, with `--skip-unmarked`, with and without
+  `--federation`: unchanged from [Verification](#verification) above. Classic
+  has 24 `ledger/coverage` and 23 `register/unique` errors, Origin 5
+  `ledger/coverage`, and Lexter none. None of the new rules adds a finding.
+- **A real assignment**, in the scratch clone with the executable of this
+  batch: the result of stage 3 is unchanged, with 16 numbers, 96 lines rewritten
+  in 10 documents, and no errors afterwards.
+- **The hook**, run in a temporary repository: it regenerated and staged a stale
+  `INDEX.md` and let the commit proceed, then refused one with a `vocab/genre`
+  error.
+- **The workflow** parses as YAML, and the ocicl tag it builds, `v2.6.6`,
+  exists, with `setup.lisp` building the executable into `~/.local/bin` as the
+  workflow expects.
+- **Speed.** A check of this repository takes about 390 ms, against about 270 ms
+  at `a12a31c`; with `--federation`, about 540 ms. Excluding a rule saves about
+  145 ms for `ref/short-record` and about 45 ms for `ref/code-exists`; the other
+  new rules cost little.
+- **Not verified:**
+  - the workflow itself, which first runs when pushed;
+  - `make hooks`, which installs into this clone's `.git/hooks`;
+  - the symbol patterns of languages other than Lisp against real code;
+  - a federated repository that is itself shallow.
+
+### Files
+
+Table: Files added or changed in commit `a9c6dd9`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/corpus/history.lisp` | **New** | Git-derived fields; what Git can say about the repository |
+| `src/corpus/code.lisp` | **New** | Finding code references and resolving them against Git; symbol patterns |
+| `src/corpus/federation.lisp` | **New** | Loading the federation, one hop deep |
+| `src/rules/code.lisp` | **New** | `ref/code-pinned`, `ref/code-exists` |
+| `src/rules/federation.lisp` | **New** | `federation/path`, `federation/namespace`, `index/current` |
+| `src/git.lisp` | Modified | Standard input; batch object queries; `log --follow`; file status |
+| `src/corpus/corpus.lisp` | Modified | A per-load cache; lookups that reach into the federation |
+| `src/corpus/outline.lisp` | Modified | Derived fields in the outline |
+| `src/rules/frontmatter.lisp` | Modified | `git/derivable` |
+| `src/rules/memo.lisp` | Modified | A pinned basis must name a revision that exists |
+| `src/rules/references.lisp` | Modified | Federated links; aliases in front-matter resolve |
+| `src/rules/ledger.lisp` | Modified | Uses the shared Git and line-difference helpers |
+| `src/model/manifest.lisp` | Modified | Writing a starting manifest; the replaced accessor removed |
+| `src/util.lisp` | Modified | `first-difference` |
+| `src/cli.lisp` | Modified | `check --federation`, `index --check`, `init`, `manifest --json`, derived fields in `outline`, paths under `--root` |
+| `src/packages.lisp` | Modified | The new exports |
+| `compass.asd` | Modified | The new source files and test suites |
+| `tests/test-code-refs.lisp` | **New** | Git queries, derived fields, code references |
+| `tests/test-federation.lisp` | **New** | Federation and the index check |
+| `tests/helpers.lisp` | Modified | `created` on request; Git repositories in `check-files` |
+| `tests/test-cli.lisp` | Modified | `init`, `manifest --json`, paths under `--root` |
+| `tests/test-rules.lisp`, `tests/test-corpus.lisp`, `tests/test-allocate.lisp`, `tests/test-skills.lisp` | Modified | Fixtures for `git/derivable` and real revisions |
+| `ocicl.csv` | **New** | The ocicl lockfile |
+| `.github/workflows/compass-check.yml` | **New** | The CI workflow |
+| `.github/CODEOWNERS` | **New** | The steward owns the ledger |
+| `scripts/pre-commit` | **New** | The pre-commit hook |
+| `Makefile` | Modified | `deps` and `hooks` |
+| `README.md` | Modified | Dependencies, CI, branch protection, the hook |
+| `doc/Plan.Toolchain.md` | Modified | COMPASS-DRAFT-toolchain-D27 to COMPASS-DRAFT-toolchain-D29; COMPASS-DRAFT-toolchain-O3 and COMPASS-DRAFT-toolchain-O4; rule table, commands, and releases |
+| `doc/Log.Ledger.md` | **New** | This Log |
+| `doc/INDEX.md` | Modified | Regenerated |
+| `skills/reference/toolchain.md` | Modified | The new commands; federation; what is not checked yet |
+
+### Metrics
+
+- Test checks: 953 at `a12a31c`; 1142 at `a9c6dd9`, of which the two new suites
+  hold 139.
+- Regressions: 0.
+- Rules: 33 at `a12a31c`; 39 at `a9c6dd9`.
+- Commands: 12 at `a12a31c`; 13 at `a9c6dd9`.
+- Source files: 31 (6,396 lines) at `a12a31c`; 36 (7,598 lines) at `a9c6dd9`, of
+  which the five new files hold 719 lines.
+- Test files: 17 (2,510 lines) at `a12a31c`; 19 (3,096 lines) at `a9c6dd9`, of
+  which the two new suites hold 496 lines.
+
+### Outstanding Work
+
+Stages 9 to 11 remain as [Outstanding Work](#outstanding-work) above lists
+them: the bootstrap and the amendments to `Compass.md`, the skills and version
+0.2.0, and the final checkpoint. In addition:
+
+- **Run the workflow.** It first runs when pushed. The ocicl job builds ocicl
+  from source with Ubuntu's SBCL, which has not been tried. Then make both jobs
+  required checks, and require code-owner review, as `README.md` describes.
+- **Install the hook** with `make hooks`, if wanted. It checks the working tree,
+  so it also indexes and checks changes not staged for the commit.
+- **A guard against replaced definitions.** Pitfall 4 is the second instance;
+  the build should fail when a definition replaces another.
+- **Speed.** A check now takes about 390 ms; `ref/short-record` remains the
+  largest cost.
+- **Unverified references in CI.** CI checks without `--federation`, so the
+  three references into Classic stay unverified there; a workflow that checks
+  out the federation beside this repository would verify them.
+- **Uses of the derived fields.** Only `outline` shows them so far; the
+  `review/approver` rule and the RDF export are their next users.
+- **Acceptance.** COMPASS-DRAFT-toolchain-D27 to COMPASS-DRAFT-toolchain-D29
+  and this Log's decisions COMPASS-DRAFT-ledger-log-D3 and
+  COMPASS-DRAFT-ledger-log-D4 are `Proposed`.
