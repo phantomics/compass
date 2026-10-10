@@ -1,9 +1,8 @@
 ;;;; index.lisp — Generate the namespace index, and preview the next identifier
 ;;;;
-;;;; Read-if: changing the generated INDEX.md, or how `compass next` computes a number
+;;;; Read-if: changing the generated INDEX.md
 ;;;; See: COMPASS-DRAFT-toolchain-D6, COMPASS-DRAFT-toolchain-D3
 ;;;; Invariant: INDEX.md is generated; its banner tells readers not to edit it
-;;;; Invariant: before the ledger exists, next-identifier is advisory
 ;;;; Tests: tests/test-corpus.lisp
 
 (in-package #:compass.corpus)
@@ -123,25 +122,3 @@ repository-relative path."
     (write-text-file (root-file (corpus-root corpus) path)
                      (generate-index corpus :namespace namespace))
     path))
-
-(defun next-identifier (corpus namespace kind)
-  "Preview the next canonical identifier of KIND in NAMESPACE, from the highest
-canonical number defined in the corpus. Return the identifier, and T to say the
-result is advisory: until the ledger exists (v0.2), a corpus scan cannot see
-numbers allocated on other branches."
-  (let ((highest 0))
-    (flet ((consider (string)
-             (let ((id (parse-identifier string)))
-               (when (and id (not (identifier-provisional-p id))
-                          (string= (identifier-namespace id) namespace)
-                          (eq (identifier-kind id) kind))
-                 (setf highest (max highest (identifier-serial id)))))))
-      (dolist (document (corpus-documents corpus))
-        (consider (document-id document))
-        (dolist (record (document-records document))
-          (consider (record-id record)))
-        (dolist (kind-spec (register-kinds))
-          (mapc #'consider
-                (node-identifiers (document-field-node document
-                                                       (register-kind-field kind-spec)))))))
-    (values (format-canonical-identifier namespace kind (1+ highest)) t)))

@@ -112,3 +112,21 @@ is not one."
     (ppcre:do-matches-as-strings (match *identifier-in-text-scanner* text)
       (when (parse-identifier match) (push match found)))
     (nreverse found)))
+
+(defun replace-identifiers-in-text (text function)
+  "TEXT with each identifier in it replaced by the string FUNCTION returns for
+it; where FUNCTION returns NIL, the identifier is left as written. Identifiers
+are matched whole, as FIND-IDENTIFIERS-IN-TEXT finds them."
+  (let ((pieces '()) (end 0) (changed nil))
+    (ppcre:do-scans (start finish reg-starts reg-ends *identifier-in-text-scanner* text)
+      (declare (ignore reg-starts reg-ends))
+      (let* ((token (subseq text start finish))
+             (replacement (and (parse-identifier token) (funcall function token))))
+        (when replacement
+          (push (subseq text end start) pieces)
+          (push replacement pieces)
+          (setf end finish changed t))))
+    (if changed
+        (progn (push (subseq text end) pieces)
+               (apply #'concatenate 'string (nreverse pieces)))
+        text)))

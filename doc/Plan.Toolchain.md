@@ -68,6 +68,11 @@ decisions:
   - COMPASS-DRAFT-toolchain-D19
   - COMPASS-DRAFT-toolchain-D20
   - COMPASS-DRAFT-toolchain-D21
+  - COMPASS-DRAFT-toolchain-D22
+  - COMPASS-DRAFT-toolchain-D23
+  - COMPASS-DRAFT-toolchain-D24
+  - COMPASS-DRAFT-toolchain-D25
+  - COMPASS-DRAFT-toolchain-D26
 open-questions:
   - COMPASS-DRAFT-toolchain-O1
   - COMPASS-DRAFT-toolchain-O2
@@ -936,6 +941,192 @@ recorded here rather than left to the code.
 - A manifest key listing documents outside the document directory. Rejected for
   v0.1: the front-matter test identifies them without configuration.
 
+### COMPASS-DRAFT-toolchain-D22 — One ledger per repository, one entry per line
+
+**Status:** Proposed
+
+**Context:** D3 fixes what the ledger records but not its shape: whether a
+repository that owns several namespaces keeps one ledger or several, how an
+entry is written, how numbers are counted, and how a ledger that a pull request
+has damaged is reported. The uniqueness guarantee (D1) depends on every
+allocation being a line appended to one file, so that two concurrent
+allocations always conflict.
+
+**Decision:**
+- **One file.** A repository keeps one ledger, `REGISTRY.sexp` in its document
+  directory, for every namespace its manifest owns (D4). Allocations in all of
+  them are therefore put in one sequence, and two branches that allocate
+  anything at all conflict.
+- **One entry per line**, as a property list read by the restricted reader:
+  `:id` and `:kind` always; `:path` (the document's path at allocation) for a
+  document; `:host` (its document's identifier at allocation) for a record;
+  `:draft`, the provisional identifier it replaced, when there was one; `:date`
+  and `:by` (the allocator, as Git and `.mailmap` name them). Blank lines and
+  `;` comments are allowed, so the file can open with a header. An unknown key
+  is a warning, so that a later toolchain may add one.
+- **Four counters per namespace:** documents, `D`, `O`, and M records. The next
+  number of a kind is one more than the highest found in the ledger, in the
+  ledger at the base revision, and among the canonical identifiers the
+  documents already use. Gaps are allowed; numbers never go down and are never
+  reused.
+- **Rules.** `ledger/valid` reports a line that is not a comment or one
+  well-formed entry, including a merge-conflict marker; `ledger/unique` an
+  identifier or alias listed twice; `ledger/coverage` a canonical identifier
+  defined without an entry, or a provisional identifier still defined after the
+  ledger assigned it; `ledger/owned-namespace` an entry or definition in a
+  namespace the manifest does not own; `ledger/append-only` a ledger whose text
+  at the base revision (`--base`, by default `HEAD`) is not a prefix of its
+  current text; `ledger/no-union-merge` a merge driver that would hide a
+  conflict; and `ref/stale-alias` (a warning) a reference written with an alias.
+  Without a manifest that declares namespaces, no ledger rule runs; without Git,
+  the last two report that they did not run.
+
+**Alternatives:**
+- One ledger per namespace. Rejected: allocations in different namespaces of
+  one repository would merge without conflict, so the repository would no
+  longer be one sequence; and nothing is gained, since the entry names its
+  namespace.
+- A ledger written as one list form. Rejected: an append would rewrite the
+  closing parenthesis, so every allocation would touch the previous line.
+- One counter for all kinds. Rejected: §8's record numbers would leap by the
+  number of documents allocated in between.
+
+### COMPASS-DRAFT-toolchain-D23 — Provisional records in a numbered document reuse its alias
+
+**Status:** Proposed
+
+**Context:** D2 forms a provisional record identifier from its document's
+provisional identifier. Once the document has a number, a record added to it on
+a branch has no provisional document identifier to borrow, and writing a
+canonical number at once would bring back the collision D2 avoids.
+
+**Decision:** A provisional record in a numbered document uses the document's
+alias in the ledger: a decision added to `COMPASS-0003`, formerly
+`COMPASS-DRAFT-toolchain`, is written `COMPASS-DRAFT-toolchain-D22`, numbered
+past every record of that slug the document or the ledger already has. A
+document that never had an alias, such as `COMPASS-0001`, uses any slug that
+names no other document and is no other identifier's alias. `id/format` accepts
+both; `compass next NS --kind K --in FILE` prints the next such identifier, and
+`compass assign FILE` numbers it. Clarifies D2 and §13.
+
+**Alternatives:**
+- Number the record at once. Rejected: numbers would be taken on branches, not
+  at acceptance (§13), and would collide.
+- Any free slug, also for documents that have an alias. Rejected: the tie
+  between a record and its document would be lost.
+
+### COMPASS-DRAFT-toolchain-D24 — What `compass assign` does
+
+**Status:** Proposed
+
+**Context:** §13 has the steward assign numbers at acceptance. Done by hand, that
+means choosing free numbers, rewriting every reference, renaming the anchors of
+changed headings, and appending entries, without a mistake.
+
+**Decision:** `compass assign FILE [--dry-run] [--force] [--base REV]`:
+- refuses unless the document's status is an accepted one (`Accepted`,
+  `Implemented`, `Design-Record`, or `Current`), or `--force` is given, and
+  unless the ledger has no errors;
+- numbers the document, if its identifier is provisional, and every provisional
+  record it defines, in the order of their headings, except memo records still
+  `Draft`, which are numbered when a person moves them to `Current` (§13);
+- takes the next numbers as D22 describes, with the base revision's ledger
+  included (`--base`, by default `origin/HEAD`, `origin/main`, or
+  `origin/master`, whichever exists), which narrows the window for a
+  collision;
+- rewrites whole identifiers in **corpus documents only**: their front-matter,
+  text, headings, code spans, and link text, but not fenced code or block HTML
+  comments, which hold examples and guidance;
+- renames the anchors of headings that change, and rewrites links and
+  `ID#anchor` references to them;
+- appends one ledger entry per number, with the provisional identifier as its
+  alias, and regenerates `INDEX.md` where one exists;
+- lists the other tracked files that still name an old identifier, such as
+  source headers and tests. Those keep working, since an alias still resolves,
+  with the `ref/stale-alias` warning in documents.
+
+With `--dry-run` it prints the same report and writes nothing. It needs Git, to
+name the allocator and to read the base revision.
+
+**Alternatives:**
+- Rewrite every tracked file. Rejected: tests and examples name provisional
+  identifiers on purpose.
+- Leave references to the alias. Rejected: documents would accumulate stale
+  references; the alias is a safety net, not the normal form.
+
+### COMPASS-DRAFT-toolchain-D25 — Concurrent allocations are recovered by keeping both and renumbering
+
+**Status:** Proposed
+
+**Context:** When two branches allocate, the second to merge meets a conflict
+in the ledger (D1). The earlier plan had the author take the upstream ledger
+and renumber. That loses the second branch's entries, and with them the aliases
+that let references to its old provisional identifiers resolve.
+
+**Decision:** The author keeps both sides of the conflict, in either order, or
+leaves the conflict markers in place, and runs
+`compass renumber [--base REV] [--dry-run]`. It:
+- removes any conflict markers, keeping both sides;
+- rewrites the ledger as the base revision's ledger followed by the entries
+  this branch added, so that the base is a prefix again;
+- moves each added entry whose identifier the base already allocated, or an
+  earlier added entry took, to the next free number, and updates the `:host` of
+  added entries that name it;
+- gives an entry to a canonical identifier this branch defines on an added line
+  with no entry at all (as after taking the upstream ledger), keeping its number
+  if it is free; such an entry has no alias, and the command says so;
+- rewrites the moved identifiers, and the anchors that change with them, **only
+  on lines this branch added** (from `git diff` against the base), so that
+  references to the other branch's allocation stay correct.
+
+It prints every change; the author reviews them before committing.
+
+**Alternatives:**
+- Take the upstream ledger and renumber. Kept as a fallback, but it loses
+  aliases.
+- Rewrite every reference to a moved identifier. Rejected: after the merge the
+  same identifier also names the other branch's document.
+
+### COMPASS-DRAFT-toolchain-D26 — Records are referred to by full identifier; short forms are found, not rewritten
+
+**Status:** Proposed
+
+**Context:** Documents refer to records by short forms such as `D6`, `O4 and O5
+of <document>`, or `<identifier>-D10 to D14`. A short form means whatever record
+its reader takes it to mean, and that changes when records are numbered: after
+`compass assign`, a `D6` written in a document whose decisions became
+`COMPASS-D5` to `COMPASS-D15` reads as `COMPASS-D6`, which is another record.
+Rewriting short forms automatically needs a guess at what each means (the
+document's own record, a related document's, or one named by the words around
+it), and a wrong guess silently changes a document's meaning. A trial
+`assign` of a real Plan made such wrong guesses.
+
+**Decision:**
+- References to records are written with the full identifier, canonical or
+  provisional. `compass assign` and `compass renumber` rewrite whole
+  identifiers only.
+- A new rule, `ref/short-record` (warning), finds short forms in text and
+  headings, outside code spans, comments, and record headings, and suggests the
+  identifier each probably means: the one the context names (a list continuing
+  a full identifier, or `of`, `in`, or `from` followed by one, also across a
+  line break), or else a record of the document itself, of a document it
+  `relates-to`, or, last, of its namespace. A bare token that matches no record,
+  such as a table label `M1`, is not reported.
+- `compass assign` refuses while any short form in the corpus probably means a
+  record it would number, listing each with its suggestion; `--force` assigns
+  anyway and lists them as warnings. `compass renumber` lists the short forms
+  that point at records it moved.
+
+Converting the existing short forms is a one-time edit by an author, guided by
+the warnings; the rule then keeps new ones from accumulating.
+
+**Alternatives:**
+- Rewrite short forms by the same guesses. Rejected for the silent errors
+  described above.
+- Make short forms an error. Rejected: in a document whose records are never
+  renumbered they are harmless, and §8 does not forbid them; the warning and the
+  refusal in `assign` cover the case where they do harm.
+
 ## The uniqueness guarantee
 
 The guarantee is a set of invariants. The validator enforces them, and the
@@ -943,11 +1134,11 @@ repository settings make it impossible to bypass the validator.
 
 **Invariants checked by `compass check`:**
 
-1. Every canonical `<NS>-<NNNN>`, `<NS>-D<n>`, and `<NS>-O<n>` that the
-   repository defines appears in the ledger of a namespace the repository owns
-   (COMPASS-DRAFT-toolchain-D4).
-2. No identifier appears twice in a ledger, and no two documents declare the
-   same `id`.
+1. Every canonical `<NS>-<NNNN>`, `<NS>-D<n>`, `<NS>-O<n>`, and `<NS>-M<n>`
+   that the repository defines appears in its ledger, in a namespace the
+   repository owns (COMPASS-DRAFT-toolchain-D4, D22).
+2. No identifier or alias appears twice in the ledger, and no two documents
+   declare the same `id`.
 3. The ledger at the base revision is a **byte-for-byte prefix** of the ledger
    at the head revision. Any deletion, edit, or renumbering is an error, which
    enforces "never reused."
@@ -970,48 +1161,55 @@ repository settings make it impossible to bypass the validator.
 
 **Why concurrent allocation cannot succeed.** Two pull requests that each
 allocate append after the same last line of the ledger, and Git reports a
-conflict. If the second is resolved by keeping both lines, invariant 2 fails. If
-it is resolved by renumbering (`compass renumber`), the result is correct. If
-the ledger is not touched at all, invariant 1 fails. Each path to a duplicate is
+conflict. If the second is resolved by keeping both lines and nothing else,
+invariant 2 fails. If `compass renumber` is then run, the result is correct
+(D25). If the ledger is not touched at all, invariant 1 fails. Each path to a duplicate is
 blocked by either Git or the required check. The concurrency tests demonstrate
 every case in temporary Git repositories.
 
 ## Identifier lifecycle
 
 1. **Draft.** `compass-author` scaffolds `<NS>-DRAFT-<slug>`, with
-   `<NS>-DRAFT-<slug>-D<n>`/`-O<n>` register entries. No coordination is
-   needed.
+   `<NS>-DRAFT-<slug>-D<n>`/`-O<n>`/`-M<n>` register entries. No coordination
+   is needed. A record added to a document that already has a number reuses the
+   document's alias (D23).
 2. **Assign.** At acceptance, the steward (or the author, with the steward
-   approving through `CODEOWNERS`) runs `compass assign <file>`. The command:
-   - computes the next numbers from the maximum of the local ledger and the
-     upstream ledger (`--base`, default `origin/main`), which keeps the race
+   approving through `CODEOWNERS`) runs `compass assign <file>` (D24). The
+   command:
+   - computes the next numbers from the local ledger, the upstream ledger
+     (`--base`), and the identifiers already in use, which keeps the race
      window small;
-   - rewrites the provisional ID and its register entries everywhere they are
-     referenced in the repository;
-   - appends the ledger entries.
+   - rewrites the provisional ID and its register entries in every corpus
+     document, with the anchors that change;
+   - appends the ledger entries, keeping each provisional ID as an alias.
 3. **Merge.** The required check confirms the invariants.
-4. **Conflict recovery.** If another allocation merged first, rebase, take the
-   upstream ledger, and run `compass renumber <id>` to move the conflicting
-   allocation to the next free number.
+4. **Conflict recovery.** If another allocation merged first, merge or rebase,
+   keep both sides of the ledger's conflict, and run `compass renumber` to move
+   this branch's colliding allocations to the next free numbers (D25).
 5. **Retirement.** The ID is never reused. Documents become `Deprecated` or
    `Superseded` (COMPASS-DRAFT-toolchain-D5), and re-homing follows §13.
 
 ## The ledger and manifest
 
-The ledger starts with a comment header, followed by one entry per line:
+The ledger starts with a comment header, followed by one entry per line
+(D22):
 
 ```lisp
-;;; COMPASS allocation ledger. Append-only: one entry per line; never edit,
-;;; reorder, or delete entries (Compass §13). Maintained by `compass assign`.
-(:id "COMPASS-0001" :kind :document :path "Compass.md" :date "2026-10-05" :by "Andrew Sengul")
-(:id "COMPASS-0002" :kind :document :draft "COMPASS-DRAFT-authoring-assistance" :path "doc/Plan.AuthoringAssistance.md" :date "2026-10-05" :by "Andrew Sengul")
-(:id "COMPASS-D1" :kind :decision :host "COMPASS-0002" :date "2026-10-05" :by "Andrew Sengul")
+;;; Compass allocation ledger for COMPASS. Append-only: one entry per line;
+;;; never edit, reorder, or delete an entry (Compass §13). Maintained by
+;;; compass assign, compass renumber, and compass init --ledger.
+(:id "COMPASS-0001" :kind :document :path "Compass.md" :date "2026-10-09" :by "Andrew Sengul")
+(:id "COMPASS-D1" :kind :decision :host "COMPASS-DRAFT-authoring-assistance" :date "2026-10-09" :by "Andrew Sengul")
+(:id "COMPASS-0002" :kind :document :draft "COMPASS-DRAFT-toolchain" :path "doc/Plan.Toolchain.md" :date "2026-10-12" :by "Andrew Sengul")
+(:id "COMPASS-D5" :kind :decision :draft "COMPASS-DRAFT-toolchain-D1" :host "COMPASS-0002" :date "2026-10-12" :by "Andrew Sengul")
 ```
 
-Description: the example ledger shows three entries. The first is a document
-allocated without a provisional alias. The second is a document whose
-provisional ID `COMPASS-DRAFT-authoring-assistance` is kept as an alias. The
-third is a decision record linked to its host document.
+Description: the example ledger shows four entries. The first two were seeded
+from identifiers already in use, so they have no alias; the decision names the
+provisional document that holds it. The last two were made by
+`compass assign`: a document whose provisional ID `COMPASS-DRAFT-toolchain` is
+kept as an alias, and one of its decision records, with its own alias and its
+host's new number.
 
 `:kind` is one of `:document`, `:decision`, `:open-question`, or `:memo`
 (COMPASS-DRAFT-agent-workflow-D2). Register entries of every kind carry `:host`.
@@ -1204,7 +1402,9 @@ Table: Initial rule set, with severity and the section each rule enforces.
 | `fm/unknown-key` | warning | §18; COMPASS-DRAFT-toolchain-D13 |
 | `fm/read-if` | warning | COMPASS-DRAFT-toolchain-D13 single-line `read-if:` within 160 characters |
 | `id/format`, `id/unique` | error | §5, §13 |
-| `ledger/coverage`, `ledger/append-only`, `ledger/no-union-merge`, `ledger/owned-namespace` | error | COMPASS-DRAFT-toolchain-D1, D3, D4 |
+| `ledger/valid`, `ledger/unique`, `ledger/coverage`, `ledger/append-only`, `ledger/no-union-merge`, `ledger/owned-namespace` | error | COMPASS-DRAFT-toolchain-D1, D3, D4, D22 |
+| `ref/stale-alias` | warning | COMPASS-DRAFT-toolchain-D22: a reference written with a provisional identifier the ledger has assigned |
+| `ref/short-record` | warning | COMPASS-DRAFT-toolchain-D26: a record referred to by a short form such as D6 |
 | `register/mirrored` | error | §8: every record defined in the body (by its heading) is listed in front-matter; every listed record is defined in the body or, for a record the document amends, defined elsewhere in the corpus |
 | `register/unique` | error | §8, §13: no record identifier is defined by a heading in more than one place |
 | `register/heading-form` | warning | COMPASS-DRAFT-toolchain-D16: record headings use the full identifier |
@@ -1232,9 +1432,16 @@ Table: Initial rule set, with severity and the section each rule enforces.
 - `compass check [PATH…] [--base REV] [--federation] [--format text|json] [--strict]`
   returns 0 if clean (warnings allowed unless `--strict`), 1 if any error was
   found, and 2 for a usage or internal failure.
-- `compass assign FILE [--base REV]` and `compass renumber ID`.
+- `compass assign FILE [--dry-run] [--force] [--base REV]` numbers a document
+  and its provisional records (D24), and refuses while short references to them
+  remain (D26). `compass renumber [--base REV]
+  [--dry-run]` recovers from concurrent allocations (D25).
+- `compass init --ledger` creates the ledger, seeded with the canonical
+  identifiers the documents already define (D9).
 - `compass next NAMESPACE [--kind document|decision|open-question|memo]` previews
-  the next number without allocating it. Before the ledger exists (baseline
+  the next number without allocating it, from the ledger here and at `--base`
+  (D22); with `--in FILE`, it prints the next provisional record identifier for
+  that document (D23). Before the ledger exists (baseline
   v0.1), it computes the preview from the highest number found by scanning the
   corpus, and says that the result is advisory.
 - `compass index [--check]` and `compass show ID[#anchor]`, which

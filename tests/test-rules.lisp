@@ -15,7 +15,8 @@
 
 (test fm-present-and-syntax
   (let ((findings (check-files (list (list "doc/Plan.A.md" (lines "# No front-matter"))))))
-    (is (has-finding-p findings "fm/present" :path "doc/Plan.A.md")))
+    (is (has-finding-p findings "fm/present" :path "doc/Plan.A.md"))
+    (is (not (find #\~ (finding-message (first findings)))) "the message is formatted"))
   (multiple-value-bind (findings corpus)
       (check-files (list (list "doc/Plan.A.md" (lines "# No front-matter")))
                    :skip-unmarked t)

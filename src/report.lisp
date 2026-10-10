@@ -45,7 +45,10 @@ if given, is the number of documents the check was limited to."
               (plural skipped "file")))
     (when (plusp unverified)
       (format stream "Did not verify ~a into namespaces that are not loaded.~%"
-              (plural unverified "reference")))))
+              (plural unverified "reference"))))
+  (when corpus
+    (dolist (text (corpus-notes corpus))
+      (format stream "Note: ~a.~%" text))))
 
 (defun object (&rest pairs)
   (let ((table (make-hash-table :test #'equal)))
@@ -79,6 +82,7 @@ if given, is the number of documents the check was limited to."
                                    findings)
                            'vector)
                "skipped" (coerce (if corpus (corpus-skipped corpus) '()) 'vector)
+               "notes" (coerce (if corpus (corpus-notes corpus) '()) 'vector)
                "unverified" (coerce
                              (mapcar (lambda (u)
                                        (destructuring-bind (path line reference) u

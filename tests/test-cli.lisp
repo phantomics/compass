@@ -5,16 +5,6 @@
 (def-suite cli :in compass)
 (in-suite cli)
 
-(defun run-cli (&rest args)
-  "Run compass with ARGS. Return the exit code, standard output, and error output."
-  (let* ((out (make-string-output-stream))
-         (err (make-string-output-stream))
-         (code (let ((*standard-output* out) (*error-output* err))
-                 (main args :exit nil))))
-    (values code (get-output-stream-string out) (get-output-stream-string err))))
-
-(defun root-arg (root) (format nil "--root=~a" (uiop:native-namestring root)))
-
 (test check-exit-codes
   (with-temp-repository (root (list (list "doc/Plan.A.md" (doc))))
     (multiple-value-bind (code out) (run-cli "check" (root-arg root))
@@ -65,7 +55,8 @@
     (multiple-value-bind (code out err) (run-cli "next" "TEST" (root-arg root))
       (is (= 0 code))
       (is (equal (lines "TEST-0002") out))
-      (is (search "advisory" err)))))
+      (is (search "a preview" err))
+      (is (search "there is no ledger" err)))))
 
 (test usage-errors
   (is (= 2 (run-cli)))

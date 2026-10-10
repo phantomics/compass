@@ -15,6 +15,15 @@
            #:relative-path-string #:normalize-relative-path #:percent-decode
            #:file-kind #:root-file))
 
+(defpackage #:compass.git
+  (:use #:cl #:compass.util)
+  (:export #:*git-program* #:git-unavailable #:git-unavailable-program
+           #:git-error #:git-error-arguments #:git-error-status #:git-error-output
+           #:run-git #:git-available-p #:git-repository-p #:git-resolve
+           #:git-has-commits-p #:git-object-type #:git-file-at #:git-shallow-p
+           #:git-attribute #:git-tracked-files #:git-added-lines #:git-identity
+           #:*default-bases* #:git-default-base))
+
 (defpackage #:compass.vocab
   (:use #:cl #:compass.util)
   (:export #:term #:term-name #:term-standing #:term-amendment
@@ -45,7 +54,8 @@
    #:identifier-serial #:identifier-slug #:identifier-provisional-p
    #:identifier-host #:parse-identifier #:identifier-document-p
    #:identifier-register-p #:diagnose-identifier #:format-canonical-identifier
-   #:split-reference #:find-identifiers-in-text
+   #:split-reference #:find-identifiers-in-text #:replace-identifiers-in-text
+   #:*identifier-in-text-scanner*
    ;; restricted s-expression reader
    #:read-restricted-sexps #:sexp-syntax-error #:sexp-syntax-error-message
    #:sexp-syntax-error-line #:sexp-syntax-error-column
@@ -93,7 +103,19 @@
    #:manifest-command #:command-name #:command-kind #:command-text #:command-doc
    #:federation-entry #:federation-entry-namespace #:federation-entry-path
    #:steward-entry #:steward-namespace #:steward-name #:steward-approval
-   #:read-manifest #:default-manifest #:+manifest-file-name+))
+   #:read-manifest #:default-manifest #:+manifest-file-name+
+   ;; ledger
+   #:+ledger-file-name+ #:ledger-entry #:make-ledger-entry #:copy-ledger-entry
+   #:ledger-entry-id #:ledger-entry-identifier #:ledger-entry-kind
+   #:ledger-entry-draft #:ledger-entry-path #:ledger-entry-host
+   #:ledger-entry-date #:ledger-entry-by #:ledger-entry-line #:ledger-entry-text
+   #:ledger #:make-ledger #:ledger-path #:ledger-text #:ledger-entries
+   #:ledger-by-id #:ledger-by-alias
+   #:ledger-entry-for #:ledger-alias-entry #:ledger-aliases-of
+   #:ledger-namespace-entries #:*ledger-kinds*
+   #:conflict-marker-p #:ledger-ignorable-line-p #:parse-ledger-line
+   #:parse-ledger-text #:read-ledger #:format-ledger-entry #:ledger-header
+   #:ledger-text-with-entries #:today))
 
 (defpackage #:compass.parse
   (:use #:cl #:compass.util #:compass.vocab #:compass.model)
@@ -107,14 +129,33 @@
            #:code-reference-revision
            #:body #:scan-body #:body-sections #:body-records #:body-links
            #:body-images #:body-tables #:body-fences #:body-code-spans
-           #:read-document #:parse-document #:document-line-kinds))
+           #:read-document #:parse-document #:document-line-kinds
+           #:find-inline-comments))
 
 (defpackage #:compass.corpus
-  (:use #:cl #:compass.util #:compass.vocab #:compass.model #:compass.parse)
+  (:use #:cl #:compass.util #:compass.git #:compass.vocab #:compass.model
+        #:compass.parse)
   (:export #:corpus #:corpus-root #:corpus-manifest #:corpus-documents
            #:corpus-skipped #:corpus-load-findings #:corpus-unverified
            #:corpus-doc-directory #:corpus-namespaces
            #:find-repository-root #:load-corpus
+           #:corpus-ledger #:corpus-ledger-path #:corpus-notes #:note
+           #:corpus-alias-target #:corpus-names-of #:corpus-owned-namespace-p
+           #:corpus-ledger-pathname #:canonical-definitions #:provisional-definitions
+           #:allocation #:allocation-command #:allocation-mapping #:allocation-entries
+           #:allocation-ledger-text #:allocation-rewrites #:allocation-stale
+           #:allocation-warnings #:allocation-base #:allocation-document
+           #:allocation-refused #:allocation-refused-message
+           #:plan-assign #:plan-renumber #:plan-seed #:execute-allocation
+           #:strip-conflict-markers
+           #:rewrite #:rewrite-path #:rewrite-old-text #:rewrite-new-text
+           #:rewrite-changed-lines #:plan-rewrites #:rewrite-line
+           #:used-serials #:next-provisional-record #:base-ledger-entries
+           #:+accepted-statuses+
+           #:short-reference #:short-reference-line #:short-reference-column
+           #:short-reference-text #:short-reference-suggestion
+           #:short-reference-written #:document-short-references
+           #:short-references-to #:line-short-references
            #:find-document #:find-documents #:find-record #:find-records
            #:resolve #:namespace-loaded-p #:note-unverified
            #:markdown-anchors #:document-at-path #:corpus-paths #:corpus-empty-p
@@ -124,34 +165,34 @@
            #:outline-focus #:outline-record #:outline-entries
            #:outline-entry #:outline-entry-level #:outline-entry-text
            #:outline-entry-anchor #:outline-entry-start #:outline-entry-end
-           #:outline-entry-record #:document-outline
+           #:outline-entry-record #:outline-alias #:document-outline
            #:inbound-reference #:inbound-reference-kind #:inbound-reference-path
            #:inbound-reference-line #:inbound-reference-column
            #:inbound-reference-field #:inbound-reference-text
-           #:inbound-reference-source #:find-references
+           #:inbound-reference-source #:inbound-reference-name #:find-references
            #:show
            #:generate-index #:write-index #:index-relative-path
-           #:next-identifier))
+           #:next-identifier #:refuse))
 
 (defpackage #:compass.rules
-  (:use #:cl #:compass.util #:compass.vocab #:compass.model #:compass.parse
-        #:compass.corpus)
+  (:use #:cl #:compass.util #:compass.git #:compass.vocab #:compass.model
+        #:compass.parse #:compass.corpus)
   (:export #:define-rule #:rule #:rule-name #:rule-severity #:rule-section
            #:rule-scope #:rule-summary #:find-rule #:list-rules
            #:emit #:emit-severity #:unverified #:run-rules #:check-corpus
-           #:rule-selected-p))
+           #:rule-selected-p #:*check-base*))
 
 (defpackage #:compass.report
   (:use #:cl #:compass.util #:compass.model #:compass.corpus #:compass.rules)
   (:export #:write-findings #:summarize #:exit-code #:sort-findings))
 
 (defpackage #:compass.cli
-  (:use #:cl #:compass.util #:compass.vocab #:compass.model #:compass.parse
-        #:compass.corpus #:compass.rules #:compass.report)
+  (:use #:cl #:compass.util #:compass.git #:compass.vocab #:compass.model
+        #:compass.parse #:compass.corpus #:compass.rules #:compass.report)
   (:export #:main #:*build-commit* #:+version+ #:command-names
            #:command-option-names))
 
 (uiop:define-package #:compass
   (:use #:cl)
-  (:use-reexport #:compass.util #:compass.vocab #:compass.model #:compass.parse
+  (:use-reexport #:compass.util #:compass.git #:compass.vocab #:compass.model #:compass.parse
                  #:compass.corpus #:compass.rules #:compass.report #:compass.cli))

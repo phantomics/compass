@@ -86,3 +86,14 @@
     (check-front-matter-references document corpus))
   (dolist (link (append (document-links document) (document-images document)))
     (check-link document corpus link)))
+
+(define-rule "ref/short-record" (:severity :warning :section "§8, §9" :front-matter nil
+                                 :summary "Records are referred to by their full ~
+                                           identifier, not by a short form such as D6")
+    (document corpus)
+  (dolist (short (document-short-references corpus document))
+    (emit document (make-instance 'located :line (short-reference-line short)
+                                           :column (short-reference-column short))
+          "~a is a short reference to a record; write its full identifier~:[, which this ~
+           check could not work out~;, probably ~:*~a~]"
+          (short-reference-text short) (short-reference-suggestion short))))

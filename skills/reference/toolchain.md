@@ -33,7 +33,7 @@ it is looking in the wrong place.
 Run `compass help` once per session and use only the commands it lists. Run
 `compass version` when a report should say which toolchain checked it.
 
-Table: Commands of toolchain version 0.1.
+Table: Commands of toolchain version 0.2.
 
 | Command | Use | Changes files |
 |---|---|---|
@@ -43,14 +43,44 @@ Table: Commands of toolchain version 0.1.
 | `compass refs ID[#ANCHOR]` | List everything that refers to an identifier or section | No |
 | `compass index --stdout` | Print the generated namespace index | No |
 | `compass index` | Write `INDEX.md` in the document directory | Yes |
-| `compass next NS --kind KIND` | Suggest the next free number (advisory only) | No |
+| `compass next NS --kind KIND` | Preview the next free number of a kind; a preview only | No |
+| `compass next --in FILE --kind KIND` | The next provisional record identifier for a document, such as `NS-DRAFT-slug-D4` | No |
+| `compass assign FILE [--dry-run]` | Give an accepted document and its provisional records their numbers, and rewrite references to them | Yes |
+| `compass renumber [--dry-run]` | After a merge conflict in the ledger, move this branch's numbers off ones another branch took | Yes |
+| `compass init --ledger [--dry-run]` | Create the ledger, recording the numbered identifiers already in use | Yes |
 | `compass rules` | List the rules the toolchain checks | No |
 | `compass version`, `compass help [COMMAND]` | Version and usage | No |
 
 `check`, `outline`, `refs`, and `rules` take `--format json`. Every command
-that reads a corpus takes `--root DIR`. Later versions add `compass assign`
-and `compass renumber` (canonical numbers), `compass diff`, and others; use
-them only when `compass help` lists them.
+that reads a corpus takes `--root DIR`. `check`, `next`, `assign`, and
+`renumber` take `--base REV`, the branch a change will be merged into. Later
+versions add `compass diff` and others; use them only when `compass help`
+lists them.
+
+## Numbers and the ledger
+
+- **The ledger**, `REGISTRY.sexp` in the document directory, lists every
+  number the repository has allocated. It is append-only and is written only by
+  `compass assign`, `compass renumber`, and `compass init --ledger`; never edit
+  it by hand.
+- **New documents and records keep provisional identifiers**
+  (`NS-DRAFT-slug`, `NS-DRAFT-slug-D1`). A record added to a document that
+  already has a number takes the identifier `compass next --in FILE --kind
+  KIND` prints.
+- **Run `compass assign` only when the user asks.** It numbers a document only
+  once a person has set an accepted status (`Accepted`, `Implemented`,
+  `Design-Record`, or `Current`); never set that status to make it run, and
+  never use `--force` unless the user asks for it. Run it with `--dry-run`
+  first and show the user the report.
+- **Short references** such as `D6` change meaning when records are numbered,
+  so `assign` refuses while any point at the records it would number. Rewrite
+  each as the full identifier the `ref/short-record` warning suggests, after
+  checking that the suggestion is what the text means.
+- **After a merge conflict in the ledger**, keep both sides (or leave the
+  conflict markers) and run `compass renumber`; show the user its report.
+- **Old provisional identifiers still resolve** through the ledger: `show`,
+  `outline`, and `refs` follow them and say so, and `ref/stale-alias` warns
+  where a document still uses one.
 
 ## Exit codes
 
@@ -59,7 +89,7 @@ Table: What each exit code means.
 | Code | Meaning | What to do |
 |---|---|---|
 | 0 | Success; for `check`, no errors (warnings may remain) | Continue |
-| 1 | `check` found errors; `show` or `outline` found nothing for the identifier; `refs` found it neither defined nor referenced | Read the output and act on it |
+| 1 | `check` found errors; `show` or `outline` found nothing for the identifier; `refs` found it neither defined nor referenced; `assign`, `renumber`, or `init` refused, saying why | Read the output and act on it |
 | 2 | Usage or internal error, such as a path that is not a document of the corpus | Report the message; fix the command, do not retry it unchanged |
 | 141 | The output was closed early, as by `head` | Normal; run again without the pipe if the whole output is needed |
 
@@ -105,10 +135,12 @@ With `--format json` the output is one object:
 - Report findings in other files; do not fix them unless the user asks.
   Repositories that predate Compass may have many.
 - Never edit `doc/INDEX.md` by hand; regenerate it with `compass index`.
-- Never write a number from `compass next` into a document. Documents and their
+- Never write a canonical number from `compass next NS` into a document (the
+  provisional identifiers `compass next --in` prints are meant to be written).
+  Documents and their
   records keep provisional identifiers (`<NS>-DRAFT-<slug>`, and
-  `<NS>-DRAFT-<slug>-D1`, `-O1`, `-M1` for records) until a canonical number is
-  assigned at merge (§13).
+  `<NS>-DRAFT-<slug>-D1`, `-O1`, `-M1` for records) until `compass assign`
+  gives them numbers at acceptance (§13).
 - The skills that only read (`compass-lookup`, `compass-review`) never run a
   command that writes; `compass index --stdout` previews the index without
   writing it.
@@ -117,7 +149,7 @@ With `--format json` the output is one object:
 
 `compass rules` lists what is checked. Everything else in the standard is
 judgment, for `compass-review` and for the person who accepts a document. As of
-version 0.1 that includes:
+version 0.2 that includes:
 
 - that `authors`, `created`, and `updated` can be derived from Git when they are
   omitted;
@@ -129,8 +161,6 @@ version 0.1 that includes:
 - the §14 section shape of each genre;
 - who may set `approved-by` (never an assistant; the sole author only as the
   declared steward of a solo namespace);
-- whether an identifier's number was also taken on another branch (the ledger
-  of version 0.2 checks this);
 - the judgments of genre fit, decision quality, memo admission, and prior art.
 
 ## Other repositories

@@ -55,6 +55,9 @@ documents whose front-matter parsed."
 (defvar *rule* nil "The rule being run.")
 (defvar *findings* '() "Findings collected by the running check.")
 (defvar *corpus* nil "The corpus being checked.")
+(defvar *check-base* nil
+  "The revision the check compares against, such as a pull request's base, or
+NIL for the default (HEAD, where there is one).")
 
 (defun location-of (where)
   (typecase where
@@ -125,11 +128,14 @@ pattern is a rule name, or a group such as \"fm\", \"fm/\", or \"fm/*\"."
            (< (or (finding-column a) 0) (or (finding-column b) 0)))
           (t (string< (finding-rule a) (finding-rule b))))))
 
-(defun check-corpus (corpus &key only exclude paths)
+(defun check-corpus (corpus &key only exclude paths base)
   "The load findings and rule findings for CORPUS, sorted. ONLY and EXCLUDE
 select rules; PATHS, if given, limits findings to those repository-relative
-paths, where a path ending in / stands for every file beneath it."
-  (let* ((load (remove-if-not (lambda (f)
+paths, where a path ending in / stands for every file beneath it. BASE is the
+revision rules that compare history use, such as `ledger/append-only`."
+  (setf (corpus-notes corpus) '())
+  (let* ((*check-base* base)
+         (load (remove-if-not (lambda (f)
                                 (let ((rule (find-rule (finding-rule f))))
                                   (or (null rule) (rule-selected-p rule only exclude))))
                               (corpus-load-findings corpus)))
@@ -163,4 +169,9 @@ paths, where a path ending in / stands for every file beneath it."
 
 (define-rule "fm/present" (:severity :error :scope :load :section "§7"
                            :summary "Every file in the document directory opens with front-matter")
+  ())
+
+(define-rule "ledger/valid" (:severity :error :scope :load :section "§13"
+                             :summary "Every line of the ledger is a comment or one ~
+                                       well-formed entry")
   ())

@@ -118,6 +118,29 @@ file the corpus considered, or a directory containing one."
               (corpus-doc-directory corpus) (uiop:native-namestring root)))
     corpus))
 
+(defun base-revision (options root &key (option "base") default)
+  "The revision named by the --base option, checked to exist in the Git
+repository at ROOT, or DEFAULT (a function of ROOT, or NIL) when it is absent."
+  (let ((given (option options option)))
+    (cond
+      ((null given) (and default (funcall default root)))
+      ((not (git-available-p))
+       (usage-error "--~a needs Git, which was not found on the PATH" option))
+      ((not (git-repository-p root))
+       (usage-error "--~a needs a Git repository; ~a is not in one" option
+                    (uiop:native-namestring root)))
+      ((not (git-resolve root given))
+       (usage-error "--~a ~a does not name a commit in this repository" option given))
+      (t given))))
+
+(defun require-git (root command)
+  "Signal a usage error unless Git can be used in the repository at ROOT."
+  (cond ((not (git-available-p))
+         (usage-error "compass ~a needs Git, which was not found on the PATH" command))
+        ((not (git-repository-p root))
+         (usage-error "compass ~a needs a Git repository; ~a is not in one" command
+                      (uiop:native-namestring root)))))
+
 (defun version-string ()
   (format nil "compass ~a (~@[commit ~a, ~]~a ~a, ~a ~a)"
           +version+ *build-commit*
@@ -152,10 +175,11 @@ a second value of NIL if there is no such subcommand."
             (and command t))))
 
 (define-command "check"
-    (:synopsis "check [PATH...] [--root DIR] [--format text|json] [--strict] [--skip-unmarked] [--rule NAME...] [--exclude NAME...]"
+    (:synopsis "check [PATH...] [--root DIR] [--format text|json] [--strict] [--skip-unmarked] [--rule NAME...] [--exclude NAME...] [--base REV]"
      :summary "Check the corpus against the standard; report findings"
      :options (("root" :value) ("format" :value) ("strict" :flag)
-               ("skip-unmarked" :flag) ("rule" :list) ("exclude" :list)))
+               ("skip-unmarked" :flag) ("rule" :list) ("exclude" :list)
+               ("base" :value)))
     (args)
   (multiple-value-bind (paths options) (parse-arguments args (command-options (find-command "check")))
     (let* ((format (output-format options))
@@ -172,7 +196,8 @@ a second value of NIL if there is no such subcommand."
                      root :skip-unmarked (option options "skip-unmarked"))))
         (check-selected-paths selected corpus)
         (let* ((limit (and selected (not (member "" selected :test #'string=)) selected))
-               (findings (check-corpus corpus :only only :exclude exclude :paths limit))
+               (findings (check-corpus corpus :only only :exclude exclude :paths limit
+                                              :base (base-revision options root)))
                (checked (and limit
                              (count-if (lambda (document)
                                          (some (lambda (p)
@@ -195,11 +220,12 @@ a second value of NIL if there is no such subcommand."
     (unless (= (length positional) 1) (usage-error "show takes one ID or ID#ANCHOR"))
     (let ((corpus (load-corpus-for-command (repository-root options)))
           (reference (first positional)))
-      (multiple-value-bind (text path first last) (show corpus reference)
+      (multiple-value-bind (text path first last via) (show corpus reference)
         (cond
           (text
-           (format *standard-output* "<!-- compass show ~a: ~a, lines ~a-~a -->~%~a"
-                   reference path first last text)
+           (format *standard-output* "<!-- compass show ~a~@[ (an alias of ~a)~]: ~a, ~
+                                      lines ~a-~a -->~%~a"
+                   reference via path first last text)
            0)
           (t
            (format *error-output* "compass: ~a is not defined in this corpus~%" reference)
@@ -256,6 +282,7 @@ a second value of NIL if there is no such subcommand."
    "front_matter" (and (outline-front-matter-end outline)
                        (json-object "start" 1 "end" (outline-front-matter-end outline)))
    "focus" (outline-focus outline) "record" (outline-record outline)
+   "alias" (outline-alias outline)
    "sections" (coerce
                (mapcar (lambda (e)
                          (json-object "level" (outline-entry-level e)
@@ -274,6 +301,9 @@ a second value of NIL if there is no such subcommand."
   (format stream "~a; ~@[~a, ~]~@[~a, ~]~d lines~@[; front-matter lines 1-~d~]~%"
           (outline-path outline) (outline-genre outline) (outline-status outline)
           (outline-total-lines outline) (outline-front-matter-end outline))
+  (when (outline-alias outline)
+    (format stream "~a is an alias of ~a in the ledger.~%" (outline-alias outline)
+            (or (outline-record outline) (outline-id outline))))
   (when (outline-record outline)
     (format stream "Record ~a is at #~a.~%" (outline-record outline) (outline-focus outline)))
   (terpri stream)
@@ -350,7 +380,8 @@ output, its path, its line, and its host document's identifier."
                                         "column" (inbound-reference-column r)
                                         "field" (inbound-reference-field r)
                                         "text" (inbound-reference-text r)
-                                        "source" (inbound-reference-source r)))
+                                        "source" (inbound-reference-source r)
+                                        "alias" (inbound-reference-name r)))
                          references)
                  'vector)
    "summary" (json-object "references" (length references)
@@ -373,7 +404,10 @@ output, its path, its line, and its host document's identifier."
         (dolist (r group)
           (format stream "  ~a:~d~@[:~d~]  ~a~%" (inbound-reference-path r)
                   (inbound-reference-line r) (inbound-reference-column r)
-                  (inbound-reference-text r))))))
+                  (inbound-reference-text r))
+          (when (inbound-reference-name r)
+            (format stream "      (written with the alias ~a)~%"
+                    (inbound-reference-name r)))))))
   (let ((documents (length (remove-duplicates (mapcar #'inbound-reference-path references)
                                               :test #'string=))))
     (if references
@@ -402,30 +436,192 @@ output, its path, its line, and its host document's identifier."
                                          this corpus~%" reference)
                  1))))))
 
+(defun parse-kind (name &key (allowed '("document" "decision" "open-question" "memo")))
+  (let ((kind (and (member name allowed :test #'string=)
+                   (cdr (assoc name '(("document" . :document) ("decision" . :decision)
+                                      ("open-question" . :open-question) ("memo" . :memo))
+                               :test #'string=)))))
+    (or kind (usage-error "--kind must be ~{~a~^, ~}" allowed))))
+
 (define-command "next"
-    (:synopsis "next NAMESPACE [--kind document|decision|open-question|memo] [--root DIR]"
-     :summary "Preview the next identifier of a kind in a namespace (advisory)"
-     :options (("root" :value) ("kind" :value)))
+    (:synopsis "next NAMESPACE [--kind document|decision|open-question|memo] [--base REV] [--root DIR], or next --in FILE --kind decision|open-question|memo"
+     :summary "Preview the next number of a kind, or a document's next provisional record"
+     :options (("root" :value) ("kind" :value) ("base" :value) ("in" :value)))
     (args)
   (multiple-value-bind (positional options) (parse-arguments args (command-options (find-command "next")))
-    (unless (= (length positional) 1) (usage-error "next takes one NAMESPACE"))
-    (let* ((namespace (first positional))
-           (kind-name (or (option options "kind") "document"))
-           (kind (cdr (assoc kind-name '(("document" . :document) ("decision" . :decision)
-                                         ("open-question" . :open-question)
-                                         ("memo" . :memo))
-                             :test #'string=))))
-      (unless kind
-        (usage-error "--kind must be document, decision, open-question, or memo"))
-      (unless (ppcre:scan "^[A-Z][A-Z0-9]*$" namespace)
-        (usage-error "~s is not a namespace; namespaces are uppercase, such as COMPASS"
-                     namespace))
-      (let ((corpus (load-corpus-for-command (repository-root options))))
-        (format *standard-output* "~a~%" (next-identifier corpus namespace kind))
-        (format *error-output* "compass: advisory: computed from the identifiers defined ~
-                                in this working tree; the ledger (v0.2) will be the ~
-                                authority~%")
-        0))))
+    (let* ((root (repository-root options))
+           (in (option options "in")))
+      (if in
+          (progn
+            (when positional (usage-error "next --in FILE takes no NAMESPACE"))
+            (let ((kind (parse-kind (or (option options "kind") "")
+                                    :allowed '("decision" "open-question" "memo")))
+                  (corpus (load-corpus-for-command root))
+                  (path (repository-path in root)))
+              (check-selected-paths (list path) corpus)
+              (handler-case
+                  (progn (format *standard-output* "~a~%"
+                                 (next-provisional-record corpus path kind))
+                         0)
+                (allocation-refused (e)
+                  (format *error-output* "compass next: ~a~%" e)
+                  1))))
+          (progn
+            (unless (= (length positional) 1) (usage-error "next takes one NAMESPACE"))
+            (let ((namespace (first positional))
+                  (kind (parse-kind (or (option options "kind") "document"))))
+              (unless (ppcre:scan "^[A-Z][A-Z0-9]*$" namespace)
+                (usage-error "~s is not a namespace; namespaces are uppercase, such as ~
+                              COMPASS" namespace))
+              (let* ((corpus (load-corpus-for-command root))
+                     (base (base-revision options root
+                                          :default (lambda (r)
+                                                     (and (git-available-p)
+                                                          (git-repository-p r)
+                                                          (git-default-base r))))))
+                (multiple-value-bind (id ledger-p)
+                    (next-identifier corpus namespace kind :base base)
+                  (format *standard-output* "~a~%" id)
+                  (format *error-output*
+                          "compass: a preview, from ~:[the identifiers defined in this ~
+                           working tree (there is no ledger)~;the ledger~@[ here and at ~a~]~
+                           ~]; numbers are taken by compass assign, and another branch may ~
+                           take this one first~%"
+                          ledger-p base))
+                0)))))))
+
+;;; Allocation
+
+(defun kind-name (kind)
+  (substitute #\Space #\- (string-downcase (symbol-name kind))))
+
+(defun write-allocation-report (allocation stream &key dry-run corpus)
+  "Describe ALLOCATION on STREAM. With CORPUS (the corpus after writing it),
+also report what compass check, against the allocation's base revision, now
+finds."
+  (ecase (allocation-command allocation)
+    (:assign
+     (let ((document (allocation-document allocation)))
+       (format stream "~:[Assigned~;Would assign~] numbers in ~a (status ~a):~%" dry-run
+               (document-path document) (or (document-status document) "none"))))
+    (:renumber
+     (format stream "~:[Renumbered~;Would renumber~] against ~a:~%" dry-run
+             (allocation-base allocation)))
+    (:seed
+     (format stream "~:[Created~;Would create~] the ledger with ~d entr~:@p:~%"
+             dry-run (length (allocation-entries allocation)))))
+  (let ((width (reduce #'max (allocation-mapping allocation)
+                       :key (lambda (m) (length (first m))) :initial-value 0)))
+    (dolist (m (allocation-mapping allocation))
+      (format stream "  ~va  →  ~a  (~a)~%" width (first m) (second m) (kind-name (third m)))))
+  (when (eq (allocation-command allocation) :seed)
+    (dolist (entry (allocation-entries allocation))
+      (format stream "  ~a  (~a)~%" (ledger-entry-id entry) (kind-name (ledger-entry-kind entry)))))
+  (let ((rewrites (allocation-rewrites allocation)))
+    (when rewrites
+      (format stream "~:[Rewrote~;Would rewrite~] ~d line~:p in ~d document~:p: ~{~a~^, ~}.~%"
+              dry-run
+              (reduce #'+ rewrites :key (lambda (r) (length (rewrite-changed-lines r))))
+              (length rewrites)
+              (mapcar (lambda (r) (format nil "~a (~d)" (rewrite-path r)
+                                          (length (rewrite-changed-lines r))))
+                      rewrites))))
+  (unless (eq (allocation-command allocation) :seed)
+    (when (allocation-entries allocation)
+      (format stream "~:[Appended~;Would append~] ~d entr~:@p to the ledger.~%" dry-run
+              (length (allocation-entries allocation)))))
+  (when (allocation-stale allocation)
+    (format stream "Other tracked files still name the old identifiers. The ledger's ~
+                    aliases keep them resolving; update them where it matters:~%")
+    (dolist (s (allocation-stale allocation))
+      (let ((text (third s)))
+        (format stream "  ~a:~d  ~a~%" (first s) (second s)
+                (if (> (length text) 100) (concatenate 'string (subseq text 0 99) "…") text)))))
+  (dolist (w (allocation-warnings allocation))
+    (format stream "Warning: ~a~:[.~;~]~%" w (find #\Newline w)))
+  (when corpus
+    (let ((errors (count :error (check-corpus corpus :base (allocation-base allocation))
+                         :key #'finding-severity)))
+      (if (zerop errors)
+          (format stream "compass check finds no errors.~%")
+          (format stream "compass check finds ~d error~:p; run it to see them.~%" errors))))
+  (when dry-run
+    (format stream "This was a dry run; nothing was written.~%")))
+
+(defun run-allocation (command options root planner)
+  "Load the corpus at ROOT, plan with PLANNER (a function of the corpus that
+returns an ALLOCATION, or NIL when there is nothing to do), and write the plan
+unless --dry-run. Report it on standard output."
+  (require-git root command)
+  (let ((corpus (load-corpus-for-command root)))
+    (handler-case
+        (let ((allocation (funcall planner corpus))
+              (dry-run (option options "dry-run")))
+          (cond
+            ((null allocation)
+             (format *standard-output* "Nothing to do.~%"))
+            (dry-run
+             (write-allocation-report allocation *standard-output* :dry-run t))
+            (t
+             (let ((fresh (execute-allocation corpus allocation)))
+               (write-allocation-report allocation *standard-output* :corpus fresh))))
+          0)
+      (allocation-refused (e)
+        (format *error-output* "compass ~a: ~a~%" command e)
+        1))))
+
+(define-command "assign"
+    (:synopsis "assign FILE [--dry-run] [--force] [--base REV] [--root DIR]"
+     :summary "Number an accepted document and its provisional records"
+     :options (("root" :value) ("dry-run" :flag) ("force" :flag) ("base" :value)))
+    (args)
+  (multiple-value-bind (positional options)
+      (parse-arguments args (command-options (find-command "assign")))
+    (unless (= (length positional) 1) (usage-error "assign takes one FILE"))
+    (let ((root (repository-root options)))
+      (require-git root "assign")
+      (let ((path (repository-path (first positional) root))
+            (base (base-revision options root)))
+        (run-allocation "assign" options root
+                        (lambda (corpus)
+                          (check-selected-paths (list path) corpus)
+                          (plan-assign corpus path :base base
+                                                   :force (option options "force"))))))))
+
+(define-command "renumber"
+    (:synopsis "renumber [--base REV] [--dry-run] [--root DIR]"
+     :summary "After concurrent allocations, move this branch's numbers off taken ones"
+     :options (("root" :value) ("dry-run" :flag) ("base" :value)))
+    (args)
+  (multiple-value-bind (positional options)
+      (parse-arguments args (command-options (find-command "renumber")))
+    (when positional (usage-error "renumber takes no arguments"))
+    (let ((root (repository-root options)))
+      (require-git root "renumber")
+      (let ((base (base-revision options root :default #'git-default-base)))
+        (run-allocation "renumber" options root
+                        (lambda (corpus)
+                          (let ((allocation (plan-renumber corpus :base base)))
+                            (unless (and (null (allocation-mapping allocation))
+                                         (null (allocation-entries allocation))
+                                         (null (allocation-warnings allocation))
+                                         (string= (allocation-ledger-text allocation)
+                                                  (read-text-file
+                                                   (corpus-ledger-pathname corpus))))
+                              allocation))))))))
+
+(define-command "init"
+    (:synopsis "init --ledger [--dry-run] [--root DIR]"
+     :summary "Create the ledger, seeded with the identifiers already in use"
+     :options (("root" :value) ("ledger" :flag) ("dry-run" :flag)))
+    (args)
+  (multiple-value-bind (positional options)
+      (parse-arguments args (command-options (find-command "init")))
+    (when positional (usage-error "init takes no arguments"))
+    (unless (option options "ledger")
+      (usage-error "this version creates only the ledger, with compass init --ledger; ~
+                    write compass.sexp by hand (COMPASS-DRAFT-toolchain-D4)"))
+    (run-allocation "init" options (repository-root options) #'plan-seed)))
 
 (define-command "rules"
     (:synopsis "rules [--format text|json]"

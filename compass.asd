@@ -16,6 +16,7 @@
     :components
     ((:file "packages")
      (:file "util")
+     (:file "git")
      (:file "vocab")
      (:module "model"
       :serial t
@@ -23,7 +24,8 @@
                    (:file "sexp")
                    (:file "document")
                    (:file "fields")
-                   (:file "manifest")))
+                   (:file "manifest")
+                   (:file "ledger")))
      (:module "parse"
       :serial t
       :components ((:file "yaml")
@@ -36,7 +38,10 @@
                    (:file "show")
                    (:file "index")
                    (:file "outline")
-                   (:file "refs")))
+                   (:file "refs")
+                   (:file "short")
+                   (:file "rewrite")
+                   (:file "allocate")))
      (:module "rules"
       :serial t
       :components ((:file "engine")
@@ -44,7 +49,8 @@
                    (:file "identity")
                    (:file "registers")
                    (:file "memo")
-                   (:file "references")))
+                   (:file "references")
+                   (:file "ledger")))
      (:file "report")
      (:file "cli"))))
   :build-operation "program-op"
@@ -61,6 +67,7 @@
     :components ((:file "package")
                  (:file "helpers")
                  (:file "test-util")
+                 (:file "test-git")
                  (:file "test-vocab")
                  (:file "test-identifier")
                  (:file "test-sexp")
@@ -68,7 +75,10 @@
                  (:file "test-scanner")
                  (:file "test-rules")
                  (:file "test-corpus")
+                 (:file "test-ledger")
                  (:file "test-cli")
+                 (:file "test-allocate")
+                 (:file "test-concurrency")
                  (:file "test-repository")
                  (:file "test-skills"))))
   :perform (test-op (o c)

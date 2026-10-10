@@ -11,7 +11,8 @@
   level text anchor start end record)
 
 (defstruct (outline)
-  id path title genre status total-lines front-matter-end focus record entries)
+  id path title genre status total-lines front-matter-end focus record entries
+  (alias nil))                          ; the alias REFERENCE used, if any
 
 (defun section-record (document section)
   "The record whose heading is SECTION, or NIL."
@@ -19,11 +20,19 @@
 
 (defun document-outline (corpus reference)
   "The OUTLINE of what REFERENCE names: a document, the host of a record, or,
-for \"ID#anchor\", one section and its subsections. NIL if it is not defined."
+for \"ID#anchor\", one section and its subsections. NIL if it is not defined.
+An alias in the ledger is followed to the identifier it was assigned."
   (multiple-value-bind (id anchor) (split-reference reference)
     (let* ((document (find-document corpus id))
            (record (and (null document) (find-record corpus id)))
-           (host (or document (and record (record-document record)))))
+           (host (or document (and record (record-document record))))
+           (target (and (null host) (corpus-alias-target corpus id))))
+      (when target
+        (let ((outline (document-outline corpus (if anchor
+                                                    (format nil "~a#~a" target anchor)
+                                                    target))))
+          (when outline (setf (outline-alias outline) id))
+          (return-from document-outline outline)))
       (when host
         (let* ((sections (document-sections host))
                (root (and anchor document

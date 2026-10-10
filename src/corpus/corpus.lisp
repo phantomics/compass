@@ -1,7 +1,7 @@
 ;;;; corpus.lisp — Discover, load, and index the documents of a repository
 ;;;;
 ;;;; Read-if: changing which files are documents, how the repository root is found, or identifier lookup
-;;;; See: COMPASS-DRAFT-toolchain-D10, COMPASS-DRAFT-toolchain-D21
+;;;; See: COMPASS-DRAFT-toolchain-D10, COMPASS-DRAFT-toolchain-D21, COMPASS-DRAFT-toolchain-D22
 ;;;; Invariant: discovery is deterministic: files are loaded in path order
 ;;;; Tests: tests/test-corpus.lisp
 
@@ -20,10 +20,32 @@
    (by-id :initform (make-hash-table :test #'equal) :reader corpus-by-id)
    (records-by-id :initform (make-hash-table :test #'equal) :reader corpus-records-by-id)
    (by-path :initform (make-hash-table :test #'equal) :reader corpus-by-path)
-   (anchor-cache :initform (make-hash-table :test #'equal) :reader corpus-anchor-cache)))
+   (anchor-cache :initform (make-hash-table :test #'equal) :reader corpus-anchor-cache)
+   (ledger :initform nil :accessor corpus-ledger
+           :documentation "The allocation ledger, or NIL if the repository has none.")
+   (notes :initform '() :accessor corpus-notes
+          :documentation "Things a check could not do, such as rules that need Git.")))
 
 (defun corpus-doc-directory (corpus)
   (manifest-doc-directory (corpus-manifest corpus)))
+
+(defun corpus-ledger-path (corpus)
+  "The repository-relative path of the ledger, whether or not it exists."
+  (concatenate 'string (corpus-doc-directory corpus) +ledger-file-name+))
+
+(defun corpus-ledger-pathname (corpus)
+  (root-file (corpus-root corpus) (corpus-ledger-path corpus)))
+
+(defun note (corpus control &rest arguments)
+  "Record a note about the check, once."
+  (let ((text (apply #'format nil control arguments)))
+    (unless (member text (corpus-notes corpus) :test #'string=)
+      (setf (corpus-notes corpus) (append (corpus-notes corpus) (list text))))))
+
+(defun corpus-owned-namespace-p (corpus namespace)
+  "True if the manifest declares that this repository owns NAMESPACE."
+  (and (member namespace (manifest-namespaces (corpus-manifest corpus)) :test #'string=)
+       t))
 
 ;;; The repository root
 
@@ -110,14 +132,19 @@ listed instead of reported."
                  (push path (corpus-skipped corpus))
                  (push (make-finding
                         :rule "fm/present" :severity :error :path path :line 1
-                        :message "no front-matter: a document in the document ~
-                                  directory opens with a YAML block between --- lines ~
-                                  (§7); use --skip-unmarked to skip files not yet migrated")
+                        :message (format nil "no front-matter: a document in the ~
+                                              document directory opens with a YAML block ~
+                                              between --- lines (§7); use --skip-unmarked ~
+                                              to skip files not yet migrated"))
                        findings)))
             (t
              (setf (gethash path (corpus-by-path corpus)) document)
              (push document (corpus-documents corpus))
              (setf findings (append findings (document-load-findings document))))))))
+    (multiple-value-bind (ledger problems)
+        (read-ledger (corpus-ledger-pathname corpus) :path (corpus-ledger-path corpus))
+      (setf (corpus-ledger corpus) ledger
+            findings (append findings problems)))
     (setf (corpus-documents corpus) (nreverse (corpus-documents corpus))
           (corpus-skipped corpus) (nreverse (corpus-skipped corpus))
           (corpus-load-findings corpus) findings)
@@ -133,6 +160,9 @@ listed instead of reported."
                 (append (gethash id (corpus-by-id corpus)) (list document)))))
       (let ((ns (document-namespace document)))
         (when ns (pushnew ns namespaces :test #'string=)))
+      (let ((id (parse-identifier (document-id document))))
+        (when (and id (identifier-provisional-p id))
+          (pushnew (identifier-namespace id) namespaces :test #'string=)))
       (dolist (record (document-records document))
         (setf (gethash (record-id record) (corpus-records-by-id corpus))
               (append (gethash (record-id record) (corpus-records-by-id corpus))
@@ -166,9 +196,53 @@ listed instead of reported."
   "Record a reference into a namespace that is not loaded."
   (push (list path line reference) (corpus-unverified corpus)))
 
+(defun canonical-definitions (corpus)
+  "Every canonical identifier the corpus defines, as (ID DOCUMENT WHERE KIND),
+WHERE being the node or record that defines it."
+  (let ((definitions '()))
+    (dolist (document (corpus-documents corpus))
+      (let ((id (document-identifier document)))
+        (when (and id (not (identifier-provisional-p id)))
+          (push (list (identifier-string id) document
+                      (or (yaml-get-entry (document-front-matter document) "id") 1)
+                      :document)
+                definitions)))
+      (dolist (record (document-records document))
+        (unless (identifier-provisional-p (record-identifier record))
+          (push (list (record-id record) document record (record-kind record))
+                definitions))))
+    (nreverse definitions)))
+
+(defun provisional-definitions (corpus)
+  "Every provisional identifier the corpus defines, as (ID DOCUMENT WHERE)."
+  (let ((definitions '()))
+    (dolist (document (corpus-documents corpus))
+      (let ((id (parse-identifier (document-id document))))
+        (when (and id (identifier-provisional-p id) (identifier-document-p id))
+          (push (list (identifier-string id) document
+                      (or (yaml-get-entry (document-front-matter document) "id") 1))
+                definitions)))
+      (dolist (record (document-records document))
+        (when (identifier-provisional-p (record-identifier record))
+          (push (list (record-id record) document record) definitions))))
+    (nreverse definitions)))
+
+(defun corpus-alias-target (corpus id)
+  "The canonical identifier the ledger assigned for the provisional ID, or NIL."
+  (let ((entry (ledger-alias-entry (corpus-ledger corpus) id)))
+    (and entry (ledger-entry-id entry))))
+
+(defun corpus-names-of (corpus id)
+  "Every identifier that names what ID names: its canonical identifier and the
+aliases the ledger records for it, with ID first."
+  (let* ((canonical (or (corpus-alias-target corpus id) id))
+         (names (cons canonical (ledger-aliases-of (corpus-ledger corpus) canonical))))
+    (cons id (remove id names :test #'string=))))
+
 (defun resolve (corpus reference)
   "Resolve \"ID\" or \"ID#anchor\". Return the document, record, or section,
-and the document containing it; or NIL."
+the document containing it, and, if ID is an alias in the ledger, the canonical
+identifier it was resolved through; or NIL."
   (multiple-value-bind (id anchor) (split-reference reference)
     (let ((document (find-document corpus id))
           (record (find-record corpus id)))
@@ -176,9 +250,14 @@ and the document containing it; or NIL."
         ((and document anchor)
          (let ((section (find anchor (document-sections document)
                               :key #'section-anchor :test #'string=)))
-           (and section (values section document))))
-        (document (values document document))
-        ((and record (null anchor)) (values record (record-document record)))
+           (and section (values section document nil))))
+        (document (values document document nil))
+        ((and record (null anchor)) (values record (record-document record) nil))
+        ((and (null document) (null record) (corpus-alias-target corpus id))
+         (let ((target (corpus-alias-target corpus id)))
+           (multiple-value-bind (object container)
+               (resolve corpus (if anchor (format nil "~a#~a" target anchor) target))
+             (and object (values object container target)))))
         (t nil)))))
 
 (defun corpus-paths (corpus)
@@ -192,6 +271,8 @@ manifest."
       (when (finding-path finding) (pushnew (finding-path finding) paths :test #'string=)))
     (when (uiop:file-exists-p (merge-pathnames +manifest-file-name+ (corpus-root corpus)))
       (pushnew +manifest-file-name+ paths :test #'string=))
+    (when (corpus-ledger corpus)
+      (pushnew (corpus-ledger-path corpus) paths :test #'string=))
     (sort paths #'string<)))
 
 (defun corpus-empty-p (corpus)

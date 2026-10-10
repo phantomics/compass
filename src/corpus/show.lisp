@@ -21,8 +21,9 @@
 (defun show (corpus reference)
   "The source text for REFERENCE: a whole document for \"ID\", one section for
 \"ID#anchor\", or one record for a record identifier. Return the text, the
-document's path, and the first and last line numbers; or NIL."
-  (multiple-value-bind (object document) (resolve corpus reference)
+document's path, the first and last line numbers, and the canonical identifier
+if REFERENCE was resolved through a ledger alias; or NIL."
+  (multiple-value-bind (object document via) (resolve corpus reference)
     (when object
       (multiple-value-bind (first last)
           (etypecase object
@@ -30,4 +31,5 @@ document's path, and the first and last line numbers; or NIL."
             (section (values (location-line object) (section-end-line object)))
             (register-record (values (location-line object) (record-end-line object))))
         (setf last (trim-trailing-blank-lines document first last))
-        (values (line-slice document first last) (document-path document) first last)))))
+        (values (line-slice document first last) (document-path document) first last
+                via)))))

@@ -76,12 +76,12 @@
         (is (= 3 (length (corpus-documents after))))
         (is (null (check-corpus after)))))))
 
-(test next-identifier-is-advisory
+(test next-identifier-without-a-ledger
   (with-temp-repository (root *sample-files*)
     (let ((corpus (load-corpus root)))
-      (multiple-value-bind (id advisory) (next-identifier corpus "TEST" :document)
+      (multiple-value-bind (id ledger-p) (next-identifier corpus "TEST" :document)
         (is (equal "TEST-0005" id))
-        (is-true advisory))
+        (is-false ledger-p))
       (is (equal "TEST-D4" (next-identifier corpus "TEST" :decision)))
       (is (equal "TEST-M1" (next-identifier corpus "TEST" :memo)))
       (is (equal "OTHER-0001" (next-identifier corpus "OTHER" :document))))))
