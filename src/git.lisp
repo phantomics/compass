@@ -28,17 +28,18 @@
                      (let ((text (trim-whitespace (or (git-error-output c) ""))))
                        (and (plusp (length text)) text))))))
 
-(defun run-git (root arguments &key (check t))
+(defun run-git (root arguments &key (check t) input (external-format :utf-8))
   "Run Git in the directory ROOT with ARGUMENTS, a list of strings. Return its
-standard output, its exit status, and its error output. With CHECK, a non-zero
-exit signals GIT-ERROR. Signal GIT-UNAVAILABLE if Git cannot be run."
+standard output, its exit status, and its error output. INPUT, a string, is
+given to Git on its standard input. With CHECK, a non-zero exit signals
+GIT-ERROR. Signal GIT-UNAVAILABLE if Git cannot be run."
   (multiple-value-bind (output error-output status)
       (handler-case
           (uiop:run-program (list* *git-program* "-C" (uiop:native-namestring root)
                                    "-c" "core.quotepath=false" arguments)
                             :output :string :error-output :string
-                            :ignore-error-status t :external-format :utf-8
-                            :input nil)
+                            :ignore-error-status t :external-format external-format
+                            :input (and input (make-string-input-stream input)))
         (error ()
           (error 'git-unavailable :program *git-program*)))
     (when (and check (/= status 0))
@@ -161,6 +162,125 @@ and the repository's .mailmap canonicalises it; NIL if no name is configured."
           (if (and angle (plusp angle))
               (trim-whitespace (subseq mapped 0 angle))
               name))))))
+
+;;; Many objects at once
+
+(defun octet-string (string)
+  "STRING encoded as UTF-8, one character per octet, for a Latin-1 stream."
+  (map 'string #'code-char (babel-free-encode string)))
+
+(defun octet-string-text (octets start end)
+  "The UTF-8 text held, one character per octet, in OCTETS from START to END, or
+NIL if it is not UTF-8."
+  (declare (type string octets) (type fixnum start end))
+  (let ((text (make-string (- end start)))
+        (i start) (j 0))
+    (declare (type fixnum i j))
+    (flet ((continuation ()
+             (when (>= i end) (return-from octet-string-text nil))
+             (let ((b (char-code (char octets i))))
+               (unless (= (logand b #xC0) #x80) (return-from octet-string-text nil))
+               (incf i)
+               (logand b #x3F))))
+      (loop while (< i end)
+            do (let ((b (char-code (char octets i))))
+                 (incf i)
+                 (setf (char text j)
+                       (code-char
+                        (cond ((< b #x80) b)
+                              ((= (logand b #xE0) #xC0)
+                               (logior (ash (logand b #x1F) 6) (continuation)))
+                              ((= (logand b #xF0) #xE0)
+                               (let* ((b1 (continuation)) (b2 (continuation)))
+                                 (logior (ash (logand b #x0F) 12) (ash b1 6) b2)))
+                              ((= (logand b #xF8) #xF0)
+                               (let* ((b1 (continuation)) (b2 (continuation))
+                                      (b3 (continuation)))
+                                 (logior (ash (logand b #x07) 18) (ash b1 12) (ash b2 6) b3)))
+                              (t (return-from octet-string-text nil)))))
+                 (incf j))))
+    (if (= j (length text)) text (subseq text 0 j))))
+
+(defun batch-input (names)
+  (format nil "~{~a~%~}" (mapcar #'octet-string names)))
+
+(defun git-object-types (root names)
+  "For each Git object name in NAMES (such as `HEAD^{commit}` or `rev:path`),
+its type as a keyword (:COMMIT, :BLOB, :TREE, :TAG), :AMBIGUOUS for an
+abbreviation that names more than one object, or NIL if it names nothing. One Git
+process answers them all."
+  (when names
+    (let ((lines (split-lines (run-git root '("cat-file" "--batch-check")
+                                       :input (batch-input names)
+                                       :external-format :latin-1))))
+      (loop for name in names
+            for line across lines
+            collect (let ((fields (uiop:split-string line :separator " ")))
+                      (cond ((ends-with-p " missing" line) nil)
+                            ((ends-with-p " ambiguous" line) :ambiguous)
+                            ((>= (length fields) 3)
+                             (intern (string-upcase (second fields)) :keyword))
+                            (t nil)))))))
+
+(defun git-read-objects (root names)
+  "For each Git object name in NAMES, its type (as GIT-OBJECT-TYPES gives it)
+and, for a blob that is UTF-8 text, its text: a list of (TYPE . TEXT). One Git
+process reads them all."
+  (when names
+    (let ((output (run-git root '("cat-file" "--batch") :input (batch-input names)
+                                                         :external-format :latin-1))
+          (position 0)
+          (results '()))
+      (dolist (name names (nreverse results))
+        (declare (ignorable name))
+        (let* ((eol (or (position #\Newline output :start position) (length output)))
+               (header (subseq output position eol))
+               (fields (uiop:split-string header :separator " ")))
+          (setf position (1+ eol))
+          (cond
+            ((ends-with-p " missing" header) (push (cons nil nil) results))
+            ((ends-with-p " ambiguous" header) (push (cons :ambiguous nil) results))
+            ((>= (length fields) 3)
+             (let* ((type (intern (string-upcase (second fields)) :keyword))
+                    (size (parse-integer (third fields)))
+                    (end (min (+ position size) (length output))))
+               (push (cons type (and (eq type :blob) (octet-string-text output position end)))
+                     results)
+               (setf position (1+ end))))
+            (t (push (cons nil nil) results))))))))
+
+;;; History of one file
+
+(defun git-log-follow (root path)
+  "The commits that touched PATH, following renames, oldest first, as a list of
+(AUTHOR DATE): the author as .mailmap names them and the author date,
+YYYY-MM-DD."
+  (let ((output (run-git root (list "log" "--follow" "--use-mailmap"
+                                    "--format=%aN%x09%as" "--" path)
+                         :check nil)))
+    (reverse
+     (loop for line across (split-lines output)
+           for tab = (position #\Tab line)
+           when tab collect (list (subseq line 0 tab) (subseq line (1+ tab)))))))
+
+(defun git-file-status (root path)
+  "Whether PATH has work not committed: :UNTRACKED, :MODIFIED (changes staged or
+not), or :CLEAN."
+  (let ((output (run-git root (list "status" "--porcelain" "--untracked-files=all"
+                                    "--" path)
+                         :check nil)))
+    (cond ((zerop (length (trim-whitespace output))) :clean)
+          ((starts-with-p "??" output) :untracked)
+          (t :modified))))
+
+(defun git-committed-files (root)
+  "The paths, relative to ROOT, of the files in the commit HEAD; NIL if there
+is no commit."
+  (multiple-value-bind (output status)
+      (run-git root '("ls-tree" "-r" "--name-only" "-z" "HEAD") :check nil)
+    (and (zerop status)
+         (remove "" (uiop:split-string output :separator (string (code-char 0)))
+                 :test #'string=))))
 
 (defparameter *default-bases* '("origin/HEAD" "origin/main" "origin/master")
   "Revisions tried, in order, when a command needs the branch a change will be

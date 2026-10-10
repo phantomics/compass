@@ -2,7 +2,8 @@
 ;;;;
 ;;;; Read-if: changing the memo rules, M-record fields, or the basis test
 ;;;; See: COMPASS-0001, COMPASS-DRAFT-agent-workflow-D2, COMPASS-DRAFT-agent-workflow-D3
-;;;; Invariant: without Git (v0.1), memo/basis checks a code reference's form, not its revision
+;;;; See: COMPASS-DRAFT-toolchain-D28
+;;;; Invariant: memo/basis checks that a pinned revision exists only where Git can tell
 ;;;; Tests: tests/test-rules.lisp
 
 (in-package #:compass.rules)
@@ -96,6 +97,18 @@
                       ((not (namespace-loaded-p corpus (identifier-namespace parsed)))
                        (unverified document entry id)
                        (setf resolved t))))))
+          ;; A pinned reference must name a revision that exists, where Git can tell.
+          (dolist (span spans)
+            (let ((reference (parse-code-reference span)))
+              (when reference
+                (let ((status (revision-status corpus (code-reference-namespace reference)
+                                               (code-reference-revision reference))))
+                  (when (member status '(:missing :ambiguous))
+                    (emit document entry "the basis of ~a cites `~a`, whose revision ~a ~
+                                          ~:[names no commit or tag~;is an abbreviation of ~
+                                          more than one object~]"
+                          (record-id record) span (code-reference-revision reference)
+                          (eq status :ambiguous)))))))
           (unless (or pinned resolved
                       (some (lambda (title) (search title basis)) (cite-titles document)))
             (if (and unpinned (not (parse-code-reference unpinned)))

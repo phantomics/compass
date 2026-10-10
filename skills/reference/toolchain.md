@@ -38,16 +38,20 @@ Table: Commands of toolchain version 0.2.
 | Command | Use | Changes files |
 |---|---|---|
 | `compass check [PATH...]` | Check the corpus; report findings for all files, or only for the PATHs given | No |
+| `compass check --federation` | Also check references into the repositories `compass.sexp` lists under `:federation` | No |
 | `compass show ID[#ANCHOR]` | Print a document, one section, or one record | No |
 | `compass outline ID[#ANCHOR]` | List a document's headings, anchors, and line ranges | No |
 | `compass refs ID[#ANCHOR]` | List everything that refers to an identifier or section | No |
 | `compass index --stdout` | Print the generated namespace index | No |
 | `compass index` | Write `INDEX.md` in the document directory | Yes |
+| `compass index --check` | Say whether `INDEX.md` is current; exit 1 if not | No |
 | `compass next NS --kind KIND` | Preview the next free number of a kind; a preview only | No |
 | `compass next --in FILE --kind KIND` | The next provisional record identifier for a document, such as `NS-DRAFT-slug-D4` | No |
 | `compass assign FILE [--dry-run]` | Give an accepted document and its provisional records their numbers, and rewrite references to them | Yes |
 | `compass renumber [--dry-run]` | After a merge conflict in the ledger, move this branch's numbers off ones another branch took | Yes |
+| `compass init [--namespace NS] [--dry-run]` | Write a starting `compass.sexp` for a repository that has none | Yes |
 | `compass init --ledger [--dry-run]` | Create the ledger, recording the numbered identifiers already in use | Yes |
+| `compass manifest --json` | Print `compass.sexp` as JSON | No |
 | `compass rules` | List the rules the toolchain checks | No |
 | `compass version`, `compass help [COMMAND]` | Version and usage | No |
 
@@ -89,7 +93,7 @@ Table: What each exit code means.
 | Code | Meaning | What to do |
 |---|---|---|
 | 0 | Success; for `check`, no errors (warnings may remain) | Continue |
-| 1 | `check` found errors; `show` or `outline` found nothing for the identifier; `refs` found it neither defined nor referenced; `assign`, `renumber`, or `init` refused, saying why | Read the output and act on it |
+| 1 | `check` found errors; `index --check` found `INDEX.md` stale; `show` or `outline` found nothing for the identifier; `refs` found it neither defined nor referenced; `assign`, `renumber`, or `init` refused, saying why | Read the output and act on it |
 | 2 | Usage or internal error, such as a path that is not a document of the corpus | Report the message; fix the command, do not retry it unchanged |
 | 141 | The output was closed early, as by `head` | Normal; run again without the pipe if the whole output is needed |
 
@@ -151,11 +155,8 @@ With `--format json` the output is one object:
 judgment, for `compass-review` and for the person who accepts a document. As of
 version 0.2 that includes:
 
-- that `authors`, `created`, and `updated` can be derived from Git when they are
-  omitted;
-- that code references in a `Log` or `Plan` are pinned to a revision, and that
-  any pinned revision, path, and symbol exist (only a memo's `**Basis:**` is
-  checked, and only for form);
+- that a code reference's symbol is the one meant: `ref/code-exists` finds a
+  definition by pattern, and only warns when it finds none;
 - the author-time accessibility rules of §12: alt text, table captions, diagram
   descriptions, heading levels, link text;
 - the §14 section shape of each genre;
@@ -175,6 +176,12 @@ To look up an identifier in another namespace, run the command in the
 repository that owns it: `compass show ORIGIN-0012 --root ../origin`, with the
 path taken relative to the directory holding `compass.sexp`. If no entry names
 the namespace, ask the user where its repository is.
+
+`compass check --federation` loads those repositories, one hop deep, and checks
+references into them; without it, such references are counted as unverified.
+It also reports a federated repository that is missing, has no manifest, or
+does not own the namespace it is listed for (`federation/path`), and a
+namespace two repositories both own (`federation/namespace`).
 
 ## Without the toolchain
 

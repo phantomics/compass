@@ -72,6 +72,17 @@ each line, and a final newline does not produce an empty last line."
         (setf start (1+ end))))
     (coerce lines 'simple-vector)))
 
+(defun first-difference (old new)
+  "The 1-based number of the first line of the text OLD that the text NEW does
+not have at the same place; one past OLD's last line if NEW only adds lines."
+  (let ((old-lines (split-lines old))
+        (new-lines (split-lines new)))
+    (loop for i from 0 below (length old-lines)
+          when (or (>= i (length new-lines))
+                   (string/= (aref old-lines i) (aref new-lines i)))
+            return (1+ i)
+          finally (return (1+ (length old-lines))))))
+
 (defun string-join (strings separator)
   (with-output-to-string (out)
     (loop for (string . rest) on strings

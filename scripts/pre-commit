@@ -1,0 +1,43 @@
+#!/bin/sh
+# pre-commit — Regenerate a stale INDEX.md, then check the corpus before committing
+#
+# Installed by `make hooks`. Uses bin/compass if it has been built, else
+# compass on the PATH, else $COMPASS. The check reads the working tree, so
+# changes not staged for this commit are checked too.
+
+root=$(git rev-parse --show-toplevel) || exit 1
+
+if [ -n "$COMPASS" ]; then
+    compass=$COMPASS
+elif [ -x "$root/bin/compass" ]; then
+    compass=$root/bin/compass
+elif command -v compass > /dev/null 2>&1; then
+    compass=compass
+else
+    echo "pre-commit: compass not found (build it with make build); not checking" >&2
+    exit 0
+fi
+
+# Regenerate the index only if there is one, and stage it.
+status=$("$compass" index --check --root "$root")
+case $? in
+    0) ;;
+    1)
+        case $status in
+            *"does not exist"*) ;;
+            *)
+                path=$("$compass" index --root "$root" | sed -n 's/^Wrote //p')
+                if [ -n "$path" ]; then
+                    git -C "$root" add -- "$path" || exit 1
+                    echo "pre-commit: regenerated and staged $path"
+                fi
+                ;;
+        esac
+        ;;
+    *) echo "$status" >&2; exit 1 ;;
+esac
+
+if ! "$compass" check --root "$root"; then
+    echo "pre-commit: compass check found errors; fix them, or commit with --no-verify" >&2
+    exit 1
+fi

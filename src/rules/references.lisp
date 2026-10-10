@@ -1,7 +1,7 @@
 ;;;; references.lisp — Rules for references between documents
 ;;;;
 ;;;; Read-if: changing how identifiers in front-matter or links in the body are resolved
-;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D21
+;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D21, COMPASS-DRAFT-toolchain-D29
 ;;;; Invariant: references into namespaces that are not loaded are unverified, not errors
 ;;;; Tests: tests/test-rules.lisp
 
@@ -12,7 +12,9 @@
     (when parsed
       (cond ((not (namespace-loaded-p corpus (identifier-namespace parsed)))
              (unverified document node id))
-            ((or (find-document corpus id) (find-record corpus id)))
+            ((or (find-document corpus id) (find-record corpus id)
+                 ;; An alias in the ledger still resolves; ref/stale-alias warns.
+                 (corpus-alias-target corpus id)))
             (t (emit document node "`~a` names ~a, which is not defined in the corpus"
                      field id))))))
 
@@ -46,6 +48,18 @@
          (emit document link "the link text names record ~a, which ~a does not define"
                text target-path))))))
 
+(defun check-federated-link (document link other path fragment written)
+  "Check LINK from DOCUMENT into the federated corpus OTHER, at PATH there (D29)."
+  (let ((file-kind (file-kind (corpus-root other) path)))
+    (cond
+      ((null file-kind)
+       (emit document link "the link target ~a does not exist" written))
+      ((and fragment (eq file-kind :file) (ends-with-p ".md" (string-downcase path))
+            (not (member fragment (markdown-anchors other path) :test #'string=)))
+       (emit document link "~a has no heading with the anchor #~a" written fragment)))
+    (when (and file-kind (not (link-image-p link)))
+      (check-link-text document other link written (document-at-path other path)))))
+
 (defun check-link (document corpus link)
   (let ((target (link-target link)))
     (multiple-value-bind (kind path fragment) (link-destination document target)
@@ -53,7 +67,14 @@
             (fragment (and fragment (plusp (length fragment)) fragment)))
         (case kind
           ((:none :external))
-          (:outside (unverified document link target))
+          (:outside
+           (multiple-value-bind (other other-path)
+               (and (corpus-federation-loaded-p corpus)
+                    (federated-location corpus document written))
+             (if other
+                 (check-federated-link document link other other-path fragment
+                                       (percent-decode written))
+                 (unverified document link target))))
           (:local
            (if (string= written "")
                (progn

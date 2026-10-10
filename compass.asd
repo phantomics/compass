@@ -35,6 +35,9 @@
      (:module "corpus"
       :serial t
       :components ((:file "corpus")
+                   (:file "federation")
+                   (:file "history")
+                   (:file "code")
                    (:file "show")
                    (:file "index")
                    (:file "outline")
@@ -50,6 +53,8 @@
                    (:file "registers")
                    (:file "memo")
                    (:file "references")
+                   (:file "code")
+                   (:file "federation")
                    (:file "ledger")))
      (:file "report")
      (:file "cli"))))
@@ -79,6 +84,8 @@
                  (:file "test-cli")
                  (:file "test-allocate")
                  (:file "test-concurrency")
+                 (:file "test-code-refs")
+                 (:file "test-federation")
                  (:file "test-repository")
                  (:file "test-skills"))))
   :perform (test-op (o c)

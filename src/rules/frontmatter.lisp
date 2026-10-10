@@ -19,11 +19,31 @@
     (document corpus)
   (declare (ignore corpus))
   (dolist (spec (field-specs))
-    ;; Git-derivable fields are checked by git/derivable (v0.2).
+    ;; Git-derivable fields are checked by git/derivable.
     (when (and (field-spec-required-p spec) (not (field-spec-derivable-p spec))
                (yaml-null-p (document-field-node document (field-spec-name spec))))
       (emit document (front-matter-start document)
             "missing required field `~a`" (field-spec-name spec)))))
+
+(define-rule "git/derivable" (:severity :error :section "§7"
+                              :summary "Required fields left out of front-matter can be ~
+                                        derived from Git")
+    (document corpus)
+  (let ((missing (loop for spec in (field-specs)
+                       when (and (field-spec-required-p spec) (field-spec-derivable-p spec)
+                                 (yaml-null-p (document-field-node document
+                                                                   (field-spec-name spec))))
+                         collect (field-spec-name spec))))
+    (when missing
+      (if (not (git-available-p))
+          (note corpus "git/derivable did not run: Git was not found")
+          (multiple-value-bind (reason identity-p) (underivable-reason corpus document)
+            (when reason
+              (emit document (front-matter-start document)
+                    "~{`~a`~^ and ~} ~:[is~;are~] not in front-matter and cannot be derived ~
+                     from Git, because ~a; ~:[~;set a name with git config user.name, or ~
+                     ~]write ~:[it~;them~] in front-matter"
+                    missing (rest missing) reason identity-p (rest missing))))))))
 
 (define-rule "fm/types" (:severity :error :section "§7"
                          :summary "Front-matter values have the types the schema requires")

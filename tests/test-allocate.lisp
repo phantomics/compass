@@ -60,7 +60,8 @@
 
 (test init-ledger-command
   (with-git-repository (root *seed-files*)
-    (is (= 2 (run-cli "init" (root-arg root))) "plain init is not supported yet")
+    (is (= 1 (run-cli "init" (root-arg root))) "plain init refuses: compass.sexp exists")
+    (is (= 2 (run-cli "init" "--ledger" "--namespace" "TEST" (root-arg root))))
     (multiple-value-bind (code out) (run-cli "init" "--ledger" "--dry-run" (root-arg root))
       (is (= 0 code))
       (is (search "Would create the ledger with 4 entries" out))
@@ -279,11 +280,11 @@ three records, and a plan that refers to them, followed by GAMMA-LINES."
                                                            "### TEST-DRAFT-notes-M1 — Unsettled" ""
                                                            "**Status:** Draft"
                                                            "**Read-if:** changing the thing"
-                                                           "**Basis:** `src/a.lisp:frob@a1b3f9c`; observed" ""
+                                                           "**Basis:** decided in TEST-DRAFT-notes; observed" ""
                                                            "### TEST-DRAFT-notes-M2 — Settled" ""
                                                            "**Status:** Current"
                                                            "**Read-if:** changing the thing"
-                                                           "**Basis:** `src/a.lisp:frob@a1b3f9c`; observed")))))
+                                                           "**Basis:** decided in TEST-DRAFT-notes; observed")))))
     (let ((allocation (plan-assign (load-test-corpus root) "doc/Memo.Notes.md")))
       (is (equal '(("TEST-DRAFT-notes" "TEST-0001" :document)
                    ("TEST-DRAFT-notes-M2" "TEST-M1" :memo))

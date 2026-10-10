@@ -24,7 +24,34 @@
    (ledger :initform nil :accessor corpus-ledger
            :documentation "The allocation ledger, or NIL if the repository has none.")
    (notes :initform '() :accessor corpus-notes
-          :documentation "Things a check could not do, such as rules that need Git.")))
+          :documentation "Things a check could not do, such as rules that need Git.")
+   (cache :initform (make-hash-table :test #'equal) :reader corpus-cache
+          :documentation "Values computed once per load, such as answers from Git.")
+   (federation :initform '() :accessor corpus-federation
+               :documentation "FEDERATED repositories, when loaded with --federation.")
+   (federation-loaded-p :initform nil :accessor corpus-federation-loaded-p)))
+
+(defstruct (federated)
+  entry                                 ; the manifest's FEDERATION-ENTRY
+  root                                  ; its directory, or NIL if it does not exist
+  manifest                              ; its manifest, or NIL if it has none
+  corpus                                ; its corpus, or NIL
+  problem)                              ; :missing, :no-manifest, :not-owned, or NIL
+
+(defun federated-corpora (corpus)
+  "The loaded corpora of the federated repositories that own the namespace they
+are listed for."
+  (loop for f in (corpus-federation corpus)
+        when (and (federated-corpus f) (null (federated-problem f)))
+          collect (federated-corpus f)))
+
+(defun corpus-cached (corpus key function)
+  "The value cached in CORPUS under KEY, computed by calling FUNCTION the first
+time it is asked for."
+  (multiple-value-bind (value found) (gethash key (corpus-cache corpus))
+    (if found
+        value
+        (setf (gethash key (corpus-cache corpus)) (funcall function)))))
 
 (defun corpus-doc-directory (corpus)
   (manifest-doc-directory (corpus-manifest corpus)))
@@ -176,21 +203,31 @@ listed instead of reported."
   (gethash id (corpus-by-id corpus)))
 
 (defun find-document (corpus id)
-  (first (find-documents corpus id)))
+  "The document declaring ID, here or, when the federation is loaded, in a
+federated repository."
+  (or (first (find-documents corpus id))
+      (some (lambda (other) (first (find-documents other id))) (federated-corpora corpus))))
 
 (defun find-records (corpus id)
   "Every record defined, by its heading, with identifier ID."
   (gethash id (corpus-records-by-id corpus)))
 
 (defun find-record (corpus id)
-  (first (find-records corpus id)))
+  "The record ID, here or, when the federation is loaded, in a federated
+repository."
+  (or (first (find-records corpus id))
+      (some (lambda (other) (first (find-records other id))) (federated-corpora corpus))))
 
 (defun document-at-path (corpus path)
   "The document (or unmarked file) loaded from the repository-relative PATH."
   (gethash path (corpus-by-path corpus)))
 
 (defun namespace-loaded-p (corpus namespace)
-  (and (member namespace (corpus-namespaces corpus) :test #'string=) t))
+  "True if documents of NAMESPACE are loaded, here or in the federation."
+  (and (or (member namespace (corpus-namespaces corpus) :test #'string=)
+           (some (lambda (other) (member namespace (corpus-namespaces other) :test #'string=))
+                 (federated-corpora corpus)))
+       t))
 
 (defun note-unverified (corpus path line reference)
   "Record a reference into a namespace that is not loaded."
@@ -228,8 +265,11 @@ WHERE being the node or record that defines it."
     (nreverse definitions)))
 
 (defun corpus-alias-target (corpus id)
-  "The canonical identifier the ledger assigned for the provisional ID, or NIL."
-  (let ((entry (ledger-alias-entry (corpus-ledger corpus) id)))
+  "The canonical identifier the ledger assigned for the provisional ID, or NIL.
+When the federation is loaded, the federated repositories' ledgers count too."
+  (let ((entry (or (ledger-alias-entry (corpus-ledger corpus) id)
+                   (some (lambda (other) (ledger-alias-entry (corpus-ledger other) id))
+                         (federated-corpora corpus)))))
     (and entry (ledger-entry-id entry))))
 
 (defun corpus-names-of (corpus id)

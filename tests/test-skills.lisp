@@ -163,15 +163,22 @@ errors; the only warnings are for vocabulary pending acceptance."
                      collect (list (format nil "doc/~a.Sample.md" genre)
                                    (fill-template (read-text-file template) slug)))))
     (is (= 10 (length files)))
-    (multiple-value-bind (findings corpus)
-        (check-files files :manifest "(:namespaces (\"TEST\"))")
+    ;; The documents are checked uncommitted, in a repository whose one commit
+    ;; holds the code the Memo's basis cites.
+    (with-git-repository (root (list (list "compass.sexp" "(:namespaces (\"TEST\"))")
+                                     (list "src/sample.lisp" (lines "(defun frob ())"))))
+      (let ((revision (trim-whitespace (git-in root "rev-parse" "--short" "HEAD"))))
+        (loop for (path text) in files
+              do (write-file root path (ppcre:regex-replace-all "a1b2c3d" text revision))))
+      (let* ((corpus (load-corpus root))
+             (findings (check-corpus corpus)))
       (is (= 10 (length (corpus-documents corpus))))
       (let ((errors (remove :warning findings :key #'finding-severity))
             (warnings (remove-if (lambda (f) (or (eq (finding-severity f) :error)
                                                  (string= (finding-rule f) "vocab/pending")))
                                  findings)))
         (is (null errors) (describe-findings errors))
-        (is (null warnings) (describe-findings warnings))))))
+        (is (null warnings) (describe-findings warnings)))))))
 
 ;;; Options
 

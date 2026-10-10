@@ -29,3 +29,15 @@ compass rules      # lists every rule, its severity, and the section it enforces
 ```
 
 `compass check` exits 0 when there are no errors, 1 when there are, and 2 on a usage or internal error. `make install` copies the executable to `~/.local/bin`, which the `compass-*` skills in `skills/` expect when they are used outside this repository.
+
+### Dependencies, CI, and hooks
+
+The build uses Quicklisp by default. To use the versions pinned in `ocicl.csv` instead, run `make deps DEPS=ocicl`, then `make build DEPS=ocicl` and `make test DEPS=ocicl`.
+
+`.github/workflows/compass-check.yml` builds the toolchain under both, checks this repository with `compass check --base` against the branch a pull request merges into, checks that `doc/INDEX.md` is current, and runs the tests. Numbers stay unique only if those checks cannot be bypassed (see [the uniqueness guarantee](doc/Plan.Toolchain.md#the-uniqueness-guarantee)), so set the default branch to:
+
+- accept changes only through pull requests;
+- require both `compass-check` jobs to pass, with branches up to date before merging (or a merge queue);
+- require review from code owners, so that `.github/CODEOWNERS` makes the steward approve every change to the ledger, `doc/REGISTRY.sexp`.
+
+`make hooks` installs `scripts/pre-commit`, which regenerates a stale `doc/INDEX.md`, stages it, and then refuses the commit if `compass check` finds errors.

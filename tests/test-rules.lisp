@@ -10,8 +10,10 @@
   (check-files (cons (list path text) extra-files) :rules rules))
 
 (test conforming-document-is-clean
-  (let ((findings (check-one (doc))))
-    (is (null findings) (describe-findings findings))))
+  (let ((findings (check-one (doc :created "2026-10-09"))))
+    (is (null findings) (describe-findings findings)))
+  (let ((findings (check-files (list (list "doc/Plan.Test.md" (doc))) :git t)))
+    (is (null findings) "in Git, created is derived: ~a" (describe-findings findings))))
 
 (test fm-present-and-syntax
   (let ((findings (check-files (list (list "doc/Plan.A.md" (lines "# No front-matter"))))))
@@ -29,7 +31,7 @@
   (let ((findings (check-one (doc :title nil :language nil) :rules '("fm/required"))))
     (is (= 2 (length findings)) (describe-findings findings)))
   (let ((findings (check-one (doc :authors nil) :rules '("fm/required"))))
-    (is (null findings) "authors is Git-derivable, checked in v0.2")))
+    (is (null findings) "authors is Git-derivable, which git/derivable checks")))
 
 (test fm-types
   (flet ((types (&rest extra)

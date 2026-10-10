@@ -1,0 +1,7 @@
+# CODEOWNERS — the steward of the COMPASS namespace approves every allocation
+#
+# Numbers are allocated by appending to the ledger (COMPASS-DRAFT-toolchain-D1,
+# D22). Requiring review from code owners makes the steward's approval a
+# condition of merging any allocation (Compass §13).
+
+/doc/REGISTRY.sexp @phantomics

@@ -6,7 +6,7 @@
 (in-suite cli)
 
 (test check-exit-codes
-  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc))))
+  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :created "2026-10-09"))))
     (multiple-value-bind (code out) (run-cli "check" (root-arg root))
       (is (= 0 code))
       (is (search "Checked 1 document: 0 errors, 0 warnings." out))))
@@ -14,12 +14,14 @@
     (multiple-value-bind (code out) (run-cli "check" (root-arg root))
       (is (= 1 code))
       (is (search "doc/Plan.A.md:4:8: error vocab/genre:" out))))
-  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :extra '("colour: blue")))))
+  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :created "2026-10-09"
+                                                              :extra '("colour: blue")))))
     (is (= 0 (run-cli "check" (root-arg root))))
     (is (= 1 (run-cli "check" "--strict" (root-arg root))))))
 
 (test check-json
-  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :scope "team"))))
+  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :scope "team"
+                                                              :created "2026-10-09"))))
     (multiple-value-bind (code out) (run-cli "check" "--format" "json" (root-arg root))
       (is (= 1 code))
       (let* ((json (shasht:read-json out))
@@ -30,9 +32,11 @@
         (is (equal "doc/Plan.A.md" (gethash "path" (aref findings 0))))))))
 
 (test check-rule-selection-and-paths
-  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :scope "team"))
+  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :scope "team"
+                                                              :created "2026-10-09"))
                                     (list "doc/Plan.B.md" (doc :id "TEST-0002"
-                                                               :genre "Nonsense"))))
+                                                               :genre "Nonsense"
+                                                               :created "2026-10-09"))))
     (is (= 1 (run-cli "check" "--rule" "vocab/scope" (root-arg root))))
     (is (= 0 (run-cli "check" "--rule" "fm" (root-arg root))))
     (is (= 0 (run-cli "check" "--exclude" "vocab" (root-arg root))))
@@ -85,8 +89,9 @@
       (is (find "fm/syntax" rules :key (lambda (r) (gethash "name" r)) :test #'equal)))))
 
 (test check-rejects-paths-outside-the-corpus
-  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc))
-                                    (list "doc/Plan.B.md" (doc :id "TEST-0002"))
+  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :created "2026-10-09"))
+                                    (list "doc/Plan.B.md" (doc :id "TEST-0002"
+                                                               :created "2026-10-09"))
                                     (list "templates/X.md" (lines "# Not a document"))))
     (flet ((path (relative) (uiop:native-namestring (merge-pathnames relative root))))
       (multiple-value-bind (code out err) (run-cli "check" (root-arg root)
@@ -166,3 +171,75 @@
       (is (search "No references." out))
       (is (search "neither defined nor referenced" err)))
     (is (= 2 (run-cli "refs" "lowercase-id" (root-arg root))))))
+
+;;; init, manifest, and paths relative to --root
+
+(test init-writes-a-manifest
+  (with-git-repository (root (list (list "docs/Plan.A.md" (doc :id "ALPHA-DRAFT-a"))
+                                   (list "docs/Plan.B.md" (doc :id "BETA-0001")))
+                             :name "Ada")
+    (multiple-value-bind (code out) (run-cli "init" "--dry-run" (root-arg root))
+      (is (= 0 code))
+      (is (search "(:namespaces (\"ALPHA\" \"BETA\")" out) "inferred from the documents")
+      (is (search ":doc-directory \"docs/\"" out))
+      (is (search ":stewards ((:namespace \"ALPHA\" :steward \"Ada\" :approval :second-reviewer)" out))
+      (is (not (uiop:file-exists-p (root-file root "compass.sexp")))))
+    (multiple-value-bind (code out) (run-cli "init" "--namespace" "ALPHA" "--solo"
+                                             "--federation" "ORIGIN=../origin"
+                                             "--steward" "Andrew Sengul" (root-arg root))
+      (is (= 0 code))
+      (is (search "Wrote compass.sexp: namespace ALPHA, documents in docs/, steward Andrew Sengul."
+                  out)))
+    (multiple-value-bind (manifest problems) (read-manifest (root-file root "compass.sexp"))
+      (is (null problems))
+      (is (equal '("ALPHA") (manifest-namespaces manifest)))
+      (is (equal "docs/" (manifest-doc-directory manifest)))
+      (is (equal "../origin" (federation-entry-path (first (manifest-federation manifest)))))
+      (is (eq :solo (steward-approval (first (manifest-stewards manifest))))))
+    (multiple-value-bind (code out err) (run-cli "init" (root-arg root))
+      (is (= 1 code))
+      (is (string= "" out))
+      (is (search "already exists; edit it by hand" err))))
+  (with-temp-repository (root (list (list "notes.txt" "x")))
+    (multiple-value-bind (code out err) (run-cli "init" (root-arg root))
+      (declare (ignore out))
+      (is (= 2 code))
+      (is (search "pass --namespace NS" err)))
+    (is (= 2 (run-cli "init" "--namespace" "lower" (root-arg root))))
+    (is (= 2 (run-cli "init" "--namespace" "X" "--federation" "nope" (root-arg root))))
+    (is (= 0 (run-cli "init" "--namespace" "X" (root-arg root))))
+    (is (search "(:namespaces (\"X\")" (read-file root "compass.sexp")))
+    (is (not (search ":stewards" (read-file root "compass.sexp"))) "no Git, no steward")))
+
+(test manifest-json
+  (with-temp-repository (root (list (list "compass.sexp"
+                                          (lines "(:namespaces (\"TEST\") :doc-directory \"notes\""
+                                                 " :federation ((:namespace \"O\" :path \"../o\"))"
+                                                 " :commands ((:name :test :shell \"make test\"))"
+                                                 " :stewards ((:namespace \"TEST\" :steward \"Ada\" :approval :solo)))"))))
+    (multiple-value-bind (code out) (run-cli "manifest" "--json" (root-arg root))
+      (is (= 0 code))
+      (let ((json (shasht:read-json out)))
+        (is (equalp #("TEST") (gethash "namespaces" json)))
+        (is (equal "notes/" (gethash "doc_directory" json)))
+        (is (equal "notes/REGISTRY.sexp" (gethash "ledger" json)))
+        (is (equal "../o" (gethash "path" (aref (gethash "federation" json) 0))))
+        (is (equal "shell" (gethash "kind" (aref (gethash "commands" json) 0))))
+        (is (equal "test" (gethash "name" (aref (gethash "commands" json) 0))))
+        (is (equal "solo" (gethash "approval" (aref (gethash "stewards" json) 0))))))
+    (is (= 2 (run-cli "manifest" (root-arg root))) "JSON only"))
+  (with-temp-repository (root (list (list "compass.sexp" "(:namespaces (\"lower\"))")))
+    (multiple-value-bind (code out err) (run-cli "manifest" "--json" (root-arg root))
+      (is (= 1 code))
+      (is (gethash "namespaces" (shasht:read-json out)))
+      (is (search "manifest/valid" err))))
+  (with-temp-repository (root (list (list "notes.txt" "x")))
+    (is (= 1 (run-cli "manifest" "--json" (root-arg root))))))
+
+(test paths-relative-to-root
+  (with-temp-repository (root (list (list "doc/Plan.A.md" (doc :created "2026-10-09"))))
+    (let ((*default-pathname-defaults* (uiop:temporary-directory)))
+      (multiple-value-bind (code out) (run-cli "check" (root-arg root) "doc/Plan.A.md")
+        (is (= 0 code))
+        (is (search "Checked 1 document" out)))
+      (is (= 2 (run-cli "check" (root-arg root) "doc/Nope.md"))))))

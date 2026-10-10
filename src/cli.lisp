@@ -79,10 +79,20 @@ comma-separated)."
 
 (defun repository-path (argument root)
   "ARGUMENT, a path on the command line, as a repository-relative path; a
-directory's path ends in /, and the root itself is \"\". Signal a usage error
-for a path that does not exist or is outside the repository at ROOT."
-  (let* ((pathname (uiop:merge-pathnames* (uiop:parse-native-namestring argument)
-                                          (uiop:getcwd)))
+directory's path ends in /, and the root itself is \"\". A relative ARGUMENT is
+relative to the current directory, or to ROOT if it names nothing there. Signal
+a usage error for a path that does not exist or is outside the repository at
+ROOT."
+  (let* ((pathname (let ((parsed (uiop:parse-native-namestring argument))
+                         (here (uiop:merge-pathnames* (uiop:parse-native-namestring argument)
+                                                      (uiop:getcwd))))
+                     ;; A relative path that names nothing here is tried under ROOT, so
+                     ;; that compass check doc/x.md --root ../other works.
+                     (if (or (uiop:absolute-pathname-p parsed)
+                             (uiop:file-exists-p here)
+                             (uiop:directory-exists-p (uiop:ensure-directory-pathname here)))
+                         here
+                         (uiop:merge-pathnames* parsed root))))
          (directory (uiop:directory-exists-p (uiop:ensure-directory-pathname pathname)))
          (file (and (not directory) (uiop:file-exists-p pathname)))
          (true (cond (directory (truename directory))
@@ -175,11 +185,11 @@ a second value of NIL if there is no such subcommand."
             (and command t))))
 
 (define-command "check"
-    (:synopsis "check [PATH...] [--root DIR] [--format text|json] [--strict] [--skip-unmarked] [--rule NAME...] [--exclude NAME...] [--base REV]"
+    (:synopsis "check [PATH...] [--root DIR] [--format text|json] [--strict] [--skip-unmarked] [--rule NAME...] [--exclude NAME...] [--base REV] [--federation]"
      :summary "Check the corpus against the standard; report findings"
      :options (("root" :value) ("format" :value) ("strict" :flag)
                ("skip-unmarked" :flag) ("rule" :list) ("exclude" :list)
-               ("base" :value)))
+               ("base" :value) ("federation" :flag)))
     (args)
   (multiple-value-bind (paths options) (parse-arguments args (command-options (find-command "check")))
     (let* ((format (output-format options))
@@ -195,6 +205,8 @@ a second value of NIL if there is no such subcommand."
       (let ((corpus (load-corpus-for-command
                      root :skip-unmarked (option options "skip-unmarked"))))
         (check-selected-paths selected corpus)
+        (when (option options "federation")
+          (load-federation corpus))
         (let* ((limit (and selected (not (member "" selected :test #'string=)) selected))
                (findings (check-corpus corpus :only only :exclude exclude :paths limit
                                               :base (base-revision options root)))
@@ -207,6 +219,9 @@ a second value of NIL if there is no such subcommand."
                                                            p (document-path document)))))
                                                limit))
                                        (corpus-documents corpus)))))
+          (when (and (option options "federation") (null (corpus-federation corpus)))
+            (note corpus "--federation loaded nothing: compass.sexp lists no repositories ~
+                          under :federation"))
           (write-findings findings *standard-output* :format format :corpus corpus
                                                      :version +version+ :checked checked)
           (exit-code findings :strict (option options "strict")))))))
@@ -232,23 +247,44 @@ a second value of NIL if there is no such subcommand."
            1))))))
 
 (define-command "index"
-    (:synopsis "index [--namespace NS] [--stdout] [--root DIR]"
-     :summary "Generate INDEX.md in the document directory"
-     :options (("root" :value) ("namespace" :value) ("stdout" :flag)))
+    (:synopsis "index [--namespace NS] [--stdout | --check] [--root DIR]"
+     :summary "Generate INDEX.md in the document directory, or check that it is current"
+     :options (("root" :value) ("namespace" :value) ("stdout" :flag) ("check" :flag)))
     (args)
   (multiple-value-bind (positional options) (parse-arguments args (command-options (find-command "index")))
     (when positional (usage-error "index takes no arguments"))
-    (let ((corpus (load-corpus-for-command (repository-root options)))
-          (namespace (option options "namespace")))
-      (cond
-        ((option options "stdout")
-         (write-string (generate-index corpus :namespace namespace) *standard-output*))
-        ((null (corpus-documents corpus))
-         (usage-error "no documents found, so no index was written; use --stdout to ~
-                       preview one"))
-        (t (format *standard-output* "Wrote ~a~%"
-                   (write-index corpus :namespace namespace))))
-      0)))
+    (when (and (option options "stdout") (option options "check"))
+      (usage-error "index takes --stdout or --check, not both"))
+    (block index-check-exit
+      (let ((corpus (load-corpus-for-command (repository-root options)))
+            (namespace (option options "namespace")))
+        (cond
+          ((option options "check")
+           (let* ((path (index-relative-path corpus))
+                  (pathname (root-file (corpus-root corpus) path)))
+             (if (not (uiop:file-exists-p pathname))
+                 (progn (format *standard-output* "~a does not exist; write it with compass index~%"
+                                path)
+                        (return-from index-check-exit 1))
+                 (let* ((written (read-text-file pathname))
+                        (expected (generate-index corpus :namespace namespace))
+                        (a (split-lines written)) (b (split-lines expected)))
+                   (if (and (= (length a) (length b)) (every #'string= a b))
+                       (format *standard-output* "~a is current.~%" path)
+                       (progn
+                         (format *standard-output* "~a differs from what compass index would ~
+                                                    write, from line ~d; regenerate it with ~
+                                                    compass index~%"
+                                 path (first-difference written expected))
+                         (return-from index-check-exit 1)))))))
+          ((option options "stdout")
+           (write-string (generate-index corpus :namespace namespace) *standard-output*))
+          ((null (corpus-documents corpus))
+           (usage-error "no documents found, so no index was written; use --stdout to ~
+                         preview one"))
+          (t (format *standard-output* "Wrote ~a~%"
+                     (write-index corpus :namespace namespace))))
+        0))))
 
 ;;; outline and refs
 
@@ -283,6 +319,13 @@ a second value of NIL if there is no such subcommand."
                        (json-object "start" 1 "end" (outline-front-matter-end outline)))
    "focus" (outline-focus outline) "record" (outline-record outline)
    "alias" (outline-alias outline)
+   "fields" (let ((table (make-hash-table :test #'equal)))
+              (dolist (field (outline-fields outline) table)
+                (setf (gethash (derived-field-name field) table)
+                      (json-object "value" (let ((value (derived-field-value field)))
+                                             (if (listp value) (coerce value 'vector) value))
+                                   "source" (field-source-name (derived-field-source field))
+                                   "note" (derived-field-note field)))))
    "sections" (coerce
                (mapcar (lambda (e)
                          (json-object "level" (outline-entry-level e)
@@ -296,11 +339,37 @@ a second value of NIL if there is no such subcommand."
                        (outline-entries outline))
                'vector)))
 
+(defun field-source-name (source)
+  (case source
+    (:front-matter "front-matter")
+    (:git "git")
+    (:working-tree "working-tree")
+    (t nil)))
+
+(defun write-outline-fields (outline stream)
+  "The derived fields as one line: each value and where it came from (D27)."
+  (when (outline-fields outline)
+    (format stream "~{~a~^; ~}~%"
+            (mapcar (lambda (field)
+                      (let ((value (derived-field-value field)))
+                        (format nil "~:(~a~): ~:[unknown~;~:*~a~]~@[ (~a~@[, ~a~])~]"
+                                (derived-field-name field)
+                                (if (listp value)
+                                    (and value (format nil "~{~a~^, ~}" value))
+                                    value)
+                                (case (derived-field-source field)
+                                  (:front-matter "front-matter")
+                                  (:git "Git")
+                                  (:working-tree "not yet committed"))
+                                (derived-field-note field))))
+                    (outline-fields outline)))))
+
 (defun write-outline-text (outline stream)
   (format stream "~a — ~a~%" (outline-id outline) (or (outline-title outline) "(untitled)"))
   (format stream "~a; ~@[~a, ~]~@[~a, ~]~d lines~@[; front-matter lines 1-~d~]~%"
           (outline-path outline) (outline-genre outline) (outline-status outline)
           (outline-total-lines outline) (outline-front-matter-end outline))
+  (write-outline-fields outline stream)
   (when (outline-alias outline)
     (format stream "~a is an alias of ~a in the ledger.~%" (outline-alias outline)
             (or (outline-record outline) (outline-id outline))))
@@ -610,18 +679,162 @@ unless --dry-run. Report it on standard output."
                                                    (corpus-ledger-pathname corpus))))
                               allocation))))))))
 
+(defparameter *manifest-options* '("namespace" "doc-directory" "federation" "steward" "solo"))
+
+(defun infer-doc-directory (root)
+  "doc/ or docs/, whichever exists, else doc/."
+  (or (find-if (lambda (dir) (uiop:directory-exists-p (merge-pathnames dir root)))
+               '("doc/" "docs/"))
+      "doc/"))
+
+(defun normalize-doc-directory (dir)
+  (let ((dir (string-left-trim "./" (substitute #\/ #\\ dir))))
+    (if (ends-with-p "/" dir) dir (concatenate 'string dir "/"))))
+
+(defun parse-federation-option (value)
+  "NS=PATH as (NS . PATH)."
+  (let ((equals (position #\= value)))
+    (unless (and equals (plusp equals) (< (1+ equals) (length value))
+                 (ppcre:scan "^[A-Z][A-Z0-9]*$" (subseq value 0 equals)))
+      (usage-error "--federation takes NS=PATH, such as ORIGIN=../origin, not ~s" value))
+    (cons (subseq value 0 equals) (subseq value (1+ equals)))))
+
+(defun init-manifest (options root)
+  "Write a starting compass.sexp at ROOT from OPTIONS and what the repository
+holds (D19). Return the exit code."
+  (let ((pathname (merge-pathnames +manifest-file-name+ root)))
+    (when (uiop:file-exists-p pathname)
+      (format *error-output* "compass init: ~a already exists; edit it by hand~%"
+              (uiop:native-namestring pathname))
+      (return-from init-manifest 1))
+    (let* ((doc-directory (normalize-doc-directory
+                           (or (option options "doc-directory") (infer-doc-directory root))))
+           (given (option-list options "namespace"))
+           (inferred (and (null given)
+                          (let ((corpus (load-corpus root :skip-unmarked t
+                                                          :manifest (make-instance
+                                                                     'manifest
+                                                                     :doc-directory doc-directory))))
+                            (sort (remove-duplicates
+                                   (remove nil (mapcar #'document-namespace
+                                                       (corpus-documents corpus)))
+                                   :test #'string=)
+                                  #'string<))))
+           (namespaces (or given inferred))
+           (federation (mapcar #'parse-federation-option (option-list options "federation")))
+           (steward (or (option options "steward")
+                        (and (git-available-p) (git-repository-p root) (git-identity root))))
+           (text (progn
+                   (unless namespaces
+                     (usage-error "no --namespace was given, and no document in ~a declares ~
+                                   one; pass --namespace NS" doc-directory))
+                   (dolist (ns namespaces)
+                     (unless (ppcre:scan "^[A-Z][A-Z0-9]*$" ns)
+                       (usage-error "~s is not a namespace; namespaces are uppercase, such as ~
+                                     COMPASS" ns)))
+                   (manifest-text :namespaces namespaces :doc-directory doc-directory
+                                  :federation federation
+                                  :stewards (and steward
+                                                 (mapcar (lambda (ns)
+                                                           (list ns steward
+                                                                 (if (option options "solo")
+                                                                     :solo
+                                                                     :second-reviewer)))
+                                                         namespaces))))))
+      (cond
+        ((option options "dry-run")
+         (format *standard-output* "Would write ~a:~%~%~a~%This was a dry run; nothing was ~
+                                    written.~%" +manifest-file-name+ text))
+        (t
+         (write-text-file pathname text)
+         (multiple-value-bind (manifest problems) (read-manifest pathname)
+           (declare (ignore manifest))
+           (when problems
+             (error "the manifest written does not read back: ~a"
+                    (finding-message (first problems)))))
+         (format *standard-output* "Wrote ~a: namespace~p ~{~a~^, ~}~:[ (from the documents)~;~], ~
+                                    documents in ~a~@[, steward ~a~].~%"
+                 +manifest-file-name+ (length namespaces) namespaces given doc-directory steward)
+         (format *standard-output* "Next: run compass check. A namespace whose documents ~
+                                    already have numbers needs a ledger: compass init --ledger.~%")))
+      0)))
+
 (define-command "init"
-    (:synopsis "init --ledger [--dry-run] [--root DIR]"
-     :summary "Create the ledger, seeded with the identifiers already in use"
-     :options (("root" :value) ("ledger" :flag) ("dry-run" :flag)))
+    (:synopsis "init [--namespace NS]... [--doc-directory DIR] [--federation NS=PATH]... [--steward NAME] [--solo] [--dry-run] [--root DIR], or init --ledger [--dry-run] [--root DIR]"
+     :summary "Write a starting compass.sexp, or create the ledger seeded with the identifiers in use"
+     :options (("root" :value) ("ledger" :flag) ("dry-run" :flag) ("namespace" :list)
+               ("doc-directory" :value) ("federation" :list) ("steward" :value)
+               ("solo" :flag)))
     (args)
   (multiple-value-bind (positional options)
       (parse-arguments args (command-options (find-command "init")))
     (when positional (usage-error "init takes no arguments"))
-    (unless (option options "ledger")
-      (usage-error "this version creates only the ledger, with compass init --ledger; ~
-                    write compass.sexp by hand (COMPASS-DRAFT-toolchain-D4)"))
-    (run-allocation "init" options (repository-root options) #'plan-seed)))
+    (let ((root (repository-root options)))
+      (if (option options "ledger")
+          (progn
+            (when (some (lambda (name) (option options name)) *manifest-options*)
+              (usage-error "init --ledger creates only the ledger; write the manifest first, ~
+                            with compass init and no --ledger"))
+            (run-allocation "init" options root #'plan-seed))
+          (init-manifest options root)))))
+
+(defun manifest-json (corpus)
+  (let ((manifest (corpus-manifest corpus)))
+    (json-object
+     "path" (and (manifest-path manifest) +manifest-file-name+)
+     "namespaces" (coerce (manifest-namespaces manifest) 'vector)
+     "doc_directory" (manifest-doc-directory manifest)
+     "ledger" (corpus-ledger-path corpus)
+     "federation" (coerce (mapcar (lambda (f)
+                                    (json-object "namespace" (federation-entry-namespace f)
+                                                 "path" (federation-entry-path f)))
+                                  (manifest-federation manifest))
+                          'vector)
+     "commands" (coerce (mapcar (lambda (c)
+                                  (json-object "name" (manifest-command-name c)
+                                               "kind" (string-downcase
+                                                       (symbol-name (command-kind c)))
+                                               "text" (command-text c)
+                                               "doc" (command-doc c)))
+                                (manifest-commands manifest))
+                        'vector)
+     "stewards" (coerce (mapcar (lambda (s)
+                                  (json-object "namespace" (steward-namespace s)
+                                               "steward" (steward-name s)
+                                               "approval" (string-downcase
+                                                           (symbol-name (steward-approval s)))))
+                                (manifest-stewards manifest))
+                        'vector)
+     "authorities" (coerce (mapcar (lambda (a)
+                                     (json-object "namespace" (getf a :namespace)
+                                                  "authority" (getf a :authority)))
+                                   (manifest-authorities manifest))
+                           'vector))))
+
+(define-command "manifest"
+    (:synopsis "manifest --json [--root DIR]"
+     :summary "Print the manifest, compass.sexp, as JSON"
+     :options (("root" :value) ("json" :flag)))
+    (args)
+  (multiple-value-bind (positional options)
+      (parse-arguments args (command-options (find-command "manifest")))
+    (when positional (usage-error "manifest takes no arguments"))
+    (unless (option options "json")
+      (usage-error "manifest prints JSON only; write compass manifest --json"))
+    (let* ((root (repository-root options))
+           (pathname (merge-pathnames +manifest-file-name+ root)))
+      (if (not (uiop:file-exists-p pathname))
+          (progn
+            (format *error-output* "compass manifest: there is no ~a in ~a~%"
+                    +manifest-file-name+ (uiop:native-namestring root))
+            1)
+      (multiple-value-bind (manifest problems) (read-manifest pathname)
+        (let ((corpus (make-instance 'corpus :root root :manifest manifest)))
+          (dolist (p problems)
+            (format *error-output* "compass: ~a:~a: ~(~a~) ~a: ~a~%" +manifest-file-name+
+                    (finding-line p) (finding-severity p) (finding-rule p) (finding-message p)))
+          (write-json-value (manifest-json corpus))
+          (if (find :error problems :key #'finding-severity) 1 0)))))))
 
 (define-command "rules"
     (:synopsis "rules [--format text|json]"

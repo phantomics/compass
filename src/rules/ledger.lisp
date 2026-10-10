@@ -97,23 +97,13 @@
                      numbers in it are allocated by the repository that does"
                     id namespace))))))))
 
-(defun first-difference (old new)
-  "The 1-based line number of the first line of OLD that NEW does not keep."
-  (let ((old-lines (split-lines old))
-        (new-lines (split-lines new)))
-    (loop for i from 0 below (length old-lines)
-          when (or (>= i (length new-lines))
-                   (string/= (aref old-lines i) (aref new-lines i)))
-            return (1+ i)
-          finally (return (1+ (length old-lines))))))
-
 (defun git-rules-root (corpus rule-name)
   "The repository root if Git can be used there; otherwise NIL, after noting
 that RULE-NAME did not run."
   (let ((root (corpus-root corpus)))
     (cond ((not (git-available-p))
            (note corpus "~a did not run: Git was not found" rule-name) nil)
-          ((not (git-repository-p root))
+          ((not (repository-usable-p corpus root))
            (note corpus "~a did not run: not a Git repository" rule-name) nil)
           (t root))))
 

@@ -73,6 +73,9 @@ decisions:
   - COMPASS-DRAFT-toolchain-D24
   - COMPASS-DRAFT-toolchain-D25
   - COMPASS-DRAFT-toolchain-D26
+  - COMPASS-DRAFT-toolchain-D27
+  - COMPASS-DRAFT-toolchain-D28
+  - COMPASS-DRAFT-toolchain-D29
 open-questions:
   - COMPASS-DRAFT-toolchain-O1
   - COMPASS-DRAFT-toolchain-O2
@@ -1127,6 +1130,130 @@ the warnings; the rule then keeps new ones from accumulating.
   renumbered they are harmless, and §8 does not forbid them; the warning and the
   refusal in `assign` cover the case where they do harm.
 
+### COMPASS-DRAFT-toolchain-D27 — Git-derived fields, including for files not yet committed
+
+**Status:** Proposed
+
+**Context:** §7 lets `authors`, `created`, and `updated` be omitted and derived
+from Git, and the rule table has `git/derivable` check that a required field is
+present or derivable. Neither says what is derived for a file that has not been
+committed, whose first check comes before its first commit, nor for a file
+outside any repository, a renamed file, or a shallow clone.
+
+**Decision:**
+- **Derived values.** `authors` are the authors of the commits that touched the
+  file, following renames (`git log --follow`), named as `.mailmap` names them,
+  in order of first contribution. `created` is the author date of the first of
+  those commits and `updated` of the last.
+- **Work not yet committed.** A file that is untracked, or has uncommitted
+  changes, adds the current Git user (`user.name`, through `.mailmap`) to its
+  authors, and today's date as `updated`, and as `created` if it has no commit.
+  A new document therefore checks clean before its first commit.
+- **`git/derivable`** (error) reports a required field (`created`, `authors`)
+  that is absent and cannot be derived: the file is outside any Git work tree,
+  or it has no commit and Git has no `user.name`. Without Git, the rule records
+  a note that it did not run.
+- **Shallow clones.** The first commit present may not be the file's first, so
+  a derived `created` there is marked as possibly late.
+- A value written in front-matter always wins, and derived values are never
+  written back into a file (§7). `compass outline` shows each of the three
+  fields with its source.
+
+**Alternatives:**
+- Require the fields in front-matter. Rejected: §7 permits deriving them, and
+  written copies go stale.
+- Treat an uncommitted file as underivable. Rejected: every new document would
+  fail its first check.
+- Use committers rather than authors. Rejected: a steward who rebases or merges
+  would be counted as an author of everything.
+
+### COMPASS-DRAFT-toolchain-D28 — Which code references are checked, and how deeply
+
+**Status:** Proposed
+
+**Context:** §9 makes commit-pinned code references mandatory in `Log` and
+`Plan` and recommended elsewhere. COMPASS-DRAFT-toolchain-O4 asks how deeply a
+reference is verified. A checker must also tell a code reference from other
+code spans: rule names such as `ledger/unique`, identifiers with anchors, and
+examples of the grammar itself, such as `path:symbol@revision`.
+
+**Decision:**
+- **What is a code reference.** A code span in a text or heading line (not in
+  fenced code or an HTML comment) of the form
+  `[NS:]path[:symbol | #Lm[-Ln] | :line][@revision]`, whose path is a path: it
+  has a namespace prefix, contains `/`, ends in a known file extension, or
+  names a file in the working tree. A path with neither a location nor a
+  revision, such as a bare file name, is not checked.
+- **`ref/code-pinned`** reports a reference with a location and no
+  `@revision`: an error in a `Log` or `Plan`, a warning elsewhere. A line written
+  `:42` is reported in either case, with the advice to write `#L42`.
+- **`ref/code-exists`** checks a pinned reference: the revision must name a
+  commit or tag, and the path must exist at it (errors); the symbol must be
+  defined there, and a line range must lie within the file (warnings).
+  Paths are repository-relative, and a path prefixed with a namespace is read
+  in that namespace's repository (COMPASS-DRAFT-toolchain-D29).
+- **Finding a symbol.** In Lisp files, a definition form (`(def…` or
+  `(define-…`, also with a quoted name, FiveAM's `(test …`, and slot readers
+  and accessors). In Python, JavaScript and TypeScript, Go, Rust, C and C++,
+  and shell, a small table of definition patterns. In any other file, the
+  symbol as a whole token.
+- **Unverified, not reported.** A reference into a namespace that is not loaded;
+  a revision missing from a shallow clone. Without Git, the rule records a note
+  that it did not run.
+- **`memo/basis`** requires a pinned basis to name a revision that exists, where
+  Git can tell; `ref/code-exists` leaves that one finding to it.
+- Revisions and files are read with two Git processes per check, whatever the
+  number of references.
+
+Resolves COMPASS-DRAFT-toolchain-O4.
+
+**Alternatives:**
+- Read Lisp files with the Lisp reader. Rejected: it needs each file's packages
+  and read-time environment, and still misses names that macros generate.
+- Report a symbol that cannot be found as an error. Rejected: definition
+  patterns are approximate, and a false error would block a merge.
+- Check every code span that parses. Rejected: rule names and examples of the
+  grammar parse too.
+
+### COMPASS-DRAFT-toolchain-D29 — Federation checks are opt-in and one hop deep
+
+**Status:** Proposed
+
+**Context:** The manifests of COMPASS-DRAFT-toolchain-D4 list the local paths of
+federated repositories, and that decision has federation-level checks run "when
+the federation paths are available". Until now a reference into another
+namespace has been counted as unverified (COMPASS-DRAFT-toolchain-D21). COMPASS-DRAFT-toolchain-O3 asks what stops two repositories from
+claiming one namespace.
+
+**Decision:**
+- `compass check --federation` loads each repository listed under
+  `:federation`, at its path relative to this repository's root: its manifest,
+  its documents (skipping files without front-matter), and its ledger. The
+  federated repositories' own `:federation` lists are not followed.
+- References into a loaded namespace are then checked as local ones are:
+  documents, records, anchors, ledger aliases, and code references prefixed
+  with the namespace, against that repository's Git. Findings are reported only
+  for this repository's files.
+- **`federation/path`** (error) reports an entry whose path does not exist, has
+  no `compass.sexp`, or whose manifest does not own the namespace the entry
+  names.
+- **`federation/namespace`** (error) reports a namespace that this repository
+  and a federated one both own, or two federated ones.
+- Without `--federation` nothing changes, so a repository's own CI does not
+  depend on what is checked out beside it. `show`, `outline`, and `refs` keep
+  `--root` for other repositories.
+
+Partly answers COMPASS-DRAFT-toolchain-O3: a namespace claimed twice among the
+federated repositories is found, but not one claimed by a repository outside
+the federation.
+
+**Alternatives:**
+- Follow `:federation` lists transitively. Rejected: the cost grows with the
+  whole federation, and cycles are the norm, since each repository lists the
+  others.
+- Load the federation whenever its paths exist. Rejected: a check's result would
+  depend on what happens to be checked out next to the repository.
+
 ## The uniqueness guarantee
 
 The guarantee is a set of invariants. The validator enforces them, and the
@@ -1415,13 +1542,14 @@ Table: Initial rule set, with severity and the section each rule enforces.
 | `review/approver` | error | §6; COMPASS-DRAFT-agent-workflow-D6: `approved-by` is never an assistant, and self-approval occurs only by the declared steward of a `:solo` namespace |
 | `ref/doc-resolves` | error | §9 document links resolve to real IDs |
 | `ref/prose-mention` | warning | §9 document named without a link |
-| `ref/code-pinned` | error in Log/Plan, else warning | §9 commit-pinned code references |
-| `ref/code-exists` | error | §9 the revision, path, and symbol exist |
+| `ref/code-pinned` | error in Log/Plan, else warning | §9 commit-pinned code references (COMPASS-DRAFT-toolchain-D28) |
+| `ref/code-exists` | error; a missing symbol or line, warning | §9 the revision, path, and symbol exist (COMPASS-DRAFT-toolchain-D28) |
 | `cite/well-formed` | error | §9 `cites` entries have `title`, `locator`, `external: true` |
-| `git/derivable` | error | §7 `authors`/`created`/`updated` present or derivable |
+| `git/derivable` | error | §7 `authors`/`created`/`updated` present or derivable (COMPASS-DRAFT-toolchain-D27) |
 | `shape/sections` | warning | §14 spine sections present and in order |
 | `a11y/alt-text`, `a11y/table-caption`, `a11y/diagram-description`, `a11y/heading-nesting`, `a11y/link-text` | error | §12, COMPASS-DRAFT-toolchain-D6 |
 | `index/current` | error | COMPASS-DRAFT-toolchain-D6 generated index matches |
+| `federation/path`, `federation/namespace` | error | COMPASS-DRAFT-toolchain-D4 and COMPASS-DRAFT-toolchain-D29: federated repositories exist, own what they are listed for, and claim no namespace twice |
 | `manifest/authority` | warning | COMPASS-DRAFT-toolchain-D17: every owned namespace declares a tagging authority |
 | `catalog/current` | error | COMPASS-DRAFT-toolchain-D10 generated catalog matches |
 | `catalog/budget` | warning | COMPASS-DRAFT-toolchain-D11 catalog fits its budget without truncation |
@@ -1444,7 +1572,9 @@ Table: Initial rule set, with severity and the section each rule enforces.
   that document (D23). Before the ledger exists (baseline
   v0.1), it computes the preview from the highest number found by scanning the
   corpus, and says that the result is advisory.
-- `compass index [--check]` and `compass show ID[#anchor]`, which
+- `compass index [--check]` writes the namespace index, or with `--check` exits
+  1 if the committed one differs from what would be written (COMPASS-DRAFT-toolchain-D6).
+- `compass show ID[#anchor]`, which
   `compass-lookup` uses. With an anchor, `show` prints one section. Given a
   register ID (`D`, `O`, or M), it prints that record alone. For a document it
   also reports the assistance history derived from `Assisted-by:` trailers.
@@ -1463,11 +1593,13 @@ Table: Initial rule set, with severity and the section each rule enforces.
   `--all` ignores the budget.
 - `compass map [PATH] [--file FILE] [--check] [--json]` writes the source map,
   prints one subtree, or prints one file's effective header.
-- `compass manifest --json`.
-- `compass init` writes a starting `compass.sexp` from the repository's state
-  (the document directory found, the namespaces in use) and a few questions,
-  so that projects not written in Lisp need not write the manifest by hand
-  (D19). It refuses to overwrite an existing manifest.
+- `compass manifest --json` prints the manifest as JSON, for consumers not
+  written in Lisp (COMPASS-DRAFT-toolchain-D4).
+- `compass init [--namespace NS]… [--doc-directory DIR] [--federation NS=PATH]…
+  [--steward NAME] [--solo] [--dry-run]` writes a starting `compass.sexp` from
+  the repository's state (the document directory found, the namespaces in use)
+  and its flags, so that projects not written in Lisp need not write the
+  manifest by hand (COMPASS-DRAFT-toolchain-D19). It refuses to overwrite an existing manifest.
 - `compass version` reports the toolchain version, the commit it was built
   from, and the target platform (D19).
 - `compass export --rdf ntriples|turtle|nquads|trig|jsonld [--derived]
@@ -1505,17 +1637,27 @@ designed so that later steps extend it rather than rewrite it.
   is an interim answer to O5, not its resolution.
 - Builds under `DEPS=ql`; FiveAM tests over fixture corpora.
 - The code constraints of D19 hold from the first commit, so that the
-  executable built in v0.1 is already the one that v0.2 releases.
+  executable built in v0.1 is already the one that v0.2.1 releases.
 
-**v0.2 — identity, CI, and release binaries** (roadmap step 4, part of step 7):
+**v0.2 — identity and CI** (roadmap step 4, part of step 7):
 - The ledger reader and its rules; `assign` and `renumber`; the concurrency
-  tests.
-- Git-derived fields (`git/derivable`) and commit-pinned reference checks.
-- `index --check`; the GitHub Actions job; `DEPS=ocicl`.
-- `compass init`.
+  tests (COMPASS-DRAFT-toolchain-D22 to COMPASS-DRAFT-toolchain-D26).
+- Git-derived fields (`git/derivable`, COMPASS-DRAFT-toolchain-D27) and commit-pinned
+  reference checks (COMPASS-DRAFT-toolchain-D28).
+- `index --check` and `index/current`; `check --base` and `check --federation`
+  (COMPASS-DRAFT-toolchain-D29).
+- `compass init` and `compass manifest --json`.
+- The GitHub Actions job under Quicklisp and ocicl; `ocicl.csv`; `CODEOWNERS`
+  for the ledger; a local `pre-commit` script.
+- The bootstrap of this repository, and the amendments to `Compass.md` of the
+  accepted COMPASS-DRAFT-toolchain-D2, COMPASS-DRAFT-toolchain-D3, COMPASS-DRAFT-toolchain-D5,
+  COMPASS-DRAFT-toolchain-D6, and COMPASS-DRAFT-toolchain-D16.
+
+**v0.2.1 — release binaries** (the rest of roadmap step 7):
 - The release workflow for the D19 targets, unsigned; the setup action; the
-  container image; the `pre-commit` hook definition. A short spike on the macOS
-  and Windows runners comes first (see the [Roadmap](#roadmap)).
+  container image; the `pre-commit` hook definition
+  (`.pre-commit-hooks.yaml`). A short spike on the macOS and Windows runners
+  comes first (see the [Roadmap](#roadmap)).
 
 **v0.3 — RDF export** (part of roadmap step 5):
 - The `:authorities` manifest key and `manifest/authority`.
@@ -1658,6 +1800,11 @@ after the fact. Should the COMPASS repository keep an authoritative namespace
 table, with new namespaces approved by the COMPASS steward, and should
 repository checks consult it?
 
+**Partly answered (2026-10-10):** `compass check --federation` reports a
+namespace that two repositories of the federation both own
+(COMPASS-DRAFT-toolchain-D29). A claim by a repository outside the federation
+is still not found, so the question of an authoritative table remains open.
+
 ### COMPASS-DRAFT-toolchain-O4 — Depth of code-reference verification
 
 Checking that a revision and path exist is cheap and exact. Checking that a
@@ -1672,6 +1819,12 @@ Release binaries make the toolchain available to projects in any language
 patterns per language (`def`, `fn`, `func`, `class`, and so on) is cheap but
 approximate. For a language with no patterns, the rule could check only the
 revision and path and report the symbol as unverified.
+
+**Resolution (2026-10-10):** The revision and path are checked exactly, and a
+missing one is an error. A symbol is looked for with definition patterns: Lisp
+forms, and a small table for other common languages; in any other file, as a
+whole token. A symbol not found is a warning. Recorded as
+COMPASS-DRAFT-toolchain-D28.
 
 ### COMPASS-DRAFT-toolchain-O5 — Treatment of pre-Compass documents
 
@@ -1730,7 +1883,7 @@ Table: Prior systems and what this plan draws from each.
 ## Roadmap
 
 Steps 2 and 3 yield baseline v0.1, step 4 with the CI and distribution parts of
-step 7 yields v0.2, and the export part of step 5 yields v0.3 (see
+step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
 [Baseline releases](#baseline-releases)).
 
 1. **This Plan.** Record the decisions and gaps. No change to `Compass.md` yet.

@@ -8,12 +8,12 @@
   (:use #:cl)
   (:export #:read-text-file #:write-text-file
            #:text-file-error #:text-file-error-pathname #:text-file-error-reason
-           #:split-lines #:join-lines #:string-join
+           #:split-lines #:join-lines #:string-join #:first-difference
            #:trim-whitespace #:blank-string-p #:starts-with-p #:ends-with-p
            #:edit-distance #:closest-match
            #:valid-date-string-p
            #:relative-path-string #:normalize-relative-path #:percent-decode
-           #:file-kind #:root-file))
+           #:file-kind #:root-file #:babel-free-encode #:babel-free-decode))
 
 (defpackage #:compass.git
   (:use #:cl #:compass.util)
@@ -22,7 +22,9 @@
            #:run-git #:git-available-p #:git-repository-p #:git-resolve
            #:git-has-commits-p #:git-object-type #:git-file-at #:git-shallow-p
            #:git-attribute #:git-tracked-files #:git-added-lines #:git-identity
-           #:*default-bases* #:git-default-base))
+           #:*default-bases* #:git-default-base
+           #:git-object-types #:git-read-objects #:git-log-follow #:git-file-status
+           #:git-committed-files))
 
 (defpackage #:compass.vocab
   (:use #:cl #:compass.util)
@@ -100,10 +102,11 @@
    #:manifest #:manifest-path #:manifest-namespaces #:manifest-doc-directory
    #:manifest-federation #:manifest-stewards #:manifest-commands
    #:manifest-map #:manifest-catalog #:manifest-authorities
-   #:manifest-command #:command-name #:command-kind #:command-text #:command-doc
+   #:manifest-command #:manifest-command-name #:command-kind #:command-text
+   #:command-doc
    #:federation-entry #:federation-entry-namespace #:federation-entry-path
    #:steward-entry #:steward-namespace #:steward-name #:steward-approval
-   #:read-manifest #:default-manifest #:+manifest-file-name+
+   #:read-manifest #:default-manifest #:+manifest-file-name+ #:manifest-text
    ;; ledger
    #:+ledger-file-name+ #:ledger-entry #:make-ledger-entry #:copy-ledger-entry
    #:ledger-entry-id #:ledger-entry-identifier #:ledger-entry-kind
@@ -165,14 +168,30 @@
            #:outline-focus #:outline-record #:outline-entries
            #:outline-entry #:outline-entry-level #:outline-entry-text
            #:outline-entry-anchor #:outline-entry-start #:outline-entry-end
-           #:outline-entry-record #:outline-alias #:document-outline
+           #:outline-entry-record #:outline-alias #:outline-fields #:document-outline
            #:inbound-reference #:inbound-reference-kind #:inbound-reference-path
            #:inbound-reference-line #:inbound-reference-column
            #:inbound-reference-field #:inbound-reference-text
            #:inbound-reference-source #:inbound-reference-name #:find-references
            #:show
            #:generate-index #:write-index #:index-relative-path
-           #:next-identifier #:refuse))
+           #:next-identifier #:refuse
+           #:corpus-cache #:corpus-cached
+           #:repository-usable-p #:git-state #:corpus-git-state #:git-state-usable #:git-state-reason
+           #:git-state-identity #:git-state-shallow #:document-committed-p
+           #:underivable-reason #:derived-field #:derived-field-name
+           #:derived-field-value #:derived-field-source #:derived-field-note
+           #:document-derived-fields
+           #:code-mention #:code-mention-document #:code-mention-span #:code-mention-text
+           #:code-mention-namespace #:code-mention-path #:code-mention-symbol
+           #:code-mention-line-start #:code-mention-line-end #:code-mention-line
+           #:code-mention-revision #:code-mention-basis-p #:parse-code-mention
+           #:document-code-mentions #:resolve-code-mentions #:revision-status
+           #:symbol-defined-p
+           #:federated #:federated-entry #:federated-root #:federated-manifest
+           #:federated-corpus #:federated-problem #:corpus-federation
+           #:corpus-federation-loaded-p #:federated-corpora #:load-federation
+           #:namespace-root #:federated-location))
 
 (defpackage #:compass.rules
   (:use #:cl #:compass.util #:compass.git #:compass.vocab #:compass.model

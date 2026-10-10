@@ -1,14 +1,23 @@
 # Makefile — Build, test, and check the Compass toolchain
 #
 # DEPS selects the dependency manager: ql (Quicklisp, default) or ocicl.
+# With ocicl, `make deps` installs the versions pinned in ocicl.csv.
 # PREFIX and DESTDIR place `make install` (default ~/.local/bin/compass).
+# `make hooks` installs scripts/pre-commit as this clone's pre-commit hook.
 
 DEPS ?= ql
 SBCL ?= sbcl
 PREFIX ?= $(HOME)/.local
 LISP = DEPS=$(DEPS) $(SBCL) --noinform --non-interactive --no-userinit --load build.lisp
 
-.PHONY: build test check install uninstall clean
+.PHONY: deps build test check install uninstall hooks clean
+
+deps:
+ifeq ($(DEPS),ocicl)
+	ocicl install
+else
+	@echo "Quicklisp loads dependencies as it builds; nothing to install."
+endif
 
 build:
 	$(LISP) --eval '(compass-build:build)'
@@ -25,6 +34,9 @@ install: build
 
 uninstall:
 	rm -f "$(DESTDIR)$(PREFIX)/bin/compass"
+
+hooks:
+	install -m 755 scripts/pre-commit "$$(git rev-parse --git-path hooks)/pre-commit"
 
 clean:
 	rm -rf bin

@@ -14,7 +14,6 @@
 (defstruct (manifest-command) name kind text doc)
 (defstruct (steward-entry) namespace name approval)
 
-(defun command-name (c) (manifest-command-name c))
 (defun command-kind (c) (manifest-command-kind c))
 (defun command-text (c) (manifest-command-text c))
 (defun command-doc (c) (manifest-command-doc c))
@@ -186,3 +185,37 @@ missing or malformed) and a list of findings under the rule manifest/valid."
                                           (:namespace \"NS\" :authority \"example.net,2026\")"))))
             (values (apply #'make-instance 'manifest initargs)
                     (nreverse findings))))))))
+
+;;; Writing a starting manifest (compass init)
+
+(defun manifest-string (string)
+  (with-output-to-string (out)
+    (write-char #\" out)
+    (loop for c across string
+          do (when (member c '(#\" #\\)) (write-char #\\ out))
+             (write-char c out))
+    (write-char #\" out)))
+
+(defun manifest-text (&key namespaces (doc-directory "doc/") federation stewards)
+  "The text of a starting compass.sexp. FEDERATION is a list of (NAMESPACE .
+PATH); STEWARDS a list of (NAMESPACE NAME APPROVAL)."
+  (with-output-to-string (out)
+    (format out ";;; compass.sexp — Compass project manifest~%;;;~%~
+                 ;;; Written by compass init. Read with a restricted reader: strings, integers,~%~
+                 ;;; keywords, and lists only. Other keys, such as :commands, may be added by~%~
+                 ;;; hand (Compass §5, §22).~%~%")
+    (format out "(:namespaces (~{~a~^ ~})~% :doc-directory ~a"
+            (mapcar #'manifest-string namespaces) (manifest-string doc-directory))
+    (when federation
+      (format out "~% :federation (~{~a~^~%              ~})"
+              (mapcar (lambda (f) (format nil "(:namespace ~a :path ~a)"
+                                          (manifest-string (car f)) (manifest-string (cdr f))))
+                      federation)))
+    (when stewards
+      (format out "~% :stewards (~{~a~^~%            ~})"
+              (mapcar (lambda (s) (destructuring-bind (ns name approval) s
+                                    (format nil "(:namespace ~a :steward ~a :approval :~(~a~))"
+                                            (manifest-string ns) (manifest-string name)
+                                            approval)))
+                      stewards)))
+    (format out ")~%")))

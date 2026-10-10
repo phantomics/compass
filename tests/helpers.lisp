@@ -32,9 +32,11 @@ FUNCTION with its pathname, and delete the directory afterwards."
 
 (defun doc (&key (id "TEST-0001") (title "A test document") (genre "Plan")
                  (scope "project") (status "Draft") (language "en")
-                 (authors '("Tester")) (extra '()) (body (lines "# A test document" "")))
+                 (authors '("Tester")) created (extra '())
+                 (body (lines "# A test document" "")))
   "The text of a document with the given front-matter. A field given as NIL is
-omitted. EXTRA is a list of additional front-matter lines."
+omitted, as CREATED is by default: outside a Git repository, git/derivable
+reports it. EXTRA is a list of additional front-matter lines."
   (with-output-to-string (out)
     (format out "---~%")
     (when id (format out "id: ~a~%" id))
@@ -44,17 +46,19 @@ omitted. EXTRA is a list of additional front-matter lines."
     (when language (format out "language: ~a~%" language))
     (when status (format out "status: ~a~%" status))
     (when authors (format out "authors:~%~{  - ~a~%~}" authors))
+    (when created (format out "created: ~a~%" created))
     (format out "~{~a~%~}" extra)
     (format out "---~%~a" body)))
 
-(defun check-files (files &key rules skip-unmarked (manifest nil manifest-p))
-  "Check a temporary repository holding FILES. Return the findings and the corpus."
-  (with-temp-repository (root (if manifest-p
-                                  (cons (list "compass.sexp" manifest) files)
-                                  files))
-    (let* ((corpus (load-corpus root :skip-unmarked skip-unmarked))
-           (findings (check-corpus corpus :only rules)))
-      (values findings corpus))))
+(defun check-files (files &key rules skip-unmarked (manifest nil manifest-p) git)
+  "Check a temporary repository holding FILES, a Git repository with them
+committed if GIT is true. Return the findings and the corpus."
+  (funcall (if git #'call-with-git-repository #'call-with-temp-repository)
+           (if manifest-p (cons (list "compass.sexp" manifest) files) files)
+           (lambda (root)
+             (let* ((corpus (load-corpus root :skip-unmarked skip-unmarked))
+                    (findings (check-corpus corpus :only rules)))
+               (values findings corpus)))))
 
 (defun findings-of (findings rule)
   (remove rule findings :key #'finding-rule :test-not #'string=))

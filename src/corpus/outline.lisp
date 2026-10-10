@@ -12,7 +12,8 @@
 
 (defstruct (outline)
   id path title genre status total-lines front-matter-end focus record entries
-  (alias nil))                          ; the alias REFERENCE used, if any
+  (alias nil)                           ; the alias REFERENCE used, if any
+  (fields '()))                         ; DERIVED-FIELDs: authors, created, updated
 
 (defun section-record (document section)
   "The record whose heading is SECTION, or NIL."
@@ -56,6 +57,8 @@ An alias in the ledger is followed to the identifier it was assigned."
                                       (1- (document-body-start-line host)))
                :focus (or (and root anchor) (and record (record-anchor record)))
                :record (and record (record-id record))
+               :fields (and (document-front-matter host)
+                            (document-derived-fields corpus host))
                :entries
                (mapcar (lambda (section)
                          (let ((start (location-line section)))

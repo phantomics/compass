@@ -1,0 +1,74 @@
+# compass-check.yml — Build the toolchain, check this repository's corpus, and run the tests
+#
+# Runs under both dependency managers (COMPASS-DRAFT-toolchain-D8). The check
+# compares the ledger with the branch a pull request merges into, so that
+# ledger/append-only sees what the merge would change (COMPASS-DRAFT-toolchain-D22).
+# Make the two jobs required status checks of the default branch.
+
+name: compass-check
+
+on:
+  pull_request:
+  push:
+    branches: [master, main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: check (${{ matrix.deps }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        deps: [ql, ocicl]
+    env:
+      DEPS: ${{ matrix.deps }}
+      OCICL_LOCAL_ONLY: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history: Git-derived fields, code references, the base ledger
+
+      - name: Install SBCL
+        run: sudo apt-get update && sudo apt-get install -y sbcl
+
+      - name: Install Quicklisp, pinned to the dist in local use
+        if: matrix.deps == 'ql'
+        run: |
+          curl -fsSL -o /tmp/quicklisp.lisp https://beta.quicklisp.org/quicklisp.lisp
+          sbcl --non-interactive --load /tmp/quicklisp.lisp \
+               --eval '(quicklisp-quickstart:install :dist-url "http://beta.quicklisp.org/dist/quicklisp/2023-06-18/distinfo.txt")'
+
+      - name: Install ocicl and the pinned dependencies
+        if: matrix.deps == 'ocicl'
+        run: |
+          git clone --depth 1 --branch v2.6.6 https://github.com/ocicl/ocicl.git /tmp/ocicl
+          (cd /tmp/ocicl && sbcl --non-interactive --load setup.lisp)
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/ocicl" setup > /dev/null
+          OCICL_LOCAL_ONLY= "$HOME/.local/bin/ocicl" install
+
+      - name: Build
+        run: make build
+
+      - name: Check the corpus
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ -n "$BASE_REF" ]; then
+            base="origin/$BASE_REF"
+          elif [ -n "$BEFORE" ] && git rev-parse --verify --quiet "$BEFORE^{commit}" > /dev/null; then
+            base="$BEFORE"
+          else
+            base=""
+          fi
+          bin/compass check ${base:+--base "$base"}
+
+      - name: Check the index
+        run: bin/compass index --check
+
+      - name: Test
+        run: make test
