@@ -503,13 +503,15 @@ glossary:      Glossary.PsycheTerms    # → term definitions consulted
 ```
 
 Fields that do not apply to a genre are omitted (shown as `~` above for
-illustration only). `superseded-by` names the successor of a document whose
-status is `Superseded`, and appears only with that status (§6); a status that
-names its successor, such as `Superseded-by: <id>`, is not valid YAML. `id`, `title`, `genre`, `scope`, `language`, `status`,
+illustration only). `id`, `title`, `genre`, `scope`, `language`, `status`,
 `created`, and `authors` are required on every document; the rest are
 optional and genre-dependent. Three of the required fields — `authors`,
 `created`, `updated` — MAY be omitted from the file when derivable from Git
 history, per the rules below.
+
+`superseded-by` names the successor of a document whose status is
+`Superseded`, and appears only with that status (§6). A status that names its
+successor, such as `Superseded-by: <id>`, is not valid YAML.
 
 ### The YAML subset
 

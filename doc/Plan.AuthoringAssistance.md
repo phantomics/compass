@@ -86,7 +86,7 @@ mapping already assumes the four-way split).
 
 ### COMPASS-D2 — Advisory-only until the toolchain exists
 
-**Status:** Accepted
+**Status:** Implemented
 **Context:** The §22 toolchain (`COMPASS-DRAFT-toolchain`) is the deterministic
 backstop the skills defer to, and it is not yet built.
 **Decision:** Skills operate in **advisory-only mode** in the toolchain's
@@ -194,6 +194,17 @@ document directory, and the federated repositories. Until the ledger exists,
 advisory next number, and documents keep provisional identifiers. The ledger
 itself arrives with toolchain version 0.2.
 
+**Resolved (2026-10-10):** with toolchain version 0.2 the registry is the
+ledger, `REGISTRY.sexp` in the document directory (COMPASS-DRAFT-toolchain-D22),
+and the shape the skills assume is the manifest plus the ledger. The skills never
+read either file themselves: `compass manifest --json` gives the manifest,
+`compass next` previews numbers from the ledger, `compass next --in` gives the
+next provisional record identifier, and `compass assign`, run only when the user
+asks, allocates. Where a repository has no ledger, `compass next` previews from
+the identifiers in use and `ledger/coverage` says to create one with
+`compass init --ledger`; where there is no executable, the skills work from the
+files and say so (COMPASS-D2).
+
 ### COMPASS-O3 — Provenance depth for LLM assistance
 
 The standard requires `provenance:` when a document is authored or reviewed with
@@ -220,7 +231,7 @@ Table: Prior systems and what this plan draws from each.
    except Ideation.
 4. **Author / review / lookup skills (now).** Full `SKILL.md` for each.
 5. **Derive skill (deferred).** Sharpen the stub; build when S1/S2/S5/S7/S8 land.
-6. **Toolchain integration (in progress).** Wire each skill to call
+6. **Toolchain integration (done for version 0.2).** Wire each skill to call
    `COMPASS-DRAFT-toolchain` (D2) instead of checking by hand.
    - **Done for toolchain version 0.1 (2026-10-08):** the shared
      `skills/reference/toolchain.md`; `compass-author` checks its drafts,
@@ -230,14 +241,25 @@ Table: Prior systems and what this plan draws from each.
      for `compass check`; and the toolchain's tests check that the skills name
      only commands and rules that exist or are planned, and that every
      template, filled in, passes `compass check`.
-   - **With version 0.2:** `compass-author` uses `compass assign` for canonical
-     numbers, and `compass-review` the ledger and code-reference rules.
+   - **Done for toolchain version 0.2 (2026-10-10):** `toolchain.md` lists the
+     new commands and sets the rules for numbers: `compass assign` runs only
+     when the user asks, with `--dry-run` first, and the ledger is never edited
+     by hand. `compass-author` gives records added to a numbered document the
+     identifier `compass next --in` prints, writes full identifiers, and pins a
+     Log's code references to the commit of its work; `compass-review` checks a
+     branch with `--base`, adds `--federation` for references into other
+     repositories, and reads the ledger, alias, short-reference, and
+     code-reference findings; `compass-lookup` follows aliases, reads authors
+     and dates from `outline`, and the manifest from `manifest --json`. See
+     [COMPASS-DRAFT-ledger-log](Log.Ledger.md).
 7. **Cross-harness adapters (future).** Re-envelope the neutral core for Claude
    Code, Cursor/Copilot, and MCP (§23 S9).
 
 ## Outstanding Work
 
-- Assign the canonical `COMPASS-<NNNN>` identifier at merge, replacing the
-  provisional `COMPASS-DRAFT-authoring-assistance` (§13).
-- Resolve COMPASS-O1..O3 (O1 and O2 are partly resolved).
+- Assign the canonical `COMPASS-<NNNN>` identifier with `compass assign` once
+  this Plan is accepted, replacing the provisional
+  `COMPASS-DRAFT-authoring-assistance` (§13).
+- Resolve COMPASS-O1 and COMPASS-O3 (COMPASS-O1 is partly resolved;
+  COMPASS-O2 is resolved).
 - Author the cross-harness adapters once the OpenCode reference set is proven.

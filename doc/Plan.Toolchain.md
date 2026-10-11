@@ -91,13 +91,14 @@ open-questions:
 This plan covers the deterministic toolchain that `Compass.md` §22 describes and
 §23 tracks, as S1 and, since version 0.2, as P5. The toolchain validates documents and corpora, hands out
 identifiers that are guaranteed unique, and generates the namespace and
-federated indexes. It will be a Common Lisp program. It builds under both
+federated indexes. It is a Common Lisp program. It builds under both
 Quicklisp, which is in use today, and ocicl, the intended long-term dependency
 manager. It assumes the standard
 ([COMPASS-0001](../Compass.md)) and the authoring-assistance layer
 ([COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md)). The skills
-in that layer currently run in advisory-only mode for lack of this toolchain
-(COMPASS-D2).
+in that layer ran in advisory-only mode until this toolchain existed
+(COMPASS-D2); since version 0.1 they call it, and fall back to advisory mode
+only where no executable is found.
 
 The plan also covers the toolchain outputs that give coding agents project
 context: a session catalog, an authority ranking, and a source map. These
@@ -218,7 +219,7 @@ under [The uniqueness guarantee](#the-uniqueness-guarantee).
 
 ### COMPASS-DRAFT-toolchain-D2 — Provisional identifiers for register entries
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** §13 gives documents a provisional `<NS>-DRAFT-<slug>` that needs no
 coordination. `D`/`O` records have no equivalent, yet they are numbered across
@@ -1964,7 +1965,9 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
      COMPASS-DRAFT-authoring-assistance's roadmap step 6; `assign` follows
      with v0.2. *`assign`, `next --in`, `check --base`, and aliases were added
      to the skills for v0.2.*
-   - Lift COMPASS-D2.
+   - Lift COMPASS-D2. *Done: the skills have called the toolchain since v0.1
+     (`07b9643`), keeping advisory mode as the fallback, and COMPASS-D2 is
+     `Implemented`.*
    - Seed the COMPASS ledger (D9), add front-matter to `Compass.md`, relabel the
      §23 rows, and run `compass check` on this repository in CI. *Done for
      v0.2 (2026-10-10).*

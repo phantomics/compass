@@ -12,12 +12,15 @@ provenance:
 relates-to:
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-toolchain-log
+  - COMPASS-DRAFT-authoring-assistance
   - COMPASS-0001
 decisions:
   - COMPASS-DRAFT-ledger-log-D1
   - COMPASS-DRAFT-ledger-log-D2
   - COMPASS-DRAFT-ledger-log-D3
   - COMPASS-DRAFT-ledger-log-D4
+  - COMPASS-DRAFT-ledger-log-D5
+  - COMPASS-DRAFT-ledger-log-D6
 ---
 
 # Compass Ledger: Development Log
@@ -716,6 +719,8 @@ a scratch clone.
     describe those amendments as pending;
   - this repository must then check clean, including the code-reference and
     Git rules.
+
+  *Done in `ccb28e9`; see [Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0](#update-2026-10-10--bootstrap-the-amended-standard-skills-and-version-020).*
 - **Stage 10: skills.**
   - `toolchain.md`: the exit codes, and a shorter list of what is not checked
     yet. The command table was done in stage 3.
@@ -724,8 +729,11 @@ a scratch clone.
   - `compass-lookup`: following aliases.
 
   The version becomes 0.2.0, with README updates.
+
+  *Done in `ccb28e9`; see [Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0](#update-2026-10-10--bootstrap-the-amended-standard-skills-and-version-020).*
 - **Stage 11: a checkpoint commit**, then an update to this Log, with
-  references pinned to that commit.
+  references pinned to that commit. *Done: the checkpoint is `ccb28e9`, and the
+  update is [Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0](#update-2026-10-10--bootstrap-the-amended-standard-skills-and-version-020).*
 
 Other work found along the way:
 
@@ -741,7 +749,9 @@ Other work found along the way:
   `compass init --ledger`. Classic must first give the duplicated open
   questions of its Surveys provisional identifiers
   ([COMPASS-DRAFT-ledger-log-D1](#compass-draft-ledger-log-d1--seeding-refuses-a-number-defined-twice)),
-  and the note in its `AGENTS.md` should say so.
+  and the note in its `AGENTS.md` should say so. *Origin's ledger was seeded in
+  its commit `7ef2f48`, and Classic's note updated in its commit `be4fe84`; see
+  [Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0](#update-2026-10-10--bootstrap-the-amended-standard-skills-and-version-020).*
 - **`compass check` during a merge.** Without `--base`, the check compares with
   `HEAD`. After `renumber` and before the merge is committed, it therefore
   reports `ledger/append-only`, as the report after `renumber` did before
@@ -755,7 +765,7 @@ Other work found along the way:
   [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Guards against two recurring mistakes.** A test that no message contains a
   `~` followed by a newline, and a build that fails when a definition replaces
-  another (pitfalls 3 and 4).
+  another (pitfalls 3 and 4). *Done in `ccb28e9`; see [Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0](#update-2026-10-10--bootstrap-the-amended-standard-skills-and-version-020).*
 - **The speed of `ref/short-record`.** It nearly tripled the time of a check. It
   could skip lines that contain no capital `D`, `O`, or `M` followed by a digit.
 - **Acceptance.** This Log is `Draft`, and its two decisions, like
@@ -1213,10 +1223,13 @@ them: the bootstrap and the amendments to `Compass.md`, the skills and version
 - **Run the workflow.** It first runs when pushed. The ocicl job builds ocicl
   from source with Ubuntu's SBCL, which has not been tried. Then make both jobs
   required checks, and require code-owner review, as `README.md` describes.
+  *It ran on the push of `342b414`, and both jobs passed; see [Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0](#update-2026-10-10--bootstrap-the-amended-standard-skills-and-version-020).
+  The repository settings remain the steward's.*
 - **Install the hook** with `make hooks`, if wanted. It checks the working tree,
   so it also indexes and checks changes not staged for the commit.
 - **A guard against replaced definitions.** Pitfall 4 is the second instance;
-  the build should fail when a definition replaces another.
+  the build should fail when a definition replaces another. *Done in
+  `ccb28e9`; see [Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0](#update-2026-10-10--bootstrap-the-amended-standard-skills-and-version-020).*
 - **Speed.** A check now takes about 390 ms; `ref/short-record` remains the
   largest cost.
 - **Unverified references in CI.** CI checks without `--federation`, so the
@@ -1227,3 +1240,484 @@ them: the bootstrap and the amendments to `Compass.md`, the skills and version
 - **Acceptance.** COMPASS-DRAFT-toolchain-D27 to COMPASS-DRAFT-toolchain-D29
   and this Log's decisions COMPASS-DRAFT-ledger-log-D3 and
   COMPASS-DRAFT-ledger-log-D4 are `Proposed`.
+
+## Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0
+
+Commit `ccb28e9` carried out stages 9 and 10 of version 0.2: the standard's
+amendments for the decisions accepted so far, as `Compass.md` 0.3.0, the
+toolchain and skills brought into line with it, two guards against mistakes
+this Log has recorded twice each, and version 0.2.0. Stage 11 is this update.
+Code references in this section are pinned to `ccb28e9`, except one into
+Classic, pinned to the Classic commit it describes. A few edits made with this
+update, after `ccb28e9`, are listed under
+[Made with this update](#made-with-this-update).
+
+### Problem
+
+At `a9c6dd9` the toolchain enforced decisions the standard did not yet state:
+
+- **The standard lagged its accepted decisions.**
+  [COMPASS-0001](../Compass.md) still had a "registry" listing titles and
+  statuses (§13), where the ledger records immutable facts only
+  ([COMPASS-DRAFT-toolchain-D3](Plan.Toolchain.md#compass-draft-toolchain-d3--the-allocation-ledger-holds-immutable-facts-only));
+  it gave records no provisional identifiers
+  ([COMPASS-DRAFT-toolchain-D2](Plan.Toolchain.md#compass-draft-toolchain-d2--provisional-identifiers-for-register-entries));
+  its §8 example used the short heading
+  ([COMPASS-DRAFT-toolchain-D16](Plan.Toolchain.md#compass-draft-toolchain-d16--register-record-headings-carry-the-full-identifier));
+  its §6 status `Superseded-by: <id>` was not valid YAML
+  ([COMPASS-DRAFT-toolchain-D5](Plan.Toolchain.md#compass-draft-toolchain-d5--supersession-uses-a-plain-status-plus-the-existing-field));
+  and §11 and §12 required table captions and diagram descriptions that
+  Markdown cannot express
+  ([COMPASS-DRAFT-toolchain-D6](Plan.Toolchain.md#compass-draft-toolchain-d6--checkable-conventions-for-12-and-generated-indexes)).
+  All five decisions are accepted.
+- **The §23 tables used labels that read as records.** Rows `D1` to `D8` and
+  `O1` to `O6` looked like `COMPASS` register identifiers, and accounted for 8
+  of this repository's `ref/short-record` warnings
+  ([COMPASS-DRAFT-toolchain-D9](Plan.Toolchain.md#compass-draft-toolchain-d9--bootstrapping-the-compass-namespace)).
+- **§22 described a toolchain "not yet built"**, with 3bmd and cl-yaml as its
+  parsers.
+- **The skills described the ledger as future work**, and the reference bundle
+  carried notes calling the amendments pending.
+- **Two kinds of mistake had each happened twice**: a definition that silently
+  replaced another (pitfall 3 of the first section, and pitfall 4 of the
+  previous update), and a message whose line continuation was printed because
+  its string never reached `format` (pitfall 4 of the first section, and the
+  `fm/present` message before it).
+
+### Design Decisions
+
+The work carried out the amendments of COMPASS-DRAFT-toolchain-D2,
+COMPASS-DRAFT-toolchain-D3, COMPASS-DRAFT-toolchain-D5,
+COMPASS-DRAFT-toolchain-D6, COMPASS-DRAFT-toolchain-D9, and
+COMPASS-DRAFT-toolchain-D16. The steward accepted
+[COMPASS-DRAFT-toolchain-D18](Plan.Toolchain.md#compass-draft-toolchain-d18--a-strict-yaml-subset-parser-written-in-lisp)
+during the round, so its §7 amendment, the YAML subset, landed too. The
+amendments of COMPASS-DRAFT-toolchain-D12 and COMPASS-DRAFT-toolchain-D13 wait
+on the agent-context evaluation and on roadmap step 6, and those of the
+proposed decisions on their acceptance.
+
+Two further decisions were made while coding. They are recorded here as
+proposals for the steward.
+
+### COMPASS-DRAFT-ledger-log-D5 — The status form that COMPASS-DRAFT-toolchain-D5 replaced is an error
+
+**Status:** Proposed
+
+**Context:** Before `Compass.md` 0.3.0 the toolchain warned on a quoted
+`status: "Superseded-by: <id>"`, because the standard still prescribed that
+form and COMPASS-DRAFT-toolchain-D5 only proposed its replacement. With the
+amendment in the standard the old form names a status that no longer exists.
+COMPASS-DRAFT-toolchain-D5 calls itself breaking, and no document uses the old
+form.
+
+**Decision:** `src/rules/frontmatter.lisp:vocab/status@ccb28e9` reports the old
+form as an error, with a message that names the replacement: `status:
+Superseded`, with the successor, read from the old value, in `superseded-by:`.
+`src/vocab.lisp:legacy-superseded-target@ccb28e9` still recognises the form, so
+that the message can be specific.
+
+**Alternatives:**
+- Keep the warning. Rejected: a document could then carry a status the
+  standard no longer has and still pass the required check.
+- Treat it as any unknown status. Rejected: the generic message would list the
+  statuses without saying which one replaces this.
+
+### COMPASS-DRAFT-ledger-log-D6 — The build fails when a compass function replaces another
+
+**Status:** Proposed
+
+**Context:** Twice a definition silently replaced another of the same name: a
+helper replaced a structure's accessor, and a structure's accessor replaced a
+function exported from a package it used. SBCL warns in both cases, but
+Quicklisp muffles every warning while it loads a system, so neither warning was
+ever seen, and each surfaced as a wrong result at run time.
+
+**Decision:** `build.lisp:load-system@ccb28e9` loads only the systems outside
+compass through the selected dependency manager
+(`build.lisp:external-dependencies@ccb28e9`), then loads the compass systems
+with ASDF inside `build.lisp:call-guarding-redefinitions@ccb28e9`. That handler
+fails the build when a function or generic function whose name belongs to a
+compass package is replaced, as SBCL reports it: a definition replacing one
+from another file, or two definitions in one file
+(`build.lisp:redefinition-name@ccb28e9`). A function and a structure accessor
+of the same name are caught either way. Macros and methods are left out,
+because compiling a file and then loading it redefines each of them with the
+same definition. On other implementations the
+handler finds nothing to report. `make build` and `make test` both load this
+way.
+
+**Alternatives:**
+- Treat every warning as an error. Rejected: dependencies warn, and so does
+  every macro redefined by loading a file just compiled.
+- A test comparing definitions after loading. Rejected: by then the replaced
+  definition is gone.
+- Review alone. Rejected: review missed both.
+
+### Implementation
+
+Code references below are pinned to `ccb28e9`.
+
+#### The amended standard, `Compass.md` 0.3.0
+
+`schema-version` went from 0.2.0 to 0.3.0: one minor increment for all of the
+round's amendments, since before 1.0 a breaking change, such as
+COMPASS-DRAFT-toolchain-D5's, increments the minor number. Section by section:
+
+- **§6 and §7** ([§6](../Compass.md#6-controlled-status-and-editorial-review)):
+  the status `Superseded`, with the successor in `superseded-by:`, each
+  requiring the other. §7's annotated example and its notes follow, and §7
+  gained [the YAML subset](../Compass.md#the-yaml-subset) of
+  COMPASS-DRAFT-toolchain-D18: what front-matter may use, and that every scalar
+  is a string typed by the schema.
+- **§8** ([§8](../Compass.md#8-cross-cutting-registers)): a record is defined by
+  a level-3 heading with its full identifier and an em dash; a record in an
+  unnumbered document carries a provisional identifier; the example is now
+  `### PSYCHE-D16 — …`.
+- **§13** ([ID allocation](../Compass.md#id-allocation)): rewritten around the
+  ledger, `REGISTRY.sexp` in the document directory of the repository that owns
+  the namespace, holding only facts fixed at allocation; provisional
+  identifiers for documents and their records; assignment of every number in
+  one change at acceptance, with references rewritten and the ledger appended;
+  aliases that keep old provisional identifiers resolving. The wording "the
+  repository that owns the namespace" fits COMPASS-DRAFT-toolchain-D3, which
+  speaks of a ledger per namespace, and the proposed COMPASS-DRAFT-toolchain-D22,
+  which keeps one per repository. The proposed COMPASS-DRAFT-toolchain-D23 is
+  not written into the standard. The master index is generated, carries a
+  banner, and is verified in CI, and §13's paragraph on conformance now names
+  the toolchain.
+- **§10**: the repository layout shows `compass.sexp`, `INDEX.md`, and
+  `REGISTRY.sexp`, and the federation text speaks of ledgers and indexes rather
+  than registries.
+- **§11 and §12** ([§12](../Compass.md#12-accessibility)): a table's caption is
+  a paragraph `Table: <caption>` immediately before it; a diagram is a fenced
+  `mermaid`, `plantuml`, `dot`, `graphviz`, or `lexis` block followed by a
+  paragraph beginning `Description:`; alt text must not be empty.
+- **§22**
+  ([§22](../Compass.md#22-appendix--conformance-and-the-validation-toolchain)):
+  describes the toolchain of version 0.2, its purpose-built parsers
+  ([COMPASS-DRAFT-toolchain-D7](Plan.Toolchain.md#compass-draft-toolchain-d7--common-lisp-with-purpose-built-parsers)),
+  its Git integration, and its commands; the list of checks gains the ledger,
+  registers, code references, the index, and federation, with the §12 rules
+  marked planned. It remains non-normative; the change is a patch.
+- **§23**:
+  - rows are labelled `R`, `S`, `P`, `ND` (open by design), and `GO` (genuinely
+    open), with a note that the labels cannot be read as records and that an
+    item that migrates takes a new label naming its old one;
+  - §23 S1, the toolchain, moved to Partially resolved as P5, and GO6,
+    draft-to-canonical assignment, as P6, each with its residue named
+    ([Partially resolved](../Compass.md#partially-resolved));
+  - R4 and P3 follow the ledger and the `Superseded` status.
+
+  Two references to the old labels, in
+  [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) and
+  [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md), and the
+  listing in `doc/README.md`, follow.
+- **Captions.** Compass.md's nine tables and the templates' eight gained
+  `Table:` captions; every other document already had them.
+
+#### The toolchain
+
+- **`Superseded` is accepted**
+  (`src/vocab.lisp:*status-families*@ccb28e9`), so `vocab/pending` no longer
+  warns on it, and the old form is an error
+  ([COMPASS-DRAFT-ledger-log-D5](#compass-draft-ledger-log-d5--the-status-form-that-compass-draft-toolchain-d5-replaced-is-an-error)).
+- **`vocab/pending`'s messages** say a value "is not yet adopted into the
+  standard" (`src/rules/frontmatter.lisp:note-pending@ccb28e9`), where they said
+  its decision "has not been accepted". That was false for the values of
+  COMPASS-DRAFT-toolchain-D12 and COMPASS-DRAFT-toolchain-D13, whose decisions
+  are accepted though their amendments have not landed
+  ([COMPASS-DRAFT-toolchain-D20](Plan.Toolchain.md#compass-draft-toolchain-d20--vocabulary-values-carry-a-standing)).
+- **The version is 0.2.0**, in `compass.asd` and in the executable.
+
+#### The skills and their reference bundle
+
+- **`skills/reference/`**: the notes calling the amendments pending are gone.
+  `references.md` states the heading rule and the rule against short forms,
+  describes allocation through the ledger, and gives the caption and
+  description conventions; `vocabularies.md` lists `Superseded`;
+  `frontmatter.md` states the YAML subset; `toolchain.md` describes notes and
+  the fields derived from Git.
+- **`compass-author`** runs `assign` only when the user asks, gives records
+  added to a numbered document the identifier `next --in` prints (memos
+  included), writes full identifiers, and pins a Log's code references to the
+  commit of its work.
+- **`compass-review`** checks a branch with `--base` and, where the federation
+  is present, `--federation`; reads the ledger, alias, and short-reference
+  findings; leaves to the toolchain what `ref/code-pinned` and
+  `ref/code-exists` now check; and takes derived authors from `outline` for
+  the approver check.
+- **`compass-lookup`** follows aliases, reads authors and dates from `outline`,
+  treats `next` as a preview, and reads the manifest with `manifest --json`.
+- **`compass-derive`** names version 0.2, and the AGENTS snippet asks that
+  numbers be assigned only when a person asks.
+- **`README.md`** describes version 0.2, with an example of each new command.
+- **[COMPASS-DRAFT-toolchain](Plan.Toolchain.md)**: roadmap steps 3, 4, 5, 6,
+  7, and 8 mark what version 0.2 finished.
+
+#### The guards
+
+- **Replaced definitions.** See
+  [COMPASS-DRAFT-ledger-log-D6](#compass-draft-ledger-log-d6--the-build-fails-when-a-compass-function-replaces-another).
+  A replacement within one file is a full warning, on which ASDF stops
+  compiling, so the handler reports each replacement as it happens rather than
+  in a summary at the end.
+- **Stray line continuations.**
+  `tests/test-repository.lisp:no-stray-format-strings@ccb28e9` reads every
+  source file under `src/` and fails on a string that continues a line with a
+  tilde and a newline anywhere but in a format-control position:
+  `tests/test-repository.lisp:*format-control-positions*@ccb28e9` lists the
+  operators and argument positions, the branches of an `if` in such a position
+  count, and so does a rule's `:summary`, which `define-rule` formats
+  (`tests/test-repository.lisp:stray-format-strings@ccb28e9`).
+
+#### Other repositories
+
+- **Origin**, commit `7ef2f48`: a `.mailmap` like this repository's, so that
+  the ledger names the allocator as "Andrew Sengul" rather than the Git user
+  `phantomics`, and then a ledger seeded by `compass init --ledger` with
+  ORIGIN-O5 to ORIGIN-O9, hosted by its Survey of the browser as an orbital.
+- **Classic**, commit `be4fe84`: its `AGENTS.md` says that the duplicated
+  CLASSIC-O1 to CLASSIC-O6 also block `compass init --ledger`, and should become
+  provisional identifiers formed from each Survey's own. The same commit adds
+  [CLASSIC-DRAFT-compass-integration](../../classic/doc/survey/Survey.CompassIntegration.md),
+  a Survey of how a Compass corpus could be composed from Classic's base schema
+  rather than its wiki preset, and of the extensions Classic needs for it. Its
+  findings bear on the RDF export of COMPASS-DRAFT-toolchain-D17: §17's
+  mapping and the binding's alignment table compare with the wiki preset, and
+  the binding maps `created` and `updated` to the predicates Classic uses for
+  record timestamps rather than authorial dates. It also found that Classic's
+  URI parser (`CLASSIC:src/uri.lisp:parse-classic-uri@e8e9b3e`) truncates every
+  `COMPASS` and `CLASSIC` identifier to six characters.
+
+#### Made with this update
+
+These edits follow `ccb28e9` and are committed with this update:
+
+- **Statuses**, set by the steward:
+  [COMPASS-D2](Plan.AuthoringAssistance.md#compass-d2--advisory-only-until-the-toolchain-exists)
+  and COMPASS-DRAFT-toolchain-D2 are `Implemented`. COMPASS-D2's decision
+  provided for the toolchain's arrival, so nothing replaced it; the skills
+  call the toolchain and keep advisory mode as their fallback.
+- **[COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md)**: roadmap
+  step 6 is done for version 0.2, COMPASS-O2 is resolved by the manifest and
+  the ledger, and its Outstanding Work follows.
+- **[COMPASS-DRAFT-toolchain](Plan.Toolchain.md)**: its introduction says the
+  skills call the toolchain, and roadmap step 8's "Lift COMPASS-D2" is done.
+- **`Compass.md` §7**: the sentence on `superseded-by` is a paragraph of its own
+  again (pitfall 4 below).
+- **`build.lisp`**: the guard's third test, for SBCL's plain warning that a
+  function "clobbers" a structure accessor, now matches that warning
+  (pitfall 6 below).
+
+### Pitfalls Encountered
+
+1. **A count that missed captions.** A scan for tables without a caption
+   reported 31, which shaped the plan for stage 9. It looked only at the line
+   before each table, and the captions of the corpus documents run over two
+   lines. The true count was 17, all in `Compass.md` and the templates, so no
+   accepted document needed an edit.
+2. **Warnings that were never seen.** Neither earlier replacement was
+   reported because Quicklisp's `quickload` muffles every warning while it
+   loads, so the guard loads compass with ASDF instead. Its first version then
+   failed the clean build: it counted the macros `define-rule` and
+   `define-command`, which loading a just-compiled file redefines with the same
+   definition. Limited to functions, it missed a replacement within one file,
+   which SBCL reports under another condition and ASDF treats as a failed
+   compilation; the guard now reads that condition too, and reports each
+   replacement as it happens. Each step was checked by putting back the two
+   historic mistakes until the build failed on both.
+3. **A bug found by the new test.** The first run of the stray-continuation
+   test found a fourth instance, from v0.1: the `fm/syntax` message for a
+   front-matter block never closed printed its tilde and indentation
+   (`src/parse/document.lisp:parse-document@ccb28e9`). The same run flagged
+   strings passed to the YAML parser's error function and to local helpers
+   named `problem`, which do format their controls; the list of positions
+   grew to include them.
+4. **A paragraph joined in an edit.** The stage 9 edit of §7 appended the
+   sentence on `superseded-by` to the paragraph on required fields, joining the
+   two mid-line. It was found on review and split again with this update.
+5. **Two records called `D2`.** The status meant for COMPASS-D2 was first set on
+   COMPASS-DRAFT-toolchain-D2, whose short form is also `D2`. The steward kept
+   both as `Implemented`, since provisional record identifiers are implemented
+   too. It is the ambiguity
+   [COMPASS-DRAFT-toolchain-D26](Plan.Toolchain.md#compass-draft-toolchain-d26--records-are-referred-to-by-full-identifier-short-forms-are-found-not-rewritten)
+   describes, met by a person rather than a rewriter.
+6. **A test that never matched.** While this update was written, the guard's
+   third test, for the plain warning that a function "clobbers structure
+   accessor", turned out never to match: it searched the warning's format
+   control for those words, but the control holds a directive
+   (`clobbers structure ~:[accessor~;…~]`). Both historic mistakes were caught
+   regardless, by the other two conditions, which SBCL signals in the same
+   cases. The test now searches for "clobbers structure", and matches.
+
+### Verification
+
+- **Tests.** `make test` at `ccb28e9`, run from a separate worktree of that
+  commit: **1182 checks, 100% pass**, under both `DEPS=ql` and `DEPS=ocicl`
+  (with `OCICL_LOCAL_ONLY=1`).
+- **The executable**, built from that worktree, reports
+  `compass 0.2.0 (commit ccb28e932238, SBCL 2.3.4, linux x86-64)`, without
+  `-dirty`: 49,257,440 bytes, or 12.1 MiB with `gzip -9`.
+- **Self-check** at `ccb28e9`: "Checked 13 documents: 0 errors, 224 warnings",
+  all `ref/short-record`, with 3 references unverified; the same with
+  `--base 342b414`, as the workflow's push job will run it; `compass index
+  --check`: current. With this update's edits, 222 warnings, and 5 references
+  unverified: the 2 new ones point into Classic, and `--federation` resolves
+  all 5.
+- **The index check at work.** When the steward accepted
+  COMPASS-DRAFT-toolchain-D18 during the round, `index/current` reported the
+  committed index stale, at the line of that record, until it was regenerated.
+- **CI.** The workflow first ran on the push of `342b414` (the code of
+  `a9c6dd9`), run 38079521930: both jobs passed every step, the Quicklisp job in
+  28 seconds and the ocicl job, which builds ocicl v2.6.6 from source with
+  Ubuntu's SBCL, in 56 seconds. `ccb28e9` was not pushed when this update was
+  written, so its run follows the push.
+- **The guards.** With the helper `allocation-base` put back into
+  `src/corpus/allocate.lisp`, the build failed with "ALLOCATION-BASE is defined
+  twice"; with the manifest's `command-name` put back and exported, it failed
+  with "COMMAND-NAME is defined twice" and "1 definition replaced another". The
+  clean tree builds. Both results hold at `ccb28e9` and with this update's fix
+  to the guard. The stray-continuation test failed on the `fm/syntax`
+  message until it was fixed.
+- **Short references** fell from 234 at `a9c6dd9` to 224 at `ccb28e9`: the 8 in
+  `Compass.md`'s §23 tables, and the 2 in the references to them elsewhere.
+
+  Table: `ref/short-record` warnings in this repository at `ccb28e9`, by document.
+
+  | Document | Warnings |
+  |---|---|
+  | `doc/Plan.Toolchain.md` | 101 |
+  | `doc/Plan.AgentWorkflow.md` | 54 |
+  | `doc/Log.Toolchain.md` | 29 |
+  | `doc/Log.AuthoringAssistance.md` | 14 |
+  | `doc/Survey.SecureDevelopment.md` | 7 |
+  | `doc/Survey.OperatorMemory.md` | 5 |
+  | `doc/Plan.AuthoringAssistance.md` | 5 |
+  | `doc/Eval.PriorArt.AgentContext.md` | 5 |
+  | `doc/Eval.AgentContext.md` | 3 |
+  | `doc/Spec.SemanticBinding.md` | 1 |
+
+- **The other repositories**, at their commits, with `--skip-unmarked`:
+
+  Table: Results of `compass check --skip-unmarked` on the other repositories, by the executable of `ccb28e9`.
+
+  | Repository | Commit | Documents | Errors | Without `--federation` |
+  |---|---|---|---|---|
+  | classic | `be4fe84` | 6 | 24 `ledger/coverage`; 23 `register/unique` | 12 references unverified; none with it |
+  | origin | `7ef2f48` | 1 | 0 | — |
+  | lexter | `4d6a89d`, manifest uncommitted | 0 | 0 | — |
+
+  Classic's errors are its duplicated open questions; Origin's five
+  `ledger/coverage` errors are gone with its ledger.
+- **The Classic Survey** checks clean in Classic; with `--federation` its links
+  into this repository resolve, and its 20 code references, pinned to
+  Classic's `e8e9b3e`, all resolve. Its table of truncated identifiers comes
+  from running Classic's own URI parser at that commit.
+- **A real assignment.** `compass assign --dry-run` of
+  [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) still refuses, on 57
+  short references. With `--force` it would rewrite 102 lines in 11 documents,
+  this Log now among them, and append 16 ledger entries.
+- **Speed.** A check takes about 405 ms, or about 265 ms without
+  `ref/short-record`.
+- **Not verified:**
+  - the workflow's run on `ccb28e9`;
+  - the repository settings `README.md` asks for: required checks, and review
+    by code owners;
+  - `make hooks`;
+  - the redefinition guard on an implementation other than SBCL, where it
+    reports nothing.
+
+### Files
+
+Table: Files added or changed in commit `ccb28e9`.
+
+| File | Action | Description |
+|------|--------|-------------|
+| `Compass.md` | Modified | Version 0.3.0: §6, §7, §8, §10 to §13, §22, §23; captions |
+| `build.lisp` | Modified | Loads compass with ASDF and fails on a replaced definition |
+| `src/vocab.lisp` | Modified | `Superseded` accepted |
+| `src/rules/frontmatter.lisp` | Modified | The old status form is an error; `vocab/pending`'s wording |
+| `src/parse/document.lisp` | Modified | The `fm/syntax` message for an unclosed block is formatted |
+| `src/cli.lisp`, `compass.asd` | Modified | Version 0.2.0 |
+| `src/model/manifest.lisp` | Modified | A comment |
+| `tests/test-repository.lisp` | Modified | The stray-continuation test |
+| `tests/test-rules.lisp`, `tests/test-vocab.lisp` | Modified | `Superseded` accepted; the old form an error |
+| `skills/compass-author/SKILL.md`, `skills/compass-review/SKILL.md`, `skills/compass-lookup/SKILL.md`, `skills/compass-derive/SKILL.md` | Modified | Version 0.2: numbers, aliases, `--base`, `--federation`, derived fields |
+| `skills/reference/references.md`, `vocabularies.md`, `frontmatter.md`, `toolchain.md` | Modified | The amended standard; notes; derived fields |
+| `templates/*.template.md` (six) | Modified | Table captions |
+| `templates/AGENTS.snippet.md` | Modified | Numbers only when a person asks |
+| `README.md` | Modified | Version 0.2 and its commands |
+| `doc/Plan.Toolchain.md` | Modified | The roadmap; the §23 labels; COMPASS-DRAFT-toolchain-D18 accepted |
+| `doc/README.md`, `doc/Survey.SecureDevelopment.md` | Modified | The §23 labels |
+| `doc/INDEX.md` | Modified | Regenerated |
+
+Table: Files changed in the other repositories.
+
+| Repo | File | Action | Description |
+|------|------|--------|-------------|
+| origin | `.mailmap` | **New** | Canonical name of the allocator |
+| origin | `doc/REGISTRY.sexp` | **New** | Origin's ledger, seeded |
+| classic | `AGENTS.md` | Modified | The duplicated open questions and the ledger |
+| classic | `doc/survey/Survey.CompassIntegration.md` | **New** | Compass on Classic's base schema |
+
+### Metrics
+
+- Test checks: 1142 at `a9c6dd9`; 1182 at `ccb28e9`.
+- Regressions: 0.
+- Rules: 39. Commands: 13.
+- Source files: 36 (7,599 lines) at `ccb28e9`. Test files: 19 (3,179 lines).
+- `Compass.md`: 190 lines added and 93 removed.
+
+### Version 0.2 in summary
+
+Version 0.2 took four commits, from the v0.1 toolchain of `f0b03b4`:
+
+Table: The commits of version 0.2, with the toolchain's size at each.
+
+| Commit | Work | Checks | Rules | Commands |
+|---|---|---|---|---|
+| `f0b03b4` | Version 0.1, with the skills wired to it | 626 | 25 | 9 |
+| `a12a31c` | Stages 0 to 4: the Git layer, the ledger and its rules, allocation, the concurrency tests | 953 | 33 | 12 |
+| `a9c6dd9` | Stages 5 to 8: derived fields, code references, the index check, federation, `init`, `manifest`, CI | 1142 | 39 | 13 |
+| `342b414` | This Log's first update | 1142 | 39 | 13 |
+| `ccb28e9` | Stages 9 and 10: `Compass.md` 0.3.0, the skills, the guards, version 0.2.0 | 1182 | 39 | 13 |
+
+Its decisions: COMPASS-DRAFT-toolchain-D22 to COMPASS-DRAFT-toolchain-D29,
+recorded in the plan, and COMPASS-DRAFT-ledger-log-D1 to
+COMPASS-DRAFT-ledger-log-D6, recorded here, all `Proposed`. Version 0.2.1 holds
+the release binaries.
+
+### Outstanding Work
+
+What remains after version 0.2:
+
+- **Short references.** 222 `ref/short-record` warnings remain, the steward's to
+  rewrite by hand; until those in and around COMPASS-DRAFT-agent-workflow are
+  rewritten, `assign` refuses it.
+- **Assigning the accepted documents**: COMPASS-DRAFT-agent-workflow,
+  COMPASS-DRAFT-operator-memory, COMPASS-DRAFT-toolchain-log, and
+  COMPASS-DRAFT-authoring-assistance-log, and later this Log and the plans once
+  accepted.
+- **Classic's duplicated open questions**, as its `AGENTS.md` now describes.
+- **Speed.** A check takes about 405 ms; `ref/short-record` is about 140 ms of
+  it, and could skip lines with no `D`, `O`, or `M` followed by a digit.
+- **`compass check` during a merge**, which compares with `HEAD` without
+  `--base` and so reports `ledger/append-only` after `renumber` until the merge
+  is committed.
+- **§7 and COMPASS-DRAFT-toolchain-D27.** §7 says the toolchain errors on an
+  untracked file; the proposed COMPASS-DRAFT-toolchain-D27, which the toolchain
+  implements, derives such a file's fields from the working tree. Accepting the
+  decision would amend §7.
+- **The semantic binding.** Revise the alignment of
+  [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) with Classic, as the
+  Classic Survey describes, before the RDF export of
+  COMPASS-DRAFT-toolchain-D17 in version 0.3. The Classic side of that work is
+  Classic's.
+- **Repository settings and the hook**: both workflow jobs required, review by
+  code owners, and `make hooks` where wanted.
+- **The checks still planned**: the §12 accessibility rules, the §14 section
+  shapes, and `review/approver`.
+- **Version 0.2.1**, the release binaries, and a `v0.2.0` tag if wanted.
+- **Acceptance**: this Log is `Draft`; COMPASS-DRAFT-toolchain-D17 and
+  COMPASS-DRAFT-toolchain-D19 to COMPASS-DRAFT-toolchain-D29, this Log's six
+  decisions, and the toolchain Log's four are `Proposed`.

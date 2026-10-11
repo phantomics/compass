@@ -84,9 +84,10 @@ report. Only SBCL signals these; elsewhere this finds none."
             when (and class-symbol reader-symbol (find-class class-symbol nil)
                       (typep condition class-symbol) (fboundp reader-symbol))
               return (funcall reader-symbol condition))
-      ;; SBCL reports a function replacing a structure accessor as a plain warning.
+      ;; SBCL also reports a function replacing a structure accessor as a plain
+      ;; warning, "redefinition of ~S clobbers structure ~:[accessor~;...~]".
       (and (typep condition 'simple-warning)
-           (search "clobbers structure accessor"
+           (search "clobbers structure"
                    (princ-to-string (simple-condition-format-control condition)))
            (first (simple-condition-format-arguments condition)))))
 
