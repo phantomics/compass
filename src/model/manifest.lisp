@@ -141,7 +141,7 @@ missing or malformed) and a list of findings under the rule manifest/valid."
                                                  "each :commands entry needs a keyword :name ~
                                                   and exactly one of :shell or :repl (a string)")))
                     (finding :error line ":commands must be a list of command entries"))))
-            ;; :map and :catalog are checked lightly in v0.1
+            ;; :map and :catalog are checked lightly until the catalog and map exist
             (let ((map (plist-get plist :map)))
               (when map
                 (if (and (plist-p map) (string-list-p (getf map :exclude)))

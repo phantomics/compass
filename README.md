@@ -6,7 +6,7 @@ Compass is a formalized methodology for documenting software projects. It includ
 
 ## The toolchain
 
-`compass` checks a repository's documents against the standard, shows documents and records by identifier, and generates the namespace index. Version 0.1 checks a corpus without the allocation ledger; see [COMPASS-DRAFT-toolchain](doc/Plan.Toolchain.md) for the plan and its later releases.
+`compass` checks a repository's documents against the standard, shows documents and records by identifier, generates the namespace index, and assigns identifiers through an append-only ledger, so that no number is ever allocated twice. Version 0.2 adds the ledger and its rules, `assign` and `renumber`, fields derived from Git, checks of commit-pinned code references, federation, and CI; see [COMPASS-DRAFT-toolchain](doc/Plan.Toolchain.md) for the plan and its later releases, and [COMPASS-DRAFT-ledger-log](doc/Log.Ledger.md) for how version 0.2 was built.
 
 Build and test it with SBCL and Quicklisp:
 
@@ -20,11 +20,21 @@ Use it from anywhere inside a repository:
 
 ```sh
 compass check [PATH...] [--format text|json] [--strict] [--skip-unmarked]
+compass check --base origin/master   # as CI does: compare the ledger with the merge target
+compass check --federation           # also check references into federated repositories
 compass show COMPASS-DRAFT-toolchain-D18
 compass show COMPASS-0001#7-yaml-front-matter-schema
-compass outline COMPASS-DRAFT-toolchain   # headings, anchors, line ranges
+compass outline COMPASS-DRAFT-toolchain   # headings, anchors, line ranges, authors and dates
 compass refs COMPASS-DRAFT-toolchain-D18  # what refers to an identifier
-compass index      # writes doc/INDEX.md
+compass index           # writes doc/INDEX.md
+compass index --check   # exits 1 if doc/INDEX.md is stale
+compass next COMPASS --kind decision                      # preview the next number
+compass next --in doc/Plan.Toolchain.md --kind decision   # next provisional record id
+compass assign doc/Plan.Example.md --dry-run   # number an accepted document and its records
+compass renumber --dry-run                     # after a merge conflict in the ledger
+compass init --namespace NS   # write a starting compass.sexp
+compass init --ledger         # create the ledger from the numbers already in use
+compass manifest --json       # compass.sexp as JSON
 compass rules      # lists every rule, its severity, and the section it enforces
 ```
 

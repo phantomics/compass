@@ -62,6 +62,8 @@ caveats. e.g. "Run via `<command>`. Result: N checks, 100% pass; 0 regressions."
 
 ## Files
 
+Table: Files added or changed in commit <revision>.
+
 | File | Action | Description |
 |------|--------|-------------|
 | `<path>` | **New** | <what it is> |

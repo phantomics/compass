@@ -1,4 +1,4 @@
-;;;; test-rules.lisp — Each v0.1 rule fires on a violation and stays quiet on conforming input
+;;;; test-rules.lisp — Each document rule fires on a violation and stays quiet on conforming input
 
 (in-package #:compass.tests)
 
@@ -71,7 +71,8 @@
   (is (null (check-one (doc :genre "Ref" :status "Current") :rules '("vocab/status"))))
   (is (has-finding-p (check-one (doc :status "\"Superseded-by: TEST-0002\"")
                                 :rules '("vocab/status"))
-                     "vocab/status" :severity :warning))
+                     "vocab/status" :severity :error)
+      "the form before Compass 0.3.0")
   (is (has-finding-p (check-one (doc :extra '("subtype: howto")) :rules '("vocab/subtype"))
                      "vocab/subtype" :severity :error))
   (is (has-finding-p (check-one (doc :genre "Eval") :rules '("vocab/subtype"))
@@ -80,8 +81,10 @@
                        :rules '("vocab/subtype")))))
 
 (test vocab-pending
-  (is (has-finding-p (check-one (doc :status "Superseded"
-                                     :extra '("superseded-by: TEST-0002"))
+  (is (null (check-one (doc :status "Superseded" :extra '("superseded-by: TEST-0002"))
+                       :rules '("vocab/pending")))
+      "Superseded is accepted with Compass 0.3.0")
+  (is (has-finding-p (check-one (doc :genre "Eval" :extra '("subtype: threat-model"))
                                 :rules '("vocab/pending"))
                      "vocab/pending"))
   (is (has-finding-p (check-one (doc :genre "Glossary" :status "Current")

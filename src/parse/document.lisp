@@ -43,8 +43,8 @@ one fm/syntax finding."
         (:unclosed
          (push (make-finding :rule "fm/syntax" :severity :error :path path :line 1
                              :column 1
-                             :message "the front-matter block opened on line 1 is never ~
-                                       closed with ---")
+                             :message (format nil "the front-matter block opened on line 1 ~
+                                                   is never closed with ---"))
                findings))
         (:ok
          (multiple-value-bind (mapping problems)

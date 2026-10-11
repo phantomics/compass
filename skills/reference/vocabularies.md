@@ -63,15 +63,10 @@ The `scope` axis records altitude and is orthogonal to genre.
 
 ## Status vocabularies (§6)
 
-Status is genre-family dependent. Use exactly one value (except the
-`Superseded-by: <id>` form, which names its successor).
-
-> **Pending amendment — supersession.** Written literally, `status: Superseded-by:
-> <id>` is not valid YAML (the second `: ` starts a mapping), so a document
-> using it cannot be parsed. COMPASS-DRAFT-toolchain-D5 replaces it with
-> `status: Superseded` plus the existing `superseded-by: <id>` field, and the
-> toolchain implements that form. Until the amendment is accepted, skills write
-> the D5 form, because the §6 form cannot be read by any YAML parser.
+Status is genre-family dependent. Use exactly one value. A superseded document
+has `status: Superseded` and names its successor in `superseded-by:`; each of
+the two requires the other. (The older form `status: Superseded-by: <id>`,
+replaced in Compass 0.3.0, is not valid YAML.)
 
 ### Proposal / record genres (`Survey`, `Eval`, `Plan`, `Arch`, `Log`)
 
@@ -84,7 +79,7 @@ Status is genre-family dependent. Use exactly one value (except the
 | `Implemented` | The described work has been built |
 | `Design-Record` | Comprehensive and settled, but not yet built (the characteristic `Arch` status) |
 | `Deprecated` | No longer current, retained for history |
-| `Superseded-by: <id>` | Replaced by another document; names it |
+| `Superseded` | Replaced by another document, named in `superseded-by:` |
 | `Rejected` | Considered and declined |
 | `Withdrawn` | Retracted by its author before resolution |
 

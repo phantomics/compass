@@ -113,15 +113,24 @@ With `--format json` the output is one object:
   "summary":    { "documents", "loaded", "errors", "warnings", "skipped", "unverified" },
   "findings":   [ { "path", "line", "column", "severity", "rule", "message" } ],
   "skipped":    [ path ],
-  "unverified": [ { "path", "line", "reference" } ] }
+  "unverified": [ { "path", "line", "reference" } ],
+  "notes":      [ text ] }
 ```
 
 - An **error** is a violation of a MUST rule; a **warning**, of a SHOULD rule.
 - `vocab/pending` warns that a value comes from a decision the standard has not
-  yet adopted. Report it; do not swap the value for another to silence it. The
-  skills write the `Superseded` form of COMPASS-DRAFT-toolchain-D5 on purpose.
+  yet adopted. Report it; do not swap the value for another to silence it.
+- Fields left to Git (`authors`, `created`, `updated`) are derived, and
+  `git/derivable` reports one that cannot be: a file outside a Git work tree,
+  or a new file when Git has no `user.name`. `compass outline` shows the
+  derived values.
 - **Unverified** references point into namespaces this repository does not
-  load. They are not findings; report how many there were.
+  load, or into revisions a shallow clone lacks. They are not findings; report
+  how many there were. `--federation` loads the repositories `compass.sexp`
+  lists and checks references into them.
+- **Notes** (`Note: …` lines, or `notes` in JSON) say what the check could not
+  do, such as a rule that needs Git when Git is missing. Report them: a clean
+  check with notes checked less than a clean check without.
 - `--skip-unmarked` skips files without front-matter. Use it in repositories
   that are still migrating older documents, and say how many were skipped.
 - `compass check PATH...` still loads and checks the whole corpus, so that

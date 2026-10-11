@@ -53,6 +53,8 @@ against a rubric (§4).>
 <!-- program-scope evals leaning on many foreign sources SHOULD add: -->
 ## Appendix — Source Map
 
+Table: The primary sources behind each section.
+
 | Section | Primary sources |
 |---|---|
 | <section> | <sources> |

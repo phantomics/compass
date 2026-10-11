@@ -60,13 +60,26 @@ Read from the shared bundle to ground the review in the standard:
 2. **Run the check over the whole corpus:**
    `compass check --format json` (add `--skip-unmarked` in a repository that
    is still migrating older documents). Checking the whole corpus lets the
-   cross-document rules judge the change correctly.
+   cross-document rules judge the change correctly. For a branch or pull
+   request, add `--base <base>`: `ledger/append-only` compares the ledger with
+   that revision, and without it compares with `HEAD`. If the change cites
+   other repositories and they are checked out where `compass.sexp` lists them,
+   add `--federation` so those references are checked rather than counted as
+   unverified.
 3. **Split the findings.** Findings in the files under review belong to the
    review. Findings elsewhere existed before the change; count them and leave
    them out of the recommendation.
-4. **Note what the check left out:** skipped files and unverified references
-   (references into namespaces this repository does not load).
-5. **Note what was checked:** `compass rules` lists the rules applied; record
+4. **Note what the check left out:** skipped files, unverified references
+   (references into namespaces this repository does not load), and any notes,
+   such as a rule that did not run because Git was missing.
+5. **Read the ledger findings with care.** A `ledger/*` error means numbers were
+   allocated outside `compass assign`, or the ledger was edited, or a merge
+   conflict in it was resolved by hand; the fix is `compass renumber` or the
+   user's decision, never an edit to the ledger. `ref/stale-alias` marks a
+   reference written with a provisional identifier that now has a number, and
+   `ref/short-record` a short form such as `D6`; report both, with the full
+   identifier each suggests.
+6. **Note what was checked:** `compass rules` lists the rules applied; record
    `compass version` for the report header.
 
 A changed Markdown file that is not a document of the corpus (outside the
@@ -132,10 +145,12 @@ toolchain does not check yet; the dimensions below cover it.
    prose-only mentions of documents that should be id-keyed links, and links to
    old `DevLog.`/`DevPlan.` names.
 
-6. **Code-reference discipline (§9).** In `Log`/`Plan`, are code references
-   commit-pinned (`path[:symbol]@revision`) rather than bare `file:line`? Prefer
-   symbol anchors. The toolchain does not check these yet outside memo bases;
-   where it is cheap, confirm a reference with `git show <revision>:<path>`.
+6. **Code-reference discipline (§9).** `ref/code-pinned` and `ref/code-exists`
+   check that references are pinned and that their revision, path, and symbol
+   exist. Judge what they cannot: whether a reference points at the code the
+   text describes (the symbol is found by pattern, and a missing one is only a
+   warning), whether it is pinned to the commit of the work a Log describes,
+   and whether a symbol anchor would serve better than a line range.
 
 7. **Prior-art coverage.** For `Survey`/`Eval`: is the prior art adequate for the
    claim, or are obvious comparators missing? For program-scope `Eval`/`Arch`
@@ -155,8 +170,9 @@ toolchain does not check yet; the dimensions below cover it.
     reviewed with LLM help, is `provenance:` present? If it carries
     `approved-by`, is that a person (never the `provenance:` assistant), and is
     it someone other than the sole author unless the namespace's `compass.sexp`
-    declares that person its steward with `:approval :solo`? The toolchain does
-    not check this yet.
+    declares that person its steward with `:approval :solo`? When `authors` is
+    left to Git, `compass outline <ID>` shows the derived authors. The toolchain
+    does not check this yet.
 
 ## Report format
 

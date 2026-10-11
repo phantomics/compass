@@ -60,6 +60,8 @@ open-questions:
 
 ## Prior Art
 
+Table: Prior systems and what this plan draws from each.
+
 | System | What to draw from |
 |---|---|
 | <system> | <what to borrow> |

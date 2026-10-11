@@ -29,6 +29,8 @@ who must satisfy it. Uses RFC 2119 language throughout: MUST / SHOULD / MAY
 <A normative section. State obligations with MUST/SHOULD/MAY. Requirement tables
 are encouraged where they sharpen the contract.>
 
+Table: <What these requirements govern>.
+
 | <Item> | <Constraint> | <Notes> |
 |---|---|---|
 | <item> | MUST <constraint> | <notes> |

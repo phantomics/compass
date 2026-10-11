@@ -89,7 +89,7 @@ open-questions:
 # Compass Validation Toolchain: Development Plan
 
 This plan covers the deterministic toolchain that `Compass.md` §22 describes and
-§23 tracks as S1. The toolchain validates documents and corpora, hands out
+§23 tracks, as S1 and, since version 0.2, as P5. The toolchain validates documents and corpora, hands out
 identifiers that are guaranteed unique, and generates the namespace and
 federated indexes. It will be a Common Lisp program. It builds under both
 Quicklisp, which is in use today, and ocicl, the intended long-term dependency
@@ -160,7 +160,7 @@ exposes further gaps in the standard:
   guarantee should rest on mechanisms that hold however carefully contributors
   behave, and be proven by tests that simulate concurrent allocation.
 - Make provisional-to-canonical assignment a single command, so that §13's
-  "steward assigns at merge" is no longer a manual step (§23 O6).
+  "steward assigns at merge" is no longer a manual step (§23 GO6, now P6).
 - Generate the per-namespace index and the federated `compass/INDEX.md` from
   front-matter and the ledger. They are never hand-maintained (§13).
 - Derive `authors`/`created`/`updated` from Git, honouring `.mailmap`, and
@@ -703,7 +703,7 @@ toolchain that produces it.
 
 ### COMPASS-DRAFT-toolchain-D18 — A strict YAML-subset parser written in Lisp
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** COMPASS-DRAFT-toolchain-O1 weighed `cl-yaml`, which parses full
 YAML 1.1 through the native libyaml library, against a parser for only the YAML
@@ -1901,7 +1901,8 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
      section-shape rules.
    - Text and JSON reports.
    - Fixture corpora covering valid and invalid documents.
-   - Amend §11/§12 (D6) and §6/§7 (D5).
+   - Amend §11/§12 (D6) and §6/§7 (D5). *Done in `Compass.md` 0.3.0, with
+     v0.2 (2026-10-10). The §12 and section-shape rules are not built yet.*
 4. **Git layer, ledger, and allocation.**
    - Code-reference verification; the ledger reader and checks.
    - `next`, `assign`, `renumber`.
@@ -1909,9 +1910,14 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
      orders, conflict on merge, the duplicate-keeping resolution failing
      `check`, and recovery through `renumber`.
    - Amend §8 and §13 (D2, D3, D4, D16).
+
+   *Done for v0.2 (2026-10-10), with the amendments in `Compass.md` 0.3.0; see
+   [COMPASS-DRAFT-ledger-log](Log.Ledger.md).*
 5. **Index generation and RDF export.** Namespace and federated `INDEX.md`,
    with `index --check`; `compass export --rdf` and `--vocab` (D17), yielding
    baseline v0.3; amend §5, §7, and §17 as the semantic binding requires.
+   *The namespace index and `index --check` were done for v0.2; the federated
+   index and the export remain.*
 6. **Agent context.** Split by whether the evaluation gates it.
    - **Not gated:**
      - extension-key handling and `read-if:` (D13); the §18 registration;
@@ -1919,8 +1925,9 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
        `compass refs`; D21);
      - manifest keys `:commands` and `:stewards` (D15);
      - agent-workflow support (COMPASS-DRAFT-agent-workflow): M-records in the
-       ledger and `assign`; the `review/approver` rule (the `memo/*` rules
-       land in v0.1); `compass diff`; `Assisted-by:` trailer derivation.
+       ledger and `assign` (done for v0.2); the `review/approver` rule (the
+       `memo/*` rules land in v0.1); `compass diff`; `Assisted-by:` trailer
+       derivation.
    - **Gated on the pilot of
      [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md),** and subject to
      its decision rules:
@@ -1936,6 +1943,10 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
    - The GitHub Actions matrix (Quicklisp + ocicl, both required).
    - An optional pre-commit hook that regenerates the index, catalog, and map.
    - Documented branch-protection and `CODEOWNERS` settings.
+
+   *The four items above were done for v0.2 (2026-10-10); the hook regenerates
+   only the index until the catalog and map exist.* Distribution follows in
+   v0.2.1:
    - **Distribution (D19)**, in this order:
      - a spike of about a day on the macOS and Windows runners, to confirm that
        an unsigned SBCL executable builds, runs, and invokes Git there, and to
@@ -1951,9 +1962,11 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
      `compass-review` to `check` and `rules`; and `compass-lookup` to `show`,
      `outline`, `refs`, and `index --stdout`. Done for v0.1 (2026-10-08), in
      COMPASS-DRAFT-authoring-assistance's roadmap step 6; `assign` follows
-     with v0.2.
+     with v0.2. *`assign`, `next --in`, `check --base`, and aliases were added
+     to the skills for v0.2.*
    - Lift COMPASS-D2.
    - Seed the COMPASS ledger (D9), add front-matter to `Compass.md`, relabel the
-     §23 rows, and run `compass check` on this repository in CI.
+     §23 rows, and run `compass check` on this repository in CI. *Done for
+     v0.2 (2026-10-10).*
    - Give the toolchain's own sources conforming headers, and commit this
      repository's `CATALOG.md` and `MAP.md`.

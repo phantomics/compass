@@ -154,10 +154,10 @@
         (cond
           ((find-genre-status genre status))
           ((and (legacy-superseded-target status) (eq (genre-family genre) :proposal))
-           (emit-severity :warning document (yaml-entry-value entry)
-                          "the §6 form `Superseded-by: <id>` cannot be written unquoted ~
-                           in YAML; COMPASS-DRAFT-toolchain-D5 proposes `status: ~
-                           Superseded` with the successor in `superseded-by:`"))
+           (emit document (yaml-entry-value entry)
+                 "`Superseded-by: <id>` is no longer a status (Compass 0.3.0, §6); write ~
+                  `status: Superseded`, with the successor in `superseded-by: ~a`"
+                 (legacy-superseded-target status)))
           (t
            (emit document (yaml-entry-value entry)
                  "~s is not a status of ~a; ~a documents use ~a" status
@@ -166,8 +166,8 @@
 
 (defun note-pending (document where what term)
   (when (and term (eq (term-standing term) :pending))
-    (emit document where "~a is pending: it is introduced by ~a, which has not been ~
-                          accepted" what (term-amendment term))))
+    (emit document where "~a is pending: it is introduced by ~a, and is not yet ~
+                          adopted into the standard" what (term-amendment term))))
 
 (define-rule "vocab/pending" (:severity :warning :section "§13"
                               :summary "No vocabulary value or field is pending acceptance")
@@ -179,7 +179,7 @@
         (multiple-value-bind (entry) (vocabulary-entry document "status")
           (emit document (if entry (yaml-entry-value entry) 1)
                 "the status vocabulary of ~a documents is pending: it is introduced by ~
-                 ~a, which has not been accepted"
+                 ~a, and is not yet adopted into the standard"
                 (genre-name genre) (genre-family-amendment genre))))
       (multiple-value-bind (entry status) (vocabulary-entry document "status")
         (when entry
@@ -192,8 +192,8 @@
   (dolist (entry (yaml-mapping-entries (document-front-matter document)))
     (let ((spec (find-field-spec (yaml-entry-key entry))))
       (when (and spec (eq (field-spec-standing spec) :pending))
-        (emit document entry "the field `~a` is pending: it is introduced by ~a, which ~
-                              has not been accepted"
+        (emit document entry "the field `~a` is pending: it is introduced by ~a, and is ~
+                              not yet adopted into the standard"
               (field-spec-name spec) (field-spec-amendment spec)))))
   (dolist (record (document-records document))
     (let ((kind (find-register-kind (record-kind record)))

@@ -6,6 +6,16 @@ Extracted from `Compass.md` §8 (registers), §9 (references/citations), §12
 
 ## Cross-cutting registers (§8)
 
+A record is defined by a level-3 heading, `### <ID> — <title>`: the full
+identifier, an em dash, and the title. In a document without a number, records
+carry provisional identifiers formed from the host's,
+`<NAMESPACE>-DRAFT-<slug>-D<n>` (§13). Never write a short heading such as
+`### D16 — …`; `compass check` warns on it (`register/heading-form`).
+
+Refer to a record by its full identifier everywhere, never by a short form
+such as `D6`: a short form changes meaning when the records are numbered, and
+`compass check` warns on one (`ref/short-record`).
+
 ### Decision records (`D`)
 
 One architectural/design decision, ADR-shaped, with a namespaced id
@@ -13,19 +23,13 @@ One architectural/design decision, ADR-shaped, with a namespaced id
 `Arch`, or `Log`):
 
 ```
-### D16 — 64-bit datapath with 8-bit shadow tags
+### PSYCHE-D16 — 64-bit datapath with 8-bit shadow tags
 
 **Status:** Accepted
 **Context:** …the problem and forces…
 **Decision:** …what was chosen…
 **Alternatives:** …what was rejected, and why…
 ```
-
-> **Pending amendment — heading form.** §8's example uses the short heading
-> `### D16 — …`. COMPASS-DRAFT-toolchain-D16 requires the full identifier,
-> `### PSYCHE-D16 — …` (or a provisional `### <NS>-DRAFT-<slug>-D<n> — …`), and
-> the toolchain warns on the short form. The genre templates already use the
-> full form; skills write it.
 
 The `decisions:` front-matter field lists the IDs a document introduces or
 amends. IDs are stable and namespaced, so one document may cite another's `D`.
@@ -118,9 +122,12 @@ sources).
 ## Author-time accessibility (§12) — MUST rules
 
 An Compass document MUST:
-- provide **alt text** for every image;
-- provide a **text-equivalent long description** for every diagram (§11);
-- give every table **header cells and a caption**;
+- provide non-empty **alt text** for every image (`![alt text](…)`);
+- provide a **text-equivalent long description** for every diagram: a
+  paragraph beginning `Description:` immediately after it. A diagram is a
+  fenced block tagged `mermaid`, `plantuml`, `dot`, `graphviz`, or `lexis` (§11);
+- give every table **header cells and a caption**: a paragraph
+  `Table: <caption>` immediately before the table;
 - use **heading levels that nest without skipping** (no h2 → h4 jump);
 - use **meaningful link text** — the linked `id` or a descriptive phrase, never
   "click here" or a bare URL;
@@ -129,31 +136,32 @@ An Compass document MUST:
 
 ## ID allocation discipline (§13)
 
-- Each namespace keeps a checked-in **registry** (its local `INDEX`) listing
-  every allocated id with current title, genre, scope, status. The registry is
-  the authority for which numbers are taken.
-- An M-record in an unassigned host uses `<NAMESPACE>-DRAFT-<slug>-M<n>`, with
-  `<n>` counting within the host; it is assigned `<NAMESPACE>-M<n>` with or
-  after its host. Retired records keep their identifier and their place.
+- Each namespace's allocations are recorded in an append-only **ledger**,
+  `REGISTRY.sexp` in the document directory of the repository that owns it. It
+  holds only facts fixed at allocation (identifier, kind, the provisional
+  identifier replaced, path or host, date, allocator), and is the authority
+  for which numbers are taken. Titles and statuses stay in front-matter; the
+  generated `INDEX.md` joins the two. Never edit the ledger by hand.
 - A document under construction uses a **provisional** `<NAMESPACE>-DRAFT-<slug>`
-  identifier (no coordination needed).
-- The namespace steward assigns the canonical `<NAMESPACE>-<NNNN>` at
-  acceptance/merge, updating the registry in the same change.
+  identifier (no coordination needed). Its records use
+  `<NAMESPACE>-DRAFT-<slug>-D<n>`, `-O<n>`, `-M<n>`, with `<n>` counting within
+  the host.
+- The namespace steward assigns the canonical numbers at acceptance/merge, in
+  one change: the document's `<NAMESPACE>-<NNNN>` and each provisional record's
+  `<NAMESPACE>-D<n>`/`-O<n>`/`-M<n>`, with references rewritten and the ledger
+  appended (`compass assign`; see `toolchain.md`). A memo record still `Draft`
+  keeps its provisional identifier until a person moves it to `Current`.
+- The ledger keeps each provisional identifier as an alias, so a reference
+  still written with it resolves, with a `ref/stale-alias` warning.
 - Identifiers are permanent and never reused. A re-homed document is re-minted in
-  the new namespace with a `superseded-by` redirect from the old id.
-
-> **Toolchain status.** The registry above is the allocation ledger of
-> COMPASS-DRAFT-toolchain-D3, `doc/REGISTRY.sexp`, which arrives with toolchain
-> version 0.2 together with `compass assign`. Until then no namespace has one:
-> `compass index --stdout` gives the registry view (every document and record
-> with its title, genre, and status), `compass next` gives an advisory next
-> number, and documents and their records keep provisional identifiers. See
-> `toolchain.md`.
+  the new namespace with a `superseded-by` redirect from the old id. Retired
+  records keep their identifier and their place.
 
 ## Naming and layout (§10)
 
 Files are `<Genre-Prefix><Topic>.md` (e.g. `Log.StopFlag.md`, `Arch.Psyche.md`).
 Within a repo the `doc/` directory is **flat**; grouping is expressed by the
 `component:` front-matter field (the single source of truth for grouping), not by
-subdirectory. Subdirectories, if present, are convenience only. The federated
-`compass/INDEX.md` aggregates per-namespace registries.
+subdirectory. Subdirectories, if present, are convenience only. Each
+repository's generated `INDEX.md` is verified by `compass index --check`; the
+federated `compass/INDEX.md` aggregates the namespaces' indexes.

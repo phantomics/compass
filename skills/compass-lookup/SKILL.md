@@ -55,11 +55,15 @@ details. In short:
 
 Identifiers may be canonical (`ORIGIN-0012`, `ORIGIN-D30`) or provisional
 (`ORIGIN-DRAFT-foreign-orbitals`, `ORIGIN-DRAFT-foreign-orbitals-D2`) (§13);
-every command takes both.
+every command takes both. A provisional identifier that has since been
+assigned a number is an alias in the ledger: `show`, `outline`, and `refs`
+follow it to the numbered document or record and say so. Report the canonical
+identifier, and mention the alias.
 
 1. **A document.** For anything long, start with `compass outline <ID>`: it
-   gives the path, title, genre, status, the front-matter's line range, and each
-   section's anchor and line range. Then print only what is needed with
+   gives the path, title, genre, status, authors and dates (from front-matter,
+   or derived from Git), the front-matter's line range, and each section's
+   anchor and line range. Then print only what is needed with
    `compass show <ID>#<anchor>`, or the whole document with `compass show <ID>`.
 2. **A section.** `compass show <ID>#<anchor>`. `compass outline <ID>#<anchor>`
    lists its subsections.
@@ -82,11 +86,15 @@ every command takes both.
 6. **A namespace.** `compass index --stdout --namespace <NS>` prints its
    documents (id, title, genre, scope, status, component) and its records (id,
    kind, title, status, host). Filter those tables to answer faceted questions,
-   such as all open questions, or all `Draft` Plans of a component. For facets
-   the index does not carry (authors, dates), read the documents' front-matter.
-7. **"What number comes next?"** `compass next <NS> --kind <kind>` answers, but
-   only as an estimate: until the ledger exists (toolchain version 0.2), it
-   cannot see numbers allocated on other branches. Say so.
+   such as all open questions, or all `Draft` Plans of a component. For authors
+   and dates, use `compass outline <ID>`, which also derives the ones left to
+   Git.
+7. **"What number comes next?"** `compass next <NS> --kind <kind>` answers from
+   the ledger, but only as a preview: another branch may take the number first,
+   and numbers are given only by `compass assign`. Say so.
+8. **The repository's configuration.** `compass manifest --json` gives the
+   namespaces it owns, its document directory and ledger, the repositories it
+   federates with, its commands, and its stewards.
 
 ## Other repositories
 

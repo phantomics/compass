@@ -7,7 +7,7 @@
 
 (in-package #:compass.cli)
 
-(defparameter +version+ "0.1.0")
+(defparameter +version+ "0.2.0")
 
 (defvar *build-commit* nil
   "The commit this executable was built from, stamped by build.lisp.")

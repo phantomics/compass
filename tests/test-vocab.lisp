@@ -19,9 +19,10 @@
   (is-true (find-genre-status (find-genre "Ref") "Current"))
   (is-true (find-genre-status (find-genre "Memo") "Superseded"))
   (is (eq :accepted (term-standing (find-genre-status (find-genre "Memo") "Superseded"))))
-  (is (eq :pending (term-standing (find-genre-status (find-genre "Plan") "Superseded"))))
-  (is (equal "COMPASS-DRAFT-toolchain-D5"
-             (term-amendment (find-genre-status (find-genre "Plan") "Superseded"))))
+  (is (eq :accepted (term-standing (find-genre-status (find-genre "Plan") "Superseded")))
+      "accepted with Compass 0.3.0")
+  (is (equal "COMPASS-DRAFT-toolchain-D12"
+             (genre-family-amendment (find-genre "Glossary"))))
   (is (eq :pending (genre-family-standing (find-genre "Glossary")))))
 
 (test legacy-superseded

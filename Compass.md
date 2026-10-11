@@ -6,7 +6,7 @@ scope:         program
 program:       Compass
 language:      en
 status:        Draft
-schema-version: "0.2.0"
+schema-version: "0.3.0"
 authors:
   - Andrew Sengul
 provenance:
@@ -179,6 +179,8 @@ prefix. There are eleven genres, each with a two-letter code used as a short
 mnemonic in indexes and tooling facets — not in the permanent identifier
 (§5).
 
+Table: The genres, with their filename prefixes, codes, and roles.
+
 | Genre | Prefix | Code | Role |
 |---|---|---|---|
 | Survey | `Survey.` | SU | Exploratory "should we?" — aspirational, non-normative; surveys the territory before a Plan |
@@ -237,6 +239,8 @@ and marked `Superseded`.
 Four genres describe systems rather than journal work, and they divide
 along two lines — whether the system yet exists, and whether the document
 is normative about it:
+
+Table: The normativity grid: the genres that describe systems, by whether the system exists and whether the document is normative about it.
 
 |  | Non-normative | Normative |
 |---|---|---|
@@ -340,7 +344,9 @@ document's lifecycle position is unambiguous.
 - **`Design-Record`** — comprehensive and settled, but describing a system
   not yet built. The characteristic status of an `Arch`.
 - **`Deprecated`** — no longer current, retained for history.
-- **`Superseded-by: <id>`** — replaced by another document; names it.
+- **`Superseded`** — replaced by another document, which the
+  `superseded-by:` field names (§7). The two appear together: `Superseded`
+  requires `superseded-by:`, and `superseded-by:` requires `Superseded`.
 - **`Rejected`** — considered and declined.
 - **`Withdrawn`** — retracted by its author before resolution.
 
@@ -479,7 +485,7 @@ provenance:                            # → PROV-O; records the assisted proces
   assistant:  claude
   session:    Ideation.PsycheGenesis
 supersedes:    ~                       # → prov:wasRevisionOf (inverse of superseded-by)
-superseded-by: ~                       # → status Superseded-by mirror
+superseded-by: ~                       # → the successor; only with status Superseded (§6)
 relates-to:                            # → typed internal links (§9)
   - PSYCHE-0002
 cites:                                 # → foreign / out-of-corpus references (§9)
@@ -497,11 +503,28 @@ glossary:      Glossary.PsycheTerms    # → term definitions consulted
 ```
 
 Fields that do not apply to a genre are omitted (shown as `~` above for
-illustration only). `id`, `title`, `genre`, `scope`, `language`, `status`,
+illustration only). `superseded-by` names the successor of a document whose
+status is `Superseded`, and appears only with that status (§6); a status that
+names its successor, such as `Superseded-by: <id>`, is not valid YAML. `id`, `title`, `genre`, `scope`, `language`, `status`,
 `created`, and `authors` are required on every document; the rest are
 optional and genre-dependent. Three of the required fields — `authors`,
 `created`, `updated` — MAY be omitted from the file when derivable from Git
 history, per the rules below.
+
+### The YAML subset
+
+Front-matter uses a small subset of YAML, which any YAML parser reads: a
+top-level block mapping, with mappings nested where the schema allows; block
+sequences of scalars or of mappings, and single-line flow sequences of scalars;
+plain, single-quoted, and double-quoted scalars; `#` comments; and the null
+forms `~`, `null`, and an empty value. Tab indentation, duplicate keys,
+anchors, aliases, tags, block scalars (`|`, `>`), flow mappings, explicit `?`
+keys, multiple documents, and `: ` inside a plain scalar are outside it, and
+front-matter that uses them is non-conforming.
+
+Every scalar is read as a string, and its type comes from the schema above,
+never from YAML's own typing: `language: no` is Norwegian, not false, and
+`schema-version: 0.10` is the version 0.10, not the number 0.1.
 
 ### Git-derived fields
 
@@ -544,6 +567,13 @@ Three kinds of numbered record cross document boundaries and are referenced
 by stable ID from anywhere in the corpus: decisions (`D`), open questions
 (`O`), and memos (`M`).
 
+A record is defined by a level-3 heading of the form `### <ID> — <title>`: its
+full identifier, an em dash, and its title. A record in a document that has
+not yet been assigned a number carries a provisional identifier formed from
+its host's, such as `ORIGIN-DRAFT-foreign-orbitals-D2`, until the steward
+assigns it a number (§13). A short heading such as `### D16 — …` names no
+namespace and cannot express a provisional identifier, so it is not used.
+
 ### Decision records (`D`)
 
 A decision record captures one architectural or design decision. It follows
@@ -552,7 +582,7 @@ the ADR shape and is assigned a namespaced identifier `<NAMESPACE>-D<n>`
 `Arch`, or `Log`), has this shape:
 
 ```
-### D16 — 64-bit datapath with 8-bit shadow tags
+### PSYCHE-D16 — 64-bit datapath with 8-bit shadow tags
 
 **Status:** Accepted
 **Context:** …the problem and forces…
@@ -705,13 +735,17 @@ compass/                      # this standard + templates + master INDEX
     Glossary.PsycheTerms.md
 
 <project>/  (classic/, origin/, lexter/, lexis/)
+  compass.sexp                # manifest: namespaces owned, federation (§13)
   doc/                        # project- and component-scope documents
     Log.*.md  Plan.*.md  Survey.*.md  Ref.*.md  ...
+    INDEX.md                  # generated index of documents and records
+    REGISTRY.sexp             # ledger of allocated identifiers
 ```
 
-Each repository keeps a local registry / index of its allocated identifiers
-(§13); the `compass/INDEX.md` federates these into one catalogue — the analogue
-of a PEP-0 index, a DITA map, and a Classic federation space.
+Each repository keeps a ledger of the identifiers it has allocated and a
+generated index of its documents and records (§13); `compass/INDEX.md`
+federates the indexes into one catalogue — the analogue of a PEP-0 index, a
+DITA map, and a Classic federation space.
 
 ### The repository README
 
@@ -784,6 +818,10 @@ The normative kernel that holds today:
   the source of truth for any textual content.
 - **Text equivalents.** Every diagram MUST carry a text-equivalent long
   description, per the accessibility rules of §12.
+- **Diagram blocks.** In the reference binding a diagram is a fenced code
+  block whose info string is `mermaid`, `plantuml`, `dot`, `graphviz`, or
+  `lexis`, and its long description is the paragraph that follows it,
+  beginning `Description:`.
 
 Deferred to a later amendment: preferred diagram languages and their
 precedence, the asset-directory layout, figure numbering and caption format,
@@ -800,9 +838,11 @@ the validation toolchain (§22).
 
 An Compass document MUST:
 
-- provide **alt text** for every image;
-- provide a **text-equivalent long description** for every diagram (§11);
-- give every table **header cells and a caption**;
+- provide non-empty **alt text** for every image (`![alt text](…)`);
+- provide a **text-equivalent long description** for every diagram: a
+  paragraph beginning `Description:` immediately after it (§11);
+- give every table **header cells and a caption**: a paragraph of the form
+  `Table: <caption>` immediately before the table;
 - use **heading levels that nest without skipping** (no h2 → h4 jump);
 - use **meaningful link text** — the linked `id` or a descriptive phrase,
   never "click here" or a bare URL (this reinforces the id-keyed link rule of
@@ -810,9 +850,11 @@ An Compass document MUST:
 - declare a **`language`** (BCP-47) in front-matter (§7), and mark inline
   spans in another language where they occur.
 
-These rules cost little at authoring time, deliver value immediately without
-waiting on tooling, and are the foundation the render-time WCAG conformance
-of §20 builds upon.
+Markdown has no syntax for a table caption or a long description, so the
+reference binding fixes the two paragraph forms above; the caption form is
+pandoc's. These rules cost little at authoring time, deliver value immediately
+without waiting on tooling, and are the foundation the render-time WCAG
+conformance of §20 builds upon.
 
 
 ## 13. Governance, Change Process, and ID Allocation
@@ -850,30 +892,44 @@ conscious decision rather than by drift.
 ### ID allocation
 
 Identifiers are `<NAMESPACE>-<NNNN>` (§5), monotonic within a namespace and
-never reused. Because sequential numbers collide when several contributors
-allocate on parallel branches, allocation follows one discipline:
+never reused; register records are numbered `<NAMESPACE>-D<n>`, `-O<n>`, and
+`-M<n>` (§8) on the same terms. Because sequential numbers collide when
+several contributors allocate on parallel branches, allocation follows one
+discipline:
 
-- Each namespace keeps a checked-in **registry** (its local `INDEX`) listing
-  every allocated identifier with its current title, genre, scope, and
-  status. The registry is the authority for which numbers are taken.
-- A document under construction carries a **provisional** identifier of the
-  form `<NAMESPACE>-DRAFT-<slug>` (e.g. `ORIGIN-DRAFT-foreign-orbitals`),
-  which needs no coordination.
-- The namespace steward assigns the canonical `<NAMESPACE>-<NNNN>` at
-  acceptance/merge time, updating the registry in the same change. This
-  serializes number assignment at the one point — merge — where collisions
-  can be resolved deterministically.
+- **The ledger.** A namespace's allocations are recorded in an append-only
+  **ledger**, `REGISTRY.sexp` in the document directory of the repository that
+  owns the namespace. Each line records one allocation, and only facts fixed
+  when it was made: the identifier, its kind, the provisional identifier it
+  replaced, the document's path or the record's host document, the date, and
+  who allocated it. Titles, genres, scopes, and statuses change over time and
+  stay in front-matter; the generated index joins the two (see
+  [The master index](#the-master-index)). The ledger is the authority for which
+  numbers are taken, and an entry is never edited or removed.
+- **Provisional identifiers.** A document under construction carries a
+  provisional identifier of the form `<NAMESPACE>-DRAFT-<slug>` (e.g.
+  `ORIGIN-DRAFT-foreign-orbitals`), which needs no coordination. The slug is
+  lowercase letters and digits, joined by single hyphens. A record in such a
+  document carries one formed from its host's, `<NAMESPACE>-DRAFT-<slug>-D<n>`,
+  `-O<n>`, or `-M<n>` (e.g. `ORIGIN-DRAFT-foreign-orbitals-D2`,
+  `CLASSIC-DRAFT-federation-M2`), where `<n>` counts within the host.
+- **Assignment at acceptance.** The namespace steward assigns canonical
+  numbers at acceptance/merge time, in a single change: the document's
+  `<NAMESPACE>-<NNNN>` and a `<NAMESPACE>-D<n>`, `-O<n>`, or `-M<n>` for each of
+  its provisional records, with every reference to them rewritten and the
+  ledger appended. This serializes number assignment at the one point — merge
+  — where collisions can be resolved deterministically: two branches that
+  allocate both append to the ledger, so their merge conflicts instead of
+  silently assigning a number twice. A memo record that is still `Draft` keeps
+  its provisional identifier; it is assigned in the change that moves it to
+  `Current`, or that accepts the record into an assigned host.
 
-**Memo records** follow the same discipline. An M-record is numbered
-`<NAMESPACE>-M<n>`, monotonic within the namespace and never reused. A record
-in a host that has not yet been assigned carries a provisional identifier
-formed from its host's, `<NAMESPACE>-DRAFT-<slug>-M<n>` (e.g.
-`CLASSIC-DRAFT-federation-M2`), where `<n>` counts within the host; the
-steward assigns the canonical `<NAMESPACE>-M<n>` in the same change that
-assigns the host, or that accepts the record into an assigned host.
+The ledger keeps each provisional identifier as an alias of the number that
+replaced it, so a reference still written with the provisional identifier
+resolves, and is reported as stale rather than broken.
 
 An identifier, once assigned, is permanent. A retired document is marked
-`Deprecated` or `Superseded-by` (§6) but keeps its identifier, and a retired
+`Deprecated` or `Superseded` (§6) but keeps its identifier, and a retired
 M-record keeps both its identifier and its place in its host; a document
 that genuinely migrates between namespaces (a rare re-homing, e.g. a
 component document promoted to a program) is re-minted in the new namespace
@@ -882,15 +938,20 @@ cross-reference ever dangles.
 
 ### The master index
 
-The `COMPASS` steward maintains `compass/INDEX.md`, which federates the
-per-namespace registries into one catalogue (§10). It is generated from
-front-matter and the registries, never hand-maintained as a parallel source.
+Each namespace's `INDEX.md`, in its document directory, lists its documents
+and records with their current titles, genres, scopes, and statuses. It is
+generated from front-matter, record headings, and the ledger, carries a banner
+saying it is generated and must not be edited, and is verified in CI against
+what the toolchain would generate, so a hand edit is detected (§22). The
+`COMPASS` steward maintains `compass/INDEX.md`, which federates the
+namespaces' indexes into one catalogue (§10), generated in the same way and
+never hand-maintained as a parallel source.
 
 ### Conformance
 
-Conformance is presently upheld by convention and editorial review (§6). The
-definition of a conforming document and corpus, and the automated validator
-that will enforce it in CI, are described in §22.
+Conformance is checked by the validation toolchain, locally and as a required
+check in CI, and acceptance remains a person's editorial decision (§6). §22
+defines a conforming document and corpus and describes the toolchain.
 
 
 ## 14. Per-Genre Templates
@@ -997,6 +1058,8 @@ project, one host per component, named `Memo.<Topic>.md`.
 This table records the concrete inconsistencies observed across the existing
 corpora (Classic, Origin, Lexter) and the resolution each receives above. It
 is the rationale companion to the rules in §§4–14.
+
+Table: Inconsistencies observed in the ancestor corpora, and how Compass resolves each.
 
 | # | Area | Observed variants | Resolution |
 |---|---|---|---|
@@ -1136,6 +1199,8 @@ For implementers targeting Classic (as a render target in Tier 1 or as the
 store in Tier 2), the Compass information model maps onto Classic's
 semantic model as follows. This table doubles as the ingestion specification.
 
+Table: Compass concepts and the Classic mappings they are intended to take.
+
 | Compass concept | Classic mapping |
 |---|---|
 | `genre` | `classic:type` / `rdf:type` (a `doc-<genre>` subclass of `wiki-page`) |
@@ -1271,12 +1336,14 @@ recorded in §23 as one of the standard's specified-but-deferred items.
 
 ## 22. Appendix — Conformance and the Validation Toolchain
 
-*Non-normative; describes intended tooling, not yet built. Tracked as the
-`COMPASS-DRAFT-toolchain` Plan.*
+*Non-normative; describes the validation toolchain, tracked as the
+`COMPASS-DRAFT-toolchain` Plan. Its version 0.2 is built; the checks this
+appendix marks as planned arrive with later versions.*
 
-Until this toolchain exists, conformance is upheld by convention and
-editorial review (§6, §13); an unenforced standard drifts, so the toolchain
-is the priority follow-on.
+The toolchain checks conformance locally, in a pre-commit hook, and as a
+required check on every pull request; editorial review (§6) decides what is
+accepted. An unenforced standard drifts, and the toolchain is what keeps a
+corpus and the standard in step.
 
 ### Conformance definitions
 
@@ -1285,24 +1352,34 @@ is the priority follow-on.
   a well-formed unique `id`, resolves all of its document references, pins
   every code reference to a revision where required (§9), and satisfies the
   author-time accessibility rules (§12).
-- A **conforming corpus** additionally has a consistent registry (§13): every
-  `id` unique within its namespace, every `relates-to` / `supersedes` /
-  inbound link resolving, and no dangling `superseded-by` redirect.
+- A **conforming corpus** additionally has a consistent ledger (§13): every
+  canonical identifier it defines recorded in the ledger, no number allocated
+  twice, and the ledger only ever appended to; every `id` unique within its
+  namespace; every `relates-to` / `supersedes` / inbound link resolving; and
+  no dangling `superseded-by` redirect.
 
 ### What the validator checks
 
 - **Front-matter schema** — required fields present; values well-typed.
 - **Controlled vocabularies** — `genre`, `subtype`, `scope`, `status`
-  drawn from §4/§6; `Superseded-by` names a real id.
-- **Identity and registry** — id format (§5), uniqueness, registry agreement.
-- **Reference integrity** — document links resolve to real ids; code
-  references are commit-pinned in `Log`/`Plan` (§9); foreign `cites` are
-  well-formed.
+  drawn from §4/§6; `Superseded` agrees with `superseded-by`, which names a
+  real id.
+- **Identity and the ledger** — id format (§5), uniqueness, and agreement with
+  the ledger, which is only appended to (§13).
+- **Registers** — records defined by full-identifier headings, listed in
+  front-matter, defined once, and carrying controlled statuses (§8).
+- **Reference integrity** — document links and anchors resolve to real ids
+  and sections; code references are commit-pinned in `Log`/`Plan`, and their
+  revision, path, and symbol exist (§9); foreign `cites` are well-formed.
 - **Git-derived fields** — when `authors`, `created`, or `updated` are
   omitted from front-matter, derives them from Git history (§7); errors
   only if underivable (untracked file, empty history). An explicit value in
   the file overrides derivation.
-- **Accessibility (author-time)** — the §12 MUST rules.
+- **Generated files** — the namespace index matches what would be generated
+  (§13).
+- **Federation** — with the federated repositories present, references into
+  them resolve and no namespace is owned twice (§10).
+- **Accessibility (author-time)** — the §12 MUST rules (planned).
 
 Severity maps to CI outcome: a **MUST** violation is an error that blocks
 merge; a **SHOULD** violation is a warning. The validator complements, and
@@ -1310,26 +1387,30 @@ does not replace, the human editorial review of §6.
 
 ### Implementation in Common Lisp (description)
 
-The toolchain is intended to be a Common Lisp program — a fitting choice, as
-the corpus and its target platform (Classic) are Lisp, and the validator can
-share code with the Markdown→Lexis importer (§16).
+The toolchain is a Common Lisp program, `compass`, built with SBCL into a
+standalone executable — a fitting choice, as the corpus and its target
+platform (Classic) are Lisp, and the validator shares its parsing front-end
+with the Markdown→Lexis importer (§16).
 
-- A **Markdown parser** (e.g. `3bmd` or a CommonMark binding) reads the body;
-  a **YAML parser** (e.g. `cl-yaml`) reads the front-matter block. This
-  parsing front-end is the *same* one the §16 importer uses — one front-end
-  serving both validation and derivation.
-- A **Git integration** shells out to `git log --follow` (respecting
-  `.mailmap`) as the source for derived `authors`/`created`/`updated` fields
-  (§7); the same integration verifies commit-pinned code references from §9.
-- The checks above run over the parsed front-matter and body tree, emitting a
-  report (human-readable and machine-readable) with per-finding severity.
-- As a side output the tool can regenerate each namespace's registry and the
-  federated `compass/INDEX.md` (§13, §10) from front-matter, keeping the index
-  from being a hand-maintained parallel source.
+- **Purpose-built parsers.** A strict parser for the subset of YAML that
+  front-matter uses, and a line-oriented scanner for the body, both of which
+  record the line and column of everything they find, so that every finding
+  cites its place. This is the front-end the §16 importer extends.
+- **Git integration.** Git is invoked with argument lists, never through a
+  shell. `git log --follow`, honouring `.mailmap`, supplies the derived
+  `authors`/`created`/`updated` fields (§7); reading files at a revision
+  verifies commit-pinned code references (§9) and compares the ledger with the
+  branch a change merges into (§13).
+- **Commands.** `check` reports findings, human-readable or as JSON, each with
+  its severity and rule; `show`, `outline`, and `refs` look up documents,
+  sections, records, and the references to them; `index` regenerates each
+  namespace's index; `assign` and `renumber` allocate numbers through the
+  ledger (§13); `init` writes a repository's manifest.
 - It runs locally and in CI (on pull request), gating merges on errors.
 
-The concrete design and code belong in a separate effort; this appendix fixes
-only what the toolchain must guarantee and how it fits the pipeline.
+The design and its decisions are in the `COMPASS-DRAFT-toolchain` Plan; this
+appendix fixes only what the toolchain must guarantee and how it fits the
+pipeline.
 
 ### Complementary authoring assistance
 
@@ -1358,16 +1439,24 @@ is legible without excavating the change log. This appendix is prospective
 (what Compass itself still lacks); it complements §15, which is retrospective
 (what the ad-hoc corpora did and how Compass fixes them).*
 
+Rows are labelled by category: `R` resolved, `S` specified with tooling
+deferred, `P` partially resolved, `ND` open by design (a non-goal), and `GO`
+genuinely open. The labels are chosen so that none reads as a register
+identifier (§8), and an item that migrates takes a label in its new category,
+naming its old one.
+
 ### Resolved
 
 Closed items, retained as history.
+
+Table: Resolved limitations and where the standard addresses each.
 
 | # | Area | Where addressed |
 |---|---|---|
 | R1 | `Concept` genre collided with DITA/Diátaxis "concept/explanation" | Renamed to `Survey` (§4) |
 | R2 | Mandatory `file:line` code refs institutionalized rot | Commit-pinned `path[:symbol]@revision` (§9) |
 | R3 | Identifier encoded mutable classification (genre, scope) | Decoupled to `<NAMESPACE>-<NNNN>` (§5) |
-| R4 | No governance, change process, or ID allocation mechanism | §13 (stewardship, amendment process, registry-based allocation) |
+| R4 | No governance, change process, or ID allocation mechanism | §13 (stewardship, amendment process, ledger-based allocation) |
 | R5 | No editorial review workflow | `In-Review` status + `reviewers`/`approved-by`/`reviewed` (§6) |
 | R6 | Scope creep / over-claiming as universal doc system | Explicit non-goals (§2) |
 | R7 | `Ideation` genre canonized raw AI transcripts | Tightened to rare curated cases (§4); routine transcripts declared disposable (§2) |
@@ -1384,9 +1473,10 @@ Closed items, retained as history.
 Described in the standard but not yet built. Each has a tracking Plan
 identifier in the `COMPASS` namespace.
 
+Table: Specified items whose tooling is deferred, and the Plans tracking them.
+
 | # | Area | Tracked as |
 |---|---|---|
-| S1 | Validation toolchain (Common Lisp; front-end shared with the importer) | `COMPASS-DRAFT-toolchain` (§22) |
 | S2 | Markdown→Lexis importer | Part of `COMPASS-DRAFT-toolchain` (§16) |
 | S3 | Diagrams and media detailed conventions | §11 stub, to be filled by amendment |
 | S4 | Classic-native Tier-2 binding | §16; gated on Classic maturation |
@@ -1428,44 +1518,51 @@ all harnesses: each envelope calls the same §22 toolchain for conformance.
 
 Addressed to some degree, with residue explicitly named.
 
+Table: Partially resolved limitations and what remains of each.
+
 | # | Area | Residue |
 |---|---|---|
 | P1 | Maturity-ladder genre ambiguity | Identity is now stable across genre changes (§5), but the "which genre?" choice at authoring time can still bikeshed |
 | P2 | Provenance disclosure depth | `provenance` (§7) and `approved-by` (§6) cover the basics; model-version, prompt captures, and human-review attestation are not specified |
-| P3 | Retention and archival policy | `Deprecated` / `Superseded-by` exist (§6); no explicit pruning or cold-storage policy |
+| P3 | Retention and archival policy | `Deprecated` / `Superseded` exist (§6); no explicit pruning or cold-storage policy |
 | P4 | Genre proliferation | Managed by the §13 amendment gate and by preferring subtypes over new genres; not actively shrunk |
+| P5 | Validation toolchain (Common Lisp; front-end shared with the importer); formerly S1 | Version 0.2 checks front-matter, vocabularies, identity and the ledger, registers, memos, references and code references, Git-derived fields, the index, and federation (§22), and allocates numbers. Not yet: the §12 accessibility rules, the §14 section shapes, `approved-by` checks, the catalog and source map, RDF export, and the importer (S2). Tracked as `COMPASS-DRAFT-toolchain` |
+| P6 | Draft-to-canonical ID assignment ergonomics; formerly GO6 | One command assigns a document's and its records' numbers, rewrites references to them, and appends the ledger (§13, §22). Short references such as `D6` cannot be rewritten safely, so an author converts them to full identifiers first; the steward's approval of each allocation rests on repository settings (code owners and a required check) |
 
 ### Open by design
 
 Accepted non-goals; recorded here so their status is not forgotten and so a
 future proposal to bring them in-scope has a clear starting point.
 
+Table: Limitations open by design, as non-goals, with the rationale for each.
+
 | # | Area | Rationale |
 |---|---|---|
-| D1 | Regulatory / compliance controlled-document regimes | §2 non-goal; use domain frameworks |
-| D2 | Auto-generated API reference at scale | §2 non-goal; integration seam via `Ref` |
-| D3 | Release notes and changelogs | §2 non-goal; per-release append artifacts |
-| D4 | Runbooks, on-call, incident postmortems | §2 non-goal; distinct operational lifecycles |
-| D5 | Requirements specification and traceability matrices | §2 non-goal; `D`/`O` registers are not a requirements register |
-| D6 | Knowledge-base / support / FAQ content | §2 non-goal |
-| D7 | DITA-style single-sourcing / transclusion | §2 non-goal; §21 gives limited cross-audience reuse |
-| D8 | Three-tier scope (`component`/`project`/`program`) rigidity | Accepted simplification; larger organizations may need extension |
+| ND1 | Regulatory / compliance controlled-document regimes | §2 non-goal; use domain frameworks |
+| ND2 | Auto-generated API reference at scale | §2 non-goal; integration seam via `Ref` |
+| ND3 | Release notes and changelogs | §2 non-goal; per-release append artifacts |
+| ND4 | Runbooks, on-call, incident postmortems | §2 non-goal; distinct operational lifecycles |
+| ND5 | Requirements specification and traceability matrices | §2 non-goal; `D`/`O` registers are not a requirements register |
+| ND6 | Knowledge-base / support / FAQ content | §2 non-goal |
+| ND7 | DITA-style single-sourcing / transclusion | §2 non-goal; §21 gives limited cross-audience reuse |
+| ND8 | Three-tier scope (`component`/`project`/`program`) rigidity | Accepted simplification; larger organizations may need extension |
 
 ### Genuinely open
 
 Real gaps not yet addressed. These are the candidate inputs for future
 Plans, in priority order.
 
+Table: Genuinely open limitations, in priority order.
+
 | # | Area | Note |
 |---|---|---|
-| O1 | Monolithic document granularity vs. modular authoring | Docs are whole files; no include mechanism for source documents; hard to reuse and hard to review in small diffs. Fixture compilation (S7) partially addresses this for derived fixtures like READMEs, but not for source-to-source transclusion, which remains a non-goal per §2. |
-| O2 | Bus factor / niche-tech adoption risk | Inherent to a bespoke standard bound to a Common Lisp platform; mitigable only by ecosystem uptake and honest disclosure |
-| O3 | End-user documentation as a first-class output | Seamed by §21 and tracked as S5, but not solved: user-doc derivation is a large body of work. Prior-art notes to seed the Plan appear after this table. |
-| O4 | Reviewer capture from forge PR data | `reviewers` is currently hand-maintained; harvesting from GitHub/GitLab PR review data is a plausible extension, unspecified |
-| O5 | Multi-persona audience axis | `audience: developer \| end-user \| both` (§21) may need to become a small vocabulary (administrator, integrator, end-user) rather than three fixed values |
-| O6 | Draft-to-canonical ID assignment ergonomics | §13 specifies steward-at-merge; needs a tooling ergonomic that isn't friction at the moment of accept |
+| GO1 | Monolithic document granularity vs. modular authoring | Docs are whole files; no include mechanism for source documents; hard to reuse and hard to review in small diffs. Fixture compilation (S7) partially addresses this for derived fixtures like READMEs, but not for source-to-source transclusion, which remains a non-goal per §2. |
+| GO2 | Bus factor / niche-tech adoption risk | Inherent to a bespoke standard bound to a Common Lisp platform; mitigable only by ecosystem uptake and honest disclosure |
+| GO3 | End-user documentation as a first-class output | Seamed by §21 and tracked as S5, but not solved: user-doc derivation is a large body of work. Prior-art notes to seed the Plan appear after this table. |
+| GO4 | Reviewer capture from forge PR data | `reviewers` is currently hand-maintained; harvesting from GitHub/GitLab PR review data is a plausible extension, unspecified |
+| GO5 | Multi-persona audience axis | `audience: developer \| end-user \| both` (§21) may need to become a small vocabulary (administrator, integrator, end-user) rather than three fixed values |
 
-### Prior-art notes for O3 (user-doc derivation)
+### Prior-art notes for GO3 (user-doc derivation)
 
 Non-normative context for the future `COMPASS-DRAFT-user-doc-derivation` Plan
 (§21, S5). The pattern of *developer-authored source → derived end-user

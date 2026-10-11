@@ -6,7 +6,7 @@
 
 (asdf:defsystem "compass"
   :description "Validation toolchain for the Compass documentation standard"
-  :version "0.1.0"
+  :version "0.2.0"
   :author "Andrew Sengul"
   :license "BSD-3-Clause"
   :depends-on ("alexandria" "cl-ppcre" "shasht")

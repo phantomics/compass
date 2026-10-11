@@ -32,19 +32,20 @@
   (list
    (cons :proposal
          (make-terms '("Draft" "Proposed" "In-Review" "Accepted" "Implemented"
-                       "Design-Record" "Deprecated"
-                       ("Superseded" :pending "COMPASS-DRAFT-toolchain-D5")
+                       "Design-Record" "Deprecated" "Superseded"
                        "Rejected" "Withdrawn")))
    (cons :reference
          (make-terms '("Current" "Draft" "Deprecated")))
    (cons :memo
          (make-terms '("Draft" "Current" "Deprecated" "Superseded"))))
   "Status vocabularies by family. The memo family is accepted
-(COMPASS-DRAFT-agent-workflow-D4).")
+(COMPASS-DRAFT-agent-workflow-D4), and the proposal family's `Superseded`
+(COMPASS-DRAFT-toolchain-D5, in Compass 0.3.0).")
 
 (defparameter +legacy-superseded-prefix+ "Superseded-by:"
-  "The §6 status form `Superseded-by: <id>`, which COMPASS-DRAFT-toolchain-D5
-replaces with `Superseded` plus the `superseded-by:` field.")
+  "The status form `Superseded-by: <id>` of Compass before 0.3.0, which
+COMPASS-DRAFT-toolchain-D5 replaced with `Superseded` plus the
+`superseded-by:` field.")
 
 (defun legacy-superseded-target (status)
   "If STATUS is the §6 form `Superseded-by: <id>`, return the id."

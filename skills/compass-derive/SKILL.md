@@ -15,9 +15,9 @@ This skill is intentionally **not yet built**. It wraps deterministic backends
 that mostly do not exist yet:
 
 - **S1/S2** — the validation toolchain and Markdown→Lexis importer
-  (`COMPASS-DRAFT-toolchain`, §16, §22). The toolchain's version 0.1 exists
+  (`COMPASS-DRAFT-toolchain`, §16, §22). The toolchain's version 0.2 exists
   (see `../reference/toolchain.md`); its one derivation is the namespace index,
-  `compass index`. RDF export is planned for version 0.3; the importer is not
+  `compass index`, which `compass index --check` verifies. RDF export is planned for version 0.3; the importer is not
   built.
 - **S5** — audience projection / end-user derivation
   (`COMPASS-DRAFT-user-doc-derivation`, §21).

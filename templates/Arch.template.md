@@ -26,6 +26,8 @@ normatively) which does not yet exist (§4). Derived from ISO/IEC/IEEE 42010.>
 
 ## Canonical Terms
 
+Table: Terms used in this design, with their definitions.
+
 | Term | Definition |
 |---|---|
 | <term> | <definition> |

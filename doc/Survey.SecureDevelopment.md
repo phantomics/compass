@@ -384,7 +384,7 @@ from public catalogs, or kept out of public corpora until mitigated?
 ### COMPASS-DRAFT-secure-development-O5 — A `security` audience
 
 The §21 audience extension (`developer | end-user | both`) may need a
-`security-reviewer` persona (cf. §23 O5), so that a projection can produce a
+`security-reviewer` persona (cf. §23 GO5), so that a projection can produce a
 security review packet from the corpus. Is that worth defining?
 
 ### COMPASS-DRAFT-secure-development-O6 — Migrating Classic's analysis

@@ -19,6 +19,8 @@ documents consult it via their `glossary:` front-matter field (§7).>
 
 ## Canonical Terms
 
+Table: Canonical terms, with their definitions and sources.
+
 | Term | Definition | Notes / Source |
 |---|---|---|
 | <term> | <definition> | <source or note> |
@@ -27,12 +29,16 @@ documents consult it via their `glossary:` front-matter field (§7).>
 
 <Expansions of the project's/program's backronyms (§1). One entry per acronym.>
 
+Table: Backronyms and their expansions.
+
 | Acronym | Expansion | Gloss |
 |---|---|---|
 | <ACRONYM> | <Expansion> | <what it emphasizes> |
 
 <!-- optional: map terms onto external vocabularies/predicates (§17):
 ## Grounding
+
+Table: Terms mapped onto external vocabularies.
 
 | Term | External vocabulary | Predicate / class |
 |---|---|---|

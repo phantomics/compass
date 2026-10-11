@@ -35,7 +35,7 @@ provenance:
   assistant:  claude
   session:    Ideation.PsycheGenesis
 supersedes:    ~
-superseded-by: ~
+superseded-by: ~                       # successor; only with status Superseded (§6)
 relates-to:
   - PSYCHE-0002
 cites:
@@ -50,6 +50,16 @@ memos:         ~                       # Memo genre only: M-register (§8)
 glossary:      Glossary.PsycheTerms
 ---
 ```
+
+## The YAML subset (§7)
+
+Front-matter uses a small subset of YAML: block mappings and sequences,
+single-line flow sequences of scalars, plain, single- or double-quoted scalars,
+`#` comments, and the nulls `~`, `null`, and empty. Tabs, duplicate keys,
+anchors, aliases, tags, block scalars (`|`, `>`), flow mappings, and `: ` inside
+an unquoted value are outside it, and `compass check` reports them under
+`fm/syntax`. Every value is read as a string; its type comes from the schema
+(`language: no` is Norwegian, not false). Quote a value that contains `: `.
 
 ## Required on every document (§7)
 
@@ -106,7 +116,8 @@ corpus not listed.
 **Provisional identifiers:** a document under construction carries
 `<NAMESPACE>-DRAFT-<slug>` (e.g. `ORIGIN-DRAFT-foreign-orbitals`), needing no
 coordination. The namespace steward assigns the canonical `<NAMESPACE>-<NNNN>`
-at acceptance/merge, updating the registry in the same change (§13).
+at acceptance/merge, recording it in the namespace's ledger in the same change
+(§13).
 
 ## Provenance discipline (§7, §22)
 

@@ -7,7 +7,7 @@ standard defined in `../Compass.md`.
 The follow-on Plans tracked in `Compass.md` §23 (Specified, tooling deferred),
 and the documents that support them, live here as they are written:
 
-- `COMPASS-DRAFT-toolchain` — validation toolchain + Markdown→Lexis importer (S1, S2)
+- `COMPASS-DRAFT-toolchain` — validation toolchain + Markdown→Lexis importer (P5, formerly S1; S2)
 - `COMPASS-DRAFT-fixture-compilation` — README/fixture transclusion (S7)
 - `COMPASS-DRAFT-user-doc-derivation` — audience projection / end-user docs (S5)
 - `COMPASS-DRAFT-federated-site` — federated Astro site (S8)

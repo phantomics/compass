@@ -41,6 +41,9 @@ details. In short:
    141 means the output was cut off by a pipe.
 4. **Fix findings only in files this task created or changed**; report the
    rest.
+5. **Numbers.** Run `compass assign` only when the user asks, with `--dry-run`
+   first, and never `--force` unless asked; `toolchain.md` under "Numbers and
+   the ledger" has the rules. This skill never sets the status `assign` needs.
 
 ## Reference material
 
@@ -81,8 +84,9 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
 
 4. **Fill the front-matter (§7).**
    - `id: <NAMESPACE>-DRAFT-<slug>`. It stays provisional; the steward assigns
-     the canonical `<NAMESPACE>-<NNNN>` at merge (§13). Never write a canonical
-     number, including one `compass next` suggests.
+     the canonical `<NAMESPACE>-<NNNN>` at acceptance, with `compass assign`
+     (§13). Never write a canonical number, including one `compass next NS`
+     suggests.
    - Set `title`, `genre`, `scope`, `language` (default `en`), `status`
      (`Draft` for new proposal/record genres; `Draft` for reference genres
      and new memo records; a new Memo host is `Current` while it is
@@ -101,8 +105,11 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
 5. **Seed genre-specific content.**
    - `Log` — seed the Files table from `git diff --stat` (or `git status`) of
      the work in progress, mapping added files to `**New**` and changed files to
-     `Modified`. Remind the author that code references in a Log MUST be
-     commit-pinned (§9): `path:symbol@revision`.
+     `Modified`. Code references in a Log MUST be commit-pinned (§9):
+     `path:symbol@revision`, pinned to the commit that holds the work, so a Log
+     is best finished after that commit. `compass check` reports an unpinned
+     reference (`ref/code-pinned`) and one whose revision, path, or symbol it
+     cannot find (`ref/code-exists`).
    - `Survey`/`Plan` — seed a Prior Art / Relationship-to-Other-Work stub and,
      if the user names comparable systems, list them. Find related documents in
      the corpus with `compass index --stdout` and `compass refs <ID>`, and link
@@ -112,13 +119,17 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
      and `O`-records for `Plan`/`Arch`. Give each a provisional identifier formed from the
      document's: `<NAMESPACE>-DRAFT-<slug>-D1`, `-D2`, …, and `-O1`, … (§13),
      with the full identifier in the heading (`### <ID> — <title>`). Mirror them
-     into `decisions:` and `open-questions:`.
+     into `decisions:` and `open-questions:`. For a record added to a document
+     that already has a number, use the identifier
+     `compass next --in <path> --kind decision` (or `open-question`) prints.
+     Refer to every record by its full identifier, never a short form such as
+     `D3` (`ref/short-record`).
    - `Eval` — set `subtype`; scaffold Method / Shared Scenario / Rubric.
    - `Memo` — find the component's host among the documents of genre `Memo` in
      `compass index --stdout`, then read its records with
      `compass outline <host-id>` and `compass show <host-id>#memos`. Add one
      M-record per durable property under `## Memos`, with status `Draft` and the
-     next unused provisional identifier in the host (`<host-id>-M<n>`), and
+     identifier `compass next --in <host-path> --kind memo` prints, and
      mirror it into `memos:`. Recording a `Draft` memo needs no review: it
      reaches later sessions through the catalog, marked unreviewed. Leave it
      `Draft`; a person moves it to `Current`. Before writing, check the four
@@ -162,8 +173,8 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
      the file is in the wrong place: move it into the document directory.
 
 9. **Regenerate the index.** If the document directory already has an
-   `INDEX.md`, run `compass index` to regenerate it. Do not create one where
-   none exists.
+   `INDEX.md`, run `compass index` to regenerate it (`index/current` reports a
+   stale one). Do not create one where none exists.
 
 10. **Report.** Give the path and provisional id, the `compass check` result
     (errors and warnings for the new file, and the toolchain version), and what
