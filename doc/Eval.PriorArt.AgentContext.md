@@ -19,7 +19,7 @@ relates-to:
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-semantic-binding
-  - COMPASS-DRAFT-source-headers
+  - COMPASS-0002
 cites:
   - title:     "Ontology-Grounded Project Memory for Coding Agents (Adam; NeSy 2026)"
     locator:   "arXiv:2608.13662, abstract and §2–§3"
@@ -107,7 +107,7 @@ are refinements, and which are already established. It covers the work recorded
 in [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md),
 [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md),
 [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) (COMPASS-DRAFT-toolchain-D10 to
-COMPASS-DRAFT-toolchain-D17), [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md),
+COMPASS-DRAFT-toolchain-D17), [COMPASS-0002](Spec.SourceHeaders.md),
 [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md), and
 [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md). Its findings inform
 how Compass describes itself and which of its claims the evaluation must
@@ -165,7 +165,7 @@ Table: Elements of the Compass agent-context work assessed in this evaluation.
 | E2 | Status-based authority weighting, so history stays in the record without being treated as current truth | COMPASS-DRAFT-toolchain-D12 |
 | E3 | Delivery of a compact, ranked catalog to agents at session start, generated deterministically and committed | COMPASS-DRAFT-toolchain-D10, COMPASS-DRAFT-toolchain-D11; COMPASS-DRAFT-agent-workflow-D10 |
 | E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-DRAFT-agent-workflow-D5 to COMPASS-DRAFT-agent-workflow-D9 |
-| E5 | Source headers whose typed fields link files to decisions, memos, and tests, compiled into a source map | COMPASS-DRAFT-source-headers |
+| E5 | Source headers whose typed fields link files to decisions, memos, and tests, compiled into a source map | COMPASS-0002 |
 | E6 | A derived RDF binding of the corpus, with an open vocabulary, `tag:` identity, SHACL shapes, and federation | COMPASS-DRAFT-semantic-binding |
 | E7 | Evaluation of quality and design-intent conformance across a relay of fresh sessions over real development history (the "annual crop" thesis), with single-feature ablation of the scheme and tasks that put supersession and rejected alternatives under pressure | COMPASS-DRAFT-agent-context-eval |
 

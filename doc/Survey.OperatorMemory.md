@@ -15,9 +15,9 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-0003
   - COMPASS-DRAFT-toolchain
-  - COMPASS-DRAFT-source-headers
+  - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-agent-context-eval
   - COMPASS-DRAFT-agent-context-prior-art
@@ -72,7 +72,7 @@ a "brain" of Markdown documents. Compass is the documentation standard defined
 in [COMPASS-0001](../Compass.md). The survey asks which of Operator Memory's
 features Compass should later import, in what form, and which it should
 decline. It assumes the authoring-assistance layer
-([COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md)) and the
+([COMPASS-0003](Plan.AuthoringAssistance.md)) and the
 validation toolchain ([COMPASS-DRAFT-toolchain](Plan.Toolchain.md)). The
 findings come from reading the Operator Memory blog post, documentation, and
 source at commit `e394f1c`. Operator Memory was not run, and no agent
@@ -394,7 +394,7 @@ correct.
   - §18 is the mechanism for the `read-if:` extension.
   - §22 frames assistance as proposing while the toolchain disposes.
   - The §23 prior-art notes (pattern 5) anticipated this survey's subject.
-- [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md):
+- [COMPASS-0003](Plan.AuthoringAssistance.md):
   - The catalog adapter and maintenance skill extend this S9 layer.
   - COMPASS-O1 (advisory-mode signalling) and COMPASS-O3 (provenance depth)
     bear directly on agent-written updates.
@@ -483,7 +483,7 @@ symbol-level API reference stays ceded (§2). The map is generated
 deterministically, never by an LLM, from a standard header comment in each
 source file and optional directory READMEs. It is not a `Ref` subtype. The
 header convention is specified in
-[COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md), and its implementation is
+[COMPASS-0002](Spec.SourceHeaders.md), and its implementation is
 recorded in [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) as
 COMPASS-DRAFT-toolchain-D14.
 

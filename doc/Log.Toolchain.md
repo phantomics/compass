@@ -16,7 +16,7 @@ provenance:
 relates-to:
   - COMPASS-DRAFT-toolchain
   - COMPASS-0001
-  - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-0003
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-authoring-assistance-log
 decisions:
@@ -468,7 +468,7 @@ Table: Files added or changed in commit `4e4549a`.
 ## Outstanding Work
 
 - **Wire the skills to the toolchain.** Roadmap step 6 of
-  [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md#roadmap):
+  [COMPASS-0003](Plan.AuthoringAssistance.md#roadmap):
   the four skills still describe advisory-only mode. *Done in `07b9643`; see
   [Update 2026-10-08 — fresh executables and federation](#update-2026-10-08--fresh-executables-and-federation).*
 - **Baseline v0.2.** The ledger and its rules, `assign` and `renumber` with the

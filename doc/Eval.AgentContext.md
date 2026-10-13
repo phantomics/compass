@@ -17,8 +17,8 @@ relates-to:
   - COMPASS-DRAFT-operator-memory
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-agent-workflow
-  - COMPASS-DRAFT-source-headers
-  - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-0002
+  - COMPASS-0003
   - COMPASS-DRAFT-secure-development
   - COMPASS-DRAFT-agent-context-prior-art
 cites:
@@ -89,7 +89,7 @@ COMPASS-DRAFT-operator-memory-O6, and it gates roadmap step 6 of
 and authority weight are not built until the pilot reported here has run. The
 designs under test are specified in
 [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) (COMPASS-DRAFT-toolchain-D10 to
-COMPASS-DRAFT-toolchain-D15), [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md),
+COMPASS-DRAFT-toolchain-D15), [COMPASS-0002](Spec.SourceHeaders.md),
 and [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md). This document is
 currently a **protocol**: it fixes the method before any run. Results will be
 appended as `## Update <date> — <title>` sections, and the Synthesis written once

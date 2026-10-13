@@ -13,7 +13,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-DRAFT-secure-development
   - COMPASS-DRAFT-agent-workflow
-  - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-0003
   - COMPASS-DRAFT-toolchain
 cites:
   - title:     "ATAM: Method for Architecture Evaluation"

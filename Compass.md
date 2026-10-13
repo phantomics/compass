@@ -1486,7 +1486,7 @@ Table: Specified items whose tooling is deferred, and the Plans tracking them.
 | S6 | Genre-specific Lexis tags and Classic infobox/label lens registry | Follow-on Plan (§16) |
 | S7 | Fixture compilation / bounded transclusion (README, CONTRIBUTING, CHANGELOG) | `COMPASS-DRAFT-fixture-compilation` (§10) |
 | S8 | Federated multi-project static site (Astro or equivalent): federation resolver, Astro-target renderer, content gating, README integration | `COMPASS-DRAFT-federated-site` (§16) |
-| S9 | Authoring assistance layer: editor/language-server integration and LLM skills across harnesses (compass-author, -review, -lookup, -derive), with a harness-neutral core and per-harness adapters | `COMPASS-DRAFT-authoring-assistance` (§22) |
+| S9 | Authoring assistance layer: editor/language-server integration and LLM skills across harnesses (compass-author, -review, -lookup, -derive), with a harness-neutral core and per-harness adapters | `COMPASS-0003` (§22) |
 
 **Note on S9 — harness portability.** The four skills separate cleanly into
 a **harness-neutral core** (each skill's behaviour, invariants, and

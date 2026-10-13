@@ -14,7 +14,7 @@ reviewed:      2026-10-08
 provenance:
   assistant:   opencode
 relates-to:
-  - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-0003
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-toolchain-log
   - COMPASS-DRAFT-agent-workflow
@@ -35,7 +35,7 @@ while doing so, the changes to the skills, templates, and AGENTS snippet, the
 tests that keep the skills in step with the toolchain, the adoption of Compass
 in the Classic, Origin, and Lexter repositories, and a smoke test in which an
 agent used each working skill on its own. The plan it carries out is roadmap
-step 6 of [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md#roadmap).
+step 6 of [COMPASS-0003](Plan.AuthoringAssistance.md#roadmap).
 
 ## Problem
 

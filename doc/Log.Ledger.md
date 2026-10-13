@@ -12,7 +12,7 @@ provenance:
 relates-to:
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-toolchain-log
-  - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-0003
   - COMPASS-0001
 decisions:
   - COMPASS-DRAFT-ledger-log-D1
@@ -434,7 +434,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
 - **`doc/REGISTRY.sexp`** was created by `compass init --ledger`, with eight
   entries allocated on 2026-10-09 by Andrew Sengul: `COMPASS-0001`,
   `COMPASS-D1` to `COMPASS-D4`, and `COMPASS-O1` to `COMPASS-O3`. The seven
-  records name `COMPASS-DRAFT-authoring-assistance` as their host, since that
+  records name `COMPASS-0003` as their host, since that
   provisional document defines them and the ledger records the host at
   allocation.
 - **`skills/reference/toolchain.md`** describes version 0.2:
@@ -1498,7 +1498,7 @@ These edits follow `ccb28e9` and are committed with this update:
   and COMPASS-DRAFT-toolchain-D2 are `Implemented`. COMPASS-D2's decision
   provided for the toolchain's arrival, so nothing replaced it; the skills
   call the toolchain and keep advisory mode as their fallback.
-- **[COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md)**: roadmap
+- **[COMPASS-0003](Plan.AuthoringAssistance.md)**: roadmap
   step 6 is done for version 0.2, COMPASS-O2 is resolved by the manifest and
   the ledger, and its Outstanding Work follows.
 - **[COMPASS-DRAFT-toolchain](Plan.Toolchain.md)**: its introduction says the

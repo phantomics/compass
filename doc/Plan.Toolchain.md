@@ -6,7 +6,7 @@ scope:         program
 program:       Compass
 component:     toolchain
 language:      en
-status:        Draft
+status:        Accepted
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
@@ -15,9 +15,9 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-0003
   - COMPASS-DRAFT-operator-memory
-  - COMPASS-DRAFT-source-headers
+  - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-agent-context-eval
   - COMPASS-DRAFT-semantic-binding
@@ -95,7 +95,7 @@ federated indexes. It is a Common Lisp program. It builds under both
 Quicklisp, which is in use today, and ocicl, the intended long-term dependency
 manager. It assumes the standard
 ([COMPASS-0001](../Compass.md)) and the authoring-assistance layer
-([COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md)). The skills
+([COMPASS-0003](Plan.AuthoringAssistance.md)). The skills
 in that layer ran in advisory-only mode until this toolchain existed
 (COMPASS-D2); since version 0.1 they call it, and fall back to advisory mode
 only where no executable is found.
@@ -105,7 +105,7 @@ context: a session catalog, an authority ranking, and a source map. These
 resolve open questions COMPASS-DRAFT-operator-memory-O1 –
 COMPASS-DRAFT-operator-memory-O3 of
 [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md), and the source map
-implements [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md).
+implements [COMPASS-0002](Spec.SourceHeaders.md).
 
 ## Problem
 
@@ -187,7 +187,7 @@ as its first worked example.
 
 ### COMPASS-DRAFT-toolchain-D1 — Merge-time ledger plus required CI as the uniqueness authority
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Uniqueness needs a single point where allocations are put in
 sequence, one per namespace. A Git-based corpus has two candidates: (A) the
@@ -246,7 +246,7 @@ The same form applies to memo records (`<NS>-DRAFT-<slug>-M<n>`, assigned
 
 ### COMPASS-DRAFT-toolchain-D3 — The allocation ledger holds immutable facts only
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** §13 says the registry lists "every allocated identifier with its
 current title, genre, scope, and status." All of those values except the
@@ -275,7 +275,7 @@ resolve, with a warning, so none ever dangles. Amends §13.
 
 ### COMPASS-DRAFT-toolchain-D4 — A project manifest declares namespace ownership and federation
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** A namespace must be minted by exactly one repository (§5, §13). The
 validator, `compass-lookup`, and the future site build (S8) all need a list of
@@ -298,7 +298,7 @@ for non-Lisp consumers (the S8 Astro build, the skills).
 
 ### COMPASS-DRAFT-toolchain-D5 — Supersession uses a plain status plus the existing field
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** `status: Superseded-by: PSYCHE-0002` fails to parse as YAML
 ("mapping values are not allowed here"). This was confirmed against a
@@ -319,7 +319,7 @@ conforming documents that use the old form exist yet.
 
 ### COMPASS-DRAFT-toolchain-D6 — Checkable conventions for §12, and generated indexes
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** §12 requires a caption for every table and a text-equivalent long
 description for every diagram. Markdown has no syntax for either, so a validator
@@ -345,7 +345,7 @@ Amends §11, §12, and §13.
 
 ### COMPASS-DRAFT-toolchain-D7 — Common Lisp, with purpose-built parsers
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** §22 intends a Common Lisp toolchain that shares its parsing front
 end with the Markdown→Lexis importer (S2). Findings must cite line numbers.
@@ -368,7 +368,7 @@ end with the Markdown→Lexis importer (S2). Findings must cite line numbers.
 
 ### COMPASS-DRAFT-toolchain-D8 — Manager-agnostic system, first-class on both Quicklisp and ocicl
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Quicklisp is what is used today: `~/.sbclrc` loads it, and its
 installed dist is 2023-06-18. ocicl is the way forward. It gives project-local
@@ -396,7 +396,7 @@ dist in current use.
 
 ### COMPASS-DRAFT-toolchain-D9 — Bootstrapping the COMPASS namespace
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The COMPASS namespace has no ledger. `Compass.md` has no
 front-matter. The authoring-assistance Plan already uses canonical-looking
@@ -407,7 +407,7 @@ and would confuse lookup.
 **Decision:** The first ledger records:
 1. `COMPASS-0001` for `Compass.md`, which gains front-matter in the same change.
 2. The existing `COMPASS-D1`–`D4` and `COMPASS-O1`–`O3` from
-   [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md), kept with
+   [COMPASS-0003](Plan.AuthoringAssistance.md), kept with
    their current numbers rather than renumbered.
 
 After those entries, normal allocation applies, so this Plan's provisional IDs
@@ -421,7 +421,7 @@ it rewrites citations already made from `skills/compass-derive/SKILL.md`.
 
 ### COMPASS-DRAFT-toolchain-D10 — Agent-context outputs are generated and committed
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The Operator Memory survey (COMPASS-DRAFT-operator-memory-O1)
 resolved to import the useful parts of Operator Memory into Compass rather than
@@ -454,7 +454,7 @@ without running Lisp.
 
 ### COMPASS-DRAFT-toolchain-D11 — Catalog contents, scope, and budget
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** An agent "can't search for what it doesn't know," so it needs a
 compact list of what exists. Injecting every document, or even every index
@@ -506,7 +506,7 @@ Budget:
 
 ### COMPASS-DRAFT-toolchain-D12 — Authority weight is derived from genre and status
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The blog post behind Operator Memory complains that "the past is
 treated as truth." Operator Memory solves this by deleting the past. Compass
@@ -569,7 +569,7 @@ fields strictly but does not say what happens to other keys.
 
 ### COMPASS-DRAFT-toolchain-D14 — The source map is extracted from source headers
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** A repository documented with Compass still sends its agent into the
 source cold. Operator Memory's answer is an agent-maintained index, which is
@@ -579,7 +579,7 @@ that a per-file map is in scope, that symbol-level API reference stays ceded
 standard header comment in each source file. The ancestor repositories already
 open most files with a descriptive comment, in four different forms.
 
-**Decision:** Implement [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md):
+**Decision:** Implement [COMPASS-0002](Spec.SourceHeaders.md):
 - an extractor per comment family (Lisp first), which reads only the header
   block of each file and the `compass:header` block of each directory README;
 - `compass map`, which writes `doc/MAP.md` (COMPASS-DRAFT-toolchain-D10), with `PATH`, `--file`,
@@ -603,7 +603,7 @@ API reference remains ceded.
 
 ### COMPASS-DRAFT-toolchain-D15 — Manifest keys for commands, map, catalog, and stewards
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** After the catalog itself, the facts agents need most often are how
 to build and test a project. In Operator Memory they live in prose instructions.
@@ -633,13 +633,13 @@ without change; `:approval` takes keywords rather than `t` for that reason.
 
 ### COMPASS-DRAFT-toolchain-D16 — Register record headings carry the full identifier
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The register scanner finds `D`, `O`, and M records by their
 headings, so the heading form must be unambiguous. The corpus uses three forms.
 §8's example uses a short form (`### D16 — …`), which names no namespace. This
 Plan, COMPASS-DRAFT-agent-workflow, and the genre templates use the full
-identifier (`### COMPASS-DRAFT-toolchain-D1 — …`). COMPASS-DRAFT-authoring-assistance
+identifier (`### COMPASS-DRAFT-toolchain-D1 — …`). COMPASS-0003
 mixes the two, with short decision headings and full open-question headings. A
 short heading cannot express a provisional identifier, cannot be found by a
 corpus-wide search for its identifier, and leaves the scanner to guess the
@@ -651,7 +651,7 @@ identifier and the separator is an em dash. The scanner recognises the short
 form `### D<n> — …` / `### O<n> — …` only to report it (`register/heading-form`,
 warning), and reads it as `<host namespace>-D<n>` meanwhile. Amends §8 (minor):
 the §8 example changes to the full form. The headings of
-COMPASS-DRAFT-authoring-assistance are corrected in the same change as this
+COMPASS-0003 are corrected in the same change as this
 decision.
 
 **Alternatives:**
@@ -705,7 +705,7 @@ toolchain that produces it.
 
 ### COMPASS-DRAFT-toolchain-D18 — A strict YAML-subset parser written in Lisp
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** COMPASS-DRAFT-toolchain-O1 weighed `cl-yaml`, which parses full
 YAML 1.1 through the native libyaml library, against a parser for only the YAML
@@ -927,7 +927,7 @@ recorded here rather than left to the code.
   enforces, and a one-line summary, as text or JSON, so that skills can explain
   findings without restating the rule set.
 - **`compass outline` and `compass refs` in the baseline.** The skills of
-  [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md) need to
+  [COMPASS-0003](Plan.AuthoringAssistance.md) need to
   open part of a large document and to find what refers to an identifier. A
   search with `grep` misses links whose text is not the identifier, so
   `outline` moves forward from roadmap step 6, and `refs` is added. `refs`
@@ -948,7 +948,7 @@ recorded here rather than left to the code.
 
 ### COMPASS-DRAFT-toolchain-D22 — One ledger per repository, one entry per line
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** COMPASS-DRAFT-toolchain-D3 fixes what the ledger records but not its shape: whether a
 repository that owns several namespaces keeps one ledger or several, how an
@@ -998,7 +998,7 @@ allocations always conflict.
 
 ### COMPASS-DRAFT-toolchain-D23 — Provisional records in a numbered document reuse its alias
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** COMPASS-DRAFT-toolchain-D2 forms a provisional record identifier from its document's
 provisional identifier. Once the document has a number, a record added to it on
@@ -1022,7 +1022,7 @@ both; `compass next NS --kind K --in FILE` prints the next such identifier, and
 
 ### COMPASS-DRAFT-toolchain-D24 — What `compass assign` does
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** §13 has the steward assign numbers at acceptance. Done by hand, that
 means choosing free numbers, rewriting every reference, renaming the anchors of
@@ -1061,7 +1061,7 @@ name the allocator and to read the base revision.
 
 ### COMPASS-DRAFT-toolchain-D25 — Concurrent allocations are recovered by keeping both and renumbering
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** When two branches allocate, the second to merge meets a conflict
 in the ledger (COMPASS-DRAFT-toolchain-D1). The earlier plan had the author take the upstream ledger
@@ -1094,7 +1094,7 @@ It prints every change; the author reviews them before committing.
 
 ### COMPASS-DRAFT-toolchain-D26 — Records are referred to by full identifier; short forms are found, not rewritten
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Documents refer to records by short forms such as `D6`, `O4 and O5
 of <document>`, or `<identifier>-D10 to D14`. A short form means whatever record
@@ -1134,7 +1134,7 @@ the warnings; the rule then keeps new ones from accumulating.
 
 ### COMPASS-DRAFT-toolchain-D27 — Git-derived fields, including for files not yet committed
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** §7 lets `authors`, `created`, and `updated` be omitted and derived
 from Git, and the rule table has `git/derivable` check that a required field is
@@ -1555,7 +1555,7 @@ Table: Initial rule set, with severity and the section each rule enforces.
 | `manifest/authority` | warning | COMPASS-DRAFT-toolchain-D17: every owned namespace declares a tagging authority |
 | `catalog/current` | error | COMPASS-DRAFT-toolchain-D10 generated catalog matches |
 | `catalog/budget` | warning | COMPASS-DRAFT-toolchain-D11 catalog fits its budget without truncation |
-| `header/*`, `dir/header-syntax`, `map/current` | as specified | [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md#validation-rules); COMPASS-DRAFT-toolchain-D14 |
+| `header/*`, `dir/header-syntax`, `map/current` | as specified | [COMPASS-0002](Spec.SourceHeaders.md#validation-rules); COMPASS-DRAFT-toolchain-D14 |
 
 ### Command-line interface
 
@@ -1838,7 +1838,7 @@ skips files without front-matter, or reports them as a migration backlog, or
 should migration be a separate `compass migrate` assistant?
 
 The same question applies to source headers: the ancestor repositories use four
-header forms (see [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md#afterword-limits)),
+header forms (see [COMPASS-0002](Spec.SourceHeaders.md#afterword-limits)),
 and most of the reshaping is mechanical enough for an assistant to propose.
 
 ### COMPASS-DRAFT-toolchain-O6 — Detecting stale source headers
@@ -1964,7 +1964,7 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
    - Wire `compass-author` to `check`, `next`, and later `assign`;
      `compass-review` to `check` and `rules`; and `compass-lookup` to `show`,
      `outline`, `refs`, and `index --stdout`. Done for v0.1 (2026-10-08), in
-     COMPASS-DRAFT-authoring-assistance's roadmap step 6; `assign` follows
+     COMPASS-0003's roadmap step 6; `assign` follows
      with v0.2. *`assign`, `next --in`, `check --base`, and aliases were added
      to the skills for v0.2.*
    - Lift COMPASS-D2. *Done: the skills have called the toolchain since v0.1

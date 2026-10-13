@@ -9,3 +9,5 @@
 (:id "COMPASS-O1" :kind :open-question :host "COMPASS-DRAFT-authoring-assistance" :date "2026-10-09" :by "Andrew Sengul")
 (:id "COMPASS-O2" :kind :open-question :host "COMPASS-DRAFT-authoring-assistance" :date "2026-10-09" :by "Andrew Sengul")
 (:id "COMPASS-O3" :kind :open-question :host "COMPASS-DRAFT-authoring-assistance" :date "2026-10-09" :by "Andrew Sengul")
+(:id "COMPASS-0002" :kind :document :draft "COMPASS-DRAFT-source-headers" :path "doc/Spec.SourceHeaders.md" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-0003" :kind :document :draft "COMPASS-DRAFT-authoring-assistance" :path "doc/Plan.AuthoringAssistance.md" :date "2026-10-13" :by "Andrew Sengul")

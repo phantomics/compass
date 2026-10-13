@@ -11,9 +11,9 @@ and the documents that support them, live here as they are written:
 - `COMPASS-DRAFT-fixture-compilation` — README/fixture transclusion (S7)
 - `COMPASS-DRAFT-user-doc-derivation` — audience projection / end-user docs (S5)
 - `COMPASS-DRAFT-federated-site` — federated Astro site (S8)
-- `COMPASS-DRAFT-authoring-assistance` — editor tooling + LLM skills (S9)
+- `COMPASS-0003` — editor tooling + LLM skills (S9)
 - `COMPASS-DRAFT-agent-workflow` — Memo genre, review gates, maintenance loop (S9)
-- `COMPASS-DRAFT-source-headers` — source-header convention and source map (Spec)
+- `COMPASS-0002` — source-header convention and source map (Spec)
 - `COMPASS-DRAFT-operator-memory` — Survey of Operator Memory as agent context
 - `COMPASS-DRAFT-agent-context-eval` — Eval protocol: agent quality over time with Compass context
 - `COMPASS-DRAFT-secure-development` — Survey of Compass's role in secure development

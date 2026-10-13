@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-authoring-assistance
+id:            COMPASS-0003
 title:         Compass Authoring-Assistance Layer
 genre:         Plan
 scope:         program
@@ -7,14 +7,12 @@ program:       Compass
 project:       ~
 component:     authoring-assistance
 language:      en
-status:        Accepted
+status:        Implemented
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
 reviewed:      2026-10-12
 created:       2026-08-24
-authors:
-  - Andrew Sengul
 provenance:
   assistant:  opencode
 relates-to:
@@ -104,7 +102,7 @@ and invites drift).
 
 ### COMPASS-D3 — Build author/review/lookup now; defer derive
 
-**Status:** Accepted
+**Status:** Implemented
 **Context:** `compass-derive` wraps deterministic backends — the toolchain and
 importer (S1/S2), audience projection (S5), fixture compilation (S7), and the
 site build (S8) — none of which exist. The other three skills either need no
@@ -120,7 +118,7 @@ useful).
 
 ### COMPASS-D4 — Harness-neutral core plus shared reference bundle
 
-**Status:** Accepted
+**Status:** Implemented
 **Context:** §23 S9 requires the skills' substance to be authored once and
 adapted per harness. Each skill also needs the same extracted slices of the
 1400-line standard (vocabularies, front-matter schema, section shapes,
@@ -263,7 +261,7 @@ Table: Prior systems and what this plan draws from each.
 
 - Assign the canonical `COMPASS-<NNNN>` identifier with `compass assign` once
   this Plan is accepted, replacing the provisional
-  `COMPASS-DRAFT-authoring-assistance` (§13).
+  `COMPASS-0003` (§13).
 - Resolve COMPASS-O1 and COMPASS-O3 (COMPASS-O1 is partly resolved;
   COMPASS-O2 is resolved).
 - Author the cross-harness adapters once the OpenCode reference set is proven.

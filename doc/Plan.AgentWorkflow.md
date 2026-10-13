@@ -15,10 +15,10 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-authoring-assistance
+  - COMPASS-0003
   - COMPASS-DRAFT-toolchain
   - COMPASS-DRAFT-operator-memory
-  - COMPASS-DRAFT-source-headers
+  - COMPASS-0002
   - COMPASS-DRAFT-agent-context-eval
 cites:
   - title:     RFC 7322 — RFC Style Guide
@@ -68,8 +68,8 @@ It is the authoring-assistance (S9) counterpart of the agent-context outputs in
 [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) (COMPASS-DRAFT-toolchain-D10 to
 COMPASS-DRAFT-toolchain-D15), which generate the session catalog and source map
 that this plan's adapter delivers. It extends
-[COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md) and uses the
-source headers of [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md). Every
+[COMPASS-0003](Plan.AuthoringAssistance.md) and uses the
+source headers of [COMPASS-0002](Spec.SourceHeaders.md). Every
 change it proposes to [COMPASS-0001](../Compass.md) is listed under
 [Amendments to the standard](#amendments-to-the-standard) and lands only by
 accepted amendment (§13).

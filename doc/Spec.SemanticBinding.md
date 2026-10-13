@@ -15,7 +15,7 @@ provenance:
 relates-to:
   - COMPASS-0001
   - COMPASS-DRAFT-toolchain
-  - COMPASS-DRAFT-source-headers
+  - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-secure-development
   - COMPASS-DRAFT-agent-context-prior-art
@@ -304,7 +304,7 @@ Table: Classes defined or reused by the binding.
 | `foaf:Person`, `prov:SoftwareAgent` | `prov:Agent` | Authors, reviewers, approvers; assistants |
 | `compass:ExternalWork` | | A work cited from outside the corpus (§9) |
 | `compass:CodeReference` | | A commit-pinned code reference (§9) |
-| `compass:SourceFile`, `compass:Directory` | `schema:SoftwareSourceCode` (files) | Items of the source map (COMPASS-DRAFT-source-headers) |
+| `compass:SourceFile`, `compass:Directory` | `schema:SoftwareSourceCode` (files) | Items of the source map (COMPASS-0002) |
 
 The genre class follows the `genre:` value, not the file prefix:
 `genre: Architecture` gives `compass:Architecture`. Subtypes are not classes;
@@ -323,8 +323,8 @@ Table: Concept schemes and their members.
 | `cscope:` | `component`, `project`, `program` | §5 |
 | `csubtype:` | `prior-art`, `comparison`, `tradeoff`, `threat-model` (pending), `tutorial`, `howto` | §4; `threat-model` from COMPASS-DRAFT-secure-development |
 | `cstatus:` | `Draft`, `Proposed`, `In-Review`, `Accepted`, `Implemented`, `Design-Record`, `Deprecated`, `Superseded`, `Rejected`, `Withdrawn`, `Current` | §6, as amended by COMPASS-DRAFT-toolchain-D5 |
-| `cconcern:` | `security-boundary`, `concurrency`, `wire-format`, `persistent-format`, `public-api`, `ffi`, `hot-path` | COMPASS-DRAFT-source-headers |
-| `cstability:` | `experimental`, `stable`, `deprecated` | COMPASS-DRAFT-source-headers |
+| `cconcern:` | `security-boundary`, `concurrency`, `wire-format`, `persistent-format`, `public-api`, `ffi`, `hot-path` | COMPASS-0002 |
+| `cstability:` | `experimental`, `stable`, `deprecated` | COMPASS-0002 |
 | `cweight:` | `Authoritative`, `Directive`, `Contextual`, `Provisional`, `Excluded` | COMPASS-DRAFT-toolchain-D12 (derived) |
 
 A component is a concept in a per-namespace scheme, `tag:<A>:<ns>/component`,
@@ -456,7 +456,7 @@ signed workflow transition, to the acceptance node.
 
 ### Source map
 
-When source headers exist (COMPASS-DRAFT-source-headers), each in-scope file
+When source headers exist (COMPASS-0002), each in-scope file
 produces a `compass:SourceFile`, and each directory with a description a
 `compass:Directory`, related by `dcterms:isPartOf`.
 

@@ -1,15 +1,17 @@
 ---
-id:            COMPASS-DRAFT-source-headers
+id:            COMPASS-0002
 title:         Compass Source Headers and Source Map
 genre:         Spec
 scope:         program
 program:       Compass
 component:     source-map
 language:      en
-status:        Draft
+status:        Current
 schema-version: "0.1"
 authors:
   - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:

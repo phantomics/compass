@@ -16,7 +16,7 @@ provenance:
 relates-to:
   - COMPASS-0001
   - COMPASS-DRAFT-toolchain
-  - COMPASS-DRAFT-source-headers
+  - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-agent-context-eval
   - COMPASS-DRAFT-operator-memory
@@ -68,7 +68,7 @@ so for coding agents as well as people. It also asks the reverse question: what
 new risks Compass creates once its corpus is delivered into agents' context. It
 builds on the content model of [COMPASS-0001](../Compass.md), the toolchain of
 [COMPASS-DRAFT-toolchain](Plan.Toolchain.md), the source headers of
-[COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md), and the agent workflow of
+[COMPASS-0002](Spec.SourceHeaders.md), and the agent workflow of
 [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md). Like any Survey it is
 exploratory and non-normative; each candidate it recommends would arrive as a
 Plan decision or an amendment (§13).
@@ -136,7 +136,7 @@ Table: Secure-design practices and their Compass forms.
 | Threat model | An `Eval` with the new subtype `threat-model` | New: minor amendment to §4 |
 | Threats tracked to resolution | An unmitigated threat is an `O`-record. A mitigation or an accepted risk is a `D`-record, whose Alternatives record what was rejected and why. A threat found not to apply is closed in prose | Existing registers |
 | Security properties of running code | Memos, such as "the codec never evaluates input" or "federation receivers must be idempotent" | Planned (COMPASS-DRAFT-agent-workflow-D1) |
-| File-level trust boundaries | Source header `Concerns: security-boundary`, `Invariant:` lines, `See:` to the decisions behind them, `Tests:` to the negative tests | Specified (COMPASS-DRAFT-source-headers) |
+| File-level trust boundaries | Source header `Concerns: security-boundary`, `Invariant:` lines, `See:` to the decisions behind them, `Tests:` to the negative tests | Specified (COMPASS-0002) |
 | Outdated security guidance stays out of use | A superseded security decision has weight Excluded, so agents follow its successor | Planned (COMPASS-DRAFT-toolchain-D12) |
 | Claims a reviewer can verify | "The check lives here" pinned to a commit | Existing (§9) |
 
@@ -348,7 +348,7 @@ evaluation, which leaves time.
   weight (COMPASS-DRAFT-toolchain-D12), source map (COMPASS-DRAFT-toolchain-D14),
   manifest (COMPASS-DRAFT-toolchain-D4, COMPASS-DRAFT-toolchain-D15),
   and the YAML-parser question (COMPASS-DRAFT-toolchain-O1).
-- [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md): `Concerns:
+- [COMPASS-0002](Spec.SourceHeaders.md): `Concerns:
   security-boundary`, `Invariant:`, `See:`, and `Tests:` are the file-level
   carriers.
 - [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md): memos, review gates,

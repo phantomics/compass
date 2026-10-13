@@ -11,17 +11,17 @@ Table: Documents in the COMPASS namespace.
 | ID | Title | Genre | Scope | Status | Component |
 |---|---|---|---|---|---|
 | [COMPASS-0001](../Compass.md) | Compass: Common Ontological Model for Prose Artifacts by Structural Standard | Spec | program | Draft | — |
+| [COMPASS-0002](Spec.SourceHeaders.md) | Compass Source Headers and Source Map | Spec | program | Current | source-map |
+| [COMPASS-0003](Plan.AuthoringAssistance.md) | Compass Authoring-Assistance Layer | Plan | program | Implemented | authoring-assistance |
 | [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md) | Compass as Agent Context — Evaluating Quality Over Time | Eval (comparison) | program | Draft | agent-context |
 | [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Draft | agent-context |
 | [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
-| [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md) | Compass Authoring-Assistance Layer | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
 | [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
 | [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md) | Operator Memory and Compass as Agent Context | Survey | program | Accepted | authoring-assistance |
-| [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Draft | security |
+| [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Accepted | security |
 | [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) | Compass Semantic Binding — RDF Vocabulary, Identity, and Shapes | Spec | program | Draft | semantic-binding |
-| [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md) | Compass Source Headers and Source Map | Spec | program | Draft | source-map |
 | [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) | Compass Validation Toolchain | Plan | program | Draft | toolchain |
 | [COMPASS-DRAFT-toolchain-log](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Accepted | toolchain |
 
@@ -29,10 +29,10 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 
 | ID | Kind | Title | Status | Host |
 |---|---|---|---|---|
-| [COMPASS-D1](Plan.AuthoringAssistance.md#compass-d1--four-skills-split-by-shape) | Decision | Four skills, split by shape | Accepted | COMPASS-DRAFT-authoring-assistance |
-| [COMPASS-D2](Plan.AuthoringAssistance.md#compass-d2--advisory-only-until-the-toolchain-exists) | Decision | Advisory-only until the toolchain exists | Implemented | COMPASS-DRAFT-authoring-assistance |
-| [COMPASS-D3](Plan.AuthoringAssistance.md#compass-d3--build-authorreviewlookup-now-defer-derive) | Decision | Build author/review/lookup now; defer derive | Accepted | COMPASS-DRAFT-authoring-assistance |
-| [COMPASS-D4](Plan.AuthoringAssistance.md#compass-d4--harness-neutral-core-plus-shared-reference-bundle) | Decision | Harness-neutral core plus shared reference bundle | Accepted | COMPASS-DRAFT-authoring-assistance |
+| [COMPASS-D1](Plan.AuthoringAssistance.md#compass-d1--four-skills-split-by-shape) | Decision | Four skills, split by shape | Implemented | COMPASS-0003 |
+| [COMPASS-D2](Plan.AuthoringAssistance.md#compass-d2--advisory-only-until-the-toolchain-exists) | Decision | Advisory-only until the toolchain exists | Implemented | COMPASS-0003 |
+| [COMPASS-D3](Plan.AuthoringAssistance.md#compass-d3--build-authorreviewlookup-now-defer-derive) | Decision | Build author/review/lookup now; defer derive | Implemented | COMPASS-0003 |
+| [COMPASS-D4](Plan.AuthoringAssistance.md#compass-d4--harness-neutral-core-plus-shared-reference-bundle) | Decision | Harness-neutral core plus shared reference bundle | Implemented | COMPASS-0003 |
 | [COMPASS-DRAFT-agent-workflow-D1](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d1--a-memo-genre-for-durable-system-knowledge) | Decision | A Memo genre for durable system knowledge | Accepted | COMPASS-DRAFT-agent-workflow |
 | [COMPASS-DRAFT-agent-workflow-D2](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d2--memos-are-numbered-records-in-a-host-document) | Decision | Memos are numbered records in a host document | Accepted | COMPASS-DRAFT-agent-workflow |
 | [COMPASS-DRAFT-agent-workflow-D3](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d3--four-admission-tests-and-a-mandatory-basis) | Decision | Four admission tests, and a mandatory basis | Accepted | COMPASS-DRAFT-agent-workflow |
@@ -93,9 +93,9 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-toolchain-log-D2](Log.Toolchain.md#compass-draft-toolchain-log-d2--problems-found-while-loading-are-rules-too) | Decision | Problems found while loading are rules too | Proposed | COMPASS-DRAFT-toolchain-log |
 | [COMPASS-DRAFT-toolchain-log-D3](Log.Toolchain.md#compass-draft-toolchain-log-d3--checking-one-path-still-checks-the-whole-corpus) | Decision | Checking one path still checks the whole corpus | Proposed | COMPASS-DRAFT-toolchain-log |
 | [COMPASS-DRAFT-toolchain-log-D4](Log.Toolchain.md#compass-draft-toolchain-log-d4--a-closed-output-stream-ends-the-command-quietly) | Decision | A closed output stream ends the command quietly | Proposed | COMPASS-DRAFT-toolchain-log |
-| [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-DRAFT-authoring-assistance |
-| [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-DRAFT-authoring-assistance |
-| [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-DRAFT-authoring-assistance |
+| [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
+| [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
+| [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |
 | [COMPASS-DRAFT-agent-context-eval-O1](Eval.AgentContext.md#compass-draft-agent-context-eval-o1--how-much-interface-a-task-statement-reveals) | Open question | How much interface a task statement reveals | — | COMPASS-DRAFT-agent-context-eval |
 | [COMPASS-DRAFT-agent-context-eval-O2](Eval.AgentContext.md#compass-draft-agent-context-eval-o2--divergence-in-free-running-mode) | Open question | Divergence in free-running mode | — | COMPASS-DRAFT-agent-context-eval |
 | [COMPASS-DRAFT-agent-context-eval-O3](Eval.AgentContext.md#compass-draft-agent-context-eval-o3--the-judge-model) | Open question | The judge model | — | COMPASS-DRAFT-agent-context-eval |
