@@ -43,7 +43,7 @@ Compass is a documentation standard whose payoff depends on documents actually
 conforming to it — correct front-matter (§7), controlled vocabularies (§4, §6),
 ADR-shaped decision records (§8), commit-pinned references (§9), and the
 per-genre section shapes (§14). Two enforcement layers are described in the
-standard: the deterministic validation toolchain (§22, `COMPASS-DRAFT-toolchain`)
+standard: the deterministic validation toolchain (§22, `COMPASS-0004`)
 and human editorial review (§6). Neither exists in automated form yet, and even
 once the toolchain lands, a large class of quality concerns — genre fit,
 section-shape judgment, decision-record quality, prior-art coverage,
@@ -89,7 +89,7 @@ mapping already assumes the four-way split).
 ### COMPASS-D2 — Advisory-only until the toolchain exists
 
 **Status:** Implemented
-**Context:** The §22 toolchain (`COMPASS-DRAFT-toolchain`) is the deterministic
+**Context:** The §22 toolchain (`COMPASS-0004`) is the deterministic
 backstop the skills defer to, and it is not yet built.
 **Decision:** Skills operate in **advisory-only mode** in the toolchain's
 absence: they apply the standard's rules as best-effort guidance and state
@@ -179,7 +179,7 @@ report the result of `compass check` and the toolchain version (the review
 report's header says "Checked with"), and anyone can rerun the check, so no
 marker in the document is needed. Without the toolchain, the skills say the
 output was not checked. What remains open is the case of a document committed
-without either, which the required check of COMPASS-DRAFT-toolchain-D1 would
+without either, which the required check of COMPASS-D5 would
 catch at merge.
 
 ### COMPASS-O2 — Registry access before the toolchain exists
@@ -190,14 +190,14 @@ What is the minimum registry/manifest shape the skills should assume, and how do
 they degrade when it is absent?
 
 **Partly resolved (2026-10-08):** the manifest is `compass.sexp`
-(COMPASS-DRAFT-toolchain-D4), from which the skills read the namespace, the
+(COMPASS-D8), from which the skills read the namespace, the
 document directory, and the federated repositories. Until the ledger exists,
 `compass index --stdout` gives the registry view, `compass next` gives an
 advisory next number, and documents keep provisional identifiers. The ledger
 itself arrives with toolchain version 0.2.
 
 **Resolved (2026-10-10):** with toolchain version 0.2 the registry is the
-ledger, `REGISTRY.sexp` in the document directory (COMPASS-DRAFT-toolchain-D22),
+ledger, `REGISTRY.sexp` in the document directory (COMPASS-D26),
 and the shape the skills assume is the manifest plus the ledger. The skills never
 read either file themselves: `compass manifest --json` gives the manifest,
 `compass next` previews numbers from the ledger, `compass next --in` gives the
@@ -234,7 +234,7 @@ Table: Prior systems and what this plan draws from each.
 4. **Author / review / lookup skills (now).** Full `SKILL.md` for each.
 5. **Derive skill (deferred).** Sharpen the stub; build when S1/S2/S5/S7/S8 land.
 6. **Toolchain integration (done for version 0.2).** Wire each skill to call
-   `COMPASS-DRAFT-toolchain` (COMPASS-D2) instead of checking by hand.
+   `COMPASS-0004` (COMPASS-D2) instead of checking by hand.
    - **Done for toolchain version 0.1 (2026-10-08):** the shared
      `skills/reference/toolchain.md`; `compass-author` checks its drafts,
      `compass-review` reports the toolchain's findings, and `compass-lookup`

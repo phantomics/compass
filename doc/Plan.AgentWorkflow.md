@@ -16,8 +16,8 @@ provenance:
 relates-to:
   - COMPASS-0001
   - COMPASS-0003
-  - COMPASS-DRAFT-toolchain
-  - COMPASS-DRAFT-operator-memory
+  - COMPASS-0004
+  - COMPASS-0005
   - COMPASS-0002
   - COMPASS-DRAFT-agent-context-eval
 cites:
@@ -60,13 +60,13 @@ open-questions:
 This plan covers how coding agents work *within* a Compass corpus: where they
 record durable knowledge, what they may change and who must approve it, how
 their assistance is recorded, and the loop that keeps the corpus current as code
-changes. It resolves open questions COMPASS-DRAFT-operator-memory-O4 and
-COMPASS-DRAFT-operator-memory-O5 of
-[COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md) and carries
-COMPASS-DRAFT-operator-memory-O6 forward.
+changes. It resolves open questions COMPASS-O14 and
+COMPASS-O15 of
+[COMPASS-0005](Survey.OperatorMemory.md) and carries
+COMPASS-O16 forward.
 It is the authoring-assistance (S9) counterpart of the agent-context outputs in
-[COMPASS-DRAFT-toolchain](Plan.Toolchain.md) (COMPASS-DRAFT-toolchain-D10 to
-COMPASS-DRAFT-toolchain-D15), which generate the session catalog and source map
+[COMPASS-0004](Plan.Toolchain.md) (COMPASS-D14 to
+COMPASS-D19), which generate the session catalog and source map
 that this plan's adapter delivers. It extends
 [COMPASS-0003](Plan.AuthoringAssistance.md) and uses the
 source headers of [COMPASS-0002](Spec.SourceHeaders.md). Every
@@ -77,7 +77,7 @@ accepted amendment (§13).
 ## Problem
 
 The Operator Memory survey resolved to import the useful parts of Operator
-Memory rather than run it alongside Compass (COMPASS-DRAFT-toolchain-D10). Three
+Memory rather than run it alongside Compass (COMPASS-D14). Three
 of Operator Memory's functions then need a home inside Compass.
 
 - **Durable working knowledge has nowhere to go.** Agents and developers learn
@@ -128,7 +128,7 @@ remain **Proposed** until accepted individually.
 
 **Status:** Accepted
 
-**Context:** COMPASS-DRAFT-operator-memory-O4 asked where durable but
+**Context:** COMPASS-O14 asked where durable but
 unpublished knowledge belongs. The answer settled with the maintainer: a genre
 for items likely to be useful in future work, such as system properties whose
 understanding is key to the system's function, and explicitly not a scratchpad.
@@ -151,7 +151,7 @@ and agents) from the knowledge-base and FAQ non-goal. Amends §2 (patch) and §4
 - `Note`. Rejected: it reads as a scratchpad, the use this genre must avoid.
 - `Finding`. Rejected: it suggests a review result or an audit item.
 - No genre, using Operator Memory's private partition. Rejected by the survey's
-  COMPASS-DRAFT-operator-memory-O1 resolution (import, do not run alongside).
+  COMPASS-O11 resolution (import, do not run alongside).
 - A `Ref` subtype. Rejected: a `Ref` is normative and comprehensive, whereas a
   memo is a single observed fact that may later be folded into a `Ref`.
 
@@ -176,7 +176,7 @@ identified `<NS>-M<n>`. They follow the D-record shape and the rules of §8:
   a fixed set of bold-label fields, and a short body. See
   [The Memo genre](#the-memo-genre).
 - **Provisional identifiers.** A record in an unassigned host is
-  `<NS>-DRAFT-<slug>-M<n>`, as COMPASS-DRAFT-toolchain-D2 defines for `D` and
+  `<NS>-DRAFT-<slug>-M<n>`, as COMPASS-D6 defines for `D` and
   `O`. `compass assign` gives it a canonical `<NS>-M<n>`, and the ledger records
   it as `:kind :memo`.
 - **Never deleted.** A retired record stays in place with its status changed, and
@@ -224,7 +224,7 @@ each proposed memo passes and why.
 
 **Status:** Accepted
 
-**Context:** The weight function of COMPASS-DRAFT-toolchain-D12 needs status
+**Context:** The weight function of COMPASS-D16 needs status
 values for the host and its records. Memos describe running software, so the
 reference-genre statuses fit, with the addition of supersession.
 
@@ -249,7 +249,7 @@ Amends §6 (minor).
 
 **Alternatives:**
 - Weight a `Current` memo as Directive. Rejected: a memo is non-normative, but
-  it is a verified fact about the code, which is what Authoritative means in COMPASS-DRAFT-toolchain-D12.
+  it is a verified fact about the code, which is what Authoritative means in COMPASS-D16.
 - A status only on the host. Rejected: memos in one host are recorded, verified,
   and retired independently.
 
@@ -257,7 +257,7 @@ Amends §6 (minor).
 
 **Status:** Accepted
 
-**Context:** COMPASS-DRAFT-operator-memory-O5 settled that changes to project-
+**Context:** COMPASS-O15 settled that changes to project-
 and program-scope documents are always reviewed by a human. Applied literally to
 every edit, that rule makes bulk mechanical rewrites (`compass assign`,
 `compass renumber`, link repair after supersession) as costly to review as
@@ -268,7 +268,7 @@ design changes. It also invites review fatigue, which ends in rubber-stamping.
 1. **The change gate.** A change to a project- or program-scope document reaches
    the main branch only in a commit made by a human, or through a pull request a
    human approves. An agent never makes the final commit to the main branch by
-   itself. Branch protection (COMPASS-DRAFT-toolchain-D1) enforces this. For
+   itself. Branch protection (COMPASS-D5) enforces this. For
    component-scope documents the gate is RECOMMENDED.
 2. **The acceptance gate.** A transition into an authoritative status
    (`Accepted`, `Design-Record`, `Current`, including a memo's `Current`)
@@ -301,7 +301,7 @@ an explicit solo-steward declaration (option a) over counting the human
 reviewer of an agent's draft as the second pair of eyes (option b).
 
 **Decision:** The project manifest declares each namespace's steward, and may
-mark the namespace's approval mode as solo (COMPASS-DRAFT-toolchain-D15). In a
+mark the namespace's approval mode as solo (COMPASS-D19). In a
 solo namespace the steward MAY be the `approved-by` of a document they also
 authored. The rule `review/approver` enforces:
 - `approved-by` is never an assistant: not the `provenance: assistant`, and not
@@ -377,7 +377,7 @@ with proposals.
 **Decision:**
 - **Protocol text.** A short protocol, given under
   [The maintenance loop](#the-maintenance-loop), is placed in the session
-  catalog's preamble (COMPASS-DRAFT-toolchain-D11) and in
+  catalog's preamble (COMPASS-D15) and in
   `templates/AGENTS.snippet.md`.
 - **A fifth skill, `compass-maintain`.** Given a change (a diff or a commit
   range), it proposes the corpus updates the change implies: corrections to
@@ -402,7 +402,7 @@ with proposals.
 
 **Status:** Proposed
 
-**Context:** The toolchain commits `doc/CATALOG.md` (COMPASS-DRAFT-toolchain-D10)
+**Context:** The toolchain commits `doc/CATALOG.md` (COMPASS-D14)
 so that an adapter can deliver it without Lisp. Operator Memory's OpenCode
 adapter injects its preamble through a session `context` hook, caches it per
 session, and replaces it with a diagnostic if any part fails to load.
@@ -414,14 +414,14 @@ session, and replaces it with a diagnostic if any part fails to load.
    telling the agent that the corpus is unverified and how to regenerate the
    catalog. It does not silently proceed with no context;
 4. if the catalog's input digest shows it is stale, behaves as
-   COMPASS-DRAFT-toolchain-O7 decides.
+   COMPASS-O10 decides.
 
 It never writes files. Adapters for other harnesses follow the same contract
 (§23 S9).
 
 **Alternatives:**
 - Have the adapter run `compass catalog` itself. Rejected for the reasons in
-  COMPASS-DRAFT-toolchain-D10: every session would need the toolchain binary,
+  COMPASS-D14: every session would need the toolchain binary,
   and session start would wait on Git.
 - Refuse to load anything if one input fails, as Operator Memory does. Adopted in
   spirit: the catalog is one generated file, so "fails to load" means the whole
@@ -463,7 +463,7 @@ knowledge, which the injection concerns of
 [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) call for:
 - unreviewed memos come after every Authoritative, Directive, and Contextual
   entry, so they are the first entries dropped when the catalog exceeds its
-  budget (COMPASS-DRAFT-toolchain-D11);
+  budget (COMPASS-D15);
 - the catalog shows only their title and `Read-if` line, both length-limited,
   never their body.
 
@@ -589,7 +589,7 @@ human.
 
 ### Acceptance in a solo namespace
 
-A manifest declaring a solo steward (COMPASS-DRAFT-toolchain-D15):
+A manifest declaring a solo steward (COMPASS-D19):
 
 ```lisp
 :stewards ((:namespace "COMPASS" :steward "Andrew Sengul" :approval :solo))
@@ -620,7 +620,7 @@ authoritative status or approved-by; a human does that.
 ```
 
 The text is short by design; the session catalog's budget
-(COMPASS-DRAFT-toolchain-D11) covers it.
+(COMPASS-D15) covers it.
 
 `compass-maintain` works through a change in this order:
 
@@ -656,13 +656,13 @@ under §13.
 **Status (2026-10-07):** the rows for COMPASS-DRAFT-agent-workflow-D1 –
 COMPASS-DRAFT-agent-workflow-D6 have landed in COMPASS-0001, as a
 minor amendment under §13. COMPASS-0001 does not yet record a version number;
-it gains one with its front-matter (COMPASS-DRAFT-toolchain-D9). The
+it gains one with its front-matter (COMPASS-D13). The
 `Assisted-by:` half of the §7 row waits on COMPASS-DRAFT-agent-workflow-D7. `skills/reference/vocabularies.md`, the `compass-author` genre list, and
 `templates/Memo.template.md` now offer the Memo genre.
 
 The identifier grammar for M-records follows the D- and O-records. Their
 provisional form (`<NS>-DRAFT-<slug>-M<n>`) is the one
-COMPASS-DRAFT-toolchain-D2 proposes for all three registers; §13 adopts it for
+COMPASS-D6 proposes for all three registers; §13 adopts it for
 M-records now, and for D- and O-records when that decision is accepted.
 
 **Open detail:** an M-record has no `approved-by` of its own. Until the
@@ -674,7 +674,7 @@ host's `approved-by` and `reviewed` record the most recent acceptance.
 
 ### COMPASS-DRAFT-agent-workflow-O1 — Measuring whether the workflow helps
 
-Carried forward from COMPASS-DRAFT-operator-memory-O6. Neither Compass nor
+Carried forward from COMPASS-O16. Neither Compass nor
 Operator Memory has evaluated agent behaviour. The maintainer favours a
 documented, repeatable test committed to the Compass repository. What tasks,
 fixture repositories, and measures would it use: for example, exploration cost,
@@ -723,7 +723,7 @@ Table: Prior systems and what this plan draws from each.
 | IETF RFC series | Every RFC calls itself a memo ("Status of This Memo"); the source of the genre's name |
 | ADR / MADR | Numbered, individually addressable records in a host document, as `D`-records already are (§8) |
 | Git trailers (`Signed-off-by`, DCO) | Per-commit attestations parsed by tools; the model for `Assisted-by:` |
-| GitHub branch protection, `CODEOWNERS` | Mechanical enforcement of the change gate (COMPASS-DRAFT-toolchain-D1) |
+| GitHub branch protection, `CODEOWNERS` | Mechanical enforcement of the change gate (COMPASS-D5) |
 | Django migrations `--check`, renumbering | Bulk mechanical changes that are reviewed as such rather than as design changes |
 
 ## Roadmap
@@ -731,7 +731,7 @@ Table: Prior systems and what this plan draws from each.
 1. **This Plan.** Record the decisions. No change to `Compass.md` yet.
 2. **Amendment.** A minor amendment to COMPASS-0001 carrying the table under
    [Amendments to the standard](#amendments-to-the-standard).
-3. **Toolchain support** (COMPASS-DRAFT-toolchain roadmap step 6): M-records,
+3. **Toolchain support** (COMPASS-0004 roadmap step 6): M-records,
    memo rules, `review/approver`, the `:stewards` manifest key, `compass diff`,
    and trailer derivation.
 4. **Templates and skills.** `templates/Memo.template.md`; the Memo genre in

@@ -15,7 +15,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0003
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0004
   - COMPASS-DRAFT-toolchain-log
   - COMPASS-DRAFT-agent-workflow
 decisions:
@@ -55,7 +55,7 @@ corpus with `grep`, and told the user its output was unverified. With version
 - The genre templates contradicted the standard in two ways the toolchain
   would expose: they numbered records `<NAMESPACE>-D<n>`, which is neither a
   canonical nor a provisional identifier
-  ([COMPASS-DRAFT-toolchain-D2](Plan.Toolchain.md#compass-draft-toolchain-d2--provisional-identifiers-for-register-entries)),
+  ([COMPASS-D6](Plan.Toolchain.md#compass-d6--provisional-identifiers-for-register-entries)),
   and they gave every new decision the status `Accepted`, which an assistant
   must never set
   ([COMPASS-DRAFT-agent-workflow-D5](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d5--three-review-gates)).
@@ -77,10 +77,10 @@ The work carried out these existing decisions:
   [COMPASS-DRAFT-agent-workflow-D8](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d8--what-an-agent-may-do-by-scope):
   an agent never sets `approved-by`, `reviewers`, or an authoritative status,
   and may run `compass index`.
-- [COMPASS-DRAFT-toolchain-D4](Plan.Toolchain.md#compass-draft-toolchain-d4--a-project-manifest-declares-namespace-ownership-and-federation):
+- [COMPASS-D8](Plan.Toolchain.md#compass-d8--a-project-manifest-declares-namespace-ownership-and-federation):
   the skills read the namespace, document directory, and federated
   repositories from `compass.sexp`.
-- [COMPASS-DRAFT-toolchain-D21](Plan.Toolchain.md#compass-draft-toolchain-d21--implementation-conventions-for-the-baseline):
+- [COMPASS-D25](Plan.Toolchain.md#compass-d25--implementation-conventions-for-the-baseline):
   the commands `outline` and `refs`, and the rejection of `check` paths outside
   the corpus, which were added to the toolchain for the skills.
 
@@ -445,7 +445,7 @@ Table: Files added or changed. Those in `compass` are in commits `07b9643` and
 | compass | `compass.asd` | Modified | The new test file |
 | compass | `compass.sexp` | Modified | Federation with Classic, Origin, and Lexter |
 | compass | `README.md` | Modified | `outline`, `refs`, `make install` |
-| compass | `doc/Plan.AuthoringAssistance.md` | Modified | The skills as they are; step 6; COMPASS-DRAFT-toolchain-O1 and COMPASS-DRAFT-toolchain-O2 |
+| compass | `doc/Plan.AuthoringAssistance.md` | Modified | The skills as they are; step 6; COMPASS-O4 and COMPASS-O5 |
 | compass | `doc/Plan.Toolchain.md` | Modified | Step 8 |
 | classic | `compass.sexp` | **New** | Manifest |
 | classic | `AGENTS.md` | Modified | Current Compass section |

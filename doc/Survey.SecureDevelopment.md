@@ -15,11 +15,11 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0004
   - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-agent-context-eval
-  - COMPASS-DRAFT-operator-memory
+  - COMPASS-0005
 cites:
   - title:     "RFC 3552 (BCP 72) — Guidelines for Writing RFC Text on Security Considerations"
     locator:   "§5, Writing Security Considerations Sections"
@@ -67,7 +67,7 @@ development, from a project's earliest design work onward, and how they can do
 so for coding agents as well as people. It also asks the reverse question: what
 new risks Compass creates once its corpus is delivered into agents' context. It
 builds on the content model of [COMPASS-0001](../Compass.md), the toolchain of
-[COMPASS-DRAFT-toolchain](Plan.Toolchain.md), the source headers of
+[COMPASS-0004](Plan.Toolchain.md), the source headers of
 [COMPASS-0002](Spec.SourceHeaders.md), and the agent workflow of
 [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md). Like any Survey it is
 exploratory and non-normative; each candidate it recommends would arrive as a
@@ -137,7 +137,7 @@ Table: Secure-design practices and their Compass forms.
 | Threats tracked to resolution | An unmitigated threat is an `O`-record. A mitigation or an accepted risk is a `D`-record, whose Alternatives record what was rejected and why. A threat found not to apply is closed in prose | Existing registers |
 | Security properties of running code | Memos, such as "the codec never evaluates input" or "federation receivers must be idempotent" | Planned (COMPASS-DRAFT-agent-workflow-D1) |
 | File-level trust boundaries | Source header `Concerns: security-boundary`, `Invariant:` lines, `See:` to the decisions behind them, `Tests:` to the negative tests | Specified (COMPASS-0002) |
-| Outdated security guidance stays out of use | A superseded security decision has weight Excluded, so agents follow its successor | Planned (COMPASS-DRAFT-toolchain-D12) |
+| Outdated security guidance stays out of use | A superseded security decision has weight Excluded, so agents follow its successor | Planned (COMPASS-D16) |
 | Claims a reviewer can verify | "The check lives here" pinned to a commit | Existing (§9) |
 
 Together these give one chain of identifiers from design to verification:
@@ -243,13 +243,13 @@ Delivering a corpus into agents' context creates risks Compass must own.
    request could plant instructions for every agent that follows. Candidate
    mitigations:
    - the catalog carries only short metadata fields, each with a length limit,
-     never bodies (already true of COMPASS-DRAFT-toolchain-D11);
+     never bodies (already true of COMPASS-D15);
    - the adapter frames injected text as reference data, not as instructions;
    - only human-accepted (Authoritative) entries receive prominence, and the
      change gate (COMPASS-DRAFT-agent-workflow-D5) means a human merged
      everything that is injected;
    - a lint flags imperative or injection-like phrasing in routing fields.
-2. **Federated trust.** One-hop federation (COMPASS-DRAFT-toolchain-D11) brings
+2. **Federated trust.** One-hop federation (COMPASS-D15) brings
    another repository's text into local sessions. Federation entries in the
    manifest should carry a trust level, and text from an untrusted namespace
    should never be injected.
@@ -257,10 +257,10 @@ Delivering a corpus into agents' context creates risks Compass must own.
    including ones from forks. The ledger and manifest already use a restricted
    reader with `*read-eval*` bound to false. Front-matter was to pass through
    libyaml by way of CFFI, a native parsing surface. That argument helped
-   resolve COMPASS-DRAFT-toolchain-O1: front-matter is now read by a strict
-   YAML-subset parser written in Lisp (COMPASS-DRAFT-toolchain-D18), so no
+   resolve COMPASS-O4: front-matter is now read by a strict
+   YAML-subset parser written in Lisp (COMPASS-D22), so no
    native code parses pull-request input. The pinned, sigstore-verified ocicl
-   dependencies of COMPASS-DRAFT-toolchain-D8 already align with SSDF's
+   dependencies of COMPASS-D12 already align with SSDF's
    toolchain practices and SLSA's build track.
 4. **Disclosure timing.** A public corpus must not describe an unfixed
    vulnerability. Embargoed issues belong in the forge's private advisory
@@ -298,11 +298,11 @@ Table: Candidate security imports, with form, dependency, and amendment class.
 
 | # | Candidate | Form | Depends on | Class |
 |---|---|---|---|---|
-| 1 | Prompt-injection hardening of delivered context | Decisions in COMPASS-DRAFT-toolchain (catalog field limits, routing-field lint) and COMPASS-DRAFT-agent-workflow (adapter framing) | This survey's acceptance | None to core |
-| 2 | Federation trust levels | A `:trust` key on manifest `:federation` entries; untrusted text never injected | COMPASS-DRAFT-toolchain-D4, COMPASS-DRAFT-toolchain-D11 | None to core |
+| 1 | Prompt-injection hardening of delivered context | Decisions in COMPASS-0004 (catalog field limits, routing-field lint) and COMPASS-DRAFT-agent-workflow (adapter framing) | This survey's acceptance | None to core |
+| 2 | Federation trust levels | A `:trust` key on manifest `:federation` entries; untrusted text never injected | COMPASS-D8, COMPASS-D15 | None to core |
 | 3 | Security Considerations section | Required in `Plan`, `Arch`, `Spec`; `shape/sections` checks it | None | Patch (§14) |
 | 4 | `threat-model` Eval subtype | Section shape as sketched above; a template | None | Minor (§4, §14) |
-| 5 | Coverage warnings and the security-boundary map | Toolchain rules and `compass map --concern` | COMPASS-DRAFT-toolchain-D14 | None to core |
+| 5 | Coverage warnings and the security-boundary map | Toolchain rules and `compass map --concern` | COMPASS-D18 | None to core |
 | 6 | Review routing | `CODEOWNERS` generation from `Concerns:`; boundary changes always substantive | Candidate 5; COMPASS-DRAFT-agent-workflow-D5 | None to core |
 | 7 | Corpus secret scanning | An external scanner run over `doc/` and source headers in CI | None | None to core |
 | 8 | Security escalation in `compass-maintain` | Boundary changes require revisiting Security Considerations | COMPASS-DRAFT-agent-workflow-D9 | None to core |
@@ -310,7 +310,7 @@ Table: Candidate security imports, with form, dependency, and amendment class.
 | 10 | Disclosure guidance | A short rule in §2 or §9: no unfixed vulnerabilities in a public corpus | None | Patch |
 
 Candidates 1 and 2 should be decided before the catalog is built, since they
-constrain its design; COMPASS-DRAFT-toolchain step 6 is in any case gated on the
+constrain its design; COMPASS-0004 step 6 is in any case gated on the
 evaluation, which leaves time.
 
 ## Honest Limits
@@ -344,10 +344,10 @@ evaluation, which leaves time.
     Considerations section.
   - §6's review rules and §9's commit-pinned references carry most of the
     verification burden.
-- [COMPASS-DRAFT-toolchain](Plan.Toolchain.md): the catalog (COMPASS-DRAFT-toolchain-D11),
-  weight (COMPASS-DRAFT-toolchain-D12), source map (COMPASS-DRAFT-toolchain-D14),
-  manifest (COMPASS-DRAFT-toolchain-D4, COMPASS-DRAFT-toolchain-D15),
-  and the YAML-parser question (COMPASS-DRAFT-toolchain-O1).
+- [COMPASS-0004](Plan.Toolchain.md): the catalog (COMPASS-D15),
+  weight (COMPASS-D16), source map (COMPASS-D18),
+  manifest (COMPASS-D8, COMPASS-D19),
+  and the YAML-parser question (COMPASS-O4).
 - [COMPASS-0002](Spec.SourceHeaders.md): `Concerns:
   security-boundary`, `Invariant:`, `See:`, and `Tests:` are the file-level
   carriers.

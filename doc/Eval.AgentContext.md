@@ -14,8 +14,8 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-operator-memory
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0005
+  - COMPASS-0004
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-0002
   - COMPASS-0003
@@ -84,12 +84,12 @@ short sessions rather than one long one. It compares Compass's form and delivery
 against untyped documentation, agent-maintained notes, no documentation, and a
 single ever-growing session. It informs open question
 COMPASS-DRAFT-agent-workflow-O1, carried forward from
-COMPASS-DRAFT-operator-memory-O6, and it gates roadmap step 6 of
-[COMPASS-DRAFT-toolchain](Plan.Toolchain.md): the session catalog, source map,
+COMPASS-O16, and it gates roadmap step 6 of
+[COMPASS-0004](Plan.Toolchain.md): the session catalog, source map,
 and authority weight are not built until the pilot reported here has run. The
 designs under test are specified in
-[COMPASS-DRAFT-toolchain](Plan.Toolchain.md) (COMPASS-DRAFT-toolchain-D10 to
-COMPASS-DRAFT-toolchain-D15), [COMPASS-0002](Spec.SourceHeaders.md),
+[COMPASS-0004](Plan.Toolchain.md) (COMPASS-D14 to
+COMPASS-D19), [COMPASS-0002](Spec.SourceHeaders.md),
 and [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md). This document is
 currently a **protocol**: it fixes the method before any run. Results will be
 appended as `## Update <date> — <title>` sections, and the Synthesis written once
@@ -229,15 +229,15 @@ Table: Pre-registered decision rules and the decisions they act on.
 
 | If… | Then… | Acts on |
 |---|---|---|
-| R4 shows no flatter quality slope than R1, and no ethos gain over R2 | Reopen the thesis; Compass's agent-context work (Toolchain step 6, the session adapter) is deferred indefinitely | COMPASS-DRAFT-toolchain-D10, COMPASS-DRAFT-agent-workflow-D10 |
-| R4 does not beat R3 on supersession errors or decision conformance | Authority typing is not earning its cost for agents; simplify the weight function to an Excluded filter only | COMPASS-DRAFT-toolchain-D12 |
-| A3 does not beat A2 on trap tasks, or adds more than 20% cost | Replace session-start injection with on-demand retrieval (`compass show`, `outline`) | COMPASS-DRAFT-toolchain-D10, COMPASS-DRAFT-toolchain-D11, COMPASS-DRAFT-agent-workflow-D10 |
-| A4 does not beat A3 | Keep the source map for human navigation; remove its top level from the catalog | COMPASS-DRAFT-toolchain-D11, COMPASS-DRAFT-toolchain-D14 |
-| A2–A4 are not equivalent to A1 on control tasks within ±10 points | Treat the corpus as harmful to ordinary work; reduce what the catalog carries | COMPASS-DRAFT-toolchain-D11 |
+| R4 shows no flatter quality slope than R1, and no ethos gain over R2 | Reopen the thesis; Compass's agent-context work (Toolchain step 6, the session adapter) is deferred indefinitely | COMPASS-D14, COMPASS-DRAFT-agent-workflow-D10 |
+| R4 does not beat R3 on supersession errors or decision conformance | Authority typing is not earning its cost for agents; simplify the weight function to an Excluded filter only | COMPASS-D16 |
+| A3 does not beat A2 on trap tasks, or adds more than 20% cost | Replace session-start injection with on-demand retrieval (`compass show`, `outline`) | COMPASS-D14, COMPASS-D15, COMPASS-DRAFT-agent-workflow-D10 |
+| A4 does not beat A3 | Keep the source map for human navigation; remove its top level from the catalog | COMPASS-D15, COMPASS-D18 |
+| A2–A4 are not equivalent to A1 on control tasks within ±10 points | Treat the corpus as harmful to ordinary work; reduce what the catalog carries | COMPASS-D15 |
 | R4 corpus accuracy falls below 80%, or agents set authoritative statuses | Revise `compass-maintain` and the protocol before any adoption | COMPASS-DRAFT-agent-workflow-D9 |
-| A2−S is not worse than A2 on seeded-supersession tasks | Status typing does not help agents directly; as for R4 vs R3, simplify the weight function to an Excluded filter | COMPASS-DRAFT-toolchain-D12 |
+| A2−S is not worse than A2 on seeded-supersession tasks | Status typing does not help agents directly; as for R4 vs R3, simplify the weight function to an Excluded filter | COMPASS-D16 |
 | A2−R is not worse than A2 on rejected-alternative tasks | Recorded Alternatives do not reach agents; keep them for human review, but stop including them in agent-facing views and reconsider the maintenance skill's emphasis on them | COMPASS-0001 §8 record shape; COMPASS-DRAFT-agent-workflow-D9 |
-| A2−L is not worse than A2 | Agents do not use identifiers and typed links directly; identity is unchanged, since the toolchain depends on it, but the catalog may drop identifier-heavy fields | COMPASS-DRAFT-toolchain-D11 |
+| A2−L is not worse than A2 | Agents do not use identifiers and typed links directly; identity is unchanged, since the toolchain depends on it, but the catalog may drop identifier-heavy fields | COMPASS-D15 |
 
 ### Models
 
@@ -281,7 +281,7 @@ opencode export <session-id> > runs/<run-id>/session.json
   shift agent quality (Ben Sghaier et al.).
 - The catalog, source map, and source headers used in A3, A4, and R4 are produced
   by hand, or with the toolchain's v0.1 baseline where it suffices, following the
-  formats of COMPASS-DRAFT-toolchain-D11 and COMPASS-DRAFT-toolchain-D14. The
+  formats of COMPASS-D15 and COMPASS-D18. The
   evaluation thereby tests the delivery design before it is built.
 
 ### Grading
@@ -742,7 +742,7 @@ where this protocol covers them.
 | 3 | Supersession robustness | Does status typing stop agents acting on outdated guidance? | MOOSEDev (retrieval, not actions) | Track 1 seeded supersession (T1-H7) |
 | 4 | Rejected-alternative recall | Do recorded alternatives prevent design churn? | None found | Track 1 rejected-alternative tasks (T1-H8) |
 | 5 | Agent-maintained corpus accuracy | Does a corpus maintained by agents stay correct, and at what review cost? | Chatlatanagulchai et al. (observational) | Track 2 maintenance steps (G9, G10); review time not yet measured |
-| 6 | Structured query versus search in tasks | Does SPARQL or structured lookup beat search or vector retrieval on development tasks? | MOOSEDev (retrieval only) | Not covered; needs the RDF export (COMPASS-DRAFT-toolchain-D17) |
+| 6 | Structured query versus search in tasks | Does SPARQL or structured lookup beat search or vector retrieval on development tasks? | MOOSEDev (retrieval only) | Not covered; needs the RDF export (COMPASS-D21) |
 | 7 | Cross-model corpus use | Does a corpus maintained with one model serve others equally? | Handoff Debt (cross-model, one handoff) | Not covered; a relay variant swapping models between steps |
 | 8 | Security-invariant preservation | Does typed context reduce security regressions? | None found with documentation as the variable | Track 1 security tasks (T1-H6) |
 | 9 | Coordination between parallel agents | Does a shared corpus reduce design-intent conflicts between parallel branches? | The Specification Gap (single task, docstrings) | Not covered |
@@ -758,9 +758,9 @@ Table: Sections of this evaluation and the primary sources each draws on.
 
 | Section | Primary sources |
 |---|---|
-| Thesis | COMPASS-DRAFT-operator-memory; Xue (2026); ContextEcho; LOCA-bench |
+| Thesis | COMPASS-0005; Xue (2026); ContextEcho; LOCA-bench |
 | What the published studies do and do not show | Gloaguen et al. (2026); Khatri (2026); Chatlatanagulchai et al.; EvoCode-Bench; Xue (2026); Handoff Debt (2026); Codified Context (2026); MOOSEDev (2026); COMPASS-DRAFT-agent-context-prior-art |
-| Decision rules | COMPASS-DRAFT-toolchain-D10 to COMPASS-DRAFT-toolchain-D14; COMPASS-DRAFT-agent-workflow-D9, COMPASS-DRAFT-agent-workflow-D10 |
+| Decision rules | COMPASS-D14 to COMPASS-D18; COMPASS-DRAFT-agent-workflow-D9, COMPASS-DRAFT-agent-workflow-D10 |
 | Harness | OpenCode CLI (`run`, `export`); Ben Sghaier et al. (2026) on harness drift |
 | Statistics | Schuirmann (1987); Khatri (2026) on equivalence testing in this setting |
 | The Shared Scenario | Classic repository history, surveyed at `6e4f02d` |

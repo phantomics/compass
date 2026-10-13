@@ -14,7 +14,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0004
   - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-secure-development
@@ -86,7 +86,7 @@ express the standard's constraints as data. With it, a Compass corpus can be
 exported to any RDF triplestore and queried with SPARQL, and later ingested by
 Classic. It replaces the RDF column of [COMPASS-0001](../Compass.md) §7 and the
 mapping table of §17 by amendment. The toolchain work that implements it is
-COMPASS-DRAFT-toolchain-D17 in [COMPASS-DRAFT-toolchain](Plan.Toolchain.md). The
+COMPASS-D21 in [COMPASS-0004](Plan.Toolchain.md). The
 key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY are used as described in
 RFC 2119.
 
@@ -194,8 +194,8 @@ Table: Prefixes used by this binding and the namespace IRIs they abbreviate.
 ### Authorities
 
 Every namespace MUST declare a **tagging authority** in its repository's
-project manifest (`compass.sexp`, COMPASS-DRAFT-toolchain-D4), under the
-`:authorities` key added by COMPASS-DRAFT-toolchain-D17. An authority follows
+project manifest (`compass.sexp`, COMPASS-D8), under the
+`:authorities` key added by COMPASS-D21. An authority follows
 RFC 4151: a DNS name or an email address that the steward controlled on a given
 date, followed by a comma and that date (`YYYY`, `YYYY-MM`, or `YYYY-MM-DD`).
 For example, `example.net,2026` or `andrew@example.net,2026-10`. The date is part
@@ -218,7 +218,7 @@ Table: IRI forms for each kind of resource.
 | Namespace | `tag:<A>:<ns>` | `tag:example.net,2026:compass` |
 | Document | `tag:<A>:<ns>/<ID>` | `tag:example.net,2026:compass/COMPASS-0001` |
 | Register entry (`D`, `O`, M) | `tag:<A>:<ns>/<ID>` | `tag:example.net,2026:compass/COMPASS-D3` |
-| Provisional document or entry | `tag:<A>:<ns>/<provisional ID>` | `tag:example.net,2026:compass/COMPASS-DRAFT-toolchain` |
+| Provisional document or entry | `tag:<A>:<ns>/<provisional ID>` | `tag:example.net,2026:compass/COMPASS-0004` |
 | Translation (§19) | `tag:<A>:<ns>/<ID>@<locale>` | `tag:example.net,2026:origin/ORIGIN-0012@fr` |
 | Section of a document | document IRI `#` anchor | `…/COMPASS-0003#the-uniqueness-guarantee` |
 | Component concept | `tag:<A>:<ns>/component/<component>` | `tag:example.net,2026:compass/component/toolchain` |
@@ -322,10 +322,10 @@ Table: Concept schemes and their members.
 |---|---|---|
 | `cscope:` | `component`, `project`, `program` | §5 |
 | `csubtype:` | `prior-art`, `comparison`, `tradeoff`, `threat-model` (pending), `tutorial`, `howto` | §4; `threat-model` from COMPASS-DRAFT-secure-development |
-| `cstatus:` | `Draft`, `Proposed`, `In-Review`, `Accepted`, `Implemented`, `Design-Record`, `Deprecated`, `Superseded`, `Rejected`, `Withdrawn`, `Current` | §6, as amended by COMPASS-DRAFT-toolchain-D5 |
+| `cstatus:` | `Draft`, `Proposed`, `In-Review`, `Accepted`, `Implemented`, `Design-Record`, `Deprecated`, `Superseded`, `Rejected`, `Withdrawn`, `Current` | §6, as amended by COMPASS-D9 |
 | `cconcern:` | `security-boundary`, `concurrency`, `wire-format`, `persistent-format`, `public-api`, `ffi`, `hot-path` | COMPASS-0002 |
 | `cstability:` | `experimental`, `stable`, `deprecated` | COMPASS-0002 |
-| `cweight:` | `Authoritative`, `Directive`, `Contextual`, `Provisional`, `Excluded` | COMPASS-DRAFT-toolchain-D12 (derived) |
+| `cweight:` | `Authoritative`, `Directive`, `Contextual`, `Provisional`, `Excluded` | COMPASS-D16 (derived) |
 
 A component is a concept in a per-namespace scheme, `tag:<A>:<ns>/component`,
 since component names are chosen by each namespace rather than controlled by
@@ -369,7 +369,7 @@ Table: Front-matter fields and the triples they produce.
 | `cites` | `cito:cites` | `compass:ExternalWork` node |
 | `decisions`, `open-questions`, `memos` | `compass:introduces` for each record defined in this document; `compass:amends` for each listed record defined elsewhere | record IRI |
 | `glossary` | `compass:glossary` | document IRI |
-| `read-if` (extension, COMPASS-DRAFT-toolchain-D13) | `compass:readIf` | string |
+| `read-if` (extension, COMPASS-D17) | `compass:readIf` | string |
 | Unregistered extension keys | not exported | |
 
 An external work carries `dcterms:title`, `compass:locator` (string), and
@@ -377,7 +377,7 @@ An external work carries `dcterms:title`, `compass:locator` (string), and
 
 ### Registers
 
-A `D`, `O`, or M record defined by a heading in a document (COMPASS-DRAFT-toolchain-D16)
+A `D`, `O`, or M record defined by a heading in a document (COMPASS-D20)
 produces:
 
 Table: Triples for a register record.
@@ -398,7 +398,7 @@ Table: Triples for a register record.
 
 ### Ledger facts
 
-For every ledger entry (COMPASS-DRAFT-toolchain-D3) the identified resource
+For every ledger entry (COMPASS-D7) the identified resource
 carries `compass:allocatedOn` (`xsd:date`), `compass:allocatedBy` (agent IRI),
 `compass:originalPath` (string), and, where present, `compass:provisionalAlias`
 with the matching `owl:sameAs` from the provisional IRI.
@@ -479,7 +479,7 @@ The source map describes one revision: the export carries
 
 ### Derived values
 
-Authority weight (COMPASS-DRAFT-toolchain-D12) is computed, never written in the
+Authority weight (COMPASS-D16) is computed, never written in the
 corpus. It is exported only with `--derived`, as `compass:weight` with a
 `cweight:` concept, and only into the named graph
 `tag:<A>:<ns>/graph/derived`. Formats without named graphs (Turtle,
@@ -492,7 +492,7 @@ The SHACL shapes in `vocab/compass-shapes.ttl` express the standard's
 constraints over the exported graph. They cover:
 - the required fields of §7, per document;
 - the status vocabulary of each genre family (§6, amended by
-  COMPASS-DRAFT-toolchain-D5 and COMPASS-DRAFT-toolchain-D12, and COMPASS-DRAFT-agent-workflow-D4);
+  COMPASS-D9 and COMPASS-D16, and COMPASS-DRAFT-agent-workflow-D4);
 - agreement of `dcterms:isReplacedBy` with `cstatus:Superseded`;
 - record kinds: a record listed under `decisions` is a `compass:DecisionRecord`,
   and so on;
@@ -523,7 +523,7 @@ vocabulary, not exported corpus data.
 ## Required Export Behaviour
 
 The toolchain exports with `compass export --rdf FORMAT`
-(COMPASS-DRAFT-toolchain-D17). An exporter conforming to this specification:
+(COMPASS-D21). An exporter conforming to this specification:
 
 - MUST support N-Triples and Turtle, and SHOULD support N-Quads, TriG, and
   JSON-LD;

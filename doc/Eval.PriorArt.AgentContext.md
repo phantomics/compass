@@ -14,10 +14,10 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-operator-memory
+  - COMPASS-0005
   - COMPASS-DRAFT-agent-context-eval
   - COMPASS-DRAFT-agent-workflow
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0004
   - COMPASS-DRAFT-semantic-binding
   - COMPASS-0002
 cites:
@@ -104,10 +104,10 @@ open-questions:
 This evaluation compares the ideas developed for Compass's agent-context work
 against the prior art found so far, to establish which of them are new, which
 are refinements, and which are already established. It covers the work recorded
-in [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md),
+in [COMPASS-0005](Survey.OperatorMemory.md),
 [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md),
-[COMPASS-DRAFT-toolchain](Plan.Toolchain.md) (COMPASS-DRAFT-toolchain-D10 to
-COMPASS-DRAFT-toolchain-D17), [COMPASS-0002](Spec.SourceHeaders.md),
+[COMPASS-0004](Plan.Toolchain.md) (COMPASS-D14 to
+COMPASS-D21), [COMPASS-0002](Spec.SourceHeaders.md),
 [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md), and
 [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md). Its findings inform
 how Compass describes itself and which of its claims the evaluation must
@@ -133,7 +133,7 @@ This document is meant to be revised as the search is extended
   for studies of agents and architecture decision records. Results were read at the
   level of abstracts, documentation excerpts, and, where available, project
   READMEs. Operator Memory was read at source level for
-  [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md).
+  [COMPASS-0005](Survey.OperatorMemory.md).
 - **Unit of comparison.** Compass's work is split into the seven elements listed
   in the rubric. Each prior system is assessed against the elements it touches.
 - **What counts as prior art.** A published system, specification, or study that
@@ -162,8 +162,8 @@ Table: Elements of the Compass agent-context work assessed in this evaluation.
 | # | Element | Where it is defined |
 |---|---|---|
 | E1 | Typed records of design knowledge (decisions, open questions, memos) with permanent identifiers, lifecycle status, and supersession | §5, §8; COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4 |
-| E2 | Status-based authority weighting, so history stays in the record without being treated as current truth | COMPASS-DRAFT-toolchain-D12 |
-| E3 | Delivery of a compact, ranked catalog to agents at session start, generated deterministically and committed | COMPASS-DRAFT-toolchain-D10, COMPASS-DRAFT-toolchain-D11; COMPASS-DRAFT-agent-workflow-D10 |
+| E2 | Status-based authority weighting, so history stays in the record without being treated as current truth | COMPASS-D16 |
+| E3 | Delivery of a compact, ranked catalog to agents at session start, generated deterministically and committed | COMPASS-D14, COMPASS-D15; COMPASS-DRAFT-agent-workflow-D10 |
 | E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-DRAFT-agent-workflow-D5 to COMPASS-DRAFT-agent-workflow-D9 |
 | E5 | Source headers whose typed fields link files to decisions, memos, and tests, compiled into a source map | COMPASS-0002 |
 | E6 | A derived RDF binding of the corpus, with an open vocabulary, `tag:` identity, SHACL shapes, and federation | COMPASS-DRAFT-semantic-binding |
@@ -194,7 +194,7 @@ Each element is scored on one scale:
 - **Operator Memory** (2026). Markdown "brain" with catalogs and an index,
   injected at session start; consult → build → update loop driven by protocol
   text; agent-maintained and untyped. **Touches E3, E4, E5.** Examined in full in
-  [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md).
+  [COMPASS-0005](Survey.OperatorMemory.md).
 - **GitHub Spec Kit** and **Kiro specs**. A project constitution plus
   per-feature specification, plan, and task files that guide agents across
   sessions; Spec Kit supports 38 agent tools. **Touches E1, E3** partially:
@@ -316,7 +316,7 @@ Table: Assessment of each element against the prior art found.
    cost; not as the originator of typed agent memory or semantic lifecycle data.
 6. **Consequences already applied.** [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)
    now cites Handoff Debt, Codified Context, and MOOSEDev and states its gap
-   narrowly; [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md) and
+   narrowly; [COMPASS-0005](Survey.OperatorMemory.md) and
    [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) record the further
    prior art.
 

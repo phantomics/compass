@@ -14,7 +14,7 @@ reviewed:      2026-10-07
 provenance:
   assistant:   opencode
 relates-to:
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0004
   - COMPASS-0001
   - COMPASS-0003
   - COMPASS-DRAFT-agent-workflow
@@ -34,7 +34,7 @@ the standard ([COMPASS-0001](../Compass.md)), and the commands added the same
 day so that the authoring skills could use it. It records the decisions made
 while coding that the plan left open, what each part of the code does, what
 went wrong along the way, and how the result was verified. The plan it carries
-out is [COMPASS-DRAFT-toolchain](Plan.Toolchain.md); version 0.1 is that
+out is [COMPASS-0004](Plan.Toolchain.md); version 0.1 is that
 plan's first baseline release, "corpus checking without a ledger".
 
 ## Problem
@@ -59,28 +59,28 @@ real checker:
 
 The build carried out these decisions of the plan:
 
-- [COMPASS-DRAFT-toolchain-D7](Plan.Toolchain.md#compass-draft-toolchain-d7--common-lisp-with-purpose-built-parsers):
+- [COMPASS-D11](Plan.Toolchain.md#compass-d11--common-lisp-with-purpose-built-parsers):
   Common Lisp, with purpose-built parsers.
-- [COMPASS-DRAFT-toolchain-D18](Plan.Toolchain.md#compass-draft-toolchain-d18--a-strict-yaml-subset-parser-written-in-lisp):
+- [COMPASS-D22](Plan.Toolchain.md#compass-d22--a-strict-yaml-subset-parser-written-in-lisp):
   front-matter is read by a strict YAML-subset parser that keeps every scalar
   a string.
-- [COMPASS-DRAFT-toolchain-D19](Plan.Toolchain.md#compass-draft-toolchain-d19--portable-binary-distribution):
+- [COMPASS-D23](Plan.Toolchain.md#compass-d23--portable-binary-distribution):
   the constraints on the code that keep a portable executable possible. The
   distribution itself belongs to v0.2.
-- [COMPASS-DRAFT-toolchain-D20](Plan.Toolchain.md#compass-draft-toolchain-d20--vocabulary-values-carry-a-standing):
+- [COMPASS-D24](Plan.Toolchain.md#compass-d24--vocabulary-values-carry-a-standing):
   every vocabulary value carries a standing, accepted or pending.
-- [COMPASS-DRAFT-toolchain-D21](Plan.Toolchain.md#compass-draft-toolchain-d21--implementation-conventions-for-the-baseline):
+- [COMPASS-D25](Plan.Toolchain.md#compass-d25--implementation-conventions-for-the-baseline):
   layered packages, the heading-anchor rule, corpus discovery, the repository
   root, syntax errors, unverified references, and `compass rules`.
 
 Several other decisions shape individual rules: the `Superseded` status form
-([COMPASS-DRAFT-toolchain-D5](Plan.Toolchain.md#compass-draft-toolchain-d5--supersession-uses-a-plain-status-plus-the-existing-field)),
+([COMPASS-D9](Plan.Toolchain.md#compass-d9--supersession-uses-a-plain-status-plus-the-existing-field)),
 provisional record identifiers
-([COMPASS-DRAFT-toolchain-D2](Plan.Toolchain.md#compass-draft-toolchain-d2--provisional-identifiers-for-register-entries)),
+([COMPASS-D6](Plan.Toolchain.md#compass-d6--provisional-identifiers-for-register-entries)),
 warnings for unknown keys
-([COMPASS-DRAFT-toolchain-D13](Plan.Toolchain.md#compass-draft-toolchain-d13--unknown-front-matter-keys-warn-read-if-is-a-registered-extension)),
+([COMPASS-D17](Plan.Toolchain.md#compass-d17--unknown-front-matter-keys-warn-read-if-is-a-registered-extension)),
 and the full-identifier record heading
-([COMPASS-DRAFT-toolchain-D16](Plan.Toolchain.md#compass-draft-toolchain-d16--register-record-headings-carry-the-full-identifier)).
+([COMPASS-D20](Plan.Toolchain.md#compass-d20--register-record-headings-carry-the-full-identifier)).
 
 Four further decisions were made while coding. They are recorded here as
 proposals for the steward.
@@ -107,7 +107,7 @@ column.
 **Alternatives:**
 - The Lisp reader with `*read-eval*` off, in a scratch package. Rejected: it
   still interns, and still runs reader macros.
-- A manifest in YAML or JSON. Rejected by COMPASS-DRAFT-toolchain-D4; the
+- A manifest in YAML or JSON. Rejected by COMPASS-D8; the
   restricted reader keeps the s-expression without its risks.
 
 ### COMPASS-DRAFT-toolchain-log-D2 — Problems found while loading are rules too
@@ -125,7 +125,7 @@ outside the rule engine, they would be invisible to `--rule`, `--exclude`, and
 (`src/rules/engine.lisp:define-rule@4e4549a`, with scope `:load`). The check
 selects and filters them like every other rule. A document whose front-matter
 does not parse receives one `fm/syntax` finding and no front-matter checks,
-as COMPASS-DRAFT-toolchain-D21 requires, but its body is still scanned and its
+as COMPASS-D25 requires, but its body is still scanned and its
 links still checked.
 
 **Alternatives:**
@@ -193,7 +193,7 @@ later the same day is described in
 - `Makefile@4e4549a` provides `make build`, `make test`, and `make check`.
 - `src/packages.lisp@4e4549a` defines eight packages, from `compass.util` and
   `compass.vocab` up to `compass.cli`, each using only those defined before it,
-  beneath a `compass` package that re-exports their interfaces (COMPASS-DRAFT-toolchain-D21).
+  beneath a `compass` package that re-exports their interfaces (COMPASS-D25).
 - The runtime dependencies are `alexandria`, `cl-ppcre`, and `shasht`; the tests
   add `fiveam`. None needs a native library.
 
@@ -203,11 +203,11 @@ later the same day is described in
   filename prefix, code, status family, subtypes, section spine, and standing.
 - `src/vocab.lisp:*status-families*@4e4549a` holds the three status families:
   proposal and record genres, reference genres, and Memo. The pending values
-  are `Superseded` in the proposal family (COMPASS-DRAFT-toolchain-D5), the assignment of Glossary and
-  Ideation to families (COMPASS-DRAFT-toolchain-D12), and the `threat-model` subtype.
+  are `Superseded` in the proposal family (COMPASS-D9), the assignment of Glossary and
+  Ideation to families (COMPASS-D16), and the `threat-model` subtype.
 - `src/vocab.lisp:*field-specs*@4e4549a` gives each §7 field its type, whether
   it is required or derivable from Git, and the genres it applies to.
-  `read-if:` is registered as a pending extension (COMPASS-DRAFT-toolchain-D13).
+  `read-if:` is registered as a pending extension (COMPASS-D17).
 - `src/vocab.lisp:well-formed-language-tag-p@4e4549a` is the BCP 47 grammar as
   one regular expression.
 
@@ -235,14 +235,14 @@ later the same day is described in
 - `src/parse/document.lisp:split-front-matter@4e4549a` finds the block between
   the `---` lines. A block that is opened and never closed is an `fm/syntax`
   error.
-- `src/parse/yaml.lisp:parse-yaml-subset@4e4549a` parses the subset of COMPASS-DRAFT-toolchain-D18 by
+- `src/parse/yaml.lisp:parse-yaml-subset@4e4549a` parses the subset of COMPASS-D22 by
   recursive descent over the block's lines, after
   `src/parse/yaml.lisp:prepare-lines@4e4549a` has dropped blank and comment
   lines and rejected tab indentation. A sequence item may begin a mapping on
   the dash's own line, as `cites:` entries do.
 - `src/parse/yaml.lisp:check-plain@4e4549a` rejects `: ` inside an unquoted
   value, as YAML does. The §6 form `status: Superseded-by: <id>` is therefore
-  an `fm/syntax` error; quoted, it parses, and `vocab/status` warns that COMPASS-DRAFT-toolchain-D5
+  an `fm/syntax` error; quoted, it parses, and `vocab/status` warns that COMPASS-D9
   replaces it.
 - Every error names the construct and a remedy ("a quoted value must close on
   the same line", "block scalars (| and >) are not supported; keep the value on
@@ -259,7 +259,7 @@ later the same day is described in
   `src/parse/inline.lisp:find-links@4e4549a` finds inline links and images
   outside code spans and comments, including an image inside a link.
 - `src/parse/inline.lisp:heading-anchor@4e4549a` implements the anchor rule of
-  COMPASS-DRAFT-toolchain-D21, and `src/parse/scanner.lisp:build-sections@4e4549a` adds `-1`, `-2`, and
+  COMPASS-D25, and `src/parse/scanner.lisp:build-sections@4e4549a` adds `-1`, `-2`, and
   so on for repeats and records each section's line range.
 - `src/parse/scanner.lisp:build-records@4e4549a` reads record headings of the
   form `<ID> — <title>` at levels 2 to 4. A short heading such as `D16 — …` is
@@ -267,7 +267,7 @@ later the same day is described in
   it. `src/parse/scanner.lisp:record-fields-in@4e4549a` collects the bold-label
   fields of a record, joining continuation lines and removing HTML comments.
 - `src/parse/scanner.lisp:build-tables@4e4549a` records each table's header
-  cells and the `Table:` caption before it (COMPASS-DRAFT-toolchain-D6), ready for the §12 rules.
+  cells and the `Table:` caption before it (COMPASS-D10), ready for the §12 rules.
 - `src/parse/inline.lisp:parse-code-reference@4e4549a` parses the §9 grammar,
   `[NS:]path[:symbol | #Lstart[-Lend]]@revision`.
 
@@ -275,7 +275,7 @@ later the same day is described in
 
 - `src/corpus/corpus.lisp:find-repository-root@4e4549a` looks upward for
   `compass.sexp`, then for `.git`.
-- `src/corpus/corpus.lisp:discover-files@4e4549a` finds the documents as COMPASS-DRAFT-toolchain-D21
+- `src/corpus/corpus.lisp:discover-files@4e4549a` finds the documents as COMPASS-D25
   describes, in path order. `src/corpus/corpus.lisp:load-corpus@4e4549a`
   indexes them by identifier and their records by record identifier. With
   `--skip-unmarked`, files without front-matter are counted instead of
@@ -311,7 +311,7 @@ later the same day is described in
   and names an unpinned path when that is the problem. Without Git it checks the
   form of a reference, not that its revision exists.
 - A reference into a namespace that no loaded document declares is counted as
-  unverified and listed in the JSON report, never reported as a finding (COMPASS-DRAFT-toolchain-D21).
+  unverified and listed in the JSON report, never reported as a finding (COMPASS-D25).
 
 ### Report and command line
 
@@ -333,7 +333,7 @@ later the same day is described in
 
 - **`Compass.md` gained front-matter:** `COMPASS-0001`, genre `Spec`,
   `schema-version: "0.2.0"`, status `Draft`. This brings forward part of
-  [COMPASS-DRAFT-toolchain-D9](Plan.Toolchain.md#compass-draft-toolchain-d9--bootstrapping-the-compass-namespace):
+  [COMPASS-D13](Plan.Toolchain.md#compass-d13--bootstrapping-the-compass-namespace):
   without it, nineteen references to `COMPASS-0001` across the corpus failed
   `ref/doc-resolves`.
 - **`compass.sexp`** declares the `COMPASS` namespace, the document directory,
@@ -341,7 +341,7 @@ later the same day is described in
 - **`doc/INDEX.md`** is the first generated index: ten documents and 76
   records.
 - **`README.md`** gained a section on building and using the toolchain.
-- **`doc/Plan.Toolchain.md`** gained COMPASS-DRAFT-toolchain-D20 and COMPASS-DRAFT-toolchain-D21, and its v0.1 scope gained the
+- **`doc/Plan.Toolchain.md`** gained COMPASS-D24 and COMPASS-D25, and its v0.1 scope gained the
   memo rules once the Memo genre was accepted
   ([COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4), along with
   `fm/syntax`, `vocab/pending`, anchors in `show`, `rules`, and `version`.
@@ -350,7 +350,7 @@ later the same day is described in
 
 - Every finding has a path and a line, and most have a column.
 - No scalar in front-matter is ever converted; its type comes only from the
-  schema (COMPASS-DRAFT-toolchain-D18).
+  schema (COMPASS-D22).
 - Reading the manifest neither runs code nor creates symbols (COMPASS-DRAFT-toolchain-log-D1).
 - Output is deterministic: files load in path order; findings sort by path,
   line, column, and rule; the index sorts by identifier.
@@ -434,7 +434,7 @@ Table: Files added or changed in commit `4e4549a`.
 | `src/model/document.lisp` | **New** | YAML nodes, body elements, documents, findings |
 | `src/model/fields.lisp` | **New** | Typed reading of front-matter fields |
 | `src/model/manifest.lisp` | **New** | The project manifest |
-| `src/parse/yaml.lisp` | **New** | The strict YAML-subset parser (COMPASS-DRAFT-toolchain-D18) |
+| `src/parse/yaml.lisp` | **New** | The strict YAML-subset parser (COMPASS-D22) |
 | `src/parse/inline.lisp` | **New** | Code spans, links, anchors, code references |
 | `src/parse/scanner.lisp` | **New** | Line kinds, sections, records, tables, fences |
 | `src/parse/document.lisp` | **New** | From a file to a document |
@@ -453,7 +453,7 @@ Table: Files added or changed in commit `4e4549a`.
 | `Compass.md` | Modified | Front-matter: `COMPASS-0001` |
 | `README.md` | Modified | Building and using the toolchain |
 | `doc/INDEX.md` | **New** | Generated namespace index |
-| `doc/Plan.Toolchain.md` | Modified | COMPASS-DRAFT-toolchain-D20, COMPASS-DRAFT-toolchain-D21, and the v0.1 scope |
+| `doc/Plan.Toolchain.md` | Modified | COMPASS-D24, COMPASS-D25, and the v0.1 scope |
 
 ## Metrics
 
@@ -487,7 +487,7 @@ Table: Files added or changed in commit `4e4549a`.
   provisional identifiers, `CLASSIC-DRAFT-<slug>-O<n>`.
 - **Acceptance.** `COMPASS-0001` and this Log are `Draft`, and the four
   decisions above are `Proposed`.
-- **Open questions** COMPASS-DRAFT-toolchain-O3 to COMPASS-DRAFT-toolchain-O7 of the plan, and the features that wait on the
+- **Open questions** COMPASS-O6 to COMPASS-O10 of the plan, and the features that wait on the
   agent-context pilot: the catalog, the authority weight, and the source map.
 
 ## Update 2026-10-08 — outline, refs, and check paths
@@ -539,7 +539,7 @@ Running the v0.1 executable the way the skills would showed four gaps:
   limited to: "Checked 1 document of 10". The JSON summary gains `loaded`.
 - `Makefile@ee5f765` adds `make install`, to `PREFIX/bin` with `PREFIX`
   defaulting to `~/.local`, and `make uninstall`.
-- The plan's COMPASS-DRAFT-toolchain-D21 records that `outline` moved forward from roadmap step 6 and
+- The plan's COMPASS-D25 records that `outline` moved forward from roadmap step 6 and
   that `refs` was added.
 
 ### Pitfalls Encountered
@@ -559,9 +559,9 @@ Running the v0.1 executable the way the skills would showed four gaps:
 - **Tests.** `make test` at `ee5f765`: **527 checks, 100% pass**, 81 of them
   new, covering `outline`, `refs`, the path checks, the empty corpus, and the
   help listing.
-- **On this repository**, at `ee5f765`: `compass refs COMPASS-DRAFT-toolchain`
+- **On this repository**, at `ee5f765`: `compass refs COMPASS-0004`
   found 31 references in 9 documents, and
-  `compass refs COMPASS-DRAFT-operator-memory` found 6 relations, 8 links, and
+  `compass refs COMPASS-0005` found 6 relations, 8 links, and
   1 mention.
 - **Installation.** `make install` into a temporary prefix; the installed copy
   ran `check`, `outline`, and `refs`, and exited 141 when piped into `head`.
@@ -587,7 +587,7 @@ Table: Files added or changed in commit `ee5f765`.
 | `Makefile` | Modified | `install` and `uninstall` |
 | `tests/test-cli.lisp` | Modified | Commands, paths, empty corpus |
 | `tests/test-corpus.lisp` | Modified | Outlines and references |
-| `doc/Plan.Toolchain.md` | Modified | COMPASS-DRAFT-toolchain-D21, the command list, and roadmap steps 6 and 8 |
+| `doc/Plan.Toolchain.md` | Modified | COMPASS-D25, the command list, and roadmap steps 6 and 8 |
 
 ## Update 2026-10-08 — fresh executables and federation
 

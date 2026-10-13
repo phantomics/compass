@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-operator-memory
+id:            COMPASS-0005
 title:         Operator Memory and Compass as Agent Context
 genre:         Survey
 scope:         program
@@ -16,7 +16,7 @@ provenance:
 relates-to:
   - COMPASS-0001
   - COMPASS-0003
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0004
   - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-DRAFT-agent-context-eval
@@ -56,12 +56,12 @@ cites:
     locator:   "arXiv:2608.13662, abstract"
     external:  true
 open-questions:
-  - COMPASS-DRAFT-operator-memory-O1
-  - COMPASS-DRAFT-operator-memory-O2
-  - COMPASS-DRAFT-operator-memory-O3
-  - COMPASS-DRAFT-operator-memory-O4
-  - COMPASS-DRAFT-operator-memory-O5
-  - COMPASS-DRAFT-operator-memory-O6
+  - COMPASS-O11
+  - COMPASS-O12
+  - COMPASS-O13
+  - COMPASS-O14
+  - COMPASS-O15
+  - COMPASS-O16
 ---
 
 # Operator Memory and Compass: Survey
@@ -73,7 +73,7 @@ in [COMPASS-0001](../Compass.md). The survey asks which of Operator Memory's
 features Compass should later import, in what form, and which it should
 decline. It assumes the authoring-assistance layer
 ([COMPASS-0003](Plan.AuthoringAssistance.md)) and the
-validation toolchain ([COMPASS-DRAFT-toolchain](Plan.Toolchain.md)). The
+validation toolchain ([COMPASS-0004](Plan.Toolchain.md)). The
 findings come from reading the Operator Memory blog post, documentation, and
 source at commit `e394f1c`. Operator Memory was not run, and no agent
 behaviour was measured. Like any Survey, this document is exploratory and
@@ -83,7 +83,7 @@ amendment (§13).
 ## Motivation
 
 Persistence of context across agent sessions is within Compass's mandate. §23
-(prior-art notes for COMPASS-DRAFT-operator-memory-O3, pattern 5) names "LLM-as-consumer" as a real design
+(prior-art notes for COMPASS-O13, pattern 5) names "LLM-as-consumer" as a real design
 goal: a typed corpus serves end users, LLM coding assistants, and LLM user-task
 assistants from a single source. So far Compass has addressed that consumer only
 indirectly. It produces structure, stable identifiers, and typed metadata, all
@@ -187,7 +187,7 @@ for agent context.
 | Relevance routing | `Read If` condition on every catalog and index entry | No routing field; title, genre, component, and status are available |
 | Codebase map | Hierarchical, agent-maintained index | `Project Structure` section of a `Ref`; otherwise out of scope |
 | Who writes, who approves | The agent writes freely; private by default | Human editorial review for project and program scope (§6) |
-| Validation | Index front-matter lint and load checks | Full §22 rule set (planned in [COMPASS-DRAFT-toolchain](Plan.Toolchain.md)) |
+| Validation | Index front-matter lint and load checks | Full §22 rule set (planned in [COMPASS-0004](Plan.Toolchain.md)) |
 | Cross-repository knowledge | Per repository; cross-project knowledge only in a private per-machine partition | Federation of namespaced repositories is a core design goal (§10) |
 | Harness support | Six adapters, shipping today | OpenCode skills shipping; other harnesses planned (§23 S9) |
 
@@ -293,8 +293,8 @@ and amendment class.
 | 4 | Consult → build → update loop | Protocol text in the injected catalog and the AGENTS snippet; a maintenance skill (or an extended `compass-author`) that, after work, proposes the `Log` and the `Ref`/`Spec` revisions it implies | Candidates 1 and 3 | None to core; S9 |
 | 5 | Lean-writing discipline | "Do not restate what the code shows" guidance in templates, the `compass-review` rubric, and §14 | None | Patch |
 | 6 | Load and conformance diagnostics | The injected catalog carries a summary of `compass check` errors, and refuses to present a corpus as authoritative if it cannot be read | Toolchain check and JSON report | None to core |
-| 7 | Codebase map | Either a navigation-oriented `Ref` subtype or a ceded, Operator-style index outside Compass | Decision on COMPASS-DRAFT-operator-memory-O3 | Minor (new subtype) or none |
-| 8 | Unpublished working knowledge | Either coexistence (Operator Memory's private partition beside Compass's published `doc/`) or a lightweight Compass note genre | Decision on COMPASS-DRAFT-operator-memory-O4 | None, or minor/major (new genre) |
+| 7 | Codebase map | Either a navigation-oriented `Ref` subtype or a ceded, Operator-style index outside Compass | Decision on COMPASS-O13 | Minor (new subtype) or none |
+| 8 | Unpublished working knowledge | Either coexistence (Operator Memory's private partition beside Compass's published `doc/`) or a lightweight Compass note genre | Decision on COMPASS-O14 | None, or minor/major (new genre) |
 
 ### The authority ranking (candidate 3), sketched
 
@@ -346,7 +346,7 @@ catalog entirely, which bounds one of Operator Memory's open scaling problems.
 - **Standard amendments:** the authority table, the `read-if:` extension, and
   lean-writing guidance in §14.
 - An **evaluation** of whether the injected catalog changes agent behaviour
-  (see COMPASS-DRAFT-operator-memory-O6). Neither project has one.
+  (see COMPASS-O16). Neither project has one.
 
 ## The deeper claim
 
@@ -398,7 +398,7 @@ correct.
   - The catalog adapter and maintenance skill extend this S9 layer.
   - COMPASS-O1 (advisory-mode signalling) and COMPASS-O3 (provenance depth)
     bear directly on agent-written updates.
-- [COMPASS-DRAFT-toolchain](Plan.Toolchain.md):
+- [COMPASS-0004](Plan.Toolchain.md):
   - Index generation is the natural home for the catalog renderer.
   - The project manifest supplies federation scope.
   - The JSON report supplies the diagnostics for candidate 6.
@@ -437,7 +437,7 @@ correct.
 
 ## Open Questions
 
-### COMPASS-DRAFT-operator-memory-O1 — Import, coexist, or both
+### COMPASS-O11 — Import, coexist, or both
 
 Should Compass import Operator Memory's delivery and loop natively (candidates
 1–6)? Should it instead recommend running Operator Memory alongside, with a
@@ -449,11 +449,11 @@ interim arrangement until native delivery exists?
 Memory that serve its goals, in Compass's own form, and does not recommend
 running the two side by side, since parallel models of project truth would
 diverge. No `.operator*` directories or `operator.md` are adopted. Recorded in
-[COMPASS-DRAFT-toolchain](Plan.Toolchain.md) as COMPASS-DRAFT-toolchain-D10.
-One consequence: COMPASS-DRAFT-operator-memory-O4 can no longer be answered by deferring to Operator Memory's
+[COMPASS-0004](Plan.Toolchain.md) as COMPASS-D14.
+One consequence: COMPASS-O14 can no longer be answered by deferring to Operator Memory's
 private partition, and needs an answer inside Compass.
 
-### COMPASS-DRAFT-operator-memory-O2 — Shape and budget of the session catalog
+### COMPASS-O12 — Shape and budget of the session catalog
 
 What does each catalog entry contain (id, title, genre, status, component, a
 `read-if:` line)? What is the size budget? How is a federation scoped down to
@@ -466,11 +466,11 @@ size, and a `read-if:` line. The catalog lists metadata only, never document
 bodies. It covers the current namespace plus documents one hop out, leaves out
 Excluded documents, has a compact section of accepted decisions, and has a
 default budget of 8 KB. It is generated and committed rather than built at
-session start. Recorded in [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) as
-COMPASS-DRAFT-toolchain-D10 to COMPASS-DRAFT-toolchain-D13 and
-COMPASS-DRAFT-toolchain-D15.
+session start. Recorded in [COMPASS-0004](Plan.Toolchain.md) as
+COMPASS-D14 to COMPASS-D17 and
+COMPASS-D19.
 
-### COMPASS-DRAFT-operator-memory-O3 — Is a codebase map a Compass concern?
+### COMPASS-O13 — Is a codebase map a Compass concern?
 
 A navigational map of the source tree is high value for agents. It is also
 close to "auto-generated API reference", which §2 cedes. Should Compass add a
@@ -484,10 +484,10 @@ deterministically, never by an LLM, from a standard header comment in each
 source file and optional directory READMEs. It is not a `Ref` subtype. The
 header convention is specified in
 [COMPASS-0002](Spec.SourceHeaders.md), and its implementation is
-recorded in [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) as
-COMPASS-DRAFT-toolchain-D14.
+recorded in [COMPASS-0004](Plan.Toolchain.md) as
+COMPASS-D18.
 
-### COMPASS-DRAFT-operator-memory-O4 — A home for durable but unpublished knowledge
+### COMPASS-O14 — A home for durable but unpublished knowledge
 
 Agents learn durable facts that do not merit a reviewed Compass document, such
 as a library quirk, an environment detail, or a debugging lesson. §2 calls this
@@ -508,7 +508,7 @@ and memos may later be folded into a `Ref`. Recorded in
 [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) as
 COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4.
 
-### COMPASS-DRAFT-operator-memory-O5 — Agent authority to update typed documents
+### COMPASS-O15 — Agent authority to update typed documents
 
 If an agent proposes revisions to a `Ref` with status `Current` or a `Spec`
 after its work, who applies them? A component-scope `Log` may be self-accepted
@@ -529,7 +529,7 @@ by scope, and a `compass-maintain` skill proposes the updates a change implies.
 Recorded in [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) as
 COMPASS-DRAFT-agent-workflow-D5 to COMPASS-DRAFT-agent-workflow-D9.
 
-### COMPASS-DRAFT-operator-memory-O6 — Measuring whether any of this works
+### COMPASS-O16 — Measuring whether any of this works
 
 Neither project has evaluated agent behaviour. What would a minimal evaluation
 look like? For example: a fixed set of tasks run against a repository with and

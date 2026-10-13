@@ -10,7 +10,7 @@ status:        Draft
 provenance:
   assistant:   opencode
 relates-to:
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0004
   - COMPASS-DRAFT-toolchain-log
   - COMPASS-0003
   - COMPASS-0001
@@ -29,7 +29,7 @@ This document chronicles the allocation ledger of the Compass toolchain. The
 ledger is the file that records every number a repository has allocated; the
 work also covers the rules that check it, and the commands that allocate
 numbers and recover when two branches allocate at once. The work is stages 0 to 4
-of version 0.2 of [COMPASS-DRAFT-toolchain](Plan.Toolchain.md), committed as
+of version 0.2 of [COMPASS-0004](Plan.Toolchain.md), committed as
 `a12a31c`. The Log records the decisions made while coding, what each part of the
 code does, what went wrong, and how the result was verified. Later work on the
 ledger, and the remaining stages of version 0.2, are appended as
@@ -47,45 +47,45 @@ ledger:
   advisory. Two branches that each took that number would both merge, and the
   corpus would define one identifier twice. Making that impossible is the
   purpose of
-  [COMPASS-DRAFT-toolchain-D1](Plan.Toolchain.md#compass-draft-toolchain-d1--merge-time-ledger-plus-required-ci-as-the-uniqueness-authority).
+  [COMPASS-D5](Plan.Toolchain.md#compass-d5--merge-time-ledger-plus-required-ci-as-the-uniqueness-authority).
 - **Assigning by hand was impractical.** Numbering one accepted plan,
   [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), takes sixteen free
   numbers and 96 rewritten lines in 10 documents, including the anchors of the
   renamed headings and the links to them (see [Verification](#verification)).
 - **Accepted documents were waiting.** Four documents are accepted but keep
   their provisional identifiers: that plan,
-  [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md), and the two Logs
+  [COMPASS-0005](Survey.OperatorMemory.md), and the two Logs
   that precede this one.
 
 ## Design Decisions
 
 The work carried out these decisions of the plan:
 
-- [COMPASS-DRAFT-toolchain-D1](Plan.Toolchain.md#compass-draft-toolchain-d1--merge-time-ledger-plus-required-ci-as-the-uniqueness-authority):
+- [COMPASS-D5](Plan.Toolchain.md#compass-d5--merge-time-ledger-plus-required-ci-as-the-uniqueness-authority):
   the uniqueness guarantee, a ledger checked at merge by a required check.
-- [COMPASS-DRAFT-toolchain-D2](Plan.Toolchain.md#compass-draft-toolchain-d2--provisional-identifiers-for-register-entries)
+- [COMPASS-D6](Plan.Toolchain.md#compass-d6--provisional-identifiers-for-register-entries)
   and
-  [COMPASS-DRAFT-toolchain-D3](Plan.Toolchain.md#compass-draft-toolchain-d3--the-allocation-ledger-holds-immutable-facts-only):
+  [COMPASS-D7](Plan.Toolchain.md#compass-d7--the-allocation-ledger-holds-immutable-facts-only):
   provisional record identifiers, and a ledger that holds immutable facts only.
-- [COMPASS-DRAFT-toolchain-D9](Plan.Toolchain.md#compass-draft-toolchain-d9--bootstrapping-the-compass-namespace):
+- [COMPASS-D13](Plan.Toolchain.md#compass-d13--bootstrapping-the-compass-namespace):
   bootstrapping the `COMPASS` namespace by seeding the ledger with the numbers
   already in use.
 - Five decisions recorded in stage 0, all `Proposed`:
-  - [COMPASS-DRAFT-toolchain-D22](Plan.Toolchain.md#compass-draft-toolchain-d22--one-ledger-per-repository-one-entry-per-line):
+  - [COMPASS-D26](Plan.Toolchain.md#compass-d26--one-ledger-per-repository-one-entry-per-line):
     one ledger per repository, one entry per line, four counters per
     namespace, and the ledger rules;
-  - [COMPASS-DRAFT-toolchain-D23](Plan.Toolchain.md#compass-draft-toolchain-d23--provisional-records-in-a-numbered-document-reuse-its-alias):
+  - [COMPASS-D27](Plan.Toolchain.md#compass-d27--provisional-records-in-a-numbered-document-reuse-its-alias):
     a provisional record in a numbered document reuses the document's alias;
-  - [COMPASS-DRAFT-toolchain-D24](Plan.Toolchain.md#compass-draft-toolchain-d24--what-compass-assign-does):
+  - [COMPASS-D28](Plan.Toolchain.md#compass-d28--what-compass-assign-does):
     what `compass assign` does;
-  - [COMPASS-DRAFT-toolchain-D25](Plan.Toolchain.md#compass-draft-toolchain-d25--concurrent-allocations-are-recovered-by-keeping-both-and-renumbering):
+  - [COMPASS-D29](Plan.Toolchain.md#compass-d29--concurrent-allocations-are-recovered-by-keeping-both-and-renumbering):
     concurrent allocations are recovered by keeping both sides of the conflict
     and renumbering;
-  - [COMPASS-DRAFT-toolchain-D26](Plan.Toolchain.md#compass-draft-toolchain-d26--records-are-referred-to-by-full-identifier-short-forms-are-found-not-rewritten):
+  - [COMPASS-D30](Plan.Toolchain.md#compass-d30--records-are-referred-to-by-full-identifier-short-forms-are-found-not-rewritten):
     records are referred to by full identifier; short forms are found, not
     rewritten.
 
-COMPASS-DRAFT-toolchain-D26 was not in the plan for this round. A trial
+COMPASS-D30 was not in the plan for this round. A trial
 `assign` of a real plan showed that short references such as `D6` change
 meaning when records are numbered (see [Pitfalls Encountered](#pitfalls-encountered)).
 The steward then asked whether short references were a one-time cleanup. They
@@ -93,8 +93,8 @@ are: once written as full identifiers, they are rewritten exactly by `assign`
 and `renumber`, and they recur only if someone writes new ones. So the toolchain
 finds short forms, and leaves rewriting them to an author. Because this decision took the next number, the decisions the plan
 had drafted for Git-derived fields, code references, and federation will be
-recorded as `COMPASS-DRAFT-toolchain-D27`, `COMPASS-DRAFT-toolchain-D28`, and
-`COMPASS-DRAFT-toolchain-D29`.
+recorded as `COMPASS-D31`, `COMPASS-D32`, and
+`COMPASS-D33`.
 
 Two further decisions were made while coding. They are recorded here as
 proposals for the steward.
@@ -103,7 +103,7 @@ proposals for the steward.
 
 **Status:** Proposed
 
-**Context:** COMPASS-DRAFT-toolchain-D9 has `compass init --ledger` record the
+**Context:** COMPASS-D13 has `compass init --ledger` record the
 canonical identifiers a repository already uses. Classic's four migrated Surveys
 each define their own `CLASSIC-O1` to `CLASSIC-O5`, and three of them a
 `CLASSIC-O6`. A ledger lists each number once (`ledger/unique`), so a seed must
@@ -128,9 +128,9 @@ written.
 
 **Context:** After writing, `assign`, `renumber`, and `init --ledger` run the
 check and say whether it finds errors. `ledger/append-only` compares the ledger
-with a base revision, by default `HEAD` (COMPASS-DRAFT-toolchain-D22). During a
+with a base revision, by default `HEAD` (COMPASS-D26). During a
 merge, `HEAD` is the branch's own tip. `renumber` rebuilds the ledger as the base
-revision's ledger followed by the branch's entries (COMPASS-DRAFT-toolchain-D25),
+revision's ledger followed by the branch's entries (COMPASS-D29),
 so the branch's committed lines move. The check therefore reported an error
 about the recovery it had just made.
 
@@ -153,8 +153,8 @@ work began from `f0b03b4`.
 
 ### Stage 0: the plan
 
-- **[COMPASS-DRAFT-toolchain](Plan.Toolchain.md)** gained
-  COMPASS-DRAFT-toolchain-D22 through COMPASS-DRAFT-toolchain-D26, and its
+- **[COMPASS-0004](Plan.Toolchain.md)** gained
+  COMPASS-D26 through COMPASS-D30, and its
   front-matter lists them.
 - **Other sections of the plan** were updated to match:
   [the uniqueness guarantee](Plan.Toolchain.md#the-uniqueness-guarantee) now
@@ -276,7 +276,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
   sets it. `ledger/valid` is a load rule, registered in `src/rules/engine.lisp`.
 - **Provisional records in numbered documents.**
   `src/rules/identity.lisp:record-slug-acceptable-p@a12a31c` lets `id/format`
-  accept the provisional records of COMPASS-DRAFT-toolchain-D23. A record in a
+  accept the provisional records of COMPASS-D27. A record in a
   numbered document must use the document's alias, or a slug that names no
   document and is no identifier's alias. One formed from another document's
   identifier is still an error.
@@ -327,7 +327,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
      its alias, and the command says so.
      `src/corpus/allocate.lisp:base-definition-ids@a12a31c` decides what this
      branch defines: what the base revision's version of the same file does not.
-     COMPASS-DRAFT-toolchain-D25 speaks of definitions on added lines; comparing
+     COMPASS-D29 speaks of definitions on added lines; comparing
      the file's definitions gives the same answer without depending on line
      positions.
   4. Moved identifiers are rewritten only on lines this branch added
@@ -342,7 +342,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
   returns the corpus loaded afresh. Planning never writes; this function writes
   only what was planned.
 - **The next provisional record.** `src/corpus/allocate.lisp:next-provisional-record@a12a31c`
-  implements COMPASS-DRAFT-toolchain-D23. A provisional document uses its own
+  implements COMPASS-D27. A provisional document uses its own
   identifier, and a numbered one its alias; a numbered document with no alias
   gets a slug from its file name
   (`src/corpus/allocate.lisp:slug-from-path@a12a31c`: `Plan.AgentWorkflow.md`
@@ -354,8 +354,8 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
 
 - **Whole identifiers.** `src/corpus/rewrite.lisp:rewrite-line@a12a31c` replaces
   whole identifiers through `src/model/identifier.lisp:replace-identifiers-in-text@a12a31c`.
-  The scanner's lookahead keeps `COMPASS-DRAFT-toolchain` from matching inside
-  `COMPASS-DRAFT-toolchain-D18` or `COMPASS-DRAFT-toolchain-log`.
+  The scanner's lookahead keeps `COMPASS-0004` from matching inside
+  `COMPASS-D22` or `COMPASS-DRAFT-toolchain-log`.
 - **Three passes.** `src/corpus/rewrite.lisp:plan-rewrites@a12a31c` works in
   three passes:
   1. It rewrites identifiers on front-matter, text, and heading lines, never in
@@ -482,11 +482,11 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
    `COMPASS-D5 to D4`, and `…-D5 to D9` became `COMPASS-D9 to D9`. The rewriter
    was then taught to rewrite short forms too, guessing what each meant from the
    text around it. The second trial showed the guesses going wrong: `O4 and O5`
-   of [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md) were taken for
+   of [COMPASS-0005](Survey.OperatorMemory.md) were taken for
    the plan's own questions, and a `D1 to D4` in another document was left
    unchanged. A wrong guess changes a document's meaning silently, so the
    guessing was removed and the short forms are reported instead
-   (COMPASS-DRAFT-toolchain-D26).
+   (COMPASS-D30).
 3. **A function that replaced an accessor.** A helper named `allocation-base`,
    taking the corpus and a revision, was defined after the `allocation`
    structure, whose `base` slot has an accessor of the same name. The helper
@@ -539,7 +539,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
   | 8. An old provisional identifier still used | A warning | `old-provisional-references-are-flagged` | `ref/stale-alias` warns; no errors |
 
   The plan first had scenario 3 take the upstream ledger.
-  COMPASS-DRAFT-toolchain-D25 made keeping both sides the recovery, and taking
+  COMPASS-D29 made keeping both sides the recovery, and taking
   upstream became the fallback, 3b.
 - **Self-check.** `bin/compass check`, built from `a12a31c`: "Checked 12
   documents: 0 errors, 235 warnings", all `ref/short-record`, with no notes.
@@ -623,7 +623,7 @@ Table: Files added or changed in commit `a12a31c`.
 | `src/corpus/index.lisp` | Modified | `next-identifier` moved to `allocate.lisp` |
 | `src/model/identifier.lisp` | Modified | `replace-identifiers-in-text` |
 | `src/rules/engine.lisp` | Modified | `ledger/valid`; `*check-base*`; notes reset per check |
-| `src/rules/identity.lisp` | Modified | `id/format` accepts the provisional records of COMPASS-DRAFT-toolchain-D23 |
+| `src/rules/identity.lisp` | Modified | `id/format` accepts the provisional records of COMPASS-D27 |
 | `src/rules/references.lisp` | Modified | `ref/short-record` |
 | `src/report.lisp` | Modified | Notes in the text and JSON reports |
 | `src/cli.lisp` | Modified | `assign`, `renumber`, `init`, `next --in`, `--base` |
@@ -638,7 +638,7 @@ Table: Files added or changed in commit `a12a31c`.
 | `tests/test-corpus.lisp` | Modified | `next-identifier` without a ledger |
 | `tests/test-rules.lisp` | Modified | The `fm/present` message is formatted |
 | `doc/REGISTRY.sexp` | **New** | This repository's ledger, seeded |
-| `doc/Plan.Toolchain.md` | Modified | COMPASS-DRAFT-toolchain-D22 through COMPASS-DRAFT-toolchain-D26, and the sections they change |
+| `doc/Plan.Toolchain.md` | Modified | COMPASS-D26 through COMPASS-D30, and the sections they change |
 | `doc/INDEX.md` | Modified | Regenerated |
 | `skills/reference/toolchain.md` | Modified | Version 0.2 commands; "Numbers and the ledger" |
 
@@ -661,11 +661,11 @@ is `make test` under both Quicklisp and ocicl, `compass check` on all four
 repositories, the concurrency tests, and a dry-run `assign` of a real document in
 a scratch clone.
 
-- **Stage 0, the rest.** Record `COMPASS-DRAFT-toolchain-D27` (Git-derived
+- **Stage 0, the rest.** Record `COMPASS-D31` (Git-derived
   fields: a document not yet committed derives its authors and dates from the
   working tree; a file outside any repository is an error),
-  `COMPASS-DRAFT-toolchain-D28` (code references, resolving
-  COMPASS-DRAFT-toolchain-O4), and `COMPASS-DRAFT-toolchain-D29` (federation). Split the plan's
+  `COMPASS-D32` (code references, resolving
+  COMPASS-O7), and `COMPASS-D33` (federation). Split the plan's
   [baseline releases](Plan.Toolchain.md#baseline-releases): v0.2 is this round,
   and v0.2.1 the release binaries. *Done in `a9c6dd9`; see
   [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
@@ -686,8 +686,8 @@ a scratch clone.
 - **Stage 6: remaining checks.** `index --check` and the `index/current` rule;
   `check --federation`, which loads each repository listed under
   `:federation` and reports a namespace claimed by two of them
-  (`COMPASS-DRAFT-toolchain-D29`, which partly answers
-  COMPASS-DRAFT-toolchain-O3).
+  (`COMPASS-D33`, which partly answers
+  COMPASS-O6).
   `check --base` was done in stage 2. *Done in `a9c6dd9`; see
   [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Stage 7: new commands.** `compass init`, with non-interactive flags, writes
@@ -708,12 +708,12 @@ a scratch clone.
   [Update 2026-10-10 — Git-derived fields, code references, federation, and CI](#update-2026-10-10--git-derived-fields-code-references-federation-and-ci).*
 - **Stage 9: bootstrap.** The ledger was seeded in stage 3. What remains:
   - relabel the rows of the §23 table, as `ND1`… and `GO1`…, per
-    COMPASS-DRAFT-toolchain-D9;
+    COMPASS-D13;
   - amend `Compass.md` for the accepted decisions due in v0.2: §13 for
-    COMPASS-DRAFT-toolchain-D2 and COMPASS-DRAFT-toolchain-D3 (the ledger
+    COMPASS-D6 and COMPASS-D7 (the ledger
     replaces the "registry"; provisional identifiers for records); and the
-    amendments of COMPASS-DRAFT-toolchain-D5 (§6, §7),
-    COMPASS-DRAFT-toolchain-D6 (§11 to §13), and COMPASS-DRAFT-toolchain-D16
+    amendments of COMPASS-D9 (§6, §7),
+    COMPASS-D10 (§11 to §13), and COMPASS-D20
     (the §8 example);
   - update the vocabulary standings, and the skills' reference notes that still
     describe those amendments as pending;
@@ -769,7 +769,7 @@ Other work found along the way:
 - **The speed of `ref/short-record`.** It nearly tripled the time of a check. It
   could skip lines that contain no capital `D`, `O`, or `M` followed by a digit.
 - **Acceptance.** This Log is `Draft`, and its two decisions, like
-  COMPASS-DRAFT-toolchain-D22 through COMPASS-DRAFT-toolchain-D26, are
+  COMPASS-D26 through COMPASS-D30, are
   `Proposed`.
 
 ## Update 2026-10-10 — Git-derived fields, code references, federation, and CI
@@ -806,14 +806,14 @@ change:
 The work carried out the three decisions recorded in the plan as the rest of
 stage 0, all `Proposed`:
 
-- [COMPASS-DRAFT-toolchain-D27](Plan.Toolchain.md#compass-draft-toolchain-d27--git-derived-fields-including-for-files-not-yet-committed):
+- [COMPASS-D31](Plan.Toolchain.md#compass-d31--git-derived-fields-including-for-files-not-yet-committed):
   Git-derived fields, including for files not yet committed;
-- [COMPASS-DRAFT-toolchain-D28](Plan.Toolchain.md#compass-draft-toolchain-d28--which-code-references-are-checked-and-how-deeply):
+- [COMPASS-D32](Plan.Toolchain.md#compass-d32--which-code-references-are-checked-and-how-deeply):
   which code references are checked, and how deeply. It resolves
-  COMPASS-DRAFT-toolchain-O4;
-- [COMPASS-DRAFT-toolchain-D29](Plan.Toolchain.md#compass-draft-toolchain-d29--federation-checks-are-opt-in-and-one-hop-deep):
+  COMPASS-O7;
+- [COMPASS-D33](Plan.Toolchain.md#compass-d33--federation-checks-are-opt-in-and-one-hop-deep):
   federation checks are opt-in and one hop deep. It partly answers
-  COMPASS-DRAFT-toolchain-O3.
+  COMPASS-O6.
 
 The plan's [baseline releases](Plan.Toolchain.md#baseline-releases) now split
 version 0.2 from version 0.2.1, which holds the release binaries, the setup
@@ -854,7 +854,7 @@ then counted as unverified, never reported.
 
 **Status:** Proposed
 
-**Context:** COMPASS-DRAFT-toolchain-D6 has each namespace's `INDEX.md`
+**Context:** COMPASS-D10 has each namespace's `INDEX.md`
 generated and verified with `compass index --check`. Classic and Origin have no
 index yet, nor has a corpus whose first document is still being written. A
 clone made with Git's `core.autocrlf` converts the committed index to CRLF line
@@ -1197,7 +1197,7 @@ Table: Files added or changed in commit `a9c6dd9`.
 | `scripts/pre-commit` | **New** | The pre-commit hook |
 | `Makefile` | Modified | `deps` and `hooks` |
 | `README.md` | Modified | Dependencies, CI, branch protection, the hook |
-| `doc/Plan.Toolchain.md` | Modified | COMPASS-DRAFT-toolchain-D27 to COMPASS-DRAFT-toolchain-D29; COMPASS-DRAFT-toolchain-O3 and COMPASS-DRAFT-toolchain-O4; rule table, commands, and releases |
+| `doc/Plan.Toolchain.md` | Modified | COMPASS-D31 to COMPASS-D33; COMPASS-O6 and COMPASS-O7; rule table, commands, and releases |
 | `doc/Log.Ledger.md` | **New** | This Log |
 | `doc/INDEX.md` | Modified | Regenerated |
 | `skills/reference/toolchain.md` | Modified | The new commands; federation; what is not checked yet |
@@ -1237,7 +1237,7 @@ them: the bootstrap and the amendments to `Compass.md`, the skills and version
   out the federation beside this repository would verify them.
 - **Uses of the derived fields.** Only `outline` shows them so far; the
   `review/approver` rule and the RDF export are their next users.
-- **Acceptance.** COMPASS-DRAFT-toolchain-D27 to COMPASS-DRAFT-toolchain-D29
+- **Acceptance.** COMPASS-D31 to COMPASS-D33
   and this Log's decisions COMPASS-DRAFT-ledger-log-D3 and
   COMPASS-DRAFT-ledger-log-D4 are `Proposed`.
 
@@ -1259,21 +1259,21 @@ At `a9c6dd9` the toolchain enforced decisions the standard did not yet state:
 - **The standard lagged its accepted decisions.**
   [COMPASS-0001](../Compass.md) still had a "registry" listing titles and
   statuses (§13), where the ledger records immutable facts only
-  ([COMPASS-DRAFT-toolchain-D3](Plan.Toolchain.md#compass-draft-toolchain-d3--the-allocation-ledger-holds-immutable-facts-only));
+  ([COMPASS-D7](Plan.Toolchain.md#compass-d7--the-allocation-ledger-holds-immutable-facts-only));
   it gave records no provisional identifiers
-  ([COMPASS-DRAFT-toolchain-D2](Plan.Toolchain.md#compass-draft-toolchain-d2--provisional-identifiers-for-register-entries));
+  ([COMPASS-D6](Plan.Toolchain.md#compass-d6--provisional-identifiers-for-register-entries));
   its §8 example used the short heading
-  ([COMPASS-DRAFT-toolchain-D16](Plan.Toolchain.md#compass-draft-toolchain-d16--register-record-headings-carry-the-full-identifier));
+  ([COMPASS-D20](Plan.Toolchain.md#compass-d20--register-record-headings-carry-the-full-identifier));
   its §6 status `Superseded-by: <id>` was not valid YAML
-  ([COMPASS-DRAFT-toolchain-D5](Plan.Toolchain.md#compass-draft-toolchain-d5--supersession-uses-a-plain-status-plus-the-existing-field));
+  ([COMPASS-D9](Plan.Toolchain.md#compass-d9--supersession-uses-a-plain-status-plus-the-existing-field));
   and §11 and §12 required table captions and diagram descriptions that
   Markdown cannot express
-  ([COMPASS-DRAFT-toolchain-D6](Plan.Toolchain.md#compass-draft-toolchain-d6--checkable-conventions-for-12-and-generated-indexes)).
+  ([COMPASS-D10](Plan.Toolchain.md#compass-d10--checkable-conventions-for-12-and-generated-indexes)).
   All five decisions are accepted.
 - **The §23 tables used labels that read as records.** Rows `D1` to `D8` and
   `O1` to `O6` looked like `COMPASS` register identifiers, and accounted for 8
   of this repository's `ref/short-record` warnings
-  ([COMPASS-DRAFT-toolchain-D9](Plan.Toolchain.md#compass-draft-toolchain-d9--bootstrapping-the-compass-namespace)).
+  ([COMPASS-D13](Plan.Toolchain.md#compass-d13--bootstrapping-the-compass-namespace)).
 - **§22 described a toolchain "not yet built"**, with 3bmd and cl-yaml as its
   parsers.
 - **The skills described the ledger as future work**, and the reference bundle
@@ -1286,28 +1286,28 @@ At `a9c6dd9` the toolchain enforced decisions the standard did not yet state:
 
 ### Design Decisions
 
-The work carried out the amendments of COMPASS-DRAFT-toolchain-D2,
-COMPASS-DRAFT-toolchain-D3, COMPASS-DRAFT-toolchain-D5,
-COMPASS-DRAFT-toolchain-D6, COMPASS-DRAFT-toolchain-D9, and
-COMPASS-DRAFT-toolchain-D16. The steward accepted
-[COMPASS-DRAFT-toolchain-D18](Plan.Toolchain.md#compass-draft-toolchain-d18--a-strict-yaml-subset-parser-written-in-lisp)
+The work carried out the amendments of COMPASS-D6,
+COMPASS-D7, COMPASS-D9,
+COMPASS-D10, COMPASS-D13, and
+COMPASS-D20. The steward accepted
+[COMPASS-D22](Plan.Toolchain.md#compass-d22--a-strict-yaml-subset-parser-written-in-lisp)
 during the round, so its §7 amendment, the YAML subset, landed too. The
-amendments of COMPASS-DRAFT-toolchain-D12 and COMPASS-DRAFT-toolchain-D13 wait
+amendments of COMPASS-D16 and COMPASS-D17 wait
 on the agent-context evaluation and on roadmap step 6, and those of the
 proposed decisions on their acceptance.
 
 Two further decisions were made while coding. They are recorded here as
 proposals for the steward.
 
-### COMPASS-DRAFT-ledger-log-D5 — The status form that COMPASS-DRAFT-toolchain-D5 replaced is an error
+### COMPASS-DRAFT-ledger-log-D5 — The status form that COMPASS-D9 replaced is an error
 
 **Status:** Proposed
 
 **Context:** Before `Compass.md` 0.3.0 the toolchain warned on a quoted
 `status: "Superseded-by: <id>"`, because the standard still prescribed that
-form and COMPASS-DRAFT-toolchain-D5 only proposed its replacement. With the
+form and COMPASS-D9 only proposed its replacement. With the
 amendment in the standard the old form names a status that no longer exists.
-COMPASS-DRAFT-toolchain-D5 calls itself breaking, and no document uses the old
+COMPASS-D9 calls itself breaking, and no document uses the old
 form.
 
 **Decision:** `src/rules/frontmatter.lisp:vocab/status@ccb28e9` reports the old
@@ -1361,13 +1361,13 @@ Code references below are pinned to `ccb28e9`.
 
 `schema-version` went from 0.2.0 to 0.3.0: one minor increment for all of the
 round's amendments, since before 1.0 a breaking change, such as
-COMPASS-DRAFT-toolchain-D5's, increments the minor number. Section by section:
+COMPASS-D9's, increments the minor number. Section by section:
 
 - **§6 and §7** ([§6](../Compass.md#6-controlled-status-and-editorial-review)):
   the status `Superseded`, with the successor in `superseded-by:`, each
   requiring the other. §7's annotated example and its notes follow, and §7
   gained [the YAML subset](../Compass.md#the-yaml-subset) of
-  COMPASS-DRAFT-toolchain-D18: what front-matter may use, and that every scalar
+  COMPASS-D22: what front-matter may use, and that every scalar
   is a string typed by the schema.
 - **§8** ([§8](../Compass.md#8-cross-cutting-registers)): a record is defined by
   a level-3 heading with its full identifier and an em dash; a record in an
@@ -1379,9 +1379,9 @@ COMPASS-DRAFT-toolchain-D5's, increments the minor number. Section by section:
   identifiers for documents and their records; assignment of every number in
   one change at acceptance, with references rewritten and the ledger appended;
   aliases that keep old provisional identifiers resolving. The wording "the
-  repository that owns the namespace" fits COMPASS-DRAFT-toolchain-D3, which
-  speaks of a ledger per namespace, and the proposed COMPASS-DRAFT-toolchain-D22,
-  which keeps one per repository. The proposed COMPASS-DRAFT-toolchain-D23 is
+  repository that owns the namespace" fits COMPASS-D7, which
+  speaks of a ledger per namespace, and the proposed COMPASS-D26,
+  which keeps one per repository. The proposed COMPASS-D27 is
   not written into the standard. The master index is generated, carries a
   banner, and is verified in CI, and §13's paragraph on conformance now names
   the toolchain.
@@ -1395,7 +1395,7 @@ COMPASS-DRAFT-toolchain-D5's, increments the minor number. Section by section:
 - **§22**
   ([§22](../Compass.md#22-appendix--conformance-and-the-validation-toolchain)):
   describes the toolchain of version 0.2, its purpose-built parsers
-  ([COMPASS-DRAFT-toolchain-D7](Plan.Toolchain.md#compass-draft-toolchain-d7--common-lisp-with-purpose-built-parsers)),
+  ([COMPASS-D11](Plan.Toolchain.md#compass-d11--common-lisp-with-purpose-built-parsers)),
   its Git integration, and its commands; the list of checks gains the ledger,
   registers, code references, the index, and federation, with the §12 rules
   marked planned. It remains non-normative; the change is a patch.
@@ -1409,7 +1409,7 @@ COMPASS-DRAFT-toolchain-D5's, increments the minor number. Section by section:
   - R4 and P3 follow the ledger and the `Superseded` status.
 
   Two references to the old labels, in
-  [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) and
+  [COMPASS-0004](Plan.Toolchain.md) and
   [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md), and the
   listing in `doc/README.md`, follow.
 - **Captions.** Compass.md's nine tables and the templates' eight gained
@@ -1420,13 +1420,13 @@ COMPASS-DRAFT-toolchain-D5's, increments the minor number. Section by section:
 - **`Superseded` is accepted**
   (`src/vocab.lisp:*status-families*@ccb28e9`), so `vocab/pending` no longer
   warns on it, and the old form is an error
-  ([COMPASS-DRAFT-ledger-log-D5](#compass-draft-ledger-log-d5--the-status-form-that-compass-draft-toolchain-d5-replaced-is-an-error)).
+  ([COMPASS-DRAFT-ledger-log-D5](#compass-draft-ledger-log-d5--the-status-form-that-compass-d9-replaced-is-an-error)).
 - **`vocab/pending`'s messages** say a value "is not yet adopted into the
   standard" (`src/rules/frontmatter.lisp:note-pending@ccb28e9`), where they said
   its decision "has not been accepted". That was false for the values of
-  COMPASS-DRAFT-toolchain-D12 and COMPASS-DRAFT-toolchain-D13, whose decisions
+  COMPASS-D16 and COMPASS-D17, whose decisions
   are accepted though their amendments have not landed
-  ([COMPASS-DRAFT-toolchain-D20](Plan.Toolchain.md#compass-draft-toolchain-d20--vocabulary-values-carry-a-standing)).
+  ([COMPASS-D24](Plan.Toolchain.md#compass-d24--vocabulary-values-carry-a-standing)).
 - **The version is 0.2.0**, in `compass.asd` and in the executable.
 
 #### The skills and their reference bundle
@@ -1451,7 +1451,7 @@ COMPASS-DRAFT-toolchain-D5's, increments the minor number. Section by section:
 - **`compass-derive`** names version 0.2, and the AGENTS snippet asks that
   numbers be assigned only when a person asks.
 - **`README.md`** describes version 0.2, with an example of each new command.
-- **[COMPASS-DRAFT-toolchain](Plan.Toolchain.md)**: roadmap steps 3, 4, 5, 6,
+- **[COMPASS-0004](Plan.Toolchain.md)**: roadmap steps 3, 4, 5, 6,
   7, and 8 mark what version 0.2 finished.
 
 #### The guards
@@ -1482,7 +1482,7 @@ COMPASS-DRAFT-toolchain-D5's, increments the minor number. Section by section:
   [CLASSIC-DRAFT-compass-integration](../../classic/doc/survey/Survey.CompassIntegration.md),
   a Survey of how a Compass corpus could be composed from Classic's base schema
   rather than its wiki preset, and of the extensions Classic needs for it. Its
-  findings bear on the RDF export of COMPASS-DRAFT-toolchain-D17: §17's
+  findings bear on the RDF export of COMPASS-D21: §17's
   mapping and the binding's alignment table compare with the wiki preset, and
   the binding maps `created` and `updated` to the predicates Classic uses for
   record timestamps rather than authorial dates. It also found that Classic's
@@ -1495,13 +1495,13 @@ These edits follow `ccb28e9` and are committed with this update:
 
 - **Statuses**, set by the steward:
   [COMPASS-D2](Plan.AuthoringAssistance.md#compass-d2--advisory-only-until-the-toolchain-exists)
-  and COMPASS-DRAFT-toolchain-D2 are `Implemented`. COMPASS-D2's decision
+  and COMPASS-D6 are `Implemented`. COMPASS-D2's decision
   provided for the toolchain's arrival, so nothing replaced it; the skills
   call the toolchain and keep advisory mode as their fallback.
 - **[COMPASS-0003](Plan.AuthoringAssistance.md)**: roadmap
   step 6 is done for version 0.2, COMPASS-O2 is resolved by the manifest and
   the ledger, and its Outstanding Work follows.
-- **[COMPASS-DRAFT-toolchain](Plan.Toolchain.md)**: its introduction says the
+- **[COMPASS-0004](Plan.Toolchain.md)**: its introduction says the
   skills call the toolchain, and roadmap step 8's "Lift COMPASS-D2" is done.
 - **`Compass.md` §7**: the sentence on `superseded-by` is a paragraph of its own
   again (pitfall 4 below).
@@ -1537,10 +1537,10 @@ These edits follow `ccb28e9` and are committed with this update:
    sentence on `superseded-by` to the paragraph on required fields, joining the
    two mid-line. It was found on review and split again with this update.
 5. **Two records called `D2`.** The status meant for COMPASS-D2 was first set on
-   COMPASS-DRAFT-toolchain-D2, whose short form is also `D2`. The steward kept
+   COMPASS-D6, whose short form is also `D2`. The steward kept
    both as `Implemented`, since provisional record identifiers are implemented
    too. It is the ambiguity
-   [COMPASS-DRAFT-toolchain-D26](Plan.Toolchain.md#compass-draft-toolchain-d26--records-are-referred-to-by-full-identifier-short-forms-are-found-not-rewritten)
+   [COMPASS-D30](Plan.Toolchain.md#compass-d30--records-are-referred-to-by-full-identifier-short-forms-are-found-not-rewritten)
    describes, met by a person rather than a rewriter.
 6. **A test that never matched.** While this update was written, the guard's
    third test, for the plain warning that a function "clobbers structure
@@ -1565,7 +1565,7 @@ These edits follow `ccb28e9` and are committed with this update:
   unverified: the 2 new ones point into Classic, and `--federation` resolves
   all 5.
 - **The index check at work.** When the steward accepted
-  COMPASS-DRAFT-toolchain-D18 during the round, `index/current` reported the
+  COMPASS-D22 during the round, `index/current` reported the
   committed index stale, at the line of that record, until it was regenerated.
 - **CI.** The workflow first ran on the push of `342b414` (the code of
   `a9c6dd9`), run 38079521930: both jobs passed every step, the Quicklisp job in
@@ -1647,7 +1647,7 @@ Table: Files added or changed in commit `ccb28e9`.
 | `templates/*.template.md` (six) | Modified | Table captions |
 | `templates/AGENTS.snippet.md` | Modified | Numbers only when a person asks |
 | `README.md` | Modified | Version 0.2 and its commands |
-| `doc/Plan.Toolchain.md` | Modified | The roadmap; the §23 labels; COMPASS-DRAFT-toolchain-D18 accepted |
+| `doc/Plan.Toolchain.md` | Modified | The roadmap; the §23 labels; COMPASS-D22 accepted |
 | `doc/README.md`, `doc/Survey.SecureDevelopment.md` | Modified | The §23 labels |
 | `doc/INDEX.md` | Modified | Regenerated |
 
@@ -1682,7 +1682,7 @@ Table: The commits of version 0.2, with the toolchain's size at each.
 | `342b414` | This Log's first update | 1142 | 39 | 13 |
 | `ccb28e9` | Stages 9 and 10: `Compass.md` 0.3.0, the skills, the guards, version 0.2.0 | 1182 | 39 | 13 |
 
-Its decisions: COMPASS-DRAFT-toolchain-D22 to COMPASS-DRAFT-toolchain-D29,
+Its decisions: COMPASS-D26 to COMPASS-D33,
 recorded in the plan, and COMPASS-DRAFT-ledger-log-D1 to
 COMPASS-DRAFT-ledger-log-D6, recorded here, all `Proposed`. Version 0.2.1 holds
 the release binaries.
@@ -1695,7 +1695,7 @@ What remains after version 0.2:
   rewrite by hand; until those in and around COMPASS-DRAFT-agent-workflow are
   rewritten, `assign` refuses it.
 - **Assigning the accepted documents**: COMPASS-DRAFT-agent-workflow,
-  COMPASS-DRAFT-operator-memory, COMPASS-DRAFT-toolchain-log, and
+  COMPASS-0005, COMPASS-DRAFT-toolchain-log, and
   COMPASS-DRAFT-authoring-assistance-log, and later this Log and the plans once
   accepted.
 - **Classic's duplicated open questions**, as its `AGENTS.md` now describes.
@@ -1704,20 +1704,20 @@ What remains after version 0.2:
 - **`compass check` during a merge**, which compares with `HEAD` without
   `--base` and so reports `ledger/append-only` after `renumber` until the merge
   is committed.
-- **§7 and COMPASS-DRAFT-toolchain-D27.** §7 says the toolchain errors on an
-  untracked file; the proposed COMPASS-DRAFT-toolchain-D27, which the toolchain
+- **§7 and COMPASS-D31.** §7 says the toolchain errors on an
+  untracked file; the proposed COMPASS-D31, which the toolchain
   implements, derives such a file's fields from the working tree. Accepting the
   decision would amend §7.
 - **The semantic binding.** Revise the alignment of
   [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) with Classic, as the
   Classic Survey describes, before the RDF export of
-  COMPASS-DRAFT-toolchain-D17 in version 0.3. The Classic side of that work is
+  COMPASS-D21 in version 0.3. The Classic side of that work is
   Classic's.
 - **Repository settings and the hook**: both workflow jobs required, review by
   code owners, and `make hooks` where wanted.
 - **The checks still planned**: the §12 accessibility rules, the §14 section
   shapes, and `review/approver`.
 - **Version 0.2.1**, the release binaries, and a `v0.2.0` tag if wanted.
-- **Acceptance**: this Log is `Draft`; COMPASS-DRAFT-toolchain-D17 and
-  COMPASS-DRAFT-toolchain-D19 to COMPASS-DRAFT-toolchain-D29, this Log's six
+- **Acceptance**: this Log is `Draft`; COMPASS-D21 and
+  COMPASS-D23 to COMPASS-D33, this Log's six
   decisions, and the toolchain Log's four are `Proposed`.

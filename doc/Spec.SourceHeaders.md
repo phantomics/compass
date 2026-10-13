@@ -16,8 +16,8 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-toolchain
-  - COMPASS-DRAFT-operator-memory
+  - COMPASS-0004
+  - COMPASS-0005
   - COMPASS-DRAFT-agent-workflow
 cites:
   - title:     RFC 2119 — Key words for use in RFCs to Indicate Requirement Levels
@@ -46,9 +46,9 @@ equivalent block for **directory READMEs**, and the **source map**: a per-file
 navigation index that the Compass toolchain generates deterministically from
 those headers. The map gives coding agents and human readers a primer on a
 repository before they explore its source. It is the Compass form of candidate 7
-in [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md), and the toolchain
+in [COMPASS-0005](Survey.OperatorMemory.md), and the toolchain
 work that implements it is recorded in
-[COMPASS-DRAFT-toolchain](Plan.Toolchain.md) as COMPASS-DRAFT-toolchain-D14.
+[COMPASS-0004](Plan.Toolchain.md) as COMPASS-D18.
 The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY are used as described
 in RFC 2119.
 
@@ -177,7 +177,7 @@ map shows them.
   anything that reads peer input". It SHOULD stay within 160 characters. It
   answers *when* the file matters; the summary line already says *what* it is.
   It is the source-file counterpart of the `read-if:` front-matter extension
-  (COMPASS-DRAFT-toolchain-D13); the capitalisation differs only to match each
+  (COMPASS-D17); the capitalisation differs only to match each
   syntax's conventions.
 - **`See`** (SHOULD, where applicable). Compass identifiers for the documents and
   register entries behind this file: the Plan or Spec it implements, the
@@ -395,7 +395,7 @@ The map is consumed in layers so that a session pays only for what it uses:
 
 1. The **top level** (repository root, first-level directories, and ASDF
    systems, with descriptions only) is embedded in the session catalog
-   (COMPASS-DRAFT-toolchain-D11).
+   (COMPASS-D15).
 2. The **full map** is `doc/MAP.md`, opened when the task needs it.
 3. **`compass map PATH`** prints the map of one subtree.
 4. **`compass map --file FILE`** prints a file's effective header, including
@@ -490,7 +490,7 @@ The resulting map entry:
   matches the headers. It cannot guarantee that the headers match the code. A
   file can be rewritten while its header stays the same. Heuristics for
   detecting a stale header are an open question
-  (COMPASS-DRAFT-toolchain-O6).
+  (COMPASS-O9).
 - **Judgment fields are unverifiable.** `Read-if` and `Invariant` are checked
   for form only. Their quality is a matter for review (`compass-review`) and for
   the author.
@@ -509,4 +509,4 @@ The resulting map entry:
   mgl-pax, and their peers (§2). The map tells a reader which file to open, not
   what each definition in it does.
 - **No evidence yet.** Whether the map measurably improves agent behaviour is
-  untested; see COMPASS-DRAFT-operator-memory-O6.
+  untested; see COMPASS-O16.

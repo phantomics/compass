@@ -1339,7 +1339,7 @@ recorded in §23 as one of the standard's specified-but-deferred items.
 ## 22. Appendix — Conformance and the Validation Toolchain
 
 *Non-normative; describes the validation toolchain, tracked as the
-`COMPASS-DRAFT-toolchain` Plan. Its version 0.2 is built; the checks this
+`COMPASS-0004` Plan. Its version 0.2 is built; the checks this
 appendix marks as planned arrive with later versions.*
 
 The toolchain checks conformance locally, in a pre-commit hook, and as a
@@ -1410,7 +1410,7 @@ with the Markdown→Lexis importer (§16).
   ledger (§13); `init` writes a repository's manifest.
 - It runs locally and in CI (on pull request), gating merges on errors.
 
-The design and its decisions are in the `COMPASS-DRAFT-toolchain` Plan; this
+The design and its decisions are in the `COMPASS-0004` Plan; this
 appendix fixes only what the toolchain must guarantee and how it fits the
 pipeline.
 
@@ -1479,7 +1479,7 @@ Table: Specified items whose tooling is deferred, and the Plans tracking them.
 
 | # | Area | Tracked as |
 |---|---|---|
-| S2 | Markdown→Lexis importer | Part of `COMPASS-DRAFT-toolchain` (§16) |
+| S2 | Markdown→Lexis importer | Part of `COMPASS-0004` (§16) |
 | S3 | Diagrams and media detailed conventions | §11 stub, to be filled by amendment |
 | S4 | Classic-native Tier-2 binding | §16; gated on Classic maturation |
 | S5 | User-doc derivation (audience projection, curation refresh, terminology mapping) | `COMPASS-DRAFT-user-doc-derivation` (§21) |
@@ -1528,7 +1528,7 @@ Table: Partially resolved limitations and what remains of each.
 | P2 | Provenance disclosure depth | `provenance` (§7) and `approved-by` (§6) cover the basics; model-version, prompt captures, and human-review attestation are not specified |
 | P3 | Retention and archival policy | `Deprecated` / `Superseded` exist (§6); no explicit pruning or cold-storage policy |
 | P4 | Genre proliferation | Managed by the §13 amendment gate and by preferring subtypes over new genres; not actively shrunk |
-| P5 | Validation toolchain (Common Lisp; front-end shared with the importer); formerly S1 | Version 0.2 checks front-matter, vocabularies, identity and the ledger, registers, memos, references and code references, Git-derived fields, the index, and federation (§22), and allocates numbers. Not yet: the §12 accessibility rules, the §14 section shapes, `approved-by` checks, the catalog and source map, RDF export, and the importer (S2). Tracked as `COMPASS-DRAFT-toolchain` |
+| P5 | Validation toolchain (Common Lisp; front-end shared with the importer); formerly S1 | Version 0.2 checks front-matter, vocabularies, identity and the ledger, registers, memos, references and code references, Git-derived fields, the index, and federation (§22), and allocates numbers. Not yet: the §12 accessibility rules, the §14 section shapes, `approved-by` checks, the catalog and source map, RDF export, and the importer (S2). Tracked as `COMPASS-0004` |
 | P6 | Draft-to-canonical ID assignment ergonomics; formerly GO6 | One command assigns a document's and its records' numbers, rewrites references to them, and appends the ledger (§13, §22). Short references such as `D6` cannot be rewritten safely, so an author converts them to full identifiers first; the steward's approval of each allocation rests on repository settings (code owners and a required check) |
 
 ### Open by design

@@ -14,7 +14,7 @@ relates-to:
   - COMPASS-DRAFT-secure-development
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-0003
-  - COMPASS-DRAFT-toolchain
+  - COMPASS-0004
 cites:
   - title:     "ATAM: Method for Architecture Evaluation"
     locator:   "Kazman, Klein, and Clements; SEI technical report CMU/SEI-2000-TR-004, 2000"
@@ -73,7 +73,7 @@ threat model proposed by
 critique's specialisation for security, keeping its own method. The plan
 assumes the review gates and agent permissions of
 [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), and the vocabulary
-standings of [COMPASS-DRAFT-toolchain](Plan.Toolchain.md).
+standings of [COMPASS-0004](Plan.Toolchain.md).
 
 ## Problem
 
@@ -119,7 +119,7 @@ form for what such a conversation produces:
 - Critique that assistants may draft and agents may read, without either
   mistaking an objection for authority.
 - Nothing the toolchain cannot express: a new value takes the pending path of
-  [COMPASS-DRAFT-toolchain-D20](Plan.Toolchain.md#compass-draft-toolchain-d20--vocabulary-values-carry-a-standing),
+  [COMPASS-D24](Plan.Toolchain.md#compass-d24--vocabulary-values-carry-a-standing),
   and findings are records the scanner already reads.
 
 ## Settled Decisions
@@ -148,7 +148,7 @@ project's own system.
   it and records it as a fair critique, which is not acceptance of its
   objections. It is `Superseded` by a later critique of the same target, and
   `Rejected` if a person judges it unfounded as a whole.
-- Under COMPASS-DRAFT-toolchain-D12 an accepted critique weighs Contextual: it
+- Under COMPASS-D16 an accepted critique weighs Contextual: it
   explains, and never overrides an Authoritative document. An objection changes
   the system only when a decision in the system's own documents adopts it
   (COMPASS-DRAFT-critique-D4).
@@ -469,7 +469,7 @@ federation?
 ### COMPASS-DRAFT-critique-O4 — Open findings and agents
 
 Open-question records carry no weight, so the session catalog does not list
-them (COMPASS-DRAFT-toolchain-D12). An agent about to change a system may not
+them (COMPASS-D16). An agent about to change a system may not
 learn of an open finding against it. Should the catalog list open findings
 against the documents an agent is working from, or is `compass refs` on the
 target, which lists the critique as a relation, enough?
@@ -509,7 +509,7 @@ Table: Prior systems and what this plan draws from each.
 2. **Acceptance.** The steward accepts, amends, or rejects
    COMPASS-DRAFT-critique-D1 to COMPASS-DRAFT-critique-D6.
 3. **Toolchain and template.** `critique` becomes a pending `Eval` subtype
-   naming this plan (COMPASS-DRAFT-toolchain-D20), so `vocab/pending` warns on
+   naming this plan (COMPASS-D24), so `vocab/pending` warns on
    it until the amendment lands. The `Eval` template's subtype comment lists
    it, with a commented block showing a finding record; the toolchain's tests
    cover both.
