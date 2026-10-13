@@ -1,7 +1,39 @@
+# Classic files to ignore
+
+# Hidden files in subdirectories
+*/.*
+
+# Emacs backup files
+*~
+
+# Other Emacs files
+.emacs*
+
 # Build outputs
 /bin/
-*.fasl
 
 # ocicl dependency tree (ocicl.csv is committed)
 /ocicl/
 /systems/
+
+# Common Lisp compiled files
+*.FASL
+*.fasl
+*.lisp-temp
+*.dfsl
+*.pfsl
+*.d64fsl
+*.p64fsl
+*.lx64fsl
+*.lx32fsl
+*.dx64fsl
+*.dx32fsl
+*.fx64fsl
+*.fx32fsl
+*.sx64fsl
+*.sx32fsl
+*.wx64fsl
+*.wx32fsl
+
+# OSX folder metadata
+.DS_Store
