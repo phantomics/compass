@@ -141,7 +141,8 @@ This document is meant to be revised as the search is extended
   A partial match counts and is described as partial.
 - **Limits of the method.** No citation chasing, no database searches (ACM,
   IEEE, Scopus), no full-text reading of most papers, and no contact with
-  authors. Each is a planned extension under O1.
+  authors. Each is a planned extension under
+  COMPASS-DRAFT-agent-context-prior-art-O1.
 
 ## The Shared Scenario
 
@@ -160,10 +161,10 @@ Table: Elements of the Compass agent-context work assessed in this evaluation.
 
 | # | Element | Where it is defined |
 |---|---|---|
-| E1 | Typed records of design knowledge (decisions, open questions, memos) with permanent identifiers, lifecycle status, and supersession | §5, §8; COMPASS-DRAFT-agent-workflow-D1 to D4 |
+| E1 | Typed records of design knowledge (decisions, open questions, memos) with permanent identifiers, lifecycle status, and supersession | §5, §8; COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4 |
 | E2 | Status-based authority weighting, so history stays in the record without being treated as current truth | COMPASS-DRAFT-toolchain-D12 |
-| E3 | Delivery of a compact, ranked catalog to agents at session start, generated deterministically and committed | COMPASS-DRAFT-toolchain-D10, D11; COMPASS-DRAFT-agent-workflow-D10 |
-| E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-DRAFT-agent-workflow-D5 to D9 |
+| E3 | Delivery of a compact, ranked catalog to agents at session start, generated deterministically and committed | COMPASS-DRAFT-toolchain-D10, COMPASS-DRAFT-toolchain-D11; COMPASS-DRAFT-agent-workflow-D10 |
+| E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-DRAFT-agent-workflow-D5 to COMPASS-DRAFT-agent-workflow-D9 |
 | E5 | Source headers whose typed fields link files to decisions, memos, and tests, compiled into a source map | COMPASS-DRAFT-source-headers |
 | E6 | A derived RDF binding of the corpus, with an open vocabulary, `tag:` identity, SHACL shapes, and federation | COMPASS-DRAFT-semantic-binding |
 | E7 | Evaluation of quality and design-intent conformance across a relay of fresh sessions over real development history (the "annual crop" thesis), with single-feature ablation of the scheme and tasks that put supersession and rejected alternatives under pressure | COMPASS-DRAFT-agent-context-eval |
@@ -242,7 +243,7 @@ Table: Studies that vary the structure of documentation given to agents.
 | *The Specification Gap* (2026) | Completeness of a specification, in four levels from full docstrings with data structures (L0) to bare signatures (L3) | Integration success of two agents' outputs falls steadily from 58% to 25% as detail is removed; a merging agent given the full specification restores 89% | Single tasks; documentation inside the code; the variable is how much, not what kind |
 | *Handoff Debt* (2026) | Summary notes against structured notes in a handoff | Both reduce effort; small effects on success | One handoff; a fixed note format; resumption cost |
 | *Spec-Driven Test Generation* (Google; SpecOps '26) | An agent first writes a semi-formal contract specification, then tests, against writing tests directly | +9.8 percentage points in bug detection (p = 0.035) | The specification is written by the agent within the task, not a maintained project record |
-| *Spec Kit Agents* (2026) | Spec-driven workflow artefacts | Not yet read beyond the title and opening | Possibly the closest evaluation of a named scheme; must be read (O1) |
+| *Spec Kit Agents* (2026) | Spec-driven workflow artefacts | Not yet read beyond the title and opening | Possibly the closest evaluation of a named scheme; must be read (COMPASS-DRAFT-agent-context-prior-art-O1) |
 | ADR studies (2024–2026) | LLMs generating architecture decision records, choosing context for generation, or detecting violations of them | Violation detection works for decisions visible in code | The record is the output under study, not the context that helps an agent develop |
 | Gloaguen et al. (2026), with other documentation removed | Context file present or absent when no other documentation exists | Generated context files then help by about 2.7% | Supports the view that context helps when it supplies knowledge not available elsewhere |
 

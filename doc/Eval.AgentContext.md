@@ -281,8 +281,8 @@ opencode export <session-id> > runs/<run-id>/session.json
   shift agent quality (Ben Sghaier et al.).
 - The catalog, source map, and source headers used in A3, A4, and R4 are produced
   by hand, or with the toolchain's v0.1 baseline where it suffices, following the
-  formats of COMPASS-DRAFT-toolchain-D11 and D14. The evaluation thereby tests
-  the delivery design before it is built.
+  formats of COMPASS-DRAFT-toolchain-D11 and COMPASS-DRAFT-toolchain-D14. The
+  evaluation thereby tests the delivery design before it is built.
 
 ### Grading
 
@@ -760,7 +760,7 @@ Table: Sections of this evaluation and the primary sources each draws on.
 |---|---|
 | Thesis | COMPASS-DRAFT-operator-memory; Xue (2026); ContextEcho; LOCA-bench |
 | What the published studies do and do not show | Gloaguen et al. (2026); Khatri (2026); Chatlatanagulchai et al.; EvoCode-Bench; Xue (2026); Handoff Debt (2026); Codified Context (2026); MOOSEDev (2026); COMPASS-DRAFT-agent-context-prior-art |
-| Decision rules | COMPASS-DRAFT-toolchain-D10 to D14; COMPASS-DRAFT-agent-workflow-D9, D10 |
+| Decision rules | COMPASS-DRAFT-toolchain-D10 to COMPASS-DRAFT-toolchain-D14; COMPASS-DRAFT-agent-workflow-D9, COMPASS-DRAFT-agent-workflow-D10 |
 | Harness | OpenCode CLI (`run`, `export`); Ben Sghaier et al. (2026) on harness drift |
 | Statistics | Schuirmann (1987); Khatri (2026) on equivalence testing in this setting |
 | The Shared Scenario | Classic repository history, surveyed at `6e4f02d` |

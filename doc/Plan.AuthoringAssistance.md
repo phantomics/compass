@@ -7,7 +7,11 @@ program:       Compass
 project:       ~
 component:     authoring-assistance
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-12
 created:       2026-08-24
 authors:
   - Andrew Sengul
@@ -72,7 +76,7 @@ resolving cross-references across a federated corpus (§9, §10).
 
 ### COMPASS-D1 — Four skills, split by shape
 
-**Status:** Accepted
+**Status:** Implemented
 **Context:** The layer must serve drafting, review, retrieval, and derivation.
 These have different interaction shapes (agent-shaped vs. tool-shaped) and
 different dependency profiles.
@@ -152,7 +156,7 @@ map to the concerns skills actually query).
 All three find the `compass` executable, check which commands it has, and
 interpret its exit codes as `skills/reference/toolchain.md` describes, and fall
 back to working from the files, saying so, when it is absent.
-- **`compass-derive`** — deferred (D3). Wraps the derivation pipeline (§16) with
+- **`compass-derive`** — deferred (COMPASS-D3). Wraps the derivation pipeline (§16) with
   LLM curation where required (§21); tracked as blocked on S1/S2/S5/S7/S8.
 
 ## Harness portability
@@ -162,7 +166,7 @@ envelope. OpenCode is the reference envelope (`skills/*/SKILL.md` with OpenCode
 front-matter, registered via `opencode.json` `skills.paths`). Claude Code,
 Cursor/Copilot, and MCP re-envelope the same core; only front-matter keys, file
 layout, and the discovery mechanism change. The propose-vs-dispose invariant
-(D2) holds across every harness.
+(COMPASS-D2) holds across every harness.
 
 ## Open Questions
 
@@ -232,7 +236,7 @@ Table: Prior systems and what this plan draws from each.
 4. **Author / review / lookup skills (now).** Full `SKILL.md` for each.
 5. **Derive skill (deferred).** Sharpen the stub; build when S1/S2/S5/S7/S8 land.
 6. **Toolchain integration (done for version 0.2).** Wire each skill to call
-   `COMPASS-DRAFT-toolchain` (D2) instead of checking by hand.
+   `COMPASS-DRAFT-toolchain` (COMPASS-D2) instead of checking by hand.
    - **Done for toolchain version 0.1 (2026-10-08):** the shared
      `skills/reference/toolchain.md`; `compass-author` checks its drafts,
      `compass-review` reports the toolchain's findings, and `compass-lookup`

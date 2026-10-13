@@ -83,7 +83,7 @@ amendment (§13).
 ## Motivation
 
 Persistence of context across agent sessions is within Compass's mandate. §23
-(prior-art notes for O3, pattern 5) names "LLM-as-consumer" as a real design
+(prior-art notes for COMPASS-DRAFT-operator-memory-O3, pattern 5) names "LLM-as-consumer" as a real design
 goal: a typed corpus serves end users, LLM coding assistants, and LLM user-task
 assistants from a single source. So far Compass has addressed that consumer only
 indirectly. It produces structure, stable identifiers, and typed metadata, all
@@ -293,8 +293,8 @@ and amendment class.
 | 4 | Consult → build → update loop | Protocol text in the injected catalog and the AGENTS snippet; a maintenance skill (or an extended `compass-author`) that, after work, proposes the `Log` and the `Ref`/`Spec` revisions it implies | Candidates 1 and 3 | None to core; S9 |
 | 5 | Lean-writing discipline | "Do not restate what the code shows" guidance in templates, the `compass-review` rubric, and §14 | None | Patch |
 | 6 | Load and conformance diagnostics | The injected catalog carries a summary of `compass check` errors, and refuses to present a corpus as authoritative if it cannot be read | Toolchain check and JSON report | None to core |
-| 7 | Codebase map | Either a navigation-oriented `Ref` subtype or a ceded, Operator-style index outside Compass | Decision on O3 | Minor (new subtype) or none |
-| 8 | Unpublished working knowledge | Either coexistence (Operator Memory's private partition beside Compass's published `doc/`) or a lightweight Compass note genre | Decision on O4 | None, or minor/major (new genre) |
+| 7 | Codebase map | Either a navigation-oriented `Ref` subtype or a ceded, Operator-style index outside Compass | Decision on COMPASS-DRAFT-operator-memory-O3 | Minor (new subtype) or none |
+| 8 | Unpublished working knowledge | Either coexistence (Operator Memory's private partition beside Compass's published `doc/`) or a lightweight Compass note genre | Decision on COMPASS-DRAFT-operator-memory-O4 | None, or minor/major (new genre) |
 
 ### The authority ranking (candidate 3), sketched
 
@@ -346,7 +346,7 @@ catalog entirely, which bounds one of Operator Memory's open scaling problems.
 - **Standard amendments:** the authority table, the `read-if:` extension, and
   lean-writing guidance in §14.
 - An **evaluation** of whether the injected catalog changes agent behaviour
-  (see O6). Neither project has one.
+  (see COMPASS-DRAFT-operator-memory-O6). Neither project has one.
 
 ## The deeper claim
 
@@ -450,7 +450,7 @@ Memory that serve its goals, in Compass's own form, and does not recommend
 running the two side by side, since parallel models of project truth would
 diverge. No `.operator*` directories or `operator.md` are adopted. Recorded in
 [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) as COMPASS-DRAFT-toolchain-D10.
-One consequence: O4 can no longer be answered by deferring to Operator Memory's
+One consequence: COMPASS-DRAFT-operator-memory-O4 can no longer be answered by deferring to Operator Memory's
 private partition, and needs an answer inside Compass.
 
 ### COMPASS-DRAFT-operator-memory-O2 — Shape and budget of the session catalog

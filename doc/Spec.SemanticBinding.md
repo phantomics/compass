@@ -492,7 +492,7 @@ The SHACL shapes in `vocab/compass-shapes.ttl` express the standard's
 constraints over the exported graph. They cover:
 - the required fields of §7, per document;
 - the status vocabulary of each genre family (§6, amended by
-  COMPASS-DRAFT-toolchain-D5 and D12, and COMPASS-DRAFT-agent-workflow-D4);
+  COMPASS-DRAFT-toolchain-D5 and COMPASS-DRAFT-toolchain-D12, and COMPASS-DRAFT-agent-workflow-D4);
 - agreement of `dcterms:isReplacedBy` with `cstatus:Superseded`;
 - record kinds: a record listed under `decisions` is a `compass:DecisionRecord`,
   and so on;

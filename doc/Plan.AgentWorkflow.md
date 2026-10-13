@@ -60,8 +60,10 @@ open-questions:
 This plan covers how coding agents work *within* a Compass corpus: where they
 record durable knowledge, what they may change and who must approve it, how
 their assistance is recorded, and the loop that keeps the corpus current as code
-changes. It resolves open questions O4 and O5 of
-[COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md) and carries O6 forward.
+changes. It resolves open questions COMPASS-DRAFT-operator-memory-O4 and
+COMPASS-DRAFT-operator-memory-O5 of
+[COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md) and carries
+COMPASS-DRAFT-operator-memory-O6 forward.
 It is the authoring-assistance (S9) counterpart of the agent-context outputs in
 [COMPASS-DRAFT-toolchain](Plan.Toolchain.md) (COMPASS-DRAFT-toolchain-D10 to
 COMPASS-DRAFT-toolchain-D15), which generate the session catalog and source map
@@ -116,10 +118,10 @@ still. Every decision below is weighed against that risk.
 
 ## Settled Decisions
 
-This Plan was accepted on 2026-10-07 by its solo steward (D6). Decisions D1–D6
+This Plan was accepted on 2026-10-07 by its solo steward (COMPASS-DRAFT-agent-workflow-D6). Decisions COMPASS-DRAFT-agent-workflow-D1–COMPASS-DRAFT-agent-workflow-D6
 were accepted with it, and their amendments to COMPASS-0001 have landed (see
-[Amendments to the standard](#amendments-to-the-standard)). D11, which amends
-the catalog rule of D4, was accepted by the steward on 2026-10-08. D7–D10
+[Amendments to the standard](#amendments-to-the-standard)). COMPASS-DRAFT-agent-workflow-D11, which amends
+the catalog rule of COMPASS-DRAFT-agent-workflow-D4, was accepted by the steward on 2026-10-08. COMPASS-DRAFT-agent-workflow-D7–COMPASS-DRAFT-agent-workflow-D10
 remain **Proposed** until accepted individually.
 
 ### COMPASS-DRAFT-agent-workflow-D1 — A Memo genre for durable system knowledge
@@ -149,7 +151,7 @@ and agents) from the knowledge-base and FAQ non-goal. Amends §2 (patch) and §4
 - `Note`. Rejected: it reads as a scratchpad, the use this genre must avoid.
 - `Finding`. Rejected: it suggests a review result or an audit item.
 - No genre, using Operator Memory's private partition. Rejected by the survey's
-  O1 resolution (import, do not run alongside).
+  COMPASS-DRAFT-operator-memory-O1 resolution (import, do not run alongside).
 - A `Ref` subtype. Rejected: a `Ref` is normative and comprehensive, whereas a
   memo is a single observed fact that may later be folded into a `Ref`.
 
@@ -210,13 +212,13 @@ because it carries authority it has not earned.
 Test 4 is enforced: the `**Basis:**` field MUST contain at least one
 commit-pinned code reference (§9), a Compass identifier, or the title of an
 entry in the host's `cites:`. Tests 1–3 are judgment; `compass-review` and the
-maintenance skill (D9) apply them, and the maintenance skill states which test
+maintenance skill (COMPASS-DRAFT-agent-workflow-D9) apply them, and the maintenance skill states which test
 each proposed memo passes and why.
 
 **Alternatives:**
 - No admission bar. Rejected: it produces the scratchpad.
 - Require review before a memo may be recorded at all. Rejected: it suppresses
-  capture. The acceptance gate (D5) controls authority instead.
+  capture. The acceptance gate (COMPASS-DRAFT-agent-workflow-D5) controls authority instead.
 
 ### COMPASS-DRAFT-agent-workflow-D4 — Memo status and authority weight
 
@@ -240,14 +242,14 @@ reference-genre statuses fit, with the addition of supersession.
   retired host makes them Excluded.
 - **Catalog:** each Authoritative memo gets one line in the session catalog,
   with its `read-if:`. The host itself is not listed as a document. *Amended by
-  D11:* Provisional memos are listed too, in a separate section marked
+  COMPASS-DRAFT-agent-workflow-D11:* Provisional memos are listed too, in a separate section marked
   unreviewed.
 
 Amends §6 (minor).
 
 **Alternatives:**
 - Weight a `Current` memo as Directive. Rejected: a memo is non-normative, but
-  it is a verified fact about the code, which is what Authoritative means in D12.
+  it is a verified fact about the code, which is what Authoritative means in COMPASS-DRAFT-toolchain-D12.
 - A status only on the host. Rejected: memos in one host are recorded, verified,
   and retired independently.
 
@@ -270,7 +272,7 @@ design changes. It also invites review fatigue, which ends in rubber-stamping.
    component-scope documents the gate is RECOMMENDED.
 2. **The acceptance gate.** A transition into an authoritative status
    (`Accepted`, `Design-Record`, `Current`, including a memo's `Current`)
-   requires a human `approved-by` at any scope (D6). An agent never sets
+   requires a human `approved-by` at any scope (COMPASS-DRAFT-agent-workflow-D6). An agent never sets
    `approved-by` or `reviewers`.
 3. **Mechanical changes.** A change consisting only of identifier rewrites,
    link-target updates, supersession mirroring, and regenerated outputs passes
@@ -303,7 +305,7 @@ mark the namespace's approval mode as solo (COMPASS-DRAFT-toolchain-D15). In a
 solo namespace the steward MAY be the `approved-by` of a document they also
 authored. The rule `review/approver` enforces:
 - `approved-by` is never an assistant: not the `provenance: assistant`, and not
-  a tool named in an `Assisted-by:` trailer (D7);
+  a tool named in an `Assisted-by:` trailer (COMPASS-DRAFT-agent-workflow-D7);
 - in a namespace without solo approval, `approved-by` is not the sole author;
 - self-approval occurs only by the declared steward of a solo namespace.
 
@@ -350,8 +352,9 @@ resolves COMPASS-O3.
 
 **Status:** Proposed
 
-**Context:** D5 and D6 define the gates. Agents and skills need the result
-stated as permissions they can follow.
+**Context:** COMPASS-DRAFT-agent-workflow-D5 and COMPASS-DRAFT-agent-workflow-D6
+define the gates. Agents and skills need the result stated as permissions they can
+follow.
 
 **Decision:** Adopt the permission table under
 [Agent permissions](#agent-permissions) as the normative rule for skills and
@@ -379,14 +382,15 @@ with proposals.
 - **A fifth skill, `compass-maintain`.** Given a change (a diff or a commit
   range), it proposes the corpus updates the change implies: corrections to
   Authoritative claims the change made false, source-header updates, a `Log`
-  entry where the change is significant, and memos that pass D3. Amends
-  COMPASS-D1, which fixed four skills.
+  entry where the change is significant, and memos that pass
+  COMPASS-DRAFT-agent-workflow-D3. Amends COMPASS-D1, which fixed four skills.
 - **Proposal bar.** It proposes an edit only when a claim has become false or a
-  D3 memo has been established. It does not propose style changes.
+  COMPASS-DRAFT-agent-workflow-D3 memo has been established. It does not propose
+  style changes.
 - **Same change.** Its proposals go into the same commit or pull request as the
   code they describe, so the human reviews once.
 - **Never accepts.** It writes new memos as `Draft` and never changes a status
-  into an authoritative one (D5).
+  into an authoritative one (COMPASS-DRAFT-agent-workflow-D5).
 
 **Alternatives:**
 - Extend `compass-author`. Rejected: creating and maintaining are different
@@ -428,15 +432,17 @@ It never writes files. Adapters for other harnesses follow the same contract
 **Status:** Accepted
 
 **Context:** Memos exist so that agents can store what they learn for later
-sessions, and agents may write them freely at any scope (D3, D8). Under D4 and
-D5 as accepted, however, an agent's memo stays `Draft` until a person moves it
-to `Current`, a `Draft` memo weighs as Provisional, and only Authoritative
-memos reach the session catalog. Machine-authored memos were therefore stored
-but invisible to the next session until reviewed, which defeated their purpose.
-Letting agents set `Current` themselves was considered and rejected below.
+sessions, and agents may write them freely at any scope
+(COMPASS-DRAFT-agent-workflow-D3, COMPASS-DRAFT-agent-workflow-D8). Under
+COMPASS-DRAFT-agent-workflow-D4 and COMPASS-DRAFT-agent-workflow-D5 as accepted,
+however, an agent's memo stays `Draft` until a person moves it to `Current`, a
+`Draft` memo weighs as Provisional, and only Authoritative memos reach the session
+catalog. Machine-authored memos were therefore stored but invisible to the next
+session until reviewed, which defeated their purpose. Letting agents set `Current`
+themselves was considered and rejected below.
 
-**Decision:** Amends the catalog rule of D4. The session catalog lists memos in
-two sections:
+**Decision:** Amends the catalog rule of COMPASS-DRAFT-agent-workflow-D4. The
+session catalog lists memos in two sections:
 - **Memos:** M-records of weight Authoritative (status `Current`, accepted by a
   person), as before;
 - **Unreviewed memos:** M-records of weight Provisional (status `Draft`), each
@@ -445,12 +451,12 @@ two sections:
 
 Nothing else changes. Memos are written as `Draft`, by agents or people, with
 no review needed to record them. A `Draft` memo's `**Basis:**` is still
-required and checked (D3), so every unreviewed memo can be verified by the
-agent that reads it. Moving a memo to `Current` still passes the acceptance
-gate (D5): a person approves it, and the host's `approved-by` and `reviewed`
-record the latest acceptance. The maintenance-loop text tells agents to treat
-unreviewed memos as leads to verify against their basis, never as present
-truth.
+required and checked (COMPASS-DRAFT-agent-workflow-D3), so every unreviewed
+memo can be verified by the agent that reads it. Moving a memo to `Current`
+still passes the acceptance gate (COMPASS-DRAFT-agent-workflow-D5): a person
+approves it, and the host's `approved-by` and `reviewed` record the latest
+acceptance. The maintenance-loop text tells agents to treat unreviewed memos
+as leads to verify against their basis, never as present truth.
 
 Two limits keep unreviewed text from crowding out or masquerading as reviewed
 knowledge, which the injection concerns of
@@ -462,9 +468,10 @@ knowledge, which the injection concerns of
   never their body.
 
 **Alternatives:**
-- Keep D4 unchanged: unreviewed memos stay out of the catalog until a person
-  accepts them. Rejected: machine-authored memos would wait unseen for review,
-  and the point of the genre is that later sessions find them.
+- Keep COMPASS-DRAFT-agent-workflow-D4 unchanged: unreviewed memos stay out of
+  the catalog until a person accepts them. Rejected: machine-authored memos
+  would wait unseen for review, and the point of the genre is that later
+  sessions find them.
 - Exempt memos from the acceptance gate, so that agents may set `Current` and
   their memos weigh as Authoritative. Rejected: an agent's mistaken memo would
   become present truth for every later session, and the distinction between
@@ -520,9 +527,9 @@ Table: M-record fields.
 
 | Field | Required | Value |
 |---|---|---|
-| `**Status:**` | yes | `Draft`, `Current`, `Deprecated`, or `Superseded` (D4) |
+| `**Status:**` | yes | `Draft`, `Current`, `Deprecated`, or `Superseded` (COMPASS-DRAFT-agent-workflow-D4) |
 | `**Read-if:**` | yes | A condition, within 160 characters; the routing line the catalog shows |
-| `**Basis:**` | yes | At least one commit-pinned code reference, Compass identifier, or `cites:` title, then how the property was established (D3) |
+| `**Basis:**` | yes | At least one commit-pinned code reference, Compass identifier, or `cites:` title, then how the property was established (COMPASS-DRAFT-agent-workflow-D3) |
 | `**Recorded:**` | no | The date the memo was recorded. Git cannot supply a per-record date |
 | `**Superseded-by:**` | with `Superseded` | The successor's identifier; required with, and only with, that status |
 
@@ -561,7 +568,7 @@ link to the system-level property behind it.
 
 ### Agent permissions
 
-Table: What an agent may do, by action and document scope (D8).
+Table: What an agent may do, by action and document scope (COMPASS-DRAFT-agent-workflow-D8).
 
 | Action | Component scope | Project or program scope |
 |---|---|---|
@@ -570,7 +577,7 @@ Table: What an agent may do, by action and document scope (D8).
 | Propose edits to an authoritative document | Yes | Yes |
 | Run `compass assign`, `renumber`, `index`, `catalog`, `map` | Yes | Yes |
 | Commit to a working branch | Yes | Yes |
-| Make the final commit to the main branch | Discouraged (D5, RECOMMENDED gate) | No |
+| Make the final commit to the main branch | Discouraged (COMPASS-DRAFT-agent-workflow-D5, RECOMMENDED gate) | No |
 | Change a status into an authoritative one | No | No |
 | Set `approved-by` or `reviewers` | No | No |
 | Edit the ledger by hand | No | No |
@@ -626,7 +633,7 @@ The text is short by design; the session catalog's budget
 4. If the change is significant (a new capability, a fixed defect with a lesson,
    a changed contract), propose a `Log` or an `## Update` section to an existing
    one.
-5. For each durable fact established during the work, apply the D3 tests and
+5. For each durable fact established during the work, apply the COMPASS-DRAFT-agent-workflow-D3 tests and
    propose a `Draft` memo in the component's host, creating the host if needed.
 6. Report what it proposes, with the reason for each item, for the human to
    accept or discard.
@@ -638,18 +645,19 @@ under §13.
 
 | Section | Change | Class | Decision |
 |---|---|---|---|
-| §2 | Durable findings belong in a Memo; memos are not knowledge-base content | patch | D1 |
-| §4 | Eleventh genre `Memo` (`Memo.`, `ME`); fills the existing/non-normative grid cell | minor | D1 |
-| §6 | Memo status vocabulary; three review gates; solo-steward approval | minor | D4, D5, D6 |
-| §7 | `memos:` field; `Assisted-by:` trailer as a derived field | minor | D2, D7 |
-| §8 | M-records as a third register | minor | D2 |
-| §13 | M-records in provisional and canonical allocation | minor | D2 |
-| §14 | Memo section shape | minor | D2 |
+| §2 | Durable findings belong in a Memo; memos are not knowledge-base content | patch | COMPASS-DRAFT-agent-workflow-D1 |
+| §4 | Eleventh genre `Memo` (`Memo.`, `ME`); fills the existing/non-normative grid cell | minor | COMPASS-DRAFT-agent-workflow-D1 |
+| §6 | Memo status vocabulary; three review gates; solo-steward approval | minor | COMPASS-DRAFT-agent-workflow-D4, COMPASS-DRAFT-agent-workflow-D5, COMPASS-DRAFT-agent-workflow-D6 |
+| §7 | `memos:` field; `Assisted-by:` trailer as a derived field | minor | COMPASS-DRAFT-agent-workflow-D2, COMPASS-DRAFT-agent-workflow-D7 |
+| §8 | M-records as a third register | minor | COMPASS-DRAFT-agent-workflow-D2 |
+| §13 | M-records in provisional and canonical allocation | minor | COMPASS-DRAFT-agent-workflow-D2 |
+| §14 | Memo section shape | minor | COMPASS-DRAFT-agent-workflow-D2 |
 
-**Status (2026-10-07):** the rows for D1–D6 have landed in COMPASS-0001, as a
+**Status (2026-10-07):** the rows for COMPASS-DRAFT-agent-workflow-D1 –
+COMPASS-DRAFT-agent-workflow-D6 have landed in COMPASS-0001, as a
 minor amendment under §13. COMPASS-0001 does not yet record a version number;
 it gains one with its front-matter (COMPASS-DRAFT-toolchain-D9). The
-`Assisted-by:` half of the §7 row waits on D7. `skills/reference/vocabularies.md`, the `compass-author` genre list, and
+`Assisted-by:` half of the §7 row waits on COMPASS-DRAFT-agent-workflow-D7. `skills/reference/vocabularies.md`, the `compass-author` genre list, and
 `templates/Memo.template.md` now offer the Memo genre.
 
 The identifier grammar for M-records follows the D- and O-records. Their
@@ -659,8 +667,8 @@ M-records now, and for D- and O-records when that decision is accepted.
 
 **Open detail:** an M-record has no `approved-by` of its own. Until the
 toolchain plan settles it, a record's move to `Current` is approved by the
-human who approves the change (D5), and the host's `approved-by` and `reviewed`
-record the most recent acceptance.
+human who approves the change (COMPASS-DRAFT-agent-workflow-D5), and the
+host's `approved-by` and `reviewed` record the most recent acceptance.
 
 ## Open Questions
 
@@ -687,7 +695,7 @@ evaluation's Synthesis is written.
 
 ### COMPASS-DRAFT-agent-workflow-O2 — Host granularity
 
-D2 suggests one host per component. A busy component may accumulate many
+COMPASS-DRAFT-agent-workflow-D2 suggests one host per component. A busy component may accumulate many
 memos, and two branches appending to one host conflict textually (resolvable,
 since draft identifiers do not collide). When should a host be split by topic,
 and should the toolchain warn above a record count or size?
@@ -701,7 +709,7 @@ assistant but no commit touching it carries a trailer?
 
 ### COMPASS-DRAFT-agent-workflow-O4 — Adapters beyond OpenCode
 
-D10 specifies the OpenCode adapter. Claude Code hooks, Cursor rules, and MCP
+COMPASS-DRAFT-agent-workflow-D10 specifies the OpenCode adapter. Claude Code hooks, Cursor rules, and MCP
 resources can carry the same catalog, with different caching and size limits.
 Which come next, and does the catalog need per-harness budgets?
 
@@ -727,7 +735,7 @@ Table: Prior systems and what this plan draws from each.
    memo rules, `review/approver`, the `:stewards` manifest key, `compass diff`,
    and trailer derivation.
 4. **Templates and skills.** `templates/Memo.template.md`; the Memo genre in
-   `skills/reference/vocabularies.md` and `compass-author`; the D3 tests and
+   `skills/reference/vocabularies.md` and `compass-author`; the COMPASS-DRAFT-agent-workflow-D3 tests and
    memo checks in `compass-review`.
 5. **Maintenance.** The `compass-maintain` skill; the protocol text in the AGENTS
    snippet and the catalog preamble.
@@ -735,5 +743,5 @@ Table: Prior systems and what this plan draws from each.
    [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md). The session
    adapter, and the catalog it delivers, are built only after it, subject to its
    decision rules.
-7. **Delivery.** The OpenCode session adapter (D10).
-8. **Full evaluation.** Complete the study and resolve O1.
+7. **Delivery.** The OpenCode session adapter (COMPASS-DRAFT-agent-workflow-D10).
+8. **Full evaluation.** Complete the study and resolve COMPASS-DRAFT-agent-workflow-O1.

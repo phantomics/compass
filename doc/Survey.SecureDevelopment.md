@@ -6,9 +6,11 @@ scope:         program
 program:       Compass
 component:     security
 language:      en
-status:        Draft
+status:        Accepted
 authors:
   - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-08
 provenance:
   assistant:   opencode
 relates-to:
@@ -297,7 +299,7 @@ Table: Candidate security imports, with form, dependency, and amendment class.
 | # | Candidate | Form | Depends on | Class |
 |---|---|---|---|---|
 | 1 | Prompt-injection hardening of delivered context | Decisions in COMPASS-DRAFT-toolchain (catalog field limits, routing-field lint) and COMPASS-DRAFT-agent-workflow (adapter framing) | This survey's acceptance | None to core |
-| 2 | Federation trust levels | A `:trust` key on manifest `:federation` entries; untrusted text never injected | COMPASS-DRAFT-toolchain-D4, D11 | None to core |
+| 2 | Federation trust levels | A `:trust` key on manifest `:federation` entries; untrusted text never injected | COMPASS-DRAFT-toolchain-D4, COMPASS-DRAFT-toolchain-D11 | None to core |
 | 3 | Security Considerations section | Required in `Plan`, `Arch`, `Spec`; `shape/sections` checks it | None | Patch (§14) |
 | 4 | `threat-model` Eval subtype | Section shape as sketched above; a template | None | Minor (§4, §14) |
 | 5 | Coverage warnings and the security-boundary map | Toolchain rules and `compass map --concern` | COMPASS-DRAFT-toolchain-D14 | None to core |
@@ -342,8 +344,10 @@ evaluation, which leaves time.
     Considerations section.
   - §6's review rules and §9's commit-pinned references carry most of the
     verification burden.
-- [COMPASS-DRAFT-toolchain](Plan.Toolchain.md): the catalog (D11), weight (D12),
-  source map (D14), manifest (D4, D15), and the YAML-parser question (O1).
+- [COMPASS-DRAFT-toolchain](Plan.Toolchain.md): the catalog (COMPASS-DRAFT-toolchain-D11),
+  weight (COMPASS-DRAFT-toolchain-D12), source map (COMPASS-DRAFT-toolchain-D14),
+  manifest (COMPASS-DRAFT-toolchain-D4, COMPASS-DRAFT-toolchain-D15),
+  and the YAML-parser question (COMPASS-DRAFT-toolchain-O1).
 - [COMPASS-DRAFT-source-headers](Spec.SourceHeaders.md): `Concerns:
   security-boundary`, `Invariant:`, `See:`, and `Tests:` are the file-level
   carriers.

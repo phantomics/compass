@@ -214,7 +214,8 @@ registry until version 0.2, and what to use until then.
 - reads the namespace and document directory from `compass.sexp`, and checks
   with `compass show` that a provisional identifier is free;
 - gives records provisional identifiers formed from the document's
-  (`<NS>-DRAFT-<slug>-D1`), and new decisions the status `Proposed` (D4);
+  (`<NS>-DRAFT-<slug>-D1`), and new decisions the status `Proposed`
+  (COMPASS-DRAFT-authoring-assistance-log-D4);
 - finds a component's memo host through `compass index --stdout`, and reads its
   records with `outline` and `show`;
 - removes leftover placeholders, then runs `compass check <path>` and fixes
@@ -225,14 +226,14 @@ registry until version 0.2, and what to use until then.
 
 ### compass-review
 
-`skills/compass-review/SKILL.md@07b9643` begins with a toolchain step (D2): the
-changed Markdown files from `git diff --name-only`, a whole-corpus `compass
-check --format json`, findings split between the change and the rest, skipped
-files and unverified references noted, and `compass rules` and `compass
-version` recorded. The judgment step covers what `compass rules` does not list;
-it uses `compass outline` for section shape, and `compass show` and `compass
-refs` for cross-reference plausibility. The report gains "Checked with" and
-"Toolchain findings".
+`skills/compass-review/SKILL.md@07b9643` begins with a toolchain step
+(COMPASS-DRAFT-authoring-assistance-log-D2): the changed Markdown files from
+`git diff --name-only`, a whole-corpus `compass check --format json`, findings
+split between the change and the rest, skipped files and unverified references
+noted, and `compass rules` and `compass version` recorded. The judgment step
+covers what `compass rules` does not list; it uses `compass outline` for
+section shape, and `compass show` and `compass refs` for cross-reference
+plausibility. The report gains "Checked with" and "Toolchain findings".
 
 ### compass-lookup
 
@@ -253,8 +254,9 @@ that its one derivation is the namespace index. The skill remains a stub.
 
 - `templates/Plan.template.md@07b9643` and the Log, Architecture, and Survey
   templates write records as `<NAMESPACE>-DRAFT-<slug>-D1` and `-O1`, and
-  decisions as `Proposed` (D4). Filled in, the old form `<NAMESPACE>-D<n>`
-  produced `TEST-Dsample`, which `fm/types` rejects.
+  decisions as `Proposed` (COMPASS-DRAFT-authoring-assistance-log-D4).
+  Filled in, the old form `<NAMESPACE>-D<n>` produced `TEST-Dsample`, which
+  `fm/types` rejects.
 - The Reference and Architecture templates give `glossary:` an identifier
   placeholder, since a document name draws an `fm/types` warning.
 - `templates/AGENTS.snippet.md@07b9643` asks for `compass check` before
@@ -263,7 +265,8 @@ that its one derivation is the namespace index. The skill remains a stub.
 
 ### Tests
 
-`tests/test-skills.lisp@fcdec0c` holds seven tests (D3):
+`tests/test-skills.lisp@fcdec0c` holds seven tests
+(COMPASS-DRAFT-authoring-assistance-log-D3):
 
 - `tests/test-skills.lisp:skills-name-only-known-commands@07b9643` and
   `tests/test-skills.lisp:skills-name-only-known-rules@07b9643` compare the
@@ -275,7 +278,7 @@ that its one derivation is the namespace index. The skill remains a stub.
   requires the guide to describe every command, using
   `src/cli.lisp:command-names@07b9643`.
 - `tests/test-skills.lisp:skills-use-the-toolchain@07b9643` requires each
-  skill to point to the guide (D1).
+  skill to point to the guide (COMPASS-DRAFT-authoring-assistance-log-D1).
 - `tests/test-skills.lisp:filled-templates-pass-check@07b9643` fills in all
   ten templates with
   `tests/test-skills.lisp:fill-template@07b9643` and requires them to pass
@@ -324,7 +327,8 @@ roadmap step 8 done for version 0.1.
    nowhere. `compass-author` now removes placeholders before running the
    check.
 3. **Templates that set `Accepted`.** Found by reading the templates while
-   running the author workflow by hand on a scratch repository (D4).
+   running the author workflow by hand on a scratch repository
+   (COMPASS-DRAFT-authoring-assistance-log-D4).
 4. **An invented federation file.** `compass-lookup` told agents to look for a
    `compass.federation` file that no part of Compass defines; `compass.sexp`
    already holds the federation.
@@ -390,7 +394,7 @@ What each agent did:
   through `compass index --stdout`, its sections through `compass outline`, and
   printed its open questions with
   `compass show CLASSIC-DRAFT-usenet#open-questions` rather than by identifier, because it had noticed that four Classic surveys
-  share CLASSIC-O1 to O6.
+  share CLASSIC-O1 to CLASSIC-O6.
 - **Review.** Ran the whole-corpus check, separated its own document's
   findings (none) from the 23 pre-existing errors, and reported 26 skipped
   files and the toolchain version. Its judgment found two claims in
@@ -408,7 +412,7 @@ for the two files placed in the clone for the test.
 - **The skills are found and followed without being named.** Ordinary requests
   loaded the right skill in every run, and each agent ran the documented
   commands, read their exit codes correctly, and stayed within its permissions.
-- **The summary in each skill carried the rules (D1).** No agent opened
+- **The summary in each skill carried the rules (COMPASS-DRAFT-authoring-assistance-log-D1).** No agent opened
   `skills/reference/toolchain.md`; each worked from its skill's own section.
 - **Agents still make small errors.** The reviewer reported "all 28 rules
   passed" (there are 25), and tried `rg`, which is not installed, before
@@ -425,23 +429,23 @@ Table: Files added or changed. Those in `compass` are in commits `07b9643` and
 
 | Repo | File | Action | Description |
 |------|------|--------|-------------|
-| compass | `skills/reference/toolchain.md` | **New** | The shared guide to running `compass` (D1) |
+| compass | `skills/reference/toolchain.md` | **New** | The shared guide to running `compass` (COMPASS-DRAFT-authoring-assistance-log-D1) |
 | compass | `skills/reference/README.md` | Modified | Names the guide and `compass rules` |
 | compass | `skills/reference/references.md` | Modified | No registry before version 0.2 |
 | compass | `skills/compass-author/SKILL.md` | Modified | Checks its drafts; provisional record identifiers |
-| compass | `skills/compass-review/SKILL.md` | Modified | Toolchain findings first (D2) |
+| compass | `skills/compass-review/SKILL.md` | Modified | Toolchain findings first (COMPASS-DRAFT-authoring-assistance-log-D2) |
 | compass | `skills/compass-lookup/SKILL.md` | Modified | `show`, `outline`, `refs`, `index --stdout` |
 | compass | `skills/compass-derive/SKILL.md` | Modified | Records the namespace index |
-| compass | `templates/Plan.template.md`, `Log`, `Arch`, `Survey` | Modified | Provisional record identifiers; `Proposed` (D4) |
+| compass | `templates/Plan.template.md`, `Log`, `Arch`, `Survey` | Modified | Provisional record identifiers; `Proposed` (COMPASS-DRAFT-authoring-assistance-log-D4) |
 | compass | `templates/Ref.template.md` | Modified | `glossary:` takes an identifier |
 | compass | `templates/README.md` | Modified | Record placeholders; templates must pass the check |
 | compass | `templates/AGENTS.snippet.md` | Modified | `compass check`; command location; migration |
-| compass | `tests/test-skills.lisp` | **New** | Seven tests (D3) |
+| compass | `tests/test-skills.lisp` | **New** | Seven tests (COMPASS-DRAFT-authoring-assistance-log-D3) |
 | compass | `src/cli.lisp`, `src/packages.lisp` | Modified | `command-names`, `command-option-names` |
 | compass | `compass.asd` | Modified | The new test file |
 | compass | `compass.sexp` | Modified | Federation with Classic, Origin, and Lexter |
 | compass | `README.md` | Modified | `outline`, `refs`, `make install` |
-| compass | `doc/Plan.AuthoringAssistance.md` | Modified | The skills as they are; step 6; O1 and O2 |
+| compass | `doc/Plan.AuthoringAssistance.md` | Modified | The skills as they are; step 6; COMPASS-DRAFT-toolchain-O1 and COMPASS-DRAFT-toolchain-O2 |
 | compass | `doc/Plan.Toolchain.md` | Modified | Step 8 |
 | classic | `compass.sexp` | **New** | Manifest |
 | classic | `AGENTS.md` | Modified | Current Compass section |
