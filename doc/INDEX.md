@@ -16,6 +16,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-authoring-assistance](Plan.AuthoringAssistance.md) | Compass Authoring-Assistance Layer | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
+| [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
 | [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
 | [COMPASS-DRAFT-operator-memory](Survey.OperatorMemory.md) | Operator Memory and Compass as Agent Context | Survey | program | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Draft | security |
@@ -47,6 +48,12 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-authoring-assistance-log-D2](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d2--review-checks-the-whole-corpus-and-separates-the-changes-findings) | Decision | Review checks the whole corpus and separates the change's findings | Proposed | COMPASS-DRAFT-authoring-assistance-log |
 | [COMPASS-DRAFT-authoring-assistance-log-D3](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d3--drift-tests-accept-what-exists-or-what-the-plan-lists) | Decision | Drift tests accept what exists or what the plan lists | Proposed | COMPASS-DRAFT-authoring-assistance-log |
 | [COMPASS-DRAFT-authoring-assistance-log-D4](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d4--templates-give-new-decisions-the-status-proposed) | Decision | Templates give new decisions the status Proposed | Proposed | COMPASS-DRAFT-authoring-assistance-log |
+| [COMPASS-DRAFT-critique-D1](Plan.Critique.md#compass-draft-critique-d1--critique-is-a-subtype-of-eval) | Decision | Critique is a subtype of Eval | Proposed | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-D2](Plan.Critique.md#compass-draft-critique-d2--a-critique-pins-its-target-and-declares-its-stance) | Decision | A critique pins its target and declares its stance | Proposed | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-D3](Plan.Critique.md#compass-draft-critique-d3--each-finding-defends-the-choice-before-attacking-it-and-is-grounded) | Decision | Each finding defends the choice before attacking it, and is grounded | Proposed | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-D4](Plan.Critique.md#compass-draft-critique-d4--findings-are-open-question-records-and-a-person-disposes-of-each) | Decision | Findings are open-question records, and a person disposes of each | Proposed | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-D5](Plan.Critique.md#compass-draft-critique-d5--a-threat-model-is-a-critique-of-security-with-its-own-method) | Decision | A threat model is a critique of security, with its own method | Proposed | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-D6](Plan.Critique.md#compass-draft-critique-d6--the-conversation-is-scratch-the-critique-is-its-distillation) | Decision | The conversation is scratch; the critique is its distillation | Proposed | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-ledger-log-D1](Log.Ledger.md#compass-draft-ledger-log-d1--seeding-refuses-a-number-defined-twice) | Decision | Seeding refuses a number defined twice | Proposed | COMPASS-DRAFT-ledger-log |
 | [COMPASS-DRAFT-ledger-log-D2](Log.Ledger.md#compass-draft-ledger-log-d2--the-check-after-an-allocation-uses-the-allocations-base) | Decision | The check after an allocation uses the allocation's base | Proposed | COMPASS-DRAFT-ledger-log |
 | [COMPASS-DRAFT-ledger-log-D3](Log.Ledger.md#compass-draft-ledger-log-d3--an-uppercase-prefix-in-a-code-span-is-a-namespace-only-when-known-or-when-a-path-follows) | Decision | An uppercase prefix in a code span is a namespace only when known, or when a path follows | Proposed | COMPASS-DRAFT-ledger-log |
@@ -102,6 +109,12 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-agent-workflow-O2](Plan.AgentWorkflow.md#compass-draft-agent-workflow-o2--host-granularity) | Open question | Host granularity | — | COMPASS-DRAFT-agent-workflow |
 | [COMPASS-DRAFT-agent-workflow-O3](Plan.AgentWorkflow.md#compass-draft-agent-workflow-o3--trust-in-assisted-by-trailers) | Open question | Trust in Assisted-by: trailers | — | COMPASS-DRAFT-agent-workflow |
 | [COMPASS-DRAFT-agent-workflow-O4](Plan.AgentWorkflow.md#compass-draft-agent-workflow-o4--adapters-beyond-opencode) | Open question | Adapters beyond OpenCode | — | COMPASS-DRAFT-agent-workflow |
+| [COMPASS-DRAFT-critique-O1](Plan.Critique.md#compass-draft-critique-o1--toolchain-checks-for-findings) | Open question | Toolchain checks for findings | — | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-O2](Plan.Critique.md#compass-draft-critique-o2--the-severity-scale) | Open question | The severity scale | — | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-O3](Plan.Critique.md#compass-draft-critique-o3--critique-across-namespaces) | Open question | Critique across namespaces | — | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-O4](Plan.Critique.md#compass-draft-critique-o4--open-findings-and-agents) | Open question | Open findings and agents | — | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-O5](Plan.Critique.md#compass-draft-critique-o5--stale-critiques) | Open question | Stale critiques | — | COMPASS-DRAFT-critique |
+| [COMPASS-DRAFT-critique-O6](Plan.Critique.md#compass-draft-critique-o6--critiques-of-the-standard-itself) | Open question | Critiques of the standard itself | — | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-operator-memory-O1](Survey.OperatorMemory.md#compass-draft-operator-memory-o1--import-coexist-or-both) | Open question | Import, coexist, or both | — | COMPASS-DRAFT-operator-memory |
 | [COMPASS-DRAFT-operator-memory-O2](Survey.OperatorMemory.md#compass-draft-operator-memory-o2--shape-and-budget-of-the-session-catalog) | Open question | Shape and budget of the session catalog | — | COMPASS-DRAFT-operator-memory |
 | [COMPASS-DRAFT-operator-memory-O3](Survey.OperatorMemory.md#compass-draft-operator-memory-o3--is-a-codebase-map-a-compass-concern) | Open question | Is a codebase map a Compass concern? | — | COMPASS-DRAFT-operator-memory |
