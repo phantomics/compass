@@ -12,7 +12,7 @@ provenance:
 relates-to:
   - COMPASS-0001
   - COMPASS-DRAFT-secure-development
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
   - COMPASS-0003
   - COMPASS-0004
 cites:
@@ -72,7 +72,7 @@ threat model proposed by
 [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) becomes
 critique's specialisation for security, keeping its own method. The plan
 assumes the review gates and agent permissions of
-[COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), and the vocabulary
+[COMPASS-0007](Plan.AgentWorkflow.md), and the vocabulary
 standings of [COMPASS-0004](Plan.Toolchain.md).
 
 ## Problem
@@ -112,7 +112,7 @@ form for what such a conversation produces:
 - Findings that are fair: each states the case for what it attacks, citing the
   decision or document that made the choice.
 - Findings that are grounded, to the standard a memo's `**Basis:**` meets
-  ([COMPASS-DRAFT-agent-workflow-D3](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d3--four-admission-tests-and-a-mandatory-basis)).
+  ([COMPASS-D36](Plan.AgentWorkflow.md#compass-d36--four-admission-tests-and-a-mandatory-basis)).
 - A recorded disposition for every finding, set by a person: accepted findings
   change the system through its own documents, and rejected ones are not
   argued again without new evidence.
@@ -258,7 +258,7 @@ renditions, between the Rubric and the Synthesis.
 - A rejected finding stays in the critique with its reason, so that it is not
   raised again without new evidence, as a PEP's Rejected Ideas are kept.
 - Writing a resolution is part of the acceptance gate of
-  [COMPASS-DRAFT-agent-workflow-D5](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d5--three-review-gates):
+  [COMPASS-D38](Plan.AgentWorkflow.md#compass-d38--three-review-gates):
   an assistant never writes one.
 
 **Alternatives:**
@@ -322,7 +322,7 @@ check.
   above. `provenance.session` names the conversation where that is meaningful
   (§7).
 - An assistant may draft a critique, at any scope, as `Draft`, as the
-  permissions of [COMPASS-DRAFT-agent-workflow-D8](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d8--what-an-agent-may-do-by-scope)
+  permissions of [COMPASS-D41](Plan.AgentWorkflow.md#compass-d41--what-an-agent-may-do-by-scope)
   allow for any document. It never writes a resolution, and never moves a
   critique to `Accepted`.
 - The grounding rule of COMPASS-DRAFT-critique-D3 is the control on an
@@ -500,7 +500,7 @@ Table: Prior systems and what this plan draws from each.
 | Rapoport's rules (Dennett) | Restate the target's case fairly before objecting: the `**Rationale:**` field |
 | PEP 12's Rejected Ideas; the Rust RFC template's Drawbacks and Rationale and alternatives | Rejected objections kept with their reasons; a design's self-critique inside the design itself |
 | Threat Modeling Manifesto | The four questions behind the `threat-model` specialisation (COMPASS-DRAFT-critique-D5) |
-| Compass memos (COMPASS-DRAFT-agent-workflow-D3) and §23 | The grounding rule of a memo's basis; a standard's standing record of its own limitations |
+| Compass memos (COMPASS-D36) and §23 | The grounding rule of a memo's basis; a standard's standing record of its own limitations |
 
 ## Roadmap
 

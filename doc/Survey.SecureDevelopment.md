@@ -17,7 +17,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-0004
   - COMPASS-0002
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
   - COMPASS-0006
   - COMPASS-0005
 cites:
@@ -69,7 +69,7 @@ new risks Compass creates once its corpus is delivered into agents' context. It
 builds on the content model of [COMPASS-0001](../Compass.md), the toolchain of
 [COMPASS-0004](Plan.Toolchain.md), the source headers of
 [COMPASS-0002](Spec.SourceHeaders.md), and the agent workflow of
-[COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md). Like any Survey it is
+[COMPASS-0007](Plan.AgentWorkflow.md). Like any Survey it is
 exploratory and non-normative; each candidate it recommends would arrive as a
 Plan decision or an amendment (§13).
 
@@ -135,7 +135,7 @@ Table: Secure-design practices and their Compass forms.
 | Security considered in every design | A required `## Security Considerations` section in `Plan`, `Arch`, and `Spec`, checked by `shape/sections`. "None" is acceptable only with a stated reason. A `Log` may discuss security where a change affects it, but no section is required | New: patch to §14, modelled on RFC 3552 |
 | Threat model | An `Eval` with the new subtype `threat-model` | New: minor amendment to §4 |
 | Threats tracked to resolution | An unmitigated threat is an `O`-record. A mitigation or an accepted risk is a `D`-record, whose Alternatives record what was rejected and why. A threat found not to apply is closed in prose | Existing registers |
-| Security properties of running code | Memos, such as "the codec never evaluates input" or "federation receivers must be idempotent" | Planned (COMPASS-DRAFT-agent-workflow-D1) |
+| Security properties of running code | Memos, such as "the codec never evaluates input" or "federation receivers must be idempotent" | Planned (COMPASS-D34) |
 | File-level trust boundaries | Source header `Concerns: security-boundary`, `Invariant:` lines, `See:` to the decisions behind them, `Tests:` to the negative tests | Specified (COMPASS-0002) |
 | Outdated security guidance stays out of use | A superseded security decision has weight Excluded, so agents follow its successor | Planned (COMPASS-D16) |
 | Claims a reviewer can verify | "The check lives here" pinned to a commit | Existing (§9) |
@@ -202,7 +202,7 @@ Given the plans already written, each of these is cheap and deterministic:
     acknowledging it.
 - **Review routing.** Generate `CODEOWNERS` entries from `Concerns:`, so that a
   change to a security boundary requires a named reviewer. `compass diff`
-  (COMPASS-DRAFT-agent-workflow-D5) classifies any change touching such a file as
+  (COMPASS-D38) classifies any change touching such a file as
   substantive, never mechanical.
 - **Secret and leak scanning of the corpus.** Memos and Logs invite environment
   detail: host names, local paths, keys pasted while debugging. Operator Memory's
@@ -225,7 +225,7 @@ This is where Compass's contribution is most distinctive.
   document's Security Considerations to be revisited and flag the change for
   human review before any acceptance.
 - **Traceable AI involvement.** `Assisted-by:` trailers
-  (COMPASS-DRAFT-agent-workflow-D7) make it auditable where AI-assisted changes
+  (COMPASS-D40) make it auditable where AI-assisted changes
   landed in security-sensitive code, the kind of traceability SP 800-218A asks
   of AI-involved development.
 - **Measured, not asserted.** Track 1 of
@@ -246,7 +246,7 @@ Delivering a corpus into agents' context creates risks Compass must own.
      never bodies (already true of COMPASS-D15);
    - the adapter frames injected text as reference data, not as instructions;
    - only human-accepted (Authoritative) entries receive prominence, and the
-     change gate (COMPASS-DRAFT-agent-workflow-D5) means a human merged
+     change gate (COMPASS-D38) means a human merged
      everything that is injected;
    - a lint flags imperative or injection-like phrasing in routing fields.
 2. **Federated trust.** One-hop federation (COMPASS-D15) brings
@@ -298,14 +298,14 @@ Table: Candidate security imports, with form, dependency, and amendment class.
 
 | # | Candidate | Form | Depends on | Class |
 |---|---|---|---|---|
-| 1 | Prompt-injection hardening of delivered context | Decisions in COMPASS-0004 (catalog field limits, routing-field lint) and COMPASS-DRAFT-agent-workflow (adapter framing) | This survey's acceptance | None to core |
+| 1 | Prompt-injection hardening of delivered context | Decisions in COMPASS-0004 (catalog field limits, routing-field lint) and COMPASS-0007 (adapter framing) | This survey's acceptance | None to core |
 | 2 | Federation trust levels | A `:trust` key on manifest `:federation` entries; untrusted text never injected | COMPASS-D8, COMPASS-D15 | None to core |
 | 3 | Security Considerations section | Required in `Plan`, `Arch`, `Spec`; `shape/sections` checks it | None | Patch (§14) |
 | 4 | `threat-model` Eval subtype | Section shape as sketched above; a template | None | Minor (§4, §14) |
 | 5 | Coverage warnings and the security-boundary map | Toolchain rules and `compass map --concern` | COMPASS-D18 | None to core |
-| 6 | Review routing | `CODEOWNERS` generation from `Concerns:`; boundary changes always substantive | Candidate 5; COMPASS-DRAFT-agent-workflow-D5 | None to core |
+| 6 | Review routing | `CODEOWNERS` generation from `Concerns:`; boundary changes always substantive | Candidate 5; COMPASS-D38 | None to core |
 | 7 | Corpus secret scanning | An external scanner run over `doc/` and source headers in CI | None | None to core |
-| 8 | Security escalation in `compass-maintain` | Boundary changes require revisiting Security Considerations | COMPASS-DRAFT-agent-workflow-D9 | None to core |
+| 8 | Security escalation in `compass-maintain` | Boundary changes require revisiting Security Considerations | COMPASS-D42 | None to core |
 | 9 | Security-invariant trap tasks | Track 1 of COMPASS-0006 | Done in that document | None |
 | 10 | Disclosure guidance | A short rule in §2 or §9: no unfixed vulnerabilities in a public corpus | None | Patch |
 
@@ -351,7 +351,7 @@ evaluation, which leaves time.
 - [COMPASS-0002](Spec.SourceHeaders.md): `Concerns:
   security-boundary`, `Invariant:`, `See:`, and `Tests:` are the file-level
   carriers.
-- [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md): memos, review gates,
+- [COMPASS-0007](Plan.AgentWorkflow.md): memos, review gates,
   `Assisted-by:` trailers, `compass-maintain`, and the session adapter.
 - [COMPASS-0006](Eval.AgentContext.md): the security trap
   tasks.

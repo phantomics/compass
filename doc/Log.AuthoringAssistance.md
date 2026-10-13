@@ -17,7 +17,7 @@ relates-to:
   - COMPASS-0003
   - COMPASS-0004
   - COMPASS-DRAFT-toolchain-log
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
 decisions:
   - COMPASS-DRAFT-authoring-assistance-log-D1
   - COMPASS-DRAFT-authoring-assistance-log-D2
@@ -58,7 +58,7 @@ corpus with `grep`, and told the user its output was unverified. With version
   ([COMPASS-D6](Plan.Toolchain.md#compass-d6--provisional-identifiers-for-register-entries)),
   and they gave every new decision the status `Accepted`, which an assistant
   must never set
-  ([COMPASS-DRAFT-agent-workflow-D5](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d5--three-review-gates)).
+  ([COMPASS-D38](Plan.AgentWorkflow.md#compass-d38--three-review-gates)).
 - Nothing would notice if a skill named a command, option, or rule the
   toolchain does not have, and the skills would be read by agents that act on
   every instruction they contain.
@@ -72,9 +72,9 @@ The work carried out these existing decisions:
   checks. Advisory mode remains as the fallback when no executable is found.
 - [COMPASS-D4](Plan.AuthoringAssistance.md#compass-d4--harness-neutral-core-plus-shared-reference-bundle):
   shared reference material lives in `skills/reference/`.
-- [COMPASS-DRAFT-agent-workflow-D5](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d5--three-review-gates)
+- [COMPASS-D38](Plan.AgentWorkflow.md#compass-d38--three-review-gates)
   and
-  [COMPASS-DRAFT-agent-workflow-D8](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d8--what-an-agent-may-do-by-scope):
+  [COMPASS-D41](Plan.AgentWorkflow.md#compass-d41--what-an-agent-may-do-by-scope):
   an agent never sets `approved-by`, `reviewers`, or an authoritative status,
   and may run `compass index`.
 - [COMPASS-D8](Plan.Toolchain.md#compass-d8--a-project-manifest-declares-namespace-ownership-and-federation):
@@ -165,7 +165,7 @@ be described in the guide.
 **Context:** The Plan, Log, and Architecture templates set `**Status:**
 Accepted` on their decision record. An agent filling in a template would set
 an authoritative status, which the acceptance gate reserves for a person
-([COMPASS-DRAFT-agent-workflow-D5](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d5--three-review-gates)).
+([COMPASS-D38](Plan.AgentWorkflow.md#compass-d38--three-review-gates)).
 
 **Decision:** The templates write `**Status:** Proposed`, with a comment that a
 person sets `Accepted`, and `compass-author` says to scaffold decisions as

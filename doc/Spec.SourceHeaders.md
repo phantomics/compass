@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-0004
   - COMPASS-0005
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
 cites:
   - title:     RFC 2119 — Key words for use in RFCs to Indicate Requirement Levels
     locator:   "§1–§5"
@@ -182,7 +182,7 @@ map shows them.
 - **`See`** (SHOULD, where applicable). Compass identifiers for the documents and
   register entries behind this file: the Plan or Spec it implements, the
   `D`-records whose decisions it embodies, the `O`-records for known gaps in it,
-  and the memo records (`<NS>-M<n>`, COMPASS-DRAFT-agent-workflow-D2) for the
+  and the memo records (`<NS>-M<n>`, COMPASS-D35) for the
   system properties it relies on. An item is `<ID>` or `<ID>#<anchor>`, where
   `<ID>` is any canonical,
   register, or provisional identifier (§5, §8, §13). This is the link from code to

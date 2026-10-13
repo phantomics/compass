@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-0003
   - COMPASS-0005
   - COMPASS-0002
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
   - COMPASS-0006
   - COMPASS-DRAFT-semantic-binding
 cites:
@@ -233,7 +233,7 @@ which keeps the uppercase `-D`/`-O` suffix unambiguous. `compass assign` gives
 the document its canonical number and each of its provisional register entries a
 canonical `<NS>-D<n>`/`<NS>-O<n>`, in a single operation. Amends §8 and §13.
 The same form applies to memo records (`<NS>-DRAFT-<slug>-M<n>`, assigned
-`<NS>-M<n>`) introduced by COMPASS-DRAFT-agent-workflow-D2.
+`<NS>-M<n>`) introduced by COMPASS-D35.
 
 **Alternatives:**
 - Allocate canonical `D`/`O` numbers while writing. Rejected: it reintroduces
@@ -473,11 +473,11 @@ data), containing, in order:
 5. **Accepted decisions**: one line per `D`-record of weight Authoritative,
    giving its id, title, and host document;
 6. **Memos**: one line per M-record of weight Authoritative
-   (COMPASS-DRAFT-agent-workflow-D4), giving its id, title, and `**Read-if:**`
+   (COMPASS-D37), giving its id, title, and `**Read-if:**`
    line. Memo host documents are not listed as documents.
 7. **Unreviewed memos**: the same, for M-records of weight Provisional, under a
    heading that marks them as not yet reviewed
-   (COMPASS-DRAFT-agent-workflow-D11). They are ordered last, so they are the
+   (COMPASS-D44). They are ordered last, so they are the
    first entries dropped when the budget is exceeded.
 
 Scope and filtering:
@@ -515,7 +515,7 @@ current behaviour. The survey sketched a ranking. Making it computable exposes
 the §6 gaps listed under [Problem](#problem).
 
 **Decision:** Every document, `D`-record, and M-record
-(COMPASS-DRAFT-agent-workflow-D2) has a derived **weight**: one of
+(COMPASS-D35) has a derived **weight**: one of
 Authoritative, Directive, Contextual, Provisional, or Excluded, defined in
 [Authority weight](#authority-weight). Weight is computed, never written in
 front-matter. Two rules close the §6 gaps:
@@ -609,7 +609,7 @@ API reference remains ceded.
 to build and test a project. In Operator Memory they live in prose instructions.
 Many Common Lisp projects have no shell command topology at all: they are built
 and tested from the REPL. The map and catalog also need per-repository settings.
-Solo-steward approval (COMPASS-DRAFT-agent-workflow-D6) needs each namespace's
+Solo-steward approval (COMPASS-D39) needs each namespace's
 steward and approval mode written down where the validator can read them.
 
 **Decision:** The project manifest (COMPASS-D8) gains four optional keys:
@@ -638,7 +638,7 @@ without change; `:approval` takes keywords rather than `t` for that reason.
 **Context:** The register scanner finds `D`, `O`, and M records by their
 headings, so the heading form must be unambiguous. The corpus uses three forms.
 §8's example uses a short form (`### D16 — …`), which names no namespace. This
-Plan, COMPASS-DRAFT-agent-workflow, and the genre templates use the full
+Plan, COMPASS-0007, and the genre templates use the full
 identifier (`### COMPASS-D5 — …`). COMPASS-0003
 mixes the two, with short decision headings and full open-question headings. A
 short heading cannot express a provisional identifier, cannot be found by a
@@ -876,7 +876,7 @@ that decision. Accepting an amendment changes one entry in the data. The test
 that keeps the toolchain's vocabulary in step with
 `skills/reference/vocabularies.md` covers accepted values only. The Memo genre,
 its statuses, M-records, and the `memos:` field are accepted
-(COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4).
+(COMPASS-D34 to COMPASS-D37).
 
 **Alternatives:**
 - Treat proposed values as accepted. Rejected: the toolchain would define the
@@ -1341,7 +1341,7 @@ kept as an alias, and one of its decision records, with its own alias and its
 host's new number.
 
 `:kind` is one of `:document`, `:decision`, `:open-question`, or `:memo`
-(COMPASS-DRAFT-agent-workflow-D2). Register entries of every kind carry `:host`.
+(COMPASS-D35). Register entries of every kind carry `:host`.
 
 The project manifest:
 
@@ -1389,7 +1389,7 @@ are checked top to bottom; the first match applies.
 
 Any combination the table does not list is Contextual. A `Memo` host document
 with status `Current` is therefore Contextual, but the catalog lists its
-records rather than the host (COMPASS-DRAFT-agent-workflow-D4). `O`-records
+records rather than the host (COMPASS-D37). `O`-records
 carry no status (§8) and therefore no weight. The catalog does not list them;
 `compass show` and `compass-lookup` resolve them on request.
 
@@ -1453,7 +1453,7 @@ Table: Toolchain components and their responsibilities.
 | Body scanner | Line-oriented scan into positioned nodes (headings, tables, captions, fences, links, images, code spans, comments) |
 | Model | CLOS classes: `document`, `decision-record`, `open-question`, `memo-record`, `code-ref`, `citation`, `ledger-entry`, `namespace`, `corpus`, `federation` |
 | Vocabularies | §4/§6 controlled values, the extension-key registry, the source-header label and value registries, and the weight function, as Lisp data. A test checks them against `skills/reference/vocabularies.md` so the skills cannot drift |
-| Git layer | Run `git` through `uiop:run-program`. Derive authors and dates (`git log --follow`, `.mailmap`), read the ledger at a base revision, check commit-pinned references, collect `Assisted-by:` trailers into each document's assistance history (COMPASS-DRAFT-agent-workflow-D7), and classify changed documents as mechanical or substantive (COMPASS-DRAFT-agent-workflow-D5) |
+| Git layer | Run `git` through `uiop:run-program`. Derive authors and dates (`git log --follow`, `.mailmap`), read the ledger at a base revision, check commit-pinned references, collect `Assisted-by:` trailers into each document's assistance history (COMPASS-D40), and classify changed documents as mechanical or substantive (COMPASS-D38) |
 | Rules | One named rule per check, each with a severity and the § it enforces |
 | Ledger and allocation | Read and append the ledger; `next`, `assign`, `renumber`; rewrite provisional IDs across the repository |
 | Index generation | Per-namespace and federated `INDEX.md`, with a drift check |
@@ -1538,10 +1538,10 @@ Table: Initial rule set, with severity and the section each rule enforces.
 | `register/unique` | error | §8, §13: no record identifier is defined by a heading in more than one place |
 | `register/heading-form` | warning | COMPASS-D20: record headings use the full identifier |
 | `register/status` | error | §8; COMPASS-D16: every `D`- and M-record has a `**Status:**` line with a controlled value |
-| `memo/host` | error | COMPASS-DRAFT-agent-workflow-D2: M-records appear only in `Memo` documents, which hold only M-records |
-| `memo/fields` | error | COMPASS-DRAFT-agent-workflow-D2, COMPASS-DRAFT-agent-workflow-D4: every M-record has `**Read-if:**` and `**Basis:**`; `**Superseded-by:**` appears with, and only with, `Superseded` |
-| `memo/basis` | error | COMPASS-DRAFT-agent-workflow-D3: `**Basis:**` holds a commit-pinned code reference, a resolving Compass identifier, or a `cites:` title |
-| `review/approver` | error | §6; COMPASS-DRAFT-agent-workflow-D6: `approved-by` is never an assistant, and self-approval occurs only by the declared steward of a `:solo` namespace |
+| `memo/host` | error | COMPASS-D35: M-records appear only in `Memo` documents, which hold only M-records |
+| `memo/fields` | error | COMPASS-D35, COMPASS-D37: every M-record has `**Read-if:**` and `**Basis:**`; `**Superseded-by:**` appears with, and only with, `Superseded` |
+| `memo/basis` | error | COMPASS-D36: `**Basis:**` holds a commit-pinned code reference, a resolving Compass identifier, or a `cites:` title |
+| `review/approver` | error | §6; COMPASS-D39: `approved-by` is never an assistant, and self-approval occurs only by the declared steward of a `:solo` namespace |
 | `ref/doc-resolves` | error | §9 document links resolve to real IDs |
 | `ref/prose-mention` | warning | §9 document named without a link |
 | `ref/code-pinned` | error in Log/Plan, else warning | §9 commit-pinned code references (COMPASS-D32) |
@@ -1582,7 +1582,7 @@ Table: Initial rule set, with severity and the section each rule enforces.
   also reports the assistance history derived from `Assisted-by:` trailers.
 - `compass diff [--base REV]` lists the documents changed since `REV`, each
   classified as mechanical or substantive, for the reviewer
-  (COMPASS-DRAFT-agent-workflow-D5).
+  (COMPASS-D38).
 - `compass outline ID[#anchor] [--format text|json]` lists a document's
   headings with their anchors and line ranges, so an agent can open only the
   part it needs with `show ID#anchor`. A record identifier outlines its host;
@@ -1727,7 +1727,7 @@ in CI, or in the release binaries (COMPASS-D22, COMPASS-D23).
 - **In scope (v1):** everything above, plus integration with the authoring
   skills and the bootstrap of the COMPASS namespace.
 - **Outside this plan, in the authoring-assistance layer (S9)**, planned in
-  [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md):
+  [COMPASS-0007](Plan.AgentWorkflow.md):
   - the harness adapter (an OpenCode plugin) that injects `doc/CATALOG.md` at
     session start;
   - the consult → build → update protocol text;
@@ -1927,7 +1927,7 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
      - `compass outline` and `show ID#anchor` (delivered in v0.1, with
        `compass refs`; COMPASS-D25);
      - manifest keys `:commands` and `:stewards` (COMPASS-D19);
-     - agent-workflow support (COMPASS-DRAFT-agent-workflow): M-records in the
+     - agent-workflow support (COMPASS-0007): M-records in the
        ledger and `assign` (done for v0.2); the `review/approver` rule (the
        `memo/*` rules land in v0.1); `compass diff`; `Assisted-by:` trailer
        derivation.

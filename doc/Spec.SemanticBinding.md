@@ -16,7 +16,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-0004
   - COMPASS-0002
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
   - COMPASS-DRAFT-secure-development
   - COMPASS-DRAFT-agent-context-prior-art
 cites:
@@ -293,9 +293,9 @@ Table: Classes defined or reused by the binding.
 |---|---|---|
 | `compass:Document` | `prov:Entity`, `foaf:Document` | Every Compass document |
 | `compass:Survey`, `compass:Eval`, `compass:Architecture`, `compass:Plan`, `compass:Log`, `compass:Ref`, `compass:Guide`, `compass:Spec`, `compass:Glossary`, `compass:Ideation` | `compass:Document` | One class per §4 genre |
-| `compass:Memo` | `compass:Document` | Memo host documents (COMPASS-0001 §4, by COMPASS-DRAFT-agent-workflow-D1) |
+| `compass:Memo` | `compass:Document` | Memo host documents (COMPASS-0001 §4, by COMPASS-D34) |
 | `compass:Record` | `prov:Entity` | Every register entry |
-| `compass:DecisionRecord`, `compass:OpenQuestion`, `compass:MemoRecord` | `compass:Record` | `D`, `O`, and M entries (§8; COMPASS-DRAFT-agent-workflow-D2) |
+| `compass:DecisionRecord`, `compass:OpenQuestion`, `compass:MemoRecord` | `compass:Record` | `D`, `O`, and M entries (§8; COMPASS-D35) |
 | `compass:Section` | | A heading-delimited section of a document |
 | `compass:Namespace` | `sioc:Space` | A Compass namespace |
 | `doap:Project`, `doap:GitRepository` | | The project and repository that own a namespace |
@@ -437,7 +437,7 @@ without changing the vocabulary:
 ```
 
 `compass:approvalMode` is `compass:SoloApproval` or `compass:SecondReviewer`,
-from the namespace's declaration (COMPASS-DRAFT-agent-workflow-D6). The
+from the namespace's declaration (COMPASS-D39). The
 shortcut `compass:approvedBy` MUST be emitted alongside the activity, for
 simple queries. A future forge integration attaches its evidence, such as a
 signed workflow transition, to the acceptance node.
@@ -452,7 +452,7 @@ signed workflow transition, to the acceptance node.
 - With `--history`, each commit that touched a document produces a
   `compass:Commit` with `compass:touched` (document IRI), `prov:endedAtTime`,
   `prov:wasAssociatedWith` (the committer's agent IRI), and `compass:assistedBy`
-  for each `Assisted-by:` trailer (COMPASS-DRAFT-agent-workflow-D7).
+  for each `Assisted-by:` trailer (COMPASS-D40).
 
 ### Source map
 
@@ -492,7 +492,7 @@ The SHACL shapes in `vocab/compass-shapes.ttl` express the standard's
 constraints over the exported graph. They cover:
 - the required fields of §7, per document;
 - the status vocabulary of each genre family (§6, amended by
-  COMPASS-D9 and COMPASS-D16, and COMPASS-DRAFT-agent-workflow-D4);
+  COMPASS-D9 and COMPASS-D16, and COMPASS-D37);
 - agreement of `dcterms:isReplacedBy` with `cstatus:Superseded`;
 - record kinds: a record listed under `decisions` is a `compass:DecisionRecord`,
   and so on;

@@ -49,7 +49,7 @@ ledger:
   purpose of
   [COMPASS-D5](Plan.Toolchain.md#compass-d5--merge-time-ledger-plus-required-ci-as-the-uniqueness-authority).
 - **Assigning by hand was impractical.** Numbering one accepted plan,
-  [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), takes sixteen free
+  [COMPASS-0007](Plan.AgentWorkflow.md), takes sixteen free
   numbers and 96 rewritten lines in 10 documents, including the anchors of the
   renamed headings and the links to them (see [Verification](#verification)).
 - **Accepted documents were waiting.** Four documents are accepted but keep
@@ -476,9 +476,9 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
    `assign` failed when it ran, as an internal error with exit 2. The variable is
    now exported.
 2. **Whole identifiers, wrong meanings.** The first trial `assign` of
-   [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), in a scratch clone,
+   [COMPASS-0007](Plan.AgentWorkflow.md), in a scratch clone,
    rewrote every full identifier correctly, but the short forms after them kept
-   their old numbers. `COMPASS-DRAFT-agent-workflow-D1 to D4` became
+   their old numbers. `COMPASS-D34 to D4` became
    `COMPASS-D5 to D4`, and `…-D5 to D9` became `COMPASS-D9 to D9`. The rewriter
    was then taught to rewrite short forms too, guessing what each meant from the
    text around it. The second trial showed the guesses going wrong: `O4 and O5`
@@ -562,7 +562,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
 
 - **A real assignment, in a scratch clone** of `f0b03b4` with a seeded ledger,
   using the executable built from the code of `a12a31c`:
-  - `compass assign --dry-run` of [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md)
+  - `compass assign --dry-run` of [COMPASS-0007](Plan.AgentWorkflow.md)
     refuses: 57 short references would change meaning.
   - With `--force`, the plan becomes `COMPASS-0002`, its eleven decisions
     `COMPASS-D5` to `COMPASS-D15`, and its four open questions `COMPASS-O4` to
@@ -574,7 +574,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
   - Afterwards `compass check` found 0 errors and no `ref/stale-alias`
     warnings. The `ref/short-record` warnings rose from 235 to 240, presumably
     because five bare short forms now matched one of the new records.
-  - `compass show COMPASS-DRAFT-agent-workflow-D4` printed the record
+  - `compass show COMPASS-D37` printed the record
     `COMPASS-D8`, saying it had followed an alias. The clone was then reset.
 - **Seeding this repository.** `compass init --ledger --dry-run` listed the
   eight entries, and the real run reported "compass check finds no errors."
@@ -740,7 +740,7 @@ Other work found along the way:
 - **Short references.** This repository has 235 `ref/short-record` warnings,
   listed in [Verification](#verification). They are the steward's to rewrite
   by hand, guided by the suggestions; until those in and around
-  [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) are rewritten, `assign`
+  [COMPASS-0007](Plan.AgentWorkflow.md) are rewritten, `assign`
   refuses it.
 - **Assigning the accepted documents.** The four documents listed under
   [Problem](#problem) can be numbered once their short references are
@@ -1614,7 +1614,7 @@ These edits follow `ccb28e9` and are committed with this update:
   Classic's `e8e9b3e`, all resolve. Its table of truncated identifiers comes
   from running Classic's own URI parser at that commit.
 - **A real assignment.** `compass assign --dry-run` of
-  [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) still refuses, on 57
+  [COMPASS-0007](Plan.AgentWorkflow.md) still refuses, on 57
   short references. With `--force` it would rewrite 102 lines in 11 documents,
   this Log now among them, and append 16 ledger entries.
 - **Speed.** A check takes about 405 ms, or about 265 ms without
@@ -1692,9 +1692,9 @@ the release binaries.
 What remains after version 0.2:
 
 - **Short references.** 222 `ref/short-record` warnings remain, the steward's to
-  rewrite by hand; until those in and around COMPASS-DRAFT-agent-workflow are
+  rewrite by hand; until those in and around COMPASS-0007 are
   rewritten, `assign` refuses it.
-- **Assigning the accepted documents**: COMPASS-DRAFT-agent-workflow,
+- **Assigning the accepted documents**: COMPASS-0007,
   COMPASS-0005, COMPASS-DRAFT-toolchain-log, and
   COMPASS-DRAFT-authoring-assistance-log, and later this Log and the plans once
   accepted.

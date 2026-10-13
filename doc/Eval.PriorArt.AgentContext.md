@@ -16,7 +16,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-0005
   - COMPASS-0006
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
   - COMPASS-0004
   - COMPASS-DRAFT-semantic-binding
   - COMPASS-0002
@@ -105,7 +105,7 @@ This evaluation compares the ideas developed for Compass's agent-context work
 against the prior art found so far, to establish which of them are new, which
 are refinements, and which are already established. It covers the work recorded
 in [COMPASS-0005](Survey.OperatorMemory.md),
-[COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md),
+[COMPASS-0007](Plan.AgentWorkflow.md),
 [COMPASS-0004](Plan.Toolchain.md) (COMPASS-D14 to
 COMPASS-D21), [COMPASS-0002](Spec.SourceHeaders.md),
 [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md), and
@@ -161,10 +161,10 @@ Table: Elements of the Compass agent-context work assessed in this evaluation.
 
 | # | Element | Where it is defined |
 |---|---|---|
-| E1 | Typed records of design knowledge (decisions, open questions, memos) with permanent identifiers, lifecycle status, and supersession | §5, §8; COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4 |
+| E1 | Typed records of design knowledge (decisions, open questions, memos) with permanent identifiers, lifecycle status, and supersession | §5, §8; COMPASS-D34 to COMPASS-D37 |
 | E2 | Status-based authority weighting, so history stays in the record without being treated as current truth | COMPASS-D16 |
-| E3 | Delivery of a compact, ranked catalog to agents at session start, generated deterministically and committed | COMPASS-D14, COMPASS-D15; COMPASS-DRAFT-agent-workflow-D10 |
-| E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-DRAFT-agent-workflow-D5 to COMPASS-DRAFT-agent-workflow-D9 |
+| E3 | Delivery of a compact, ranked catalog to agents at session start, generated deterministically and committed | COMPASS-D14, COMPASS-D15; COMPASS-D43 |
+| E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-D38 to COMPASS-D42 |
 | E5 | Source headers whose typed fields link files to decisions, memos, and tests, compiled into a source map | COMPASS-0002 |
 | E6 | A derived RDF binding of the corpus, with an open vocabulary, `tag:` identity, SHACL shapes, and federation | COMPASS-DRAFT-semantic-binding |
 | E7 | Evaluation of quality and design-intent conformance across a relay of fresh sessions over real development history (the "annual crop" thesis), with single-feature ablation of the scheme and tasks that put supersession and rejected alternatives under pressure | COMPASS-0006 |

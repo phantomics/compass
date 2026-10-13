@@ -16,8 +16,8 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0004](Plan.Toolchain.md) | Compass Validation Toolchain | Plan | program | Accepted | toolchain |
 | [COMPASS-0005](Survey.OperatorMemory.md) | Operator Memory and Compass as Agent Context | Survey | program | Accepted | authoring-assistance |
 | [COMPASS-0006](Eval.AgentContext.md) | Compass as Agent Context — Evaluating Quality Over Time | Eval (comparison) | program | Accepted | agent-context |
+| [COMPASS-0007](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Draft | agent-context |
-| [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
 | [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
@@ -62,17 +62,17 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D31](Plan.Toolchain.md#compass-d31--git-derived-fields-including-for-files-not-yet-committed) | Decision | Git-derived fields, including for files not yet committed | Implemented | COMPASS-0004 |
 | [COMPASS-D32](Plan.Toolchain.md#compass-d32--which-code-references-are-checked-and-how-deeply) | Decision | Which code references are checked, and how deeply | Proposed | COMPASS-0004 |
 | [COMPASS-D33](Plan.Toolchain.md#compass-d33--federation-checks-are-opt-in-and-one-hop-deep) | Decision | Federation checks are opt-in and one hop deep | Proposed | COMPASS-0004 |
-| [COMPASS-DRAFT-agent-workflow-D1](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d1--a-memo-genre-for-durable-system-knowledge) | Decision | A Memo genre for durable system knowledge | Accepted | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D2](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d2--memos-are-numbered-records-in-a-host-document) | Decision | Memos are numbered records in a host document | Accepted | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D3](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d3--four-admission-tests-and-a-mandatory-basis) | Decision | Four admission tests, and a mandatory basis | Accepted | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D4](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d4--memo-status-and-authority-weight) | Decision | Memo status and authority weight | Accepted | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D5](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d5--three-review-gates) | Decision | Three review gates | Accepted | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D6](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d6--solo-stewards-may-approve-their-own-documents) | Decision | Solo stewards may approve their own documents | Accepted | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D7](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d7--per-edit-assistance-is-recorded-in-commit-trailers) | Decision | Per-edit assistance is recorded in commit trailers | Proposed | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D8](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d8--what-an-agent-may-do-by-scope) | Decision | What an agent may do, by scope | Proposed | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D9](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d9--a-maintenance-skill-and-the-consult--build--update-protocol) | Decision | A maintenance skill and the consult → build → update protocol | Proposed | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D10](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d10--the-session-adapter-delivers-the-catalog-and-fails-loudly) | Decision | The session adapter delivers the catalog and fails loudly | Proposed | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-D11](Plan.AgentWorkflow.md#compass-draft-agent-workflow-d11--unreviewed-memos-are-listed-in-the-catalog) | Decision | Unreviewed memos are listed in the catalog | Accepted | COMPASS-DRAFT-agent-workflow |
+| [COMPASS-D34](Plan.AgentWorkflow.md#compass-d34--a-memo-genre-for-durable-system-knowledge) | Decision | A Memo genre for durable system knowledge | Accepted | COMPASS-0007 |
+| [COMPASS-D35](Plan.AgentWorkflow.md#compass-d35--memos-are-numbered-records-in-a-host-document) | Decision | Memos are numbered records in a host document | Accepted | COMPASS-0007 |
+| [COMPASS-D36](Plan.AgentWorkflow.md#compass-d36--four-admission-tests-and-a-mandatory-basis) | Decision | Four admission tests, and a mandatory basis | Accepted | COMPASS-0007 |
+| [COMPASS-D37](Plan.AgentWorkflow.md#compass-d37--memo-status-and-authority-weight) | Decision | Memo status and authority weight | Accepted | COMPASS-0007 |
+| [COMPASS-D38](Plan.AgentWorkflow.md#compass-d38--three-review-gates) | Decision | Three review gates | Accepted | COMPASS-0007 |
+| [COMPASS-D39](Plan.AgentWorkflow.md#compass-d39--solo-stewards-may-approve-their-own-documents) | Decision | Solo stewards may approve their own documents | Accepted | COMPASS-0007 |
+| [COMPASS-D40](Plan.AgentWorkflow.md#compass-d40--per-edit-assistance-is-recorded-in-commit-trailers) | Decision | Per-edit assistance is recorded in commit trailers | Proposed | COMPASS-0007 |
+| [COMPASS-D41](Plan.AgentWorkflow.md#compass-d41--what-an-agent-may-do-by-scope) | Decision | What an agent may do, by scope | Proposed | COMPASS-0007 |
+| [COMPASS-D42](Plan.AgentWorkflow.md#compass-d42--a-maintenance-skill-and-the-consult--build--update-protocol) | Decision | A maintenance skill and the consult → build → update protocol | Proposed | COMPASS-0007 |
+| [COMPASS-D43](Plan.AgentWorkflow.md#compass-d43--the-session-adapter-delivers-the-catalog-and-fails-loudly) | Decision | The session adapter delivers the catalog and fails loudly | Proposed | COMPASS-0007 |
+| [COMPASS-D44](Plan.AgentWorkflow.md#compass-d44--unreviewed-memos-are-listed-in-the-catalog) | Decision | Unreviewed memos are listed in the catalog | Accepted | COMPASS-0007 |
 | [COMPASS-DRAFT-authoring-assistance-log-D1](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d1--one-shared-toolchain-guide-and-a-short-summary-in-each-skill) | Decision | One shared toolchain guide, and a short summary in each skill | Proposed | COMPASS-DRAFT-authoring-assistance-log |
 | [COMPASS-DRAFT-authoring-assistance-log-D2](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d2--review-checks-the-whole-corpus-and-separates-the-changes-findings) | Decision | Review checks the whole corpus and separates the change's findings | Proposed | COMPASS-DRAFT-authoring-assistance-log |
 | [COMPASS-DRAFT-authoring-assistance-log-D3](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d3--drift-tests-accept-what-exists-or-what-the-plan-lists) | Decision | Drift tests accept what exists or what the plan lists | Proposed | COMPASS-DRAFT-authoring-assistance-log |
@@ -115,13 +115,13 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O20](Eval.AgentContext.md#compass-o20--acting-on-contamination) | Open question | Acting on contamination | — | COMPASS-0006 |
 | [COMPASS-O21](Eval.AgentContext.md#compass-o21--the-python-phase) | Open question | The Python phase | — | COMPASS-0006 |
 | [COMPASS-O22](Eval.AgentContext.md#compass-o22--cross-repository-knowledge) | Open question | Cross-repository knowledge | — | COMPASS-0006 |
+| [COMPASS-O23](Plan.AgentWorkflow.md#compass-o23--measuring-whether-the-workflow-helps) | Open question | Measuring whether the workflow helps | — | COMPASS-0007 |
+| [COMPASS-O24](Plan.AgentWorkflow.md#compass-o24--host-granularity) | Open question | Host granularity | — | COMPASS-0007 |
+| [COMPASS-O25](Plan.AgentWorkflow.md#compass-o25--trust-in-assisted-by-trailers) | Open question | Trust in Assisted-by: trailers | — | COMPASS-0007 |
+| [COMPASS-O26](Plan.AgentWorkflow.md#compass-o26--adapters-beyond-opencode) | Open question | Adapters beyond OpenCode | — | COMPASS-0007 |
 | [COMPASS-DRAFT-agent-context-prior-art-O1](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o1--a-systematic-search) | Open question | A systematic search | — | COMPASS-DRAFT-agent-context-prior-art |
 | [COMPASS-DRAFT-agent-context-prior-art-O2](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o2--contact-with-closest-work) | Open question | Contact with closest work | — | COMPASS-DRAFT-agent-context-prior-art |
 | [COMPASS-DRAFT-agent-context-prior-art-O3](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o3--keeping-this-evaluation-current) | Open question | Keeping this evaluation current | — | COMPASS-DRAFT-agent-context-prior-art |
-| [COMPASS-DRAFT-agent-workflow-O1](Plan.AgentWorkflow.md#compass-draft-agent-workflow-o1--measuring-whether-the-workflow-helps) | Open question | Measuring whether the workflow helps | — | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-O2](Plan.AgentWorkflow.md#compass-draft-agent-workflow-o2--host-granularity) | Open question | Host granularity | — | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-O3](Plan.AgentWorkflow.md#compass-draft-agent-workflow-o3--trust-in-assisted-by-trailers) | Open question | Trust in Assisted-by: trailers | — | COMPASS-DRAFT-agent-workflow |
-| [COMPASS-DRAFT-agent-workflow-O4](Plan.AgentWorkflow.md#compass-draft-agent-workflow-o4--adapters-beyond-opencode) | Open question | Adapters beyond OpenCode | — | COMPASS-DRAFT-agent-workflow |
 | [COMPASS-DRAFT-critique-O1](Plan.Critique.md#compass-draft-critique-o1--toolchain-checks-for-findings) | Open question | Toolchain checks for findings | — | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-O2](Plan.Critique.md#compass-draft-critique-o2--the-severity-scale) | Open question | The severity scale | — | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-O3](Plan.Critique.md#compass-draft-critique-o3--critique-across-namespaces) | Open question | Critique across namespaces | — | COMPASS-DRAFT-critique |

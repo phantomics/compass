@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-0003
   - COMPASS-0004
   - COMPASS-0002
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
   - COMPASS-0006
   - COMPASS-DRAFT-agent-context-prior-art
 cites:
@@ -505,8 +505,8 @@ Memos are numbered records (`<NS>-M<n>`) in a host document, normally one per
 component, so each keeps its own identity, status, routing line, catalog entry,
 and supersession without one file per memo. A `Current` memo is Authoritative,
 and memos may later be folded into a `Ref`. Recorded in
-[COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) as
-COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4.
+[COMPASS-0007](Plan.AgentWorkflow.md) as
+COMPASS-D34 to COMPASS-D37.
 
 ### COMPASS-O15 — Agent authority to update typed documents
 
@@ -526,8 +526,8 @@ a solo maintainer, may approve their own documents. Per-edit assistance is
 recorded in `Assisted-by:` commit trailers and derived from Git, leaving
 `provenance:` to record a document's origin. Agents' permissions are tabulated
 by scope, and a `compass-maintain` skill proposes the updates a change implies.
-Recorded in [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) as
-COMPASS-DRAFT-agent-workflow-D5 to COMPASS-DRAFT-agent-workflow-D9.
+Recorded in [COMPASS-0007](Plan.AgentWorkflow.md) as
+COMPASS-D38 to COMPASS-D42.
 
 ### COMPASS-O16 — Measuring whether any of this works
 
@@ -539,8 +539,8 @@ updates were made. Could that evaluation be the first rigorous account of
 "documentation as LLM context" that §23 says does not yet exist?
 
 **Status (2026-10-07):** Open. Carried forward as
-COMPASS-DRAFT-agent-workflow-O1 in
-[COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), as a documented,
+COMPASS-O23 in
+[COMPASS-0007](Plan.AgentWorkflow.md), as a documented,
 repeatable test to be committed to the Compass repository. The protocol is
 [COMPASS-0006](Eval.AgentContext.md). Since this survey was
 written, three 2026 studies have evaluated repository context files

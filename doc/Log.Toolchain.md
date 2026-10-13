@@ -17,7 +17,7 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0001
   - COMPASS-0003
-  - COMPASS-DRAFT-agent-workflow
+  - COMPASS-0007
   - COMPASS-DRAFT-authoring-assistance-log
 decisions:
   - COMPASS-DRAFT-toolchain-log-D1
@@ -343,7 +343,7 @@ later the same day is described in
 - **`README.md`** gained a section on building and using the toolchain.
 - **`doc/Plan.Toolchain.md`** gained COMPASS-D24 and COMPASS-D25, and its v0.1 scope gained the
   memo rules once the Memo genre was accepted
-  ([COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), COMPASS-DRAFT-agent-workflow-D1 to COMPASS-DRAFT-agent-workflow-D4), along with
+  ([COMPASS-0007](Plan.AgentWorkflow.md), COMPASS-D34 to COMPASS-D37), along with
   `fm/syntax`, `vocab/pending`, anchors in `show`, `rules`, and `version`.
 
 ## Design Properties
