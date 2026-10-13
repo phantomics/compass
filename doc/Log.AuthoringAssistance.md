@@ -476,7 +476,7 @@ The build-stamp fix in `fcdec0c` belongs to the toolchain and is recorded in
 - **A repeatable smoke test.** The runs were made by hand; a script with fixed
   prompts and checks on the JSON events could run whenever the skills change,
   and could feed the agent-context evaluation
-  ([COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)).
+  ([COMPASS-0006](Eval.AgentContext.md)).
 - **Version 0.2.** `compass-author` should use `compass assign`, and
   `compass-review`'s list of unchecked concerns shrinks as the ledger,
   Git-derived fields, and code-reference rules arrive.

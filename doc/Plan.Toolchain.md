@@ -19,7 +19,7 @@ relates-to:
   - COMPASS-0005
   - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
-  - COMPASS-DRAFT-agent-context-eval
+  - COMPASS-0006
   - COMPASS-DRAFT-semantic-binding
 cites:
   - title:     ocicl README
@@ -1611,7 +1611,7 @@ Table: Initial rule set, with severity and the section each rule enforces.
 ## Baseline releases
 
 The full plan is large, and its agent-context half waits on an evaluation
-([COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)). A usable baseline
+([COMPASS-0006](Eval.AgentContext.md)). A usable baseline
 comes first, so that the toolchain can check the corpora of projects in
 development now. Each release is a subset of the [Roadmap](#roadmap) and is
 designed so that later steps extend it rather than rewrite it.
@@ -1740,7 +1740,7 @@ in CI, or in the release binaries (COMPASS-D22, COMPASS-D23).
 - **Gated on evaluation:** the session catalog (COMPASS-D15), the authority weight
   (COMPASS-D16), and source-header extraction with the source map
   (COMPASS-D18) are not built until the pilot of
-  [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)
+  [COMPASS-0006](Eval.AgentContext.md)
   has run. Its decision rules may change or remove them. Everything else in
   this plan proceeds independently.
 - **Not in v1:**
@@ -1932,7 +1932,7 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
        `memo/*` rules land in v0.1); `compass diff`; `Assisted-by:` trailer
        derivation.
    - **Gated on the pilot of
-     [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md),** and subject to
+     [COMPASS-0006](Eval.AgentContext.md),** and subject to
      its decision rules:
      - the weight function (COMPASS-D16) and the §6 and §8 amendments it carries;
      - `compass catalog` and the manifest's `:catalog` key (COMPASS-D15);

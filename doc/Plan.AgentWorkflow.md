@@ -19,7 +19,7 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0005
   - COMPASS-0002
-  - COMPASS-DRAFT-agent-context-eval
+  - COMPASS-0006
 cites:
   - title:     RFC 7322 — RFC Style Guide
     locator:   "§4.6 Status of This Memo"
@@ -683,7 +683,7 @@ documents, and whether `compass-maintain`'s proposals were accurate and
 accepted?
 
 **Status (2026-10-07):** Open, with a protocol in
-[COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md). It is an `Eval` with
+[COMPASS-0006](Eval.AgentContext.md). It is an `Eval` with
 a harness, run on a snapshot of Classic. Its primary track is a relay of real
 development steps from Classic's history, comparing one long session, fresh
 sessions with no context, fresh sessions with untyped agent-maintained notes,
@@ -740,7 +740,7 @@ Table: Prior systems and what this plan draws from each.
 5. **Maintenance.** The `compass-maintain` skill; the protocol text in the AGENTS
    snippet and the catalog preamble.
 6. **Evaluation pilot.** Run the pilot of
-   [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md). The session
+   [COMPASS-0006](Eval.AgentContext.md). The session
    adapter, and the catalog it delivers, are built only after it, subject to its
    decision rules.
 7. **Delivery.** The OpenCode session adapter (COMPASS-DRAFT-agent-workflow-D10).

@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-agent-context-eval
+id:            COMPASS-0006
 title:         Compass as Agent Context — Evaluating Quality Over Time
 genre:         Eval
 subtype:       comparison
@@ -7,9 +7,11 @@ scope:         program
 program:       Compass
 component:     agent-context
 language:      en
-status:        Draft
+status:        Accepted
 authors:
   - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -68,12 +70,12 @@ cites:
     locator:   "J. Pharmacokinetics and Biopharmaceutics 15(6)"
     external:  true
 open-questions:
-  - COMPASS-DRAFT-agent-context-eval-O1
-  - COMPASS-DRAFT-agent-context-eval-O2
-  - COMPASS-DRAFT-agent-context-eval-O3
-  - COMPASS-DRAFT-agent-context-eval-O4
-  - COMPASS-DRAFT-agent-context-eval-O5
-  - COMPASS-DRAFT-agent-context-eval-O6
+  - COMPASS-O17
+  - COMPASS-O18
+  - COMPASS-O19
+  - COMPASS-O20
+  - COMPASS-O21
+  - COMPASS-O22
 ---
 
 # Compass as Agent Context: Evaluation Protocol
@@ -335,7 +337,7 @@ opencode export <session-id> > runs/<run-id>/session.json
    A2−S, A2−R, and A2−L on the trap tasks with Claude Opus 5.5 and GPT-6 Sol.
 6. **Full study, free-running mode** (Track 2 only), after the anchored results.
 7. **Python phase**, when a suitable Python project exists (see
-   COMPASS-DRAFT-agent-context-eval-O5).
+   COMPASS-O21).
 
 Table: Indicative run counts for the full study, before any reduction after the
 pilot.
@@ -379,7 +381,7 @@ directory, Lexis appears only in docstrings, and the dependency runs one way
 (`classic.composer` depends on `classic`). Every relay step can therefore run
 on Classic alone, and the multi-repository snapshot is unnecessary. The cost is
 that the cross-repository knowledge-trap category has no material in this
-snapshot; see COMPASS-DRAFT-agent-context-eval-O6.
+snapshot; see COMPASS-O22.
 
 ### Track 2: the relay sequence
 
@@ -654,7 +656,7 @@ The conditions, their hypotheses, and their expected outcomes under the thesis.
   rule and a reviewer check (see [Seed corpora](#seed-corpora)).
 - **Interface leakage in task statements.** Naming the interface the tests call
   reveals some design. Too little leads to false failures; too much hands over
-  the design. See COMPASS-DRAFT-agent-context-eval-O1.
+  the design. See COMPASS-O17.
 - **Unmatched models.** GLM-5.3 benchmarks below the other two; effects are
   reported per model.
 - **Model and harness drift.** Models are pinned by ID and the OpenCode version
@@ -682,7 +684,7 @@ resolution for COMPASS-DRAFT-agent-workflow-O1.
 
 ## Open Questions
 
-### COMPASS-DRAFT-agent-context-eval-O1 — How much interface a task statement reveals
+### COMPASS-O17 — How much interface a task statement reveals
 
 Hidden tests call specific names. A statement that names none produces false
 failures from reasonable alternative designs; one that specifies everything
@@ -690,7 +692,7 @@ hands the design to the agent and erases the difference the corpus might make.
 The proposal is to name the public entry points the tests call and nothing
 else. Should a pilot compare two levels of disclosure on a few steps?
 
-### COMPASS-DRAFT-agent-context-eval-O2 — Divergence in free-running mode
+### COMPASS-O18 — Divergence in free-running mode
 
 In free-running mode the agents' code drifts from history, and later historical
 tests may stop applying, for reasons unrelated to quality. When does a relay
@@ -698,27 +700,27 @@ stop, how are inapplicable tests distinguished from failures, and should a
 cumulative suite of the agents' own passing tests replace the historical ones
 after divergence?
 
-### COMPASS-DRAFT-agent-context-eval-O3 — The judge model
+### COMPASS-O19 — The judge model
 
 All three study models are subjects. Using one of them as judge risks favouring
 its own outputs. Options: a model from a fourth lab, a rotating judge that never
 grades its own family, or each item judged by two models with disagreements
 sent to a human. Which, and does the κ ≥ 0.6 acceptance threshold suffice?
 
-### COMPASS-DRAFT-agent-context-eval-O4 — Acting on contamination
+### COMPASS-O20 — Acting on contamination
 
 If the probe shows that a model recalls Classic's API in detail, are that
 model's results reported with a caveat, excluded, or rerun on a private
 repository?
 
-### COMPASS-DRAFT-agent-context-eval-O5 — The Python phase
+### COMPASS-O21 — The Python phase
 
 No suitable Python project exists. Adding documents to an existing project after
 the fact would bias the test, so a Python project must be developed under
 Compass from its start, which takes months. Which project, started when, and how
 large must its history be before it can carry a relay?
 
-### COMPASS-DRAFT-agent-context-eval-O6 — Cross-repository knowledge
+### COMPASS-O22 — Cross-repository knowledge
 
 Classic is self-contained, so this snapshot cannot test federation: decisions in
 one namespace constraining work in another. A later phase could use
@@ -747,7 +749,7 @@ where this protocol covers them.
 | 8 | Security-invariant preservation | Does typed context reduce security regressions? | None found with documentation as the variable | Track 1 security tasks (T1-H6) |
 | 9 | Coordination between parallel agents | Does a shared corpus reduce design-intent conflicts between parallel branches? | The Specification Gap (single task, docstrings) | Not covered |
 | 10 | Cost-benefit of documentation | When does the cost of authoring pay off in agent performance? | None found | Derivable from studies 1–4 if authoring time is recorded |
-| 11 | Federation | Do decisions recorded in another repository constrain agents correctly? | None found | Not covered; see COMPASS-DRAFT-agent-context-eval-O6 |
+| 11 | Federation | Do decisions recorded in another repository constrain agents correctly? | None found | Not covered; see COMPASS-O22 |
 
 To keep studies 5 and 10 possible, the harness records the time humans spend
 authoring and reviewing corpus changes during the study.

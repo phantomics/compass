@@ -19,7 +19,7 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
-  - COMPASS-DRAFT-agent-context-eval
+  - COMPASS-0006
   - COMPASS-DRAFT-agent-context-prior-art
 cites:
   - title:     "Agents Don't Need Memory. They Need Documentation. (Kevin Liao, 2026-10-03)"
@@ -542,7 +542,7 @@ updates were made. Could that evaluation be the first rigorous account of
 COMPASS-DRAFT-agent-workflow-O1 in
 [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md), as a documented,
 repeatable test to be committed to the Compass repository. The protocol is
-[COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md). Since this survey was
+[COMPASS-0006](Eval.AgentContext.md). Since this survey was
 written, three 2026 studies have evaluated repository context files
 (Gloaguen et al.; Khatri; Chatlatanagulchai et al.) and found no measurable gain
 in task success, at over 20% added cost. The premise that no rigorous account

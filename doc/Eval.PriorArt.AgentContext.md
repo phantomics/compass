@@ -15,7 +15,7 @@ provenance:
 relates-to:
   - COMPASS-0001
   - COMPASS-0005
-  - COMPASS-DRAFT-agent-context-eval
+  - COMPASS-0006
   - COMPASS-DRAFT-agent-workflow
   - COMPASS-0004
   - COMPASS-DRAFT-semantic-binding
@@ -109,7 +109,7 @@ in [COMPASS-0005](Survey.OperatorMemory.md),
 [COMPASS-0004](Plan.Toolchain.md) (COMPASS-D14 to
 COMPASS-D21), [COMPASS-0002](Spec.SourceHeaders.md),
 [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md), and
-[COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md). Its findings inform
+[COMPASS-0006](Eval.AgentContext.md). Its findings inform
 how Compass describes itself and which of its claims the evaluation must
 support.
 
@@ -167,7 +167,7 @@ Table: Elements of the Compass agent-context work assessed in this evaluation.
 | E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-DRAFT-agent-workflow-D5 to COMPASS-DRAFT-agent-workflow-D9 |
 | E5 | Source headers whose typed fields link files to decisions, memos, and tests, compiled into a source map | COMPASS-0002 |
 | E6 | A derived RDF binding of the corpus, with an open vocabulary, `tag:` identity, SHACL shapes, and federation | COMPASS-DRAFT-semantic-binding |
-| E7 | Evaluation of quality and design-intent conformance across a relay of fresh sessions over real development history (the "annual crop" thesis), with single-feature ablation of the scheme and tasks that put supersession and rejected alternatives under pressure | COMPASS-DRAFT-agent-context-eval |
+| E7 | Evaluation of quality and design-intent conformance across a relay of fresh sessions over real development history (the "annual crop" thesis), with single-feature ablation of the scheme and tasks that put supersession and rejected alternatives under pressure | COMPASS-0006 |
 
 Each element is scored on one scale:
 - **Established:** the idea is in common use or standardised.
@@ -302,7 +302,7 @@ Table: Assessment of each element against the prior art found.
      parts of it look individually publishable: the relay over real history,
      single-feature ablation of a documentation scheme, and the supersession
      and rejected-alternative pressure tasks. The research agenda appended to
-     [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md) lists these and
+     [COMPASS-0006](Eval.AgentContext.md) lists these and
      eight further studies;
    - the **source-header chain** (E5), weakly, pending a targeted search.
 4. **Queryability is distinctive in its source, not in itself.** SPARQL over
@@ -314,7 +314,7 @@ Table: Assessment of each element against the prior art found.
    first synthesis that makes established ideas work together for agents and
    people, with an evaluation designed to test whether the synthesis earns its
    cost; not as the originator of typed agent memory or semantic lifecycle data.
-6. **Consequences already applied.** [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)
+6. **Consequences already applied.** [COMPASS-0006](Eval.AgentContext.md)
    now cites Handoff Debt, Codified Context, and MOOSEDev and states its gap
    narrowly; [COMPASS-0005](Survey.OperatorMemory.md) and
    [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) record the further

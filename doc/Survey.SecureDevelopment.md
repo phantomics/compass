@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0002
   - COMPASS-DRAFT-agent-workflow
-  - COMPASS-DRAFT-agent-context-eval
+  - COMPASS-0006
   - COMPASS-0005
 cites:
   - title:     "RFC 3552 (BCP 72) — Guidelines for Writing RFC Text on Security Considerations"
@@ -217,7 +217,7 @@ This is where Compass's contribution is most distinctive.
 - **Constraints at the point of change.** The session catalog and source map
   put a file's invariants in front of an agent before it edits that file. The
   2026 context-rot study by Xue (cited in
-  [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)) found that rot most
+  [COMPASS-0006](Eval.AgentContext.md)) found that rot most
   often appears as a silently dropped requirement; a security invariant is the
   most costly requirement to drop.
 - **Escalation in the maintenance loop.** When a change touches a
@@ -229,7 +229,7 @@ This is where Compass's contribution is most distinctive.
   landed in security-sensitive code, the kind of traceability SP 800-218A asks
   of AI-involved development.
 - **Measured, not asserted.** Track 1 of
-  [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md) now includes
+  [COMPASS-0006](Eval.AgentContext.md) now includes
   security-invariant trap tasks, so the claim that typed context helps agents
   keep security constraints can be tested rather than asserted.
 
@@ -306,7 +306,7 @@ Table: Candidate security imports, with form, dependency, and amendment class.
 | 6 | Review routing | `CODEOWNERS` generation from `Concerns:`; boundary changes always substantive | Candidate 5; COMPASS-DRAFT-agent-workflow-D5 | None to core |
 | 7 | Corpus secret scanning | An external scanner run over `doc/` and source headers in CI | None | None to core |
 | 8 | Security escalation in `compass-maintain` | Boundary changes require revisiting Security Considerations | COMPASS-DRAFT-agent-workflow-D9 | None to core |
-| 9 | Security-invariant trap tasks | Track 1 of COMPASS-DRAFT-agent-context-eval | Done in that document | None |
+| 9 | Security-invariant trap tasks | Track 1 of COMPASS-0006 | Done in that document | None |
 | 10 | Disclosure guidance | A short rule in §2 or §9: no unfixed vulnerabilities in a public corpus | None | Patch |
 
 Candidates 1 and 2 should be decided before the catalog is built, since they
@@ -353,7 +353,7 @@ evaluation, which leaves time.
   carriers.
 - [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md): memos, review gates,
   `Assisted-by:` trailers, `compass-maintain`, and the session adapter.
-- [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md): the security trap
+- [COMPASS-0006](Eval.AgentContext.md): the security trap
   tasks.
 - Classic's `securityPoints.md` is the worked example and the natural first
   migration: a `threat-model` Eval with one `O`-record per unaddressed area.

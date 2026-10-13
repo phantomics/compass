@@ -50,7 +50,7 @@ real checker:
 - **The agent-context evaluation.** It grades the proposals of its
   full-Compass condition with `compass check`, run over corpora that are only
   partly migrated
-  ([COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md)).
+  ([COMPASS-0006](Eval.AgentContext.md)).
 - **The standard's own corpus.** Several thousand lines of Plans, Specs, and
   Surveys had accumulated in `doc/`, with cross-references and decision records
   that nothing had verified.

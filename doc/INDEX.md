@@ -15,7 +15,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0003](Plan.AuthoringAssistance.md) | Compass Authoring-Assistance Layer | Plan | program | Implemented | authoring-assistance |
 | [COMPASS-0004](Plan.Toolchain.md) | Compass Validation Toolchain | Plan | program | Accepted | toolchain |
 | [COMPASS-0005](Survey.OperatorMemory.md) | Operator Memory and Compass as Agent Context | Survey | program | Accepted | authoring-assistance |
-| [COMPASS-DRAFT-agent-context-eval](Eval.AgentContext.md) | Compass as Agent Context — Evaluating Quality Over Time | Eval (comparison) | program | Draft | agent-context |
+| [COMPASS-0006](Eval.AgentContext.md) | Compass as Agent Context — Evaluating Quality Over Time | Eval (comparison) | program | Accepted | agent-context |
 | [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Draft | agent-context |
 | [COMPASS-DRAFT-agent-workflow](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
@@ -109,12 +109,12 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O14](Survey.OperatorMemory.md#compass-o14--a-home-for-durable-but-unpublished-knowledge) | Open question | A home for durable but unpublished knowledge | — | COMPASS-0005 |
 | [COMPASS-O15](Survey.OperatorMemory.md#compass-o15--agent-authority-to-update-typed-documents) | Open question | Agent authority to update typed documents | — | COMPASS-0005 |
 | [COMPASS-O16](Survey.OperatorMemory.md#compass-o16--measuring-whether-any-of-this-works) | Open question | Measuring whether any of this works | — | COMPASS-0005 |
-| [COMPASS-DRAFT-agent-context-eval-O1](Eval.AgentContext.md#compass-draft-agent-context-eval-o1--how-much-interface-a-task-statement-reveals) | Open question | How much interface a task statement reveals | — | COMPASS-DRAFT-agent-context-eval |
-| [COMPASS-DRAFT-agent-context-eval-O2](Eval.AgentContext.md#compass-draft-agent-context-eval-o2--divergence-in-free-running-mode) | Open question | Divergence in free-running mode | — | COMPASS-DRAFT-agent-context-eval |
-| [COMPASS-DRAFT-agent-context-eval-O3](Eval.AgentContext.md#compass-draft-agent-context-eval-o3--the-judge-model) | Open question | The judge model | — | COMPASS-DRAFT-agent-context-eval |
-| [COMPASS-DRAFT-agent-context-eval-O4](Eval.AgentContext.md#compass-draft-agent-context-eval-o4--acting-on-contamination) | Open question | Acting on contamination | — | COMPASS-DRAFT-agent-context-eval |
-| [COMPASS-DRAFT-agent-context-eval-O5](Eval.AgentContext.md#compass-draft-agent-context-eval-o5--the-python-phase) | Open question | The Python phase | — | COMPASS-DRAFT-agent-context-eval |
-| [COMPASS-DRAFT-agent-context-eval-O6](Eval.AgentContext.md#compass-draft-agent-context-eval-o6--cross-repository-knowledge) | Open question | Cross-repository knowledge | — | COMPASS-DRAFT-agent-context-eval |
+| [COMPASS-O17](Eval.AgentContext.md#compass-o17--how-much-interface-a-task-statement-reveals) | Open question | How much interface a task statement reveals | — | COMPASS-0006 |
+| [COMPASS-O18](Eval.AgentContext.md#compass-o18--divergence-in-free-running-mode) | Open question | Divergence in free-running mode | — | COMPASS-0006 |
+| [COMPASS-O19](Eval.AgentContext.md#compass-o19--the-judge-model) | Open question | The judge model | — | COMPASS-0006 |
+| [COMPASS-O20](Eval.AgentContext.md#compass-o20--acting-on-contamination) | Open question | Acting on contamination | — | COMPASS-0006 |
+| [COMPASS-O21](Eval.AgentContext.md#compass-o21--the-python-phase) | Open question | The Python phase | — | COMPASS-0006 |
+| [COMPASS-O22](Eval.AgentContext.md#compass-o22--cross-repository-knowledge) | Open question | Cross-repository knowledge | — | COMPASS-0006 |
 | [COMPASS-DRAFT-agent-context-prior-art-O1](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o1--a-systematic-search) | Open question | A systematic search | — | COMPASS-DRAFT-agent-context-prior-art |
 | [COMPASS-DRAFT-agent-context-prior-art-O2](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o2--contact-with-closest-work) | Open question | Contact with closest work | — | COMPASS-DRAFT-agent-context-prior-art |
 | [COMPASS-DRAFT-agent-context-prior-art-O3](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o3--keeping-this-evaluation-current) | Open question | Keeping this evaluation current | — | COMPASS-DRAFT-agent-context-prior-art |
