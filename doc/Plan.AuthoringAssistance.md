@@ -253,7 +253,7 @@ Table: Prior systems and what this plan draws from each.
      repositories, and reads the ledger, alias, short-reference, and
      code-reference findings; `compass-lookup` follows aliases, reads authors
      and dates from `outline`, and the manifest from `manifest --json`. See
-     [COMPASS-DRAFT-ledger-log](Log.Ledger.md).
+     [COMPASS-0013](Log.Ledger.md).
 7. **Cross-harness adapters (future).** Re-envelope the neutral core for Claude
    Code, Cursor/Copilot, and MCP (§23 S9).
 

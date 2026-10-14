@@ -1915,7 +1915,7 @@ step 7 yields v0.2 and v0.2.1, and the export part of step 5 yields v0.3 (see
    - Amend §8 and §13 (COMPASS-D6, COMPASS-D7, COMPASS-D8, COMPASS-D20).
 
    *Done for v0.2 (2026-10-10), with the amendments in `Compass.md` 0.3.0; see
-   [COMPASS-DRAFT-ledger-log](Log.Ledger.md).*
+   [COMPASS-0013](Log.Ledger.md).*
 5. **Index generation and RDF export.** Namespace and federated `INDEX.md`,
    with `index --check`; `compass export --rdf` and `--vocab` (COMPASS-D21), yielding
    baseline v0.3; amend §5, §7, and §17 as the semantic binding requires.

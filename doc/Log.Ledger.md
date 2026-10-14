@@ -1,12 +1,16 @@
 ---
-id:            COMPASS-DRAFT-ledger-log
+id:            COMPASS-0013
 title:         Compass Ledger Development Log
 genre:         Log
 scope:         component
 program:       Compass
 component:     toolchain
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -15,12 +19,12 @@ relates-to:
   - COMPASS-0003
   - COMPASS-0001
 decisions:
-  - COMPASS-DRAFT-ledger-log-D1
-  - COMPASS-DRAFT-ledger-log-D2
-  - COMPASS-DRAFT-ledger-log-D3
-  - COMPASS-DRAFT-ledger-log-D4
-  - COMPASS-DRAFT-ledger-log-D5
-  - COMPASS-DRAFT-ledger-log-D6
+  - COMPASS-D53
+  - COMPASS-D54
+  - COMPASS-D55
+  - COMPASS-D56
+  - COMPASS-D57
+  - COMPASS-D58
 ---
 
 # Compass Ledger: Development Log
@@ -99,9 +103,9 @@ recorded as `COMPASS-D31`, `COMPASS-D32`, and
 Two further decisions were made while coding. They are recorded here as
 proposals for the steward.
 
-### COMPASS-DRAFT-ledger-log-D1 — Seeding refuses a number defined twice
+### COMPASS-D53 — Seeding refuses a number defined twice
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** COMPASS-D13 has `compass init --ledger` record the
 canonical identifiers a repository already uses. Classic's four migrated Surveys
@@ -122,9 +126,9 @@ written.
 - Seed every definition. Rejected: the new ledger would fail `ledger/unique`
   at once.
 
-### COMPASS-DRAFT-ledger-log-D2 — The check after an allocation uses the allocation's base
+### COMPASS-D54 — The check after an allocation uses the allocation's base
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** After writing, `assign`, `renumber`, and `init --ledger` run the
 check and say whether it finds errors. `ledger/append-only` compares the ledger
@@ -312,7 +316,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
   both.
 - **Seeding.** `src/corpus/allocate.lisp:plan-seed@a12a31c` lists documents first,
   then each kind of record, by namespace and number; it refuses as
-  [COMPASS-DRAFT-ledger-log-D1](#compass-draft-ledger-log-d1--seeding-refuses-a-number-defined-twice)
+  [COMPASS-D53](#compass-d53--seeding-refuses-a-number-defined-twice)
   describes.
 - **`src/corpus/allocate.lisp:plan-renumber@a12a31c`** needs a base revision.
   1. `src/corpus/allocate.lisp:strip-conflict-markers@a12a31c` removes the
@@ -418,7 +422,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
   - the stale mentions, cut to 100 characters;
   - the warnings;
   - what the check now finds
-    ([COMPASS-DRAFT-ledger-log-D2](#compass-draft-ledger-log-d2--the-check-after-an-allocation-uses-the-allocations-base)).
+    ([COMPASS-D54](#compass-d54--the-check-after-an-allocation-uses-the-allocations-base)).
 
 ### Tests
 
@@ -508,7 +512,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
 6. **A check against the wrong revision mid-merge.** The check after `renumber`
    compared the ledger with `HEAD`, the branch's own tip, and reported an error
    about the recovery it had just made
-   ([COMPASS-DRAFT-ledger-log-D2](#compass-draft-ledger-log-d2--the-check-after-an-allocation-uses-the-allocations-base)).
+   ([COMPASS-D54](#compass-d54--the-check-after-an-allocation-uses-the-allocations-base)).
 7. **Paths and `--root`.** In the trials, `compass assign doc/Plan.AgentWorkflow.md --root <clone>`
    refused the file as outside the repository: paths on the command line are
    relative to the current directory, not to `--root`, as in v0.1. The trials
@@ -748,14 +752,14 @@ Other work found along the way:
 - **The other repositories' ledgers.** Origin can be seeded with
   `compass init --ledger`. Classic must first give the duplicated open
   questions of its Surveys provisional identifiers
-  ([COMPASS-DRAFT-ledger-log-D1](#compass-draft-ledger-log-d1--seeding-refuses-a-number-defined-twice)),
+  ([COMPASS-D53](#compass-d53--seeding-refuses-a-number-defined-twice)),
   and the note in its `AGENTS.md` should say so. *Origin's ledger was seeded in
   its commit `7ef2f48`, and Classic's note updated in its commit `be4fe84`; see
   [Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0](#update-2026-10-10--bootstrap-the-amended-standard-skills-and-version-020).*
 - **`compass check` during a merge.** Without `--base`, the check compares with
   `HEAD`. After `renumber` and before the merge is committed, it therefore
   reports `ledger/append-only`, as the report after `renumber` did before
-  [COMPASS-DRAFT-ledger-log-D2](#compass-draft-ledger-log-d2--the-check-after-an-allocation-uses-the-allocations-base).
+  [COMPASS-D54](#compass-d54--the-check-after-an-allocation-uses-the-allocations-base).
   While a merge is in progress, the default could be the commit being merged
   in.
 - **Paths and `--root`.** Paths on the command line are relative to the current
@@ -823,7 +827,7 @@ Two further decisions were made while coding. They are recorded here as
 proposals for the steward, as records at the same level as this section, the
 level §8 gives a record's heading.
 
-### COMPASS-DRAFT-ledger-log-D3 — An uppercase prefix in a code span is a namespace only when known, or when a path follows
+### COMPASS-D55 — An uppercase prefix in a code span is a namespace only when known, or when a path follows
 
 **Status:** Proposed
 
@@ -850,7 +854,7 @@ then counted as unverified, never reported.
   repository not yet listed under `:federation` would become an error about a
   missing file, where §9 asks only that it be pinned.
 
-### COMPASS-DRAFT-ledger-log-D4 — The index is checked only where one exists, and line endings do not count
+### COMPASS-D56 — The index is checked only where one exists, and line endings do not count
 
 **Status:** Proposed
 
@@ -927,7 +931,7 @@ The plan's stage 1 also listed `git grep`; nothing needed it.
   `src/corpus/code.lisp:parse-code-mention@a9c6dd9`, and keeps those that are
   pinned or name a place in a file. A bare file name, a rule name such as
   `ledger/unique`, and an example of the grammar are left out
-  ([COMPASS-DRAFT-ledger-log-D3](#compass-draft-ledger-log-d3--an-uppercase-prefix-in-a-code-span-is-a-namespace-only-when-known-or-when-a-path-follows)).
+  ([COMPASS-D55](#compass-d55--an-uppercase-prefix-in-a-code-span-is-a-namespace-only-when-known-or-when-a-path-follows)).
 - **`ref/code-pinned`.** `src/rules/code.lisp:ref/code-pinned@a9c6dd9` reports a
   reference that names a symbol or lines without a revision, at the severity
   `src/rules/code.lisp:pinning-severity@a9c6dd9` gives: an error in a `Log` or
@@ -997,7 +1001,7 @@ The plan's stage 1 also listed `git grep`; nothing needed it.
   by stage 2.
 - **The index.** `src/rules/federation.lisp:index/current@a9c6dd9`, and the new
   `--check` of `compass index`, compare the index with what would be written
-  ([COMPASS-DRAFT-ledger-log-D4](#compass-draft-ledger-log-d4--the-index-is-checked-only-where-one-exists-and-line-endings-do-not-count)).
+  ([COMPASS-D56](#compass-d56--the-index-is-checked-only-where-one-exists-and-line-endings-do-not-count)).
   `src/util.lisp:first-difference@a9c6dd9`, which `ledger/append-only` already
   used, moved to the utilities to name the first line that differs.
 
@@ -1238,8 +1242,8 @@ them: the bootstrap and the amendments to `Compass.md`, the skills and version
 - **Uses of the derived fields.** Only `outline` shows them so far; the
   `review/approver` rule and the RDF export are their next users.
 - **Acceptance.** COMPASS-D31 to COMPASS-D33
-  and this Log's decisions COMPASS-DRAFT-ledger-log-D3 and
-  COMPASS-DRAFT-ledger-log-D4 are `Proposed`.
+  and this Log's decisions COMPASS-D55 and
+  COMPASS-D56 are `Proposed`.
 
 ## Update 2026-10-10 — Bootstrap, the amended standard, skills, and version 0.2.0
 
@@ -1299,7 +1303,7 @@ proposed decisions on their acceptance.
 Two further decisions were made while coding. They are recorded here as
 proposals for the steward.
 
-### COMPASS-DRAFT-ledger-log-D5 — The status form that COMPASS-D9 replaced is an error
+### COMPASS-D57 — The status form that COMPASS-D9 replaced is an error
 
 **Status:** Proposed
 
@@ -1322,7 +1326,7 @@ that the message can be specific.
 - Treat it as any unknown status. Rejected: the generic message would list the
   statuses without saying which one replaces this.
 
-### COMPASS-DRAFT-ledger-log-D6 — The build fails when a compass function replaces another
+### COMPASS-D58 — The build fails when a compass function replaces another
 
 **Status:** Proposed
 
@@ -1420,7 +1424,7 @@ COMPASS-D9's, increments the minor number. Section by section:
 - **`Superseded` is accepted**
   (`src/vocab.lisp:*status-families*@ccb28e9`), so `vocab/pending` no longer
   warns on it, and the old form is an error
-  ([COMPASS-DRAFT-ledger-log-D5](#compass-draft-ledger-log-d5--the-status-form-that-compass-d9-replaced-is-an-error)).
+  ([COMPASS-D57](#compass-d57--the-status-form-that-compass-d9-replaced-is-an-error)).
 - **`vocab/pending`'s messages** say a value "is not yet adopted into the
   standard" (`src/rules/frontmatter.lisp:note-pending@ccb28e9`), where they said
   its decision "has not been accepted". That was false for the values of
@@ -1457,7 +1461,7 @@ COMPASS-D9's, increments the minor number. Section by section:
 #### The guards
 
 - **Replaced definitions.** See
-  [COMPASS-DRAFT-ledger-log-D6](#compass-draft-ledger-log-d6--the-build-fails-when-a-compass-function-replaces-another).
+  [COMPASS-D58](#compass-d58--the-build-fails-when-a-compass-function-replaces-another).
   A replacement within one file is a full warning, on which ASDF stops
   compiling, so the handler reports each replacement as it happens rather than
   in a summary at the end.
@@ -1683,8 +1687,8 @@ Table: The commits of version 0.2, with the toolchain's size at each.
 | `ccb28e9` | Stages 9 and 10: `Compass.md` 0.3.0, the skills, the guards, version 0.2.0 | 1182 | 39 | 13 |
 
 Its decisions: COMPASS-D26 to COMPASS-D33,
-recorded in the plan, and COMPASS-DRAFT-ledger-log-D1 to
-COMPASS-DRAFT-ledger-log-D6, recorded here, all `Proposed`. Version 0.2.1 holds
+recorded in the plan, and COMPASS-D53 to
+COMPASS-D58, recorded here, all `Proposed`. Version 0.2.1 holds
 the release binaries.
 
 ### Outstanding Work

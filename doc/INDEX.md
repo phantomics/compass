@@ -22,8 +22,8 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0010](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Accepted | agent-context |
 | [COMPASS-0011](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Accepted | toolchain |
 | [COMPASS-0012](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
+| [COMPASS-0013](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Accepted | toolchain |
 | [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
-| [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
 
@@ -81,18 +81,18 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D50](Log.AuthoringAssistance.md#compass-d50--review-checks-the-whole-corpus-and-separates-the-changes-findings) | Decision | Review checks the whole corpus and separates the change's findings | Accepted | COMPASS-0012 |
 | [COMPASS-D51](Log.AuthoringAssistance.md#compass-d51--drift-tests-accept-what-exists-or-what-the-plan-lists) | Decision | Drift tests accept what exists or what the plan lists | Proposed | COMPASS-0012 |
 | [COMPASS-D52](Log.AuthoringAssistance.md#compass-d52--templates-give-new-decisions-the-status-proposed) | Decision | Templates give new decisions the status Proposed | Accepted | COMPASS-0012 |
+| [COMPASS-D53](Log.Ledger.md#compass-d53--seeding-refuses-a-number-defined-twice) | Decision | Seeding refuses a number defined twice | Accepted | COMPASS-0013 |
+| [COMPASS-D54](Log.Ledger.md#compass-d54--the-check-after-an-allocation-uses-the-allocations-base) | Decision | The check after an allocation uses the allocation's base | Accepted | COMPASS-0013 |
+| [COMPASS-D55](Log.Ledger.md#compass-d55--an-uppercase-prefix-in-a-code-span-is-a-namespace-only-when-known-or-when-a-path-follows) | Decision | An uppercase prefix in a code span is a namespace only when known, or when a path follows | Proposed | COMPASS-0013 |
+| [COMPASS-D56](Log.Ledger.md#compass-d56--the-index-is-checked-only-where-one-exists-and-line-endings-do-not-count) | Decision | The index is checked only where one exists, and line endings do not count | Proposed | COMPASS-0013 |
+| [COMPASS-D57](Log.Ledger.md#compass-d57--the-status-form-that-compass-d9-replaced-is-an-error) | Decision | The status form that COMPASS-D9 replaced is an error | Proposed | COMPASS-0013 |
+| [COMPASS-D58](Log.Ledger.md#compass-d58--the-build-fails-when-a-compass-function-replaces-another) | Decision | The build fails when a compass function replaces another | Proposed | COMPASS-0013 |
 | [COMPASS-DRAFT-critique-D1](Plan.Critique.md#compass-draft-critique-d1--critique-is-a-subtype-of-eval) | Decision | Critique is a subtype of Eval | Proposed | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-D2](Plan.Critique.md#compass-draft-critique-d2--a-critique-pins-its-target-and-declares-its-stance) | Decision | A critique pins its target and declares its stance | Proposed | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-D3](Plan.Critique.md#compass-draft-critique-d3--each-finding-defends-the-choice-before-attacking-it-and-is-grounded) | Decision | Each finding defends the choice before attacking it, and is grounded | Proposed | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-D4](Plan.Critique.md#compass-draft-critique-d4--findings-are-open-question-records-and-a-person-disposes-of-each) | Decision | Findings are open-question records, and a person disposes of each | Proposed | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-D5](Plan.Critique.md#compass-draft-critique-d5--a-threat-model-is-a-critique-of-security-with-its-own-method) | Decision | A threat model is a critique of security, with its own method | Proposed | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-D6](Plan.Critique.md#compass-draft-critique-d6--the-conversation-is-scratch-the-critique-is-its-distillation) | Decision | The conversation is scratch; the critique is its distillation | Proposed | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-ledger-log-D1](Log.Ledger.md#compass-draft-ledger-log-d1--seeding-refuses-a-number-defined-twice) | Decision | Seeding refuses a number defined twice | Proposed | COMPASS-DRAFT-ledger-log |
-| [COMPASS-DRAFT-ledger-log-D2](Log.Ledger.md#compass-draft-ledger-log-d2--the-check-after-an-allocation-uses-the-allocations-base) | Decision | The check after an allocation uses the allocation's base | Proposed | COMPASS-DRAFT-ledger-log |
-| [COMPASS-DRAFT-ledger-log-D3](Log.Ledger.md#compass-draft-ledger-log-d3--an-uppercase-prefix-in-a-code-span-is-a-namespace-only-when-known-or-when-a-path-follows) | Decision | An uppercase prefix in a code span is a namespace only when known, or when a path follows | Proposed | COMPASS-DRAFT-ledger-log |
-| [COMPASS-DRAFT-ledger-log-D4](Log.Ledger.md#compass-draft-ledger-log-d4--the-index-is-checked-only-where-one-exists-and-line-endings-do-not-count) | Decision | The index is checked only where one exists, and line endings do not count | Proposed | COMPASS-DRAFT-ledger-log |
-| [COMPASS-DRAFT-ledger-log-D5](Log.Ledger.md#compass-draft-ledger-log-d5--the-status-form-that-compass-d9-replaced-is-an-error) | Decision | The status form that COMPASS-D9 replaced is an error | Proposed | COMPASS-DRAFT-ledger-log |
-| [COMPASS-DRAFT-ledger-log-D6](Log.Ledger.md#compass-draft-ledger-log-d6--the-build-fails-when-a-compass-function-replaces-another) | Decision | The build fails when a compass function replaces another | Proposed | COMPASS-DRAFT-ledger-log |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |
