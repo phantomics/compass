@@ -109,7 +109,33 @@ list of named design principles instead of, or alongside, Open Questions.
 (`G1…Gn`) as bold-lead bullets; close each rendition with a one-line
 `**Steal:** … **Reject:** …` lesson; per-installment `## Comparison — <N>`
 tables and `## Synthesis for <project> — <N>`. Large evals are written in
-`# Installment I…N` banners. Recall `subtype: prior-art | comparison | tradeoff`.
+`# Installment I…N` banners. Recall `subtype: prior-art | comparison | tradeoff | critique`.
+
+**Critique** (`subtype: critique`, §4, §8, §14), named `Eval.Critique.<Topic>.md`:
+an adversarial evaluation of the project's own system or design. Same spine:
+
+- **Method** — the target (the documents criticised, also in `relates-to`, and
+  the revision of any code, with pinned references); the stance (red team,
+  devil's advocate, pre-mortem, newcomer, user advocate); whether the critic is
+  independent of the target's authors; the evidence standard; what was left
+  unexamined.
+- **The Shared Scenario** — use cases, workloads, failure modes, or adversaries.
+- **The Rubric** — qualities `C1`…`Cn`, each with what holding up means.
+- **`## Findings`**, in place of the renditions — one open-question record per
+  finding, most severe first, listed in `open-questions:`, with the fields
+  `**Rationale:**` (the target's own case, citing its decision), `**Objection:**`,
+  `**Evidence:**` (a pinned code reference, identifier, or `cites:` title, then
+  how it was shown), `**Severity:**` (`high | medium | low`), and optionally
+  `**Seed:**`. A person adds `**Resolution:**`: dated, accepted (naming the
+  decision in the target's own Plan or Arch that answers it) or rejected (with
+  the reason). A finding without one is open.
+- **`## What Held Up`** (optional) — parts of the target that survived.
+- **Synthesis** — themes by severity, seeds worth a Survey or Plan, and what the
+  critique did not examine. An objection without evidence goes here as a seed,
+  never as a finding.
+
+A threat model (`subtype: threat-model`, pending) is a critique of security
+with its own method (COMPASS-D63).
 
 ---
 

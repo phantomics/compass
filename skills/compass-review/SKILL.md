@@ -1,6 +1,6 @@
 ---
 name: compass-review
-description: Review a Compass document or pull request — first with the compass toolchain's mechanical checks, then for the judgment-level conformance it cannot check — genre fit, section shape, decision-record quality, memo admission, prior-art coverage, cross-reference plausibility, accessibility, and README-transclusion drift. Use before accepting or merging a Compass document.
+description: Review a Compass document or pull request — first with the compass toolchain's mechanical checks, then for the judgment-level conformance it cannot check — genre fit, section shape, decision-record quality, memo admission, critique quality, prior-art coverage, cross-reference plausibility, accessibility, and README-transclusion drift. Use before accepting or merging a Compass document.
 ---
 
 # compass-review
@@ -156,17 +156,33 @@ toolchain does not check yet; the dimensions below cover it.
    claim, or are obvious comparators missing? For program-scope `Eval`/`Arch`
    leaning on foreign sources, is there a source-map appendix (§9)?
 
-8. **Accessibility (author-time, §12).** The toolchain does not check these
+8. **Critique quality (§4, §8, §14).** For an `Eval` with `subtype: critique`:
+   - Is the target pinned (documents in `relates-to`, code at a revision) and
+     the stance declared, with what was left unexamined?
+   - Does each finding's `**Rationale:**` state the target's case as its
+     authors would, citing the decision that made the choice (`compass show`
+     it)? A strawman is an ERROR.
+   - Does each `**Evidence:**` name something checkable that supports the
+     `**Objection:**`, and is the `**Severity:**` plausible? An ungrounded
+     finding belongs in the Synthesis as a seed.
+   - Has the critic, or an assistant, written a `**Resolution:**` or set the
+     critique `Accepted`? Both are a person's acts.
+
+   For any document under review, check for open findings against it: a
+   critique that lists it in `relates-to` appears in `compass refs <ID>`.
+   Report open findings; do not resolve them.
+
+9. **Accessibility (author-time, §12).** The toolchain does not check these
    yet: tables have header cells and a `Table:` caption; diagrams have a
    `Description:` paragraph; headings nest without skipping; links use
    meaningful text.
 
-9. **README-transclusion drift (§10, S7).** For a compiled `README.md` with a
-   `README.md.compass` template, check whether committed content still matches
-   what the transclusion directives would produce. This is best-effort until the
-   fixture compiler (S7) exists; flag suspected drift for the editor.
+10. **README-transclusion drift (§10, S7).** For a compiled `README.md` with a
+    `README.md.compass` template, check whether committed content still matches
+    what the transclusion directives would produce. This is best-effort until the
+    fixture compiler (S7) exists; flag suspected drift for the editor.
 
-10. **Provenance and approval (§6, §7, §22).** If the document was authored or
+11. **Provenance and approval (§6, §7, §22).** If the document was authored or
     reviewed with LLM help, is `provenance:` present? If it carries
     `approved-by`, is that a person (never the `provenance:` assistant), and is
     it someone other than the sole author unless the namespace's `compass.sexp`

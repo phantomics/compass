@@ -6,7 +6,7 @@ scope:         program
 program:       Compass
 language:      en
 status:        Draft
-schema-version: "0.3.0"
+schema-version: "0.4.0"
 authors:
   - Andrew Sengul
 provenance:
@@ -184,7 +184,7 @@ Table: The genres, with their filename prefixes, codes, and roles.
 | Genre | Prefix | Code | Role |
 |---|---|---|---|
 | Survey | `Survey.` | SU | Exploratory "should we?" — aspirational, non-normative; surveys the territory before a Plan |
-| Eval | `Eval.` | EV | Evaluative analysis; `subtype: prior-art \| comparison \| tradeoff` |
+| Eval | `Eval.` | EV | Evaluative analysis; `subtype: prior-art \| comparison \| tradeoff \| critique` |
 | Architecture | `Arch.` | AR | Comprehensive design record — aspirational and normative |
 | Plan | `Plan.` | PL | Forward design plus roadmap for a buildable unit |
 | Log | `Log.` | LG | Engineering journal of work done and verified |
@@ -205,6 +205,19 @@ prefix reduces cleanly to two.
 already knows the domain). This split is *cross-audience*: it applies to
 developer-facing guides as much as to end-user ones, and it pre-shapes the
 Diátaxis quadrants that the end-user derivation of §21 targets.
+
+`Eval` carries a `subtype` naming what is evaluated: other systems, to learn
+from them (`prior-art`); several alternatives side by side (`comparison`);
+options for a decision not yet taken (`tradeoff`); or a system or design of the
+project's own, attacked to find its weaknesses and seed improvements
+(`critique`). A critique pins the target it examined and declares its stance;
+each of its findings states the target's own case before objecting, is
+grounded in evidence a reader can check, and is disposed of by a person, never
+by its critic (§8, §14). An accepted critique records that the critique is fair,
+not that its objections are: an objection changes the target only when a
+decision in the target's own documents adopts it. A conversation that produced
+a critique stays scratch (§2); the critique is its distillation. Critiques are
+conventionally named `Eval.Critique.<Topic>.md`.
 
 The `Ideation` genre is deliberately narrow. It is for the *exceptional* seed
 discussion whose high-level framing is worth preserving as part of the record
@@ -275,6 +288,10 @@ inbound reference.
 `Memo` stands beside the later rungs rather than on the ladder: memos
 accumulate while a system is built and used, and the memos of a component are
 eventually folded into its `Ref` or `Spec`.
+
+A critique (an `Eval` with `subtype: critique`) is how the ladder is climbed
+again: a critique of what exists, a `Ref` or a `Log`'s result, leads back to a
+`Survey` or `Plan` for what should change.
 
 
 ## 5. Identity, Scope, and Numbering
@@ -464,7 +481,7 @@ lossless.
 id:            PSYCHE-0001             # → classic:uri; the permanent identifier (§5)
 title:         The Psyche Architecture # → rdfs:label / dc:title
 genre:         Architecture            # → classic:type / rdf:type (§4)
-subtype:       ~                       # Eval: prior-art|comparison|tradeoff; Guide: tutorial|howto
+subtype:       ~                       # Eval: prior-art|comparison|tradeoff|critique; Guide: tutorial|howto
 scope:         program                 # → federation altitude (§5)
 program:       Psyche                  # → sioc:Space  (program-scope docs)
 project:       ~                       # → sioc:Space  (project/component docs)
@@ -603,6 +620,28 @@ An open question is a known unresolved issue, assigned `<NAMESPACE>-O<n>`
 section and are listed in the `open-questions:` field. They are
 cross-referable across repositories, so a `program`-scope document may cite
 a `project`-scope open question by ID.
+
+In a critique (§4) the findings are open-question records, under a
+`## Findings` section in the place of the `Eval`'s renditions (§14), and carry
+bold-label fields:
+
+Table: The fields of a finding record in a critique.
+
+| Field | Required | Value |
+|---|---|---|
+| `**Rationale:**` | yes | The target's own case for the choice, citing the decision record or document that made it, or saying that none did |
+| `**Objection:**` | yes | What is wrong, under which scenario or rubric criterion |
+| `**Evidence:**` | yes | At least one commit-pinned code reference (§9), Compass identifier, or title of an entry in the critique's `cites:`, then how the weakness was shown |
+| `**Severity:**` | yes | `high`, `medium`, or `low`, by the consequence if the objection holds; a threat model uses its method's measure |
+| `**Seed:**` | no | The improvement the objection suggests |
+| `**Resolution:**` | added by a person | The date, then accepted, naming the decision or change that answers it, or rejected, with the reason |
+
+A finding without a resolution is open. Writing a resolution passes the
+acceptance gate (§6): an assistant never writes one. An accepted finding is
+answered by a decision record in the target's own `Plan` or `Arch`; a rejected
+one stays, with its reason, so that it is not raised again without new
+evidence. An objection without evidence is not a finding; it may be kept as a
+seed in the critique's Synthesis.
 
 ### Memo records (`M`)
 
@@ -1013,6 +1052,17 @@ documents linked via `relates-to`.
 ## Synthesis
 ## Appendix — Source Map          (for program-scope; §9)
 ```
+
+A critique (`subtype: critique`, §4) keeps this spine. Its Method names the
+target (the documents criticised, which `relates-to` also lists, and the
+revision of any code, with pinned references), the stance taken (such as red
+team, devil's advocate, or pre-mortem), whether the critic is independent of
+the target's authors, the evidence standard, and what was left unexamined. Its
+renditions are a `## Findings` section of finding records (§8), in order of
+severity; an optional `## What Held Up` section after them records the parts of
+the target that survived, so they are not argued again; and its Synthesis
+ranks the themes, names the seeds worth a `Survey` or `Plan`, and states what
+the critique did not examine.
 
 ### Architecture
 

@@ -43,12 +43,19 @@ Notes:
 
 Only two genres take a `subtype`:
 
-- **`Eval`** — `subtype: prior-art | comparison | tradeoff`
-- **`Guide`** — `subtype: tutorial | howto`
-  - `tutorial` — learning-oriented, guided walkthrough for a newcomer
-    (the REPL-walkthrough style).
-  - `howto` — task-oriented, terse numbered procedure ending in the result.
+Table: Subtypes and what each evaluates or teaches.
 
+| Subtype | Genre | Use |
+|---|---|---|
+| `prior-art` | `Eval` | Other projects' systems, judged to learn from them |
+| `comparison` | `Eval` | Several alternatives, ranked side by side |
+| `tradeoff` | `Eval` | Options for a decision not yet taken |
+| `critique` | `Eval` | A system or design of the project's own, attacked to find its weaknesses and seed improvements; named `Eval.Critique.<Topic>.md` (§4, §8, §14) |
+| `tutorial` | `Guide` | Learning-oriented, a guided walkthrough for a newcomer (the REPL-walkthrough style) |
+| `howto` | `Guide` | Task-oriented, a terse numbered procedure ending in the result |
+
+`threat-model` (`Eval`, a critique of security with its own method) is pending:
+COMPASS-0009 proposes it, and `compass check` warns on it under `vocab/pending`.
 All other genres omit `subtype`.
 
 ## Scope (§5)

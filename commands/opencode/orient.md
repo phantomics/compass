@@ -34,7 +34,10 @@ Get acquainted with this repository's documentation before we work. Use the
    `Superseded` or `Deprecated` documents as history.
 6. If a topic is given below, then read what bears on it: the documents whose
    titles or components match, `compass refs <ID>` on each, and the decisions
-   and open questions they hold.
+   and open questions they hold. Include critiques of them (`Eval` documents
+   with `subtype: critique` that list them in `relates-to`) and their findings
+   without a `**Resolution:**`: these are open objections to weigh, not
+   decisions in force.
 
 Topic: $ARGUMENTS
 

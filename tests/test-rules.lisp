@@ -80,6 +80,27 @@
   (is (null (check-one (doc :genre "Eval" :extra '("subtype: comparison"))
                        :rules '("vocab/subtype")))))
 
+(test critique-evals
+  "A critique, with a finding record under Findings, checks clean (COMPASS-D59,
+COMPASS-D62)."
+  (let ((findings
+          (check-one
+           (doc :genre "Eval" :created "2026-10-13"
+                :extra '("subtype: critique" "relates-to:" "  - TEST-0002"
+                         "open-questions:" "  - TEST-O1")
+                :body (lines "# The ledger: Critique" "" "## Method" "" "Red team." ""
+                             "## The Shared Scenario" "" "Two teams." "" "## The Rubric" ""
+                             "C1." "" "## Findings" ""
+                             "### TEST-O1 — One ledger serializes unrelated namespaces" ""
+                             "**Rationale:** TEST-0002 keeps one ledger."
+                             "**Objection:** Unrelated allocations conflict."
+                             "**Evidence:** TEST-0002; read."
+                             "**Severity:** low" "" "## Synthesis" "" "Low risk."))
+           :path "doc/Eval.Critique.Ledger.md"
+           :extra-files (list (list "doc/Plan.Ledger.md"
+                                    (doc :id "TEST-0002" :created "2026-10-13"))))))
+    (is (null findings) (describe-findings findings))))
+
 (test vocab-pending
   (is (null (check-one (doc :status "Superseded" :extra '("superseded-by: TEST-0002"))
                        :rules '("vocab/pending")))

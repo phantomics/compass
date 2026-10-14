@@ -516,15 +516,20 @@ Table: Prior systems and what this plan draws from each.
    naming this plan (COMPASS-D24), so `vocab/pending` warns on
    it until the amendment lands. The `Eval` template's subtype comment lists
    it, with a commented block showing a finding record; the toolchain's tests
-   cover both.
+   cover both. *Done (2026-10-13), with the decisions already accepted: the
+   subtype went in as accepted rather than pending, and a test keeps
+   `skills/reference/vocabularies.md` listing every accepted subtype.*
 4. **Skills.** `compass-author` scaffolds a critique, with findings as records
    carrying the fields above and never a resolution; `compass-review` gains a
    critique dimension: target pinned, stance declared, rationale fair, evidence
-   grounded; `section-shapes.md` gains the shape.
+   grounded; `section-shapes.md` gains the shape. *Done (2026-10-13); `/orient`
+   also reads critiques of a topic and their open findings, a partial answer to
+   COMPASS-O44.*
 5. **Amendments.** On acceptance, §4, §8, and §14 are amended as
    `Compass.md` 0.4.0, the subtype's standing becomes accepted, and
-   `vocabularies.md` lists it.
+   `vocabularies.md` lists it. *Done (2026-10-13): `Compass.md` 0.4.0.*
 6. **Checks**, if COMPASS-O41 settles on them.
 7. **First critiques.** A critique of part of Compass, such as the ledger, as
-   the worked example; and, at Classic's choice, its `securityPoints.md`
+   the worked example (begun as COMPASS-DRAFT-ledger-critique, a scaffold with
+   its method, scenario, and rubric, and no findings yet); and, at Classic's choice, its `securityPoints.md`
    rewritten as a `threat-model` Eval (COMPASS-O37).

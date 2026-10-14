@@ -1,6 +1,6 @@
 ---
 name: compass-author
-description: Scaffold and draft Compass documents. Use when creating a new Survey, Eval, Plan, Log, Ref, Guide, Spec, Arch, Glossary, or Memo document in a Compass corpus — determines genre, scope, and namespace, generates the YAML front-matter block and per-genre section skeleton from templates/, assigns provisional DRAFT identifiers, and checks the draft with the compass toolchain.
+description: Scaffold and draft Compass documents. Use when creating a new Survey, Eval, Plan, Log, Ref, Guide, Spec, Arch, Glossary, or Memo document in a Compass corpus, or a critique (an adversarial Eval of the project's own system) — determines genre, scope, and namespace, generates the YAML front-matter block and per-genre section skeleton from templates/, assigns provisional DRAFT identifiers, and checks the draft with the compass toolchain.
 ---
 
 # compass-author
@@ -125,6 +125,22 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
      Refer to every record by its full identifier, never a short form such as
      `D3` (`ref/short-record`).
    - `Eval` — set `subtype`; scaffold Method / Shared Scenario / Rubric.
+   - `Eval` with `subtype: critique` — an attack on the project's own system or
+     design (`section-shapes.md` has the shape). Name it
+     `Eval.Critique.<Topic>.md` and list the documents criticised in
+     `relates-to`. In Method, pin the target (code references at a revision),
+     declare the stance, say whether the critic is independent of the target's
+     authors, and name what was left unexamined. Write each finding as an
+     open-question record under `## Findings`, mirrored into `open-questions:`,
+     with `**Rationale:**` (the target's own case, citing the decision record
+     that made the choice — read it first with `compass show`),
+     `**Objection:**`, `**Evidence:**` (a pinned code reference, identifier, or
+     `cites:` title, then how it was shown), `**Severity:**`, and optionally
+     `**Seed:**`. An objection you cannot ground is not a finding: put it in
+     the Synthesis as a seed. **Never write a `**Resolution:**`**, and never
+     move a critique to `Accepted`; a person disposes of findings (§6, §8).
+     When the critique distils a conversation, name it in
+     `provenance.session`.
    - `Memo` — find the component's host among the documents of genre `Memo` in
      `compass index --stdout`, then read its records with
      `compass outline <host-id>` and `compass show <host-id>#memos`. Add one

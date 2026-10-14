@@ -46,6 +46,28 @@ against a rubric (§4).>
 - per-installment `## Comparison — <N>` tables
 -->
 
+<!-- for subtype: critique (§4, §8, §14), name the file Eval.Critique.<Topic>.md,
+     list the documents criticised in relates-to, and shape the document so:
+## Method
+  the target (documents, and the revision of any code, pinned), the stance
+  (red team, devil's advocate, pre-mortem, newcomer, user advocate), whether the
+  critic is independent of the target's authors, the evidence standard, and
+  what was left unexamined
+## The Shared Scenario      (use cases, workloads, failure modes, adversaries)
+## The Rubric               (qualities C1…Cn, each with what holding up means)
+## Findings                 (in place of the renditions; one record per finding,
+                             most severe first, each listed in open-questions:)
+### <NAMESPACE>-DRAFT-<slug>-O1 — <the weakness, stated as a claim>
+**Rationale:** <the target's own case, citing the decision that made the choice>
+**Objection:** <what is wrong, under which scenario or criterion>
+**Evidence:** <a pinned code reference, identifier, or cites title; how it was shown>
+**Severity:** high | medium | low
+**Seed:** <optional: the improvement it suggests>
+  (a person adds **Resolution:** — never the critic or an assistant)
+## What Held Up             (optional: parts that survived the attack)
+## Synthesis                (themes by severity; seeds; what was not examined)
+-->
+
 ## Synthesis
 
 <What the comparison settles; the recommendation it supports.>

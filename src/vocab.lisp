@@ -88,8 +88,8 @@ COMPASS-DRAFT-toolchain-D5 replaced with `Superseded` plus the
                  "Open Questions"))
      (g "Eval" "Eval." "EV" :proposal
         "Evaluative analysis against a rubric"
-        :subtypes '("prior-art" "comparison" "tradeoff"
-                    ("threat-model" :pending "COMPASS-DRAFT-secure-development"))
+        :subtypes '("prior-art" "comparison" "tradeoff" "critique"
+                    ("threat-model" :pending "COMPASS-0009"))
         :spine '("Method" "The Shared Scenario" "The Rubric" "Synthesis"))
      (g "Architecture" "Arch." "AR" :proposal
         "Comprehensive design record; aspirational and normative"

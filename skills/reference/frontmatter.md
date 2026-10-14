@@ -14,7 +14,7 @@ mappings are omitted here and kept in the standard.
 id:            PSYCHE-0001             # permanent identifier (§5)
 title:         The Psyche Architecture
 genre:         Architecture            # controlled (§4)
-subtype:       ~                       # Eval: prior-art|comparison|tradeoff; Guide: tutorial|howto
+subtype:       ~                       # Eval: prior-art|comparison|tradeoff|critique; Guide: tutorial|howto
 scope:         program                 # component|project|program (§5)
 program:       Psyche                  # program-scope docs
 project:       ~                       # project/component docs
