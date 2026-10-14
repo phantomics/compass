@@ -19,7 +19,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0007](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-0008](Spec.SemanticBinding.md) | Compass Semantic Binding — RDF Vocabulary, Identity, and Shapes | Spec | program | Current | semantic-binding |
 | [COMPASS-0009](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Accepted | security |
-| [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Draft | agent-context |
+| [COMPASS-0010](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Accepted | agent-context |
 | [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
 | [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
@@ -130,9 +130,9 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O35](Survey.SecureDevelopment.md#compass-o35--security-memos-and-disclosure) | Open question | Security memos and disclosure | — | COMPASS-0009 |
 | [COMPASS-O36](Survey.SecureDevelopment.md#compass-o36--a-security-audience) | Open question | A security audience | — | COMPASS-0009 |
 | [COMPASS-O37](Survey.SecureDevelopment.md#compass-o37--migrating-classics-analysis) | Open question | Migrating Classic's analysis | — | COMPASS-0009 |
-| [COMPASS-DRAFT-agent-context-prior-art-O1](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o1--a-systematic-search) | Open question | A systematic search | — | COMPASS-DRAFT-agent-context-prior-art |
-| [COMPASS-DRAFT-agent-context-prior-art-O2](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o2--contact-with-closest-work) | Open question | Contact with closest work | — | COMPASS-DRAFT-agent-context-prior-art |
-| [COMPASS-DRAFT-agent-context-prior-art-O3](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o3--keeping-this-evaluation-current) | Open question | Keeping this evaluation current | — | COMPASS-DRAFT-agent-context-prior-art |
+| [COMPASS-O38](Eval.PriorArt.AgentContext.md#compass-o38--a-systematic-search) | Open question | A systematic search | — | COMPASS-0010 |
+| [COMPASS-O39](Eval.PriorArt.AgentContext.md#compass-o39--contact-with-closest-work) | Open question | Contact with closest work | — | COMPASS-0010 |
+| [COMPASS-O40](Eval.PriorArt.AgentContext.md#compass-o40--keeping-this-evaluation-current) | Open question | Keeping this evaluation current | — | COMPASS-0010 |
 | [COMPASS-DRAFT-critique-O1](Plan.Critique.md#compass-draft-critique-o1--toolchain-checks-for-findings) | Open question | Toolchain checks for findings | — | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-O2](Plan.Critique.md#compass-draft-critique-o2--the-severity-scale) | Open question | The severity scale | — | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-O3](Plan.Critique.md#compass-draft-critique-o3--critique-across-namespaces) | Open question | Critique across namespaces | — | COMPASS-DRAFT-critique |

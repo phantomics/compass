@@ -20,7 +20,7 @@ relates-to:
   - COMPASS-0002
   - COMPASS-0007
   - COMPASS-0006
-  - COMPASS-DRAFT-agent-context-prior-art
+  - COMPASS-0010
 cites:
   - title:     "Agents Don't Need Memory. They Need Documentation. (Kevin Liao, 2026-10-03)"
     locator:   https://liao.gg/blog/agents-dont-need-memory
@@ -410,7 +410,7 @@ correct.
   - `llms.txt` (LLM-oriented site summaries).
   - The RAG memory plugins that the blog post argues against.
 - Further prior art, found after this survey was first written and examined in
-  [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md). The
+  [COMPASS-0010](Eval.PriorArt.AgentContext.md). The
   search behind it has not been exhaustive.
   - **MOOSEDev** (Adam, NeSy 2026) is the closest system found. It gives coding
     agents an ontology-grounded project memory: decisions, constraints,

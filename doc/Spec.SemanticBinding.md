@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-0002
   - COMPASS-0007
   - COMPASS-0009
-  - COMPASS-DRAFT-agent-context-prior-art
+  - COMPASS-0010
 cites:
   - title:     "RFC 4151 — The 'tag' URI Scheme"
     locator:   "§2, Tag syntax and rules"
@@ -573,7 +573,7 @@ carried by amendment when it is accepted:
 The idea of software lifecycle artefacts as linked data is not new, and this
 binding should be read against two precedents. The search behind this section
 has not been exhaustive; see
-[COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md).
+[COMPASS-0010](Eval.PriorArt.AgentContext.md).
 
 - **OSLC** (Open Services for Lifecycle Collaboration; IBM, then OASIS, since
   about 2008) represents requirements, change requests, test cases, and

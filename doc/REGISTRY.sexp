@@ -91,3 +91,7 @@
 (:id "COMPASS-O35" :kind :open-question :draft "COMPASS-DRAFT-secure-development-O4" :host "COMPASS-0009" :date "2026-10-13" :by "Andrew Sengul")
 (:id "COMPASS-O36" :kind :open-question :draft "COMPASS-DRAFT-secure-development-O5" :host "COMPASS-0009" :date "2026-10-13" :by "Andrew Sengul")
 (:id "COMPASS-O37" :kind :open-question :draft "COMPASS-DRAFT-secure-development-O6" :host "COMPASS-0009" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-0010" :kind :document :draft "COMPASS-DRAFT-agent-context-prior-art" :path "doc/Eval.PriorArt.AgentContext.md" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-O38" :kind :open-question :draft "COMPASS-DRAFT-agent-context-prior-art-O1" :host "COMPASS-0010" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-O39" :kind :open-question :draft "COMPASS-DRAFT-agent-context-prior-art-O2" :host "COMPASS-0010" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-O40" :kind :open-question :draft "COMPASS-DRAFT-agent-context-prior-art-O3" :host "COMPASS-0010" :date "2026-10-13" :by "Andrew Sengul")

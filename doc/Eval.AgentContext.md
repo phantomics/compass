@@ -22,7 +22,7 @@ relates-to:
   - COMPASS-0002
   - COMPASS-0003
   - COMPASS-0009
-  - COMPASS-DRAFT-agent-context-prior-art
+  - COMPASS-0010
 cites:
   - title:     "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (Gloaguen, Mündler, Müller, Raychev, Vechev; MemAgents @ ICLR 2026)"
     locator:   "arXiv:2602.11988v2, §4 and abstract"
@@ -162,7 +162,7 @@ and completeness answers almost fully where vector retrieval recovers 6–27%; i
 evaluates retrieval, not development outcomes. So the separate parts of the
 remedy have been studied: one handoff at a time, observationally, or as
 retrieval. What none of them measures, as far as the literature examined
-(see [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md))
+(see [COMPASS-0010](Eval.PriorArt.AgentContext.md))
 shows, is whether output quality and conformance to design intent hold across a
 long sequence of real development steps when each step is taken by a fresh
 session carrying a maintained, typed corpus. That is the gap this evaluation
@@ -731,7 +731,7 @@ federated read-only namespace. Is that worth a separate relay, and when?
 
 The evaluation is one instance of a wider set of studies that a Compass corpus
 makes possible, most with little published precedent (see
-[COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md)). Listed
+[COMPASS-0010](Eval.PriorArt.AgentContext.md)). Listed
 here so that the protocol's data can be planned to serve later studies.
 
 Table: Studies a Compass corpus could support, their closest precedent, and
@@ -761,12 +761,12 @@ Table: Sections of this evaluation and the primary sources each draws on.
 | Section | Primary sources |
 |---|---|
 | Thesis | COMPASS-0005; Xue (2026); ContextEcho; LOCA-bench |
-| What the published studies do and do not show | Gloaguen et al. (2026); Khatri (2026); Chatlatanagulchai et al.; EvoCode-Bench; Xue (2026); Handoff Debt (2026); Codified Context (2026); MOOSEDev (2026); COMPASS-DRAFT-agent-context-prior-art |
+| What the published studies do and do not show | Gloaguen et al. (2026); Khatri (2026); Chatlatanagulchai et al.; EvoCode-Bench; Xue (2026); Handoff Debt (2026); Codified Context (2026); MOOSEDev (2026); COMPASS-0010 |
 | Decision rules | COMPASS-D14 to COMPASS-D18; COMPASS-D42, COMPASS-D43 |
 | Harness | OpenCode CLI (`run`, `export`); Ben Sghaier et al. (2026) on harness drift |
 | Statistics | Schuirmann (1987); Khatri (2026) on equivalence testing in this setting |
 | The Shared Scenario | Classic repository history, surveyed at `6e4f02d` |
 | Track 1 setups | Gloaguen et al. (2026) and Khatri (2026) settings, adapted |
 | Security-invariant tasks | COMPASS-0009; Classic's `securityPoints.md` |
-| Seeded-supersession and rejected-alternative tasks; ablation setups | The Specification Gap (2026); MOOSEDev (2026); ADR violation detection (2026); COMPASS-DRAFT-agent-context-prior-art |
-| Research Agenda | COMPASS-DRAFT-agent-context-prior-art; Spec-Driven Test Generation (SpecOps '26) |
+| Seeded-supersession and rejected-alternative tasks; ablation setups | The Specification Gap (2026); MOOSEDev (2026); ADR violation detection (2026); COMPASS-0010 |
+| Research Agenda | COMPASS-0010; Spec-Driven Test Generation (SpecOps '26) |

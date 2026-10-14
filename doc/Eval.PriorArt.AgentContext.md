@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-agent-context-prior-art
+id:            COMPASS-0010
 title:         Prior Art for Compass as Agent Context and Queryable Corpus
 genre:         Eval
 subtype:       prior-art
@@ -7,9 +7,11 @@ scope:         program
 program:       Compass
 component:     agent-context
 language:      en
-status:        Draft
+status:        Accepted
 authors:
   - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -94,9 +96,9 @@ cites:
     locator:   "IBIS"
     external:  true
 open-questions:
-  - COMPASS-DRAFT-agent-context-prior-art-O1
-  - COMPASS-DRAFT-agent-context-prior-art-O2
-  - COMPASS-DRAFT-agent-context-prior-art-O3
+  - COMPASS-O38
+  - COMPASS-O39
+  - COMPASS-O40
 ---
 
 # Compass as Agent Context: Prior-Art Evaluation
@@ -120,7 +122,7 @@ design-rationale research, in OSLC-adjacent tooling, and in the many agent-memor
 tools published in 2026. Every novelty judgement below is therefore provisional:
 "no prior art found" means not found in this search, not shown to be absent.
 This document is meant to be revised as the search is extended
-(COMPASS-DRAFT-agent-context-prior-art-O1).
+(COMPASS-O38).
 
 ## Method
 
@@ -142,7 +144,7 @@ This document is meant to be revised as the search is extended
 - **Limits of the method.** No citation chasing, no database searches (ACM,
   IEEE, Scopus), no full-text reading of most papers, and no contact with
   authors. Each is a planned extension under
-  COMPASS-DRAFT-agent-context-prior-art-O1.
+  COMPASS-O38.
 
 ## The Shared Scenario
 
@@ -243,7 +245,7 @@ Table: Studies that vary the structure of documentation given to agents.
 | *The Specification Gap* (2026) | Completeness of a specification, in four levels from full docstrings with data structures (L0) to bare signatures (L3) | Integration success of two agents' outputs falls steadily from 58% to 25% as detail is removed; a merging agent given the full specification restores 89% | Single tasks; documentation inside the code; the variable is how much, not what kind |
 | *Handoff Debt* (2026) | Summary notes against structured notes in a handoff | Both reduce effort; small effects on success | One handoff; a fixed note format; resumption cost |
 | *Spec-Driven Test Generation* (Google; SpecOps '26) | An agent first writes a semi-formal contract specification, then tests, against writing tests directly | +9.8 percentage points in bug detection (p = 0.035) | The specification is written by the agent within the task, not a maintained project record |
-| *Spec Kit Agents* (2026) | Spec-driven workflow artefacts | Not yet read beyond the title and opening | Possibly the closest evaluation of a named scheme; must be read (COMPASS-DRAFT-agent-context-prior-art-O1) |
+| *Spec Kit Agents* (2026) | Spec-driven workflow artefacts | Not yet read beyond the title and opening | Possibly the closest evaluation of a named scheme; must be read (COMPASS-O38) |
 | ADR studies (2024–2026) | LLMs generating architecture decision records, choosing context for generation, or detecting violations of them | Violation detection works for decisions visible in code | The record is the output under study, not the context that helps an agent develop |
 | Gloaguen et al. (2026), with other documentation removed | Context file present or absent when no other documentation exists | Generated context files then help by about 2.7% | Supports the view that context helps when it supplies knowledge not available elsewhere |
 
@@ -322,7 +324,7 @@ Table: Assessment of each element against the prior art found.
 
 ## Open Questions
 
-### COMPASS-DRAFT-agent-context-prior-art-O1 — A systematic search
+### COMPASS-O38 — A systematic search
 
 This evaluation rests on an informal search. A systematic one would define
 search strings and databases (ACM Digital Library, IEEE Xplore, arXiv cs.SE and
@@ -335,7 +337,7 @@ generation (2604.03826); and the papers of the SpecOps '26 workshop. Who
 undertakes the search, and should it be complete before any public claim of
 novelty is made?
 
-### COMPASS-DRAFT-agent-context-prior-art-O2 — Contact with closest work
+### COMPASS-O39 — Contact with closest work
 
 MOOSEDev and Handoff Debt are close enough that their authors may know of work
 this search missed, and their benchmark artefacts may be reusable (MOOSEDev
@@ -343,7 +345,7 @@ publishes a corpus of 835 typed records; Handoff Debt publishes its takeover
 protocol). Should Compass's evaluation reuse either, and should their authors be
 contacted?
 
-### COMPASS-DRAFT-agent-context-prior-art-O3 — Keeping this evaluation current
+### COMPASS-O40 — Keeping this evaluation current
 
 The field moved quickly during 2026: three of the closest works appeared between
 February and August. How is this document kept current: revised before each
