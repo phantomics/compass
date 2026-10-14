@@ -16,7 +16,7 @@ provenance:
 relates-to:
   - COMPASS-0003
   - COMPASS-0004
-  - COMPASS-DRAFT-toolchain-log
+  - COMPASS-0011
   - COMPASS-0007
 decisions:
   - COMPASS-DRAFT-authoring-assistance-log-D1
@@ -30,7 +30,7 @@ decisions:
 This document chronicles the wiring of the Compass skills (`compass-author`,
 `compass-review`, `compass-lookup`, and the `compass-derive` stub) to the
 `compass` command, version 0.1 of the toolchain described in
-[COMPASS-DRAFT-toolchain-log](Log.Toolchain.md). It records the decisions made
+[COMPASS-0011](Log.Toolchain.md). It records the decisions made
 while doing so, the changes to the skills, templates, and AGENTS snippet, the
 tests that keep the skills in step with the toolchain, the adoption of Compass
 in the Classic, Origin, and Lexter repositories, and a smoke test in which an
@@ -124,7 +124,7 @@ causes in other documents, such as a duplicated identifier.
 
 **Decision:** `compass-review` runs `compass check --format json` over the
 whole corpus, so that the cross-document rules judge the change correctly
-([COMPASS-DRAFT-toolchain-log-D3](Log.Toolchain.md#compass-draft-toolchain-log-d3--checking-one-path-still-checks-the-whole-corpus)).
+([COMPASS-D47](Log.Toolchain.md#compass-d47--checking-one-path-still-checks-the-whole-corpus)).
 It reports the findings in the changed files as the review's, and counts the
 rest as pre-existing. It never recommends acceptance while the changed files
 have a toolchain error. A changed Markdown file that is not a document of the
@@ -453,7 +453,7 @@ Table: Files added or changed. Those in `compass` are in commits `07b9643` and
 | lexter | `compass.sexp`, `AGENTS.md` | **New** | Manifest and agent guide |
 
 The build-stamp fix in `fcdec0c` belongs to the toolchain and is recorded in
-[COMPASS-DRAFT-toolchain-log](Log.Toolchain.md).
+[COMPASS-0011](Log.Toolchain.md).
 
 ## Metrics
 

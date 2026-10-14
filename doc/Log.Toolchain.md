@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-toolchain-log
+id:            COMPASS-0011
 title:         Compass Toolchain Development Log
 genre:         Log
 scope:         component
@@ -20,10 +20,10 @@ relates-to:
   - COMPASS-0007
   - COMPASS-DRAFT-authoring-assistance-log
 decisions:
-  - COMPASS-DRAFT-toolchain-log-D1
-  - COMPASS-DRAFT-toolchain-log-D2
-  - COMPASS-DRAFT-toolchain-log-D3
-  - COMPASS-DRAFT-toolchain-log-D4
+  - COMPASS-D45
+  - COMPASS-D46
+  - COMPASS-D47
+  - COMPASS-D48
 ---
 
 # Compass Toolchain: Development Log
@@ -85,9 +85,9 @@ and the full-identifier record heading
 Four further decisions were made while coding. They are recorded here as
 proposals for the steward.
 
-### COMPASS-DRAFT-toolchain-log-D1 — The manifest reader never creates symbols
+### COMPASS-D45 — The manifest reader never creates symbols
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The plan says the manifest and ledger are read "with
 `*read-eval*` bound to false and a reader restricted to strings, integers,
@@ -110,9 +110,9 @@ column.
 - A manifest in YAML or JSON. Rejected by COMPASS-D8; the
   restricted reader keeps the s-expression without its risks.
 
-### COMPASS-DRAFT-toolchain-log-D2 — Problems found while loading are rules too
+### COMPASS-D46 — Problems found while loading are rules too
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Some problems are found before any rule can run: a file that
 cannot be read as UTF-8, a malformed manifest, front-matter outside the YAML
@@ -134,9 +134,9 @@ links still checked.
 - Reporting a syntax error as errors in each field. Rejected: one mistake would
   produce a screenful of findings.
 
-### COMPASS-DRAFT-toolchain-log-D3 — Checking one path still checks the whole corpus
+### COMPASS-D47 — Checking one path still checks the whole corpus
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** `compass check PATH` is how an author or a skill checks one
 document. Several rules concern the corpus as a whole: `id/unique`,
@@ -156,9 +156,9 @@ the named paths. A directory stands for every file beneath it.
 The cost is that a check takes as long as the whole corpus does: about 75 ms
 for this repository's ten documents.
 
-### COMPASS-DRAFT-toolchain-log-D4 — A closed output stream ends the command quietly
+### COMPASS-D48 — A closed output stream ends the command quietly
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** People and agents pipe `compass` into `head`, `jq`, or a pager.
 When the reader stops reading, the next write fails. Unhandled, SBCL printed a
@@ -227,7 +227,7 @@ later the same day is described in
   so a second author cannot be added as a mistyped scalar; relation fields must
   name documents, not records; register fields must list records of their kind.
 - `src/model/manifest.lisp:read-manifest@4e4549a` reads `compass.sexp` with the
-  restricted reader (COMPASS-DRAFT-toolchain-log-D1). An unknown key is a warning; a malformed manifest
+  restricted reader (COMPASS-D45). An unknown key is a warning; a malformed manifest
   yields defaults and `manifest/valid` findings, never a crash.
 
 ### Front-matter
@@ -296,7 +296,7 @@ later the same day is described in
   severity, section of the standard, scope, and summary.
   `src/rules/engine.lisp:rule-selected-p@4e4549a` lets `--rule` and `--exclude`
   name a rule or a group (`fm`, `fm/`, or `fm/*`).
-- Twenty-five rules: the four load rules (COMPASS-DRAFT-toolchain-log-D2) in `src/rules/engine.lisp`, and
+- Twenty-five rules: the four load rules (COMPASS-D46) in `src/rules/engine.lisp`, and
   front-matter and vocabulary, identity, register, memo, and reference rules in
   one file each. Errors come from MUST rules and warnings from SHOULD rules,
   as §22 requires.
@@ -325,7 +325,7 @@ later the same day is described in
   line adds no dependency.
 - `src/cli.lisp:main@4e4549a` runs a command and exits 0 on success, 1 on
   findings or a failed lookup, 2 on a usage or internal error, 130 when
-  interrupted, and 141 when its output is closed (COMPASS-DRAFT-toolchain-log-D4).
+  interrupted, and 141 when its output is closed (COMPASS-D48).
 - The commands are `check`, `show`, `index`, `next`, `rules`, `version`, and
   `help`.
 
@@ -351,7 +351,7 @@ later the same day is described in
 - Every finding has a path and a line, and most have a column.
 - No scalar in front-matter is ever converted; its type comes only from the
   schema (COMPASS-D22).
-- Reading the manifest neither runs code nor creates symbols (COMPASS-DRAFT-toolchain-log-D1).
+- Reading the manifest neither runs code nor creates symbols (COMPASS-D45).
 - Output is deterministic: files load in path order; findings sort by path,
   line, column, and rule; the index sorts by identifier.
 - A reference into a namespace that is not loaded is counted, never failed.
@@ -374,7 +374,7 @@ later the same day is described in
 3. **A command listed twice.** `help` is a registered command and was also
    printed explicitly in the help text.
 4. **A backtrace on a closed pipe.** `compass check --format json | head`
-   printed an SBCL backtrace (COMPASS-DRAFT-toolchain-log-D4).
+   printed an SBCL backtrace (COMPASS-D48).
 5. **`english` is a well-formed language tag.** A test expected `fm/language`
    to reject it, but BCP 47 allows language subtags of five to eight letters.
    The rule checks the form of a tag, not the IANA registry; the test now uses
@@ -430,7 +430,7 @@ Table: Files added or changed in commit `4e4549a`.
 | `src/util.lisp` | **New** | UTF-8 files, strings, dates, paths, edit distance |
 | `src/vocab.lisp` | **New** | Genres, statuses, subtypes, scopes, register kinds, field schema |
 | `src/model/identifier.lisp` | **New** | Identifier grammar, diagnosis, and search in text |
-| `src/model/sexp.lisp` | **New** | Restricted s-expression reader (COMPASS-DRAFT-toolchain-log-D1) |
+| `src/model/sexp.lisp` | **New** | Restricted s-expression reader (COMPASS-D45) |
 | `src/model/document.lisp` | **New** | YAML nodes, body elements, documents, findings |
 | `src/model/fields.lisp` | **New** | Typed reading of front-matter fields |
 | `src/model/manifest.lisp` | **New** | The project manifest |
@@ -441,7 +441,7 @@ Table: Files added or changed in commit `4e4549a`.
 | `src/corpus/corpus.lisp` | **New** | Root, discovery, loading, lookup, resolution |
 | `src/corpus/show.lisp` | **New** | `compass show` |
 | `src/corpus/index.lisp` | **New** | `compass index` and `compass next` |
-| `src/rules/engine.lisp` | **New** | Rule registry, selection, the check, load rules (COMPASS-DRAFT-toolchain-log-D2) |
+| `src/rules/engine.lisp` | **New** | Rule registry, selection, the check, load rules (COMPASS-D46) |
 | `src/rules/frontmatter.lisp` | **New** | Front-matter, vocabulary, supersession, and citation rules |
 | `src/rules/identity.lisp` | **New** | `id/format`, `id/unique` |
 | `src/rules/registers.lisp` | **New** | `register/*` |

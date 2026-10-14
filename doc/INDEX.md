@@ -20,10 +20,10 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0008](Spec.SemanticBinding.md) | Compass Semantic Binding — RDF Vocabulary, Identity, and Shapes | Spec | program | Current | semantic-binding |
 | [COMPASS-0009](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Accepted | security |
 | [COMPASS-0010](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Accepted | agent-context |
+| [COMPASS-0011](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Accepted | toolchain |
 | [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
 | [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
-| [COMPASS-DRAFT-toolchain-log](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Accepted | toolchain |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
 
@@ -73,6 +73,10 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D42](Plan.AgentWorkflow.md#compass-d42--a-maintenance-skill-and-the-consult--build--update-protocol) | Decision | A maintenance skill and the consult → build → update protocol | Proposed | COMPASS-0007 |
 | [COMPASS-D43](Plan.AgentWorkflow.md#compass-d43--the-session-adapter-delivers-the-catalog-and-fails-loudly) | Decision | The session adapter delivers the catalog and fails loudly | Proposed | COMPASS-0007 |
 | [COMPASS-D44](Plan.AgentWorkflow.md#compass-d44--unreviewed-memos-are-listed-in-the-catalog) | Decision | Unreviewed memos are listed in the catalog | Accepted | COMPASS-0007 |
+| [COMPASS-D45](Log.Toolchain.md#compass-d45--the-manifest-reader-never-creates-symbols) | Decision | The manifest reader never creates symbols | Accepted | COMPASS-0011 |
+| [COMPASS-D46](Log.Toolchain.md#compass-d46--problems-found-while-loading-are-rules-too) | Decision | Problems found while loading are rules too | Accepted | COMPASS-0011 |
+| [COMPASS-D47](Log.Toolchain.md#compass-d47--checking-one-path-still-checks-the-whole-corpus) | Decision | Checking one path still checks the whole corpus | Accepted | COMPASS-0011 |
+| [COMPASS-D48](Log.Toolchain.md#compass-d48--a-closed-output-stream-ends-the-command-quietly) | Decision | A closed output stream ends the command quietly | Accepted | COMPASS-0011 |
 | [COMPASS-DRAFT-authoring-assistance-log-D1](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d1--one-shared-toolchain-guide-and-a-short-summary-in-each-skill) | Decision | One shared toolchain guide, and a short summary in each skill | Proposed | COMPASS-DRAFT-authoring-assistance-log |
 | [COMPASS-DRAFT-authoring-assistance-log-D2](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d2--review-checks-the-whole-corpus-and-separates-the-changes-findings) | Decision | Review checks the whole corpus and separates the change's findings | Proposed | COMPASS-DRAFT-authoring-assistance-log |
 | [COMPASS-DRAFT-authoring-assistance-log-D3](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d3--drift-tests-accept-what-exists-or-what-the-plan-lists) | Decision | Drift tests accept what exists or what the plan lists | Proposed | COMPASS-DRAFT-authoring-assistance-log |
@@ -89,10 +93,6 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-ledger-log-D4](Log.Ledger.md#compass-draft-ledger-log-d4--the-index-is-checked-only-where-one-exists-and-line-endings-do-not-count) | Decision | The index is checked only where one exists, and line endings do not count | Proposed | COMPASS-DRAFT-ledger-log |
 | [COMPASS-DRAFT-ledger-log-D5](Log.Ledger.md#compass-draft-ledger-log-d5--the-status-form-that-compass-d9-replaced-is-an-error) | Decision | The status form that COMPASS-D9 replaced is an error | Proposed | COMPASS-DRAFT-ledger-log |
 | [COMPASS-DRAFT-ledger-log-D6](Log.Ledger.md#compass-draft-ledger-log-d6--the-build-fails-when-a-compass-function-replaces-another) | Decision | The build fails when a compass function replaces another | Proposed | COMPASS-DRAFT-ledger-log |
-| [COMPASS-DRAFT-toolchain-log-D1](Log.Toolchain.md#compass-draft-toolchain-log-d1--the-manifest-reader-never-creates-symbols) | Decision | The manifest reader never creates symbols | Proposed | COMPASS-DRAFT-toolchain-log |
-| [COMPASS-DRAFT-toolchain-log-D2](Log.Toolchain.md#compass-draft-toolchain-log-d2--problems-found-while-loading-are-rules-too) | Decision | Problems found while loading are rules too | Proposed | COMPASS-DRAFT-toolchain-log |
-| [COMPASS-DRAFT-toolchain-log-D3](Log.Toolchain.md#compass-draft-toolchain-log-d3--checking-one-path-still-checks-the-whole-corpus) | Decision | Checking one path still checks the whole corpus | Proposed | COMPASS-DRAFT-toolchain-log |
-| [COMPASS-DRAFT-toolchain-log-D4](Log.Toolchain.md#compass-draft-toolchain-log-d4--a-closed-output-stream-ends-the-command-quietly) | Decision | A closed output stream ends the command quietly | Proposed | COMPASS-DRAFT-toolchain-log |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |

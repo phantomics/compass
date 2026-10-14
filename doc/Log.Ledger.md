@@ -11,7 +11,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0004
-  - COMPASS-DRAFT-toolchain-log
+  - COMPASS-0011
   - COMPASS-0003
   - COMPASS-0001
 decisions:
@@ -38,7 +38,7 @@ ledger, and the remaining stages of version 0.2, are appended as
 ## Problem
 
 Version 0.1 checked a corpus but could not allocate a number
-([COMPASS-DRAFT-toolchain-log](Log.Toolchain.md)). The standard has the steward
+([COMPASS-0011](Log.Toolchain.md)). The standard has the steward
 assign canonical identifiers at acceptance and never reuse one (§13). Without a
 ledger:
 
@@ -198,7 +198,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
 
 - **Reading a line.** `src/model/ledger.lisp:parse-ledger-line@a12a31c` reads one
   line with v0.1's restricted reader
-  ([COMPASS-DRAFT-toolchain-log-D1](Log.Toolchain.md#compass-draft-toolchain-log-d1--the-manifest-reader-never-creates-symbols)),
+  ([COMPASS-D45](Log.Toolchain.md#compass-d45--the-manifest-reader-never-creates-symbols)),
   so reading a ledger from a pull request runs no code and creates no symbols.
   It reports:
   - a merge-conflict marker, with the advice to run `compass renumber`;
@@ -355,7 +355,7 @@ Two parts of stage 0 are not done yet; see [Outstanding Work](#outstanding-work)
 - **Whole identifiers.** `src/corpus/rewrite.lisp:rewrite-line@a12a31c` replaces
   whole identifiers through `src/model/identifier.lisp:replace-identifiers-in-text@a12a31c`.
   The scanner's lookahead keeps `COMPASS-0004` from matching inside
-  `COMPASS-D22` or `COMPASS-DRAFT-toolchain-log`.
+  `COMPASS-D22` or `COMPASS-0011`.
 - **Three passes.** `src/corpus/rewrite.lisp:plan-rewrites@a12a31c` works in
   three passes:
   1. It rewrites identifiers on front-matter, text, and heading lines, never in
@@ -1126,7 +1126,7 @@ The plan's stage 1 also listed `git grep`; nothing needed it.
   | `fcdec0c` | 8 | 8 |
   | `6e4f02d`, in Classic | 3 | unverified; 3 with `--federation` |
 
-  They are in this Log (71), [COMPASS-DRAFT-toolchain-log](Log.Toolchain.md)
+  They are in this Log (71), [COMPASS-0011](Log.Toolchain.md)
   (62), [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md)
   (24), and one each in three other documents. Every reference that names a
   symbol or lines names a Lisp file, and every symbol was found by a definition
@@ -1695,7 +1695,7 @@ What remains after version 0.2:
   rewrite by hand; until those in and around COMPASS-0007 are
   rewritten, `assign` refuses it.
 - **Assigning the accepted documents**: COMPASS-0007,
-  COMPASS-0005, COMPASS-DRAFT-toolchain-log, and
+  COMPASS-0005, COMPASS-0011, and
   COMPASS-DRAFT-authoring-assistance-log, and later this Log and the plans once
   accepted.
 - **Classic's duplicated open questions**, as its `AGENTS.md` now describes.
