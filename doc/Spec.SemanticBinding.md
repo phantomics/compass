@@ -1,12 +1,12 @@
 ---
-id:            COMPASS-DRAFT-semantic-binding
+id:            COMPASS-0008
 title:         Compass Semantic Binding — RDF Vocabulary, Identity, and Shapes
 genre:         Spec
 scope:         program
 program:       Compass
 component:     semantic-binding
 language:      en
-status:        Draft
+status:        Current
 schema-version: "0.1"
 authors:
   - Andrew Sengul
@@ -69,11 +69,11 @@ cites:
     locator:   "README, registering a redirect (perma-id/w3id.org)"
     external:  true
 open-questions:
-  - COMPASS-DRAFT-semantic-binding-O1
-  - COMPASS-DRAFT-semantic-binding-O2
-  - COMPASS-DRAFT-semantic-binding-O3
-  - COMPASS-DRAFT-semantic-binding-O4
-  - COMPASS-DRAFT-semantic-binding-O5
+  - COMPASS-O27
+  - COMPASS-O28
+  - COMPASS-O29
+  - COMPASS-O30
+  - COMPASS-O31
 ---
 
 # Semantic Binding Specification
@@ -584,7 +584,7 @@ has not been exhaustive; see
   record for its own resources, and it does not model design narrative, typed
   documentation, decision records, or agent consumption. Its Architecture
   Management vocabulary is the nearest overlap with Compass's `Arch` and
-  `Spec` genres. See COMPASS-DRAFT-semantic-binding-O5.
+  `Spec` genres. See COMPASS-O31.
 - **MOOSEDev** (Adam, NeSy 2026) keeps a coding agent's project memory as
   decisions, constraints, rationales, and lessons in a knowledge graph grounded
   in two small OWL ontologies with SHACL shapes, carrying lifecycle status,
@@ -738,7 +738,7 @@ ORDER BY ?modified
 
 ## Open Questions
 
-### COMPASS-DRAFT-semantic-binding-O1 — Dereferenceable identifiers
+### COMPASS-O27 — Dereferenceable identifiers
 
 `tag:` URIs are names, not locations: no protocol resolves them. That suits
 permanent identity, but a browser or linked-data client cannot follow one. An
@@ -747,7 +747,7 @@ HTTP form could be added alongside, such as a w3id.org path per namespace
 linked by `owl:sameAs`. Is that worth registering, and who would host the
 targets?
 
-### COMPASS-DRAFT-semantic-binding-O2 — People across authorities
+### COMPASS-O28 — People across authorities
 
 An author who works in two namespaces with different authorities receives two
 agent IRIs. Should the exporter link them (`owl:sameAs`, by matching `.mailmap`
@@ -755,7 +755,7 @@ identities across the federation), should people use a single authority of
 their own, or should people be identified by an external IRI such as an ORCID
 or a WebID where they have one?
 
-### COMPASS-DRAFT-semantic-binding-O3 — Record text by default
+### COMPASS-O29 — Record text by default
 
 Record prose (Context, Decision, Alternatives) is the most useful text to
 search, and the decisions are short. Exporting it by default would make the
@@ -763,14 +763,14 @@ store far more useful for questions such as "which decisions mention
 federation?". It also enlarges the injection and disclosure surface. Should
 `--with-text` become the default for records only?
 
-### COMPASS-DRAFT-semantic-binding-O4 — Ontology profile
+### COMPASS-O30 — Ontology profile
 
 The vocabulary is written in RDFS with a few OWL terms (`owl:sameAs`,
 `owl:versionInfo`). Should it declare an OWL 2 profile (for example OWL 2 RL)
 so that reasoners can infer superclass membership and inverse properties, or
 stay at RDFS and leave inference to queries?
 
-### COMPASS-DRAFT-semantic-binding-O5 — Alignment with OSLC
+### COMPASS-O31 — Alignment with OSLC
 
 OSLC already defines RDF vocabularies for lifecycle resources, notably
 Architecture Management and Change Management, and is supported by commercial
@@ -790,7 +790,7 @@ service requirements do not match a derived, file-based corpus?
   except for record text under `--with-text`.
 - **Names that do not resolve.** Neither the `tag:` IRIs nor the w3id.org
   vocabulary IRIs dereference until a redirect is registered (see
-  COMPASS-DRAFT-semantic-binding-O1).
+  COMPASS-O27).
 - **Classic's half.** Joining Compass data with Classic data needs Classic's
   prefix table and its acceptance of Compass identifiers as local identifiers.
   Both are Classic's work.

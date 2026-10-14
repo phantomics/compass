@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-0006
   - COMPASS-0007
   - COMPASS-0004
-  - COMPASS-DRAFT-semantic-binding
+  - COMPASS-0008
   - COMPASS-0002
 cites:
   - title:     "Ontology-Grounded Project Memory for Coding Agents (Adam; NeSy 2026)"
@@ -108,7 +108,7 @@ in [COMPASS-0005](Survey.OperatorMemory.md),
 [COMPASS-0007](Plan.AgentWorkflow.md),
 [COMPASS-0004](Plan.Toolchain.md) (COMPASS-D14 to
 COMPASS-D21), [COMPASS-0002](Spec.SourceHeaders.md),
-[COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md), and
+[COMPASS-0008](Spec.SemanticBinding.md), and
 [COMPASS-0006](Eval.AgentContext.md). Its findings inform
 how Compass describes itself and which of its claims the evaluation must
 support.
@@ -166,7 +166,7 @@ Table: Elements of the Compass agent-context work assessed in this evaluation.
 | E3 | Delivery of a compact, ranked catalog to agents at session start, generated deterministically and committed | COMPASS-D14, COMPASS-D15; COMPASS-D43 |
 | E4 | A maintenance loop with human-gated acceptance, solo-steward approval, and per-commit assistance trailers | COMPASS-D38 to COMPASS-D42 |
 | E5 | Source headers whose typed fields link files to decisions, memos, and tests, compiled into a source map | COMPASS-0002 |
-| E6 | A derived RDF binding of the corpus, with an open vocabulary, `tag:` identity, SHACL shapes, and federation | COMPASS-DRAFT-semantic-binding |
+| E6 | A derived RDF binding of the corpus, with an open vocabulary, `tag:` identity, SHACL shapes, and federation | COMPASS-0008 |
 | E7 | Evaluation of quality and design-intent conformance across a relay of fresh sessions over real development history (the "annual crop" thesis), with single-feature ablation of the scheme and tasks that put supersession and rejected alternatives under pressure | COMPASS-0006 |
 
 Each element is scored on one scale:
@@ -317,7 +317,7 @@ Table: Assessment of each element against the prior art found.
 6. **Consequences already applied.** [COMPASS-0006](Eval.AgentContext.md)
    now cites Handoff Debt, Codified Context, and MOOSEDev and states its gap
    narrowly; [COMPASS-0005](Survey.OperatorMemory.md) and
-   [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) record the further
+   [COMPASS-0008](Spec.SemanticBinding.md) record the further
    prior art.
 
 ## Open Questions

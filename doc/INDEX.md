@@ -17,12 +17,12 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0005](Survey.OperatorMemory.md) | Operator Memory and Compass as Agent Context | Survey | program | Accepted | authoring-assistance |
 | [COMPASS-0006](Eval.AgentContext.md) | Compass as Agent Context — Evaluating Quality Over Time | Eval (comparison) | program | Accepted | agent-context |
 | [COMPASS-0007](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
+| [COMPASS-0008](Spec.SemanticBinding.md) | Compass Semantic Binding — RDF Vocabulary, Identity, and Shapes | Spec | program | Current | semantic-binding |
 | [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Draft | agent-context |
 | [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
 | [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
 | [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Accepted | security |
-| [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) | Compass Semantic Binding — RDF Vocabulary, Identity, and Shapes | Spec | program | Draft | semantic-binding |
 | [COMPASS-DRAFT-toolchain-log](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Accepted | toolchain |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
@@ -119,6 +119,11 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O24](Plan.AgentWorkflow.md#compass-o24--host-granularity) | Open question | Host granularity | — | COMPASS-0007 |
 | [COMPASS-O25](Plan.AgentWorkflow.md#compass-o25--trust-in-assisted-by-trailers) | Open question | Trust in Assisted-by: trailers | — | COMPASS-0007 |
 | [COMPASS-O26](Plan.AgentWorkflow.md#compass-o26--adapters-beyond-opencode) | Open question | Adapters beyond OpenCode | — | COMPASS-0007 |
+| [COMPASS-O27](Spec.SemanticBinding.md#compass-o27--dereferenceable-identifiers) | Open question | Dereferenceable identifiers | — | COMPASS-0008 |
+| [COMPASS-O28](Spec.SemanticBinding.md#compass-o28--people-across-authorities) | Open question | People across authorities | — | COMPASS-0008 |
+| [COMPASS-O29](Spec.SemanticBinding.md#compass-o29--record-text-by-default) | Open question | Record text by default | — | COMPASS-0008 |
+| [COMPASS-O30](Spec.SemanticBinding.md#compass-o30--ontology-profile) | Open question | Ontology profile | — | COMPASS-0008 |
+| [COMPASS-O31](Spec.SemanticBinding.md#compass-o31--alignment-with-oslc) | Open question | Alignment with OSLC | — | COMPASS-0008 |
 | [COMPASS-DRAFT-agent-context-prior-art-O1](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o1--a-systematic-search) | Open question | A systematic search | — | COMPASS-DRAFT-agent-context-prior-art |
 | [COMPASS-DRAFT-agent-context-prior-art-O2](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o2--contact-with-closest-work) | Open question | Contact with closest work | — | COMPASS-DRAFT-agent-context-prior-art |
 | [COMPASS-DRAFT-agent-context-prior-art-O3](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o3--keeping-this-evaluation-current) | Open question | Keeping this evaluation current | — | COMPASS-DRAFT-agent-context-prior-art |
@@ -134,8 +139,3 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-secure-development-O4](Survey.SecureDevelopment.md#compass-draft-secure-development-o4--security-memos-and-disclosure) | Open question | Security memos and disclosure | — | COMPASS-DRAFT-secure-development |
 | [COMPASS-DRAFT-secure-development-O5](Survey.SecureDevelopment.md#compass-draft-secure-development-o5--a-security-audience) | Open question | A security audience | — | COMPASS-DRAFT-secure-development |
 | [COMPASS-DRAFT-secure-development-O6](Survey.SecureDevelopment.md#compass-draft-secure-development-o6--migrating-classics-analysis) | Open question | Migrating Classic's analysis | — | COMPASS-DRAFT-secure-development |
-| [COMPASS-DRAFT-semantic-binding-O1](Spec.SemanticBinding.md#compass-draft-semantic-binding-o1--dereferenceable-identifiers) | Open question | Dereferenceable identifiers | — | COMPASS-DRAFT-semantic-binding |
-| [COMPASS-DRAFT-semantic-binding-O2](Spec.SemanticBinding.md#compass-draft-semantic-binding-o2--people-across-authorities) | Open question | People across authorities | — | COMPASS-DRAFT-semantic-binding |
-| [COMPASS-DRAFT-semantic-binding-O3](Spec.SemanticBinding.md#compass-draft-semantic-binding-o3--record-text-by-default) | Open question | Record text by default | — | COMPASS-DRAFT-semantic-binding |
-| [COMPASS-DRAFT-semantic-binding-O4](Spec.SemanticBinding.md#compass-draft-semantic-binding-o4--ontology-profile) | Open question | Ontology profile | — | COMPASS-DRAFT-semantic-binding |
-| [COMPASS-DRAFT-semantic-binding-O5](Spec.SemanticBinding.md#compass-draft-semantic-binding-o5--alignment-with-oslc) | Open question | Alignment with OSLC | — | COMPASS-DRAFT-semantic-binding |

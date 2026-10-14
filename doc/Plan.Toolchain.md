@@ -20,7 +20,7 @@ relates-to:
   - COMPASS-0002
   - COMPASS-0007
   - COMPASS-0006
-  - COMPASS-DRAFT-semantic-binding
+  - COMPASS-0008
 cites:
   - title:     ocicl README
     locator:   "Lisp Usage; ocicl Scope (Local-Only Mode)"
@@ -668,7 +668,7 @@ decision.
 predicate and that a corpus can feed a triplestore, but the mapping they give
 is incomplete, disagrees with the predicates Classic actually uses, and
 provides no identity rule that yields valid IRIs.
-[COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) now specifies the
+[COMPASS-0008](Spec.SemanticBinding.md) now specifies the
 binding: the `compass:` vocabulary under `https://w3id.org/compass/vocab#`,
 `tag:` IRIs minted from a per-namespace authority, the mapping of front-matter,
 registers, body structure, and source headers, and SHACL shapes. SPARQL over a
@@ -906,7 +906,7 @@ recorded here rather than left to the code.
   character other than a letter, a digit, an underscore, a hyphen, or a space
   is removed, and each space becomes a hyphen. A repeated anchor gets `-1`,
   `-2`, and so on. `compass show ID#anchor`, `ref/doc-resolves`, and the
-  section IRIs of [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) use
+  section IRIs of [COMPASS-0008](Spec.SemanticBinding.md) use
   this one rule.
 - **Corpus discovery.** The corpus is every `.md` file under the document
   directory, except the non-documents of COMPASS-D14 (`README.md`, `INDEX.md`,
@@ -1665,7 +1665,7 @@ designed so that later steps extend it rather than rewrite it.
 - The `:authorities` manifest key and `manifest/authority`.
 - `compass export --rdf` in N-Triples and Turtle, covering front-matter,
   registers, ledger facts and aliases, sections, links, and code references
-  ([COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md)).
+  ([COMPASS-0008](Spec.SemanticBinding.md)).
 - `compass export --vocab`: the vocabulary, JSON-LD context, and SHACL shapes,
   generated from the vocabulary data.
 - Tests that parse the output with an independent RDF parser and run the shapes

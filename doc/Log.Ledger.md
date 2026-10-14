@@ -1709,7 +1709,7 @@ What remains after version 0.2:
   implements, derives such a file's fields from the working tree. Accepting the
   decision would amend §7.
 - **The semantic binding.** Revise the alignment of
-  [COMPASS-DRAFT-semantic-binding](Spec.SemanticBinding.md) with Classic, as the
+  [COMPASS-0008](Spec.SemanticBinding.md) with Classic, as the
   Classic Survey describes, before the RDF export of
   COMPASS-D21 in version 0.3. The Classic side of that work is
   Classic's.
