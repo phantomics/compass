@@ -22,7 +22,8 @@
   "The files that tell agents how to use the toolchain."
   (append (repository-markdown "skills/*/SKILL.md")
           (repository-markdown "skills/reference/*.md")
-          (repository-markdown "templates/AGENTS.snippet.md")))
+          (repository-markdown "templates/AGENTS.snippet.md")
+          (repository-markdown "commands/opencode/*.md")))
 
 (defun code-texts (pathname)
   "The code in the Markdown file at PATHNAME: its code spans, and the lines of
@@ -220,3 +221,21 @@ accepts, and every option written on its own exists on some command."
           (is (member option all-options :test #'string=)
               "~a names the option --~a, which no command accepts"
               (file-namestring file) option))))))
+
+(test opencode-commands-are-linked
+  "Each authoritative OpenCode command in commands/opencode/ is what
+.opencode/command/ gives OpenCode, and has a description."
+  (let ((commands (repository-markdown "commands/opencode/*.md")))
+    (is (find "orient.md" commands :key #'file-namestring :test #'string=))
+    (dolist (command commands)
+      (let ((link (merge-pathnames (concatenate 'string ".opencode/command/"
+                                                (file-namestring command))
+                                   (repository-root))))
+        (is (uiop:file-exists-p link) "~a is not linked from .opencode/command/"
+            (file-namestring command))
+        (when (uiop:file-exists-p link)
+          (is (string= (read-text-file command) (read-text-file link))
+              "~a in .opencode/command/ differs from commands/opencode/"
+              (file-namestring command))))
+      (is (search (format nil "~%description: ") (read-text-file command))
+          "~a has no description" (file-namestring command)))))

@@ -51,3 +51,7 @@ The build uses Quicklisp by default. To use the versions pinned in `ocicl.csv` i
 - require review from code owners, so that `.github/CODEOWNERS` makes the steward approve every change to the ledger, `doc/REGISTRY.sexp`.
 
 `make hooks` installs `scripts/pre-commit`, which regenerates a stale `doc/INDEX.md`, stages it, and then refuses the commit if `compass check` finds errors.
+
+### Orienting an agent
+
+`/orient` asks an OpenCode agent to get acquainted with a Compass repository's documentation, read-only: the manifest, the index, the check, and the documents that count most, with an optional topic (`/orient the ledger`). It is defined in `commands/opencode/orient.md` and available in this repository through `.opencode/command/`; to use it in any repository, copy it to `~/.config/opencode/command/`. It is provisional, standing in for the session catalog the agent-context evaluation will settle (COMPASS-D14, COMPASS-D15, COMPASS-D43).
