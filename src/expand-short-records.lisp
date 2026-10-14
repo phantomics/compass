@@ -1,25 +1,34 @@
 ;;;; expand-short-records.lisp — Write short record references, such as D6, as the full identifiers compass check suggests
 ;;;;
 ;;;; Read-if: expanding short record references before compass assign, or promoting this script to a command
-;;;; See: COMPASS-DRAFT-toolchain-D26
+;;;; See: COMPASS-D30
 ;;;; Status: experimental
-;;;; Invariant: writes only when given one file and a count, and then only the first COUNT findings in it
+;;;; Invariant: writes only when given one file and an explicit selection (--count or --only), and only the entries selected
 ;;;; Invariant: writes nothing to a file unless every chosen finding still matches the file's text
 ;;;;
 ;;;; A standalone script, not part of the compass system. Run it from inside a
 ;;;; corpus:
 ;;;;
 ;;;;   sbcl --non-interactive --load src/expand-short-records.lisp \
-;;;;        --end-toplevel-options PATH [--count N] [--dry-run] [--json REPORT] [--compass PROGRAM]
+;;;;        --end-toplevel-options PATH [--count N [--offset K] [--skip LIST] | --only LIST]
+;;;;        [--dry-run] [--json REPORT] [--compass PROGRAM]
 ;;;;
-;;;; With no --count it only lists, numbered in file order, the short references
-;;;; `compass check` reports (rule ref/short-record) under PATH, a file or a
-;;;; directory (`.` for the whole corpus), with the identifier each probably
-;;;; means. With a FILE and --count N it rewrites the first N of them in
-;;;; FILE, and with --dry-run as well it shows those N rewrites without writing.
-;;;; The toolchain itself never rewrites a short reference (COMPASS-DRAFT-toolchain-D26),
-;;;; because the suggestion is a guess from context; the count keeps a person
-;;;; choosing how many guesses to accept, after reading the list.
+;;;; Without --count or --only it only lists, numbered in file order, the short
+;;;; references `compass check` reports (rule ref/short-record) under PATH, a
+;;;; file or a directory (`.` for the whole corpus), with the identifier each
+;;;; probably means. Given a FILE, it rewrites the entries selected by number:
+;;;;
+;;;;   --count N        the first N entries
+;;;;   --offset K       with --count, pass over the first K and start at #K+1
+;;;;   --skip LIST      with --count, pass over these entries; still N rewrites
+;;;;   --only LIST      exactly these entries, and nothing else may select
+;;;;
+;;;; LIST is listing numbers separated by commas, with inclusive ranges, such as
+;;;; 1,4,7-9. Numbers always mean the listing's, whatever --offset is. With
+;;;; --dry-run it shows the rewrites without writing. The toolchain itself never
+;;;; rewrites a short reference (COMPASS-D30), because the suggestion is a guess
+;;;; from context; choosing entries by number keeps a person deciding which
+;;;; guesses to accept, after reading the list.
 ;;;;
 ;;;; The report comes from running `compass check --format json --rule
 ;;;; ref/short-record` in the current directory, or from a saved report given
@@ -203,20 +212,64 @@ order --count takes them, then any without one."
           (loop for finding in suggested for n from 1 do (show n finding))
           (dolist (finding unsuggested) (show "-" finding)))))
     (when groups
-      (format t "~&~%Expand the first N in a file with: FILE --count N (add --dry-run to preview).~%"))))
+      (format t "~&~%Expand entries in a file with FILE --count N [--offset K] [--skip LIST], ~
+                 or FILE --only LIST, where LIST is numbers above such as 1,4,7-9. ~
+                 Add --dry-run to preview.~%"))))
+
+;;; Selecting
+
+;;; Every number below is an entry's number in the file's listing: its place
+;;; among the findings that have a suggestion, counting from 1, whatever
+;;; --offset is. A person reads the numbers off the listing and types them back.
+
+(defun select-findings (suggested &key count (offset 0) skip only)
+  "The entries of SUGGESTED, a file's findings that have a suggestion in listing
+order, chosen by the options, as (NUMBER . FINDING) pairs in listing order.
+With ONLY, a sorted list of listing numbers, exactly those entries. Otherwise
+COUNT entries, starting after the first OFFSET and passing over the listing
+numbers in SKIP. Refuses a number that would select nothing or have no effect."
+  (let ((available (length suggested)))
+    (flet ((entry (n) (cons n (nth (1- n) suggested))))
+      (if only
+          (let ((missing (remove-if (lambda (n) (<= n available)) only)))
+            (when missing
+              (expand-fail "--only names ~{#~d~^, ~}, but the file lists only ~d entr~:@p with a suggestion"
+                           missing available))
+            (mapcar #'entry only))
+          (let ((early (remove-if (lambda (n) (> n offset)) skip))
+                (remaining (- available offset
+                              (count-if (lambda (n) (< offset n (1+ available))) skip))))
+            (when early
+              (expand-fail "--skip names ~{#~d~^, ~}, at or before --offset ~d, where nothing is taken anyway"
+                           early offset))
+            (when (< remaining count)
+              ;; One line: the repository's tests allow a continued line only
+              ;; in the controls of operators they know, which this is not.
+              (expand-fail "the file lists ~d entr~:@p with a suggestion; after --offset ~d~@[ and ~d skipped~], ~d remain, fewer than --count ~d"
+                           available offset
+                           (let ((n (- available offset remaining))) (and (plusp n) n))
+                           (max remaining 0) count))
+            (let ((taken '()) (n offset))
+              (loop while (< (length taken) count)
+                    do (incf n)
+                       (unless (member n skip) (push (entry n) taken)))
+              (let ((late (remove-if (lambda (s) (<= s n)) skip)))
+                (when late
+                  (expand-fail "--skip names ~{#~d~^, ~}, past #~d, the last entry --count ~d takes"
+                               late n count)))
+              (nreverse taken)))))))
 
 ;;; Expanding
 
-(defun expand-findings (file findings count &key dry-run)
-  "Rewrite the first COUNT of FINDINGS that have a suggestion, all in FILE, as
-their suggested identifiers; with DRY-RUN, only print what would change.
-Refuses, writing nothing, if any of the chosen findings no longer matches."
-  (let* ((suggested (remove nil findings :key #'short-finding-suggestion))
-         (available (length suggested)))
-    (when (> count available)
-      (expand-fail "~a has ~d short reference~:p with a suggestion, fewer than --count ~d"
-                   (uiop:native-namestring file) available count))
-    (let* ((chosen (subseq suggested 0 count))
+(defun expand-findings (file findings chosen &key dry-run)
+  "Rewrite CHOSEN, (NUMBER . FINDING) pairs from SELECT-FINDINGS, all in FILE, as
+their suggested identifiers; FINDINGS are all of FILE's findings, for the
+summary. With DRY-RUN, only print what would change. Refuses, writing nothing,
+if any of the chosen findings no longer matches."
+  (let* ((available (count-if #'short-finding-suggestion findings))
+         (numbers (mapcar #'car chosen))
+         (count (length chosen)))
+    (let* ((chosen (mapcar #'cdr chosen))
            (lines (read-lines file))
            (stale (remove-if (lambda (f) (finding-matches-p lines f)) chosen)))
       (when stale
@@ -237,7 +290,8 @@ Refuses, writing nothing, if any of the chosen findings no longer matches."
             (setf (aref lines index)
                   (concatenate 'string (subseq text 0 start)
                                (short-finding-suggestion finding) (subseq text end))))))
-      (loop for finding in chosen for n from 1
+      ;; Each entry under its listing number, so the report matches the listing.
+      (loop for finding in chosen for n in numbers
             do (format t "  ~4d  ~5d:~3a ~4a -> ~a~%" n
                        (short-finding-line finding) (short-finding-column finding)
                        (short-finding-token finding) (short-finding-suggestion finding)))
@@ -249,49 +303,100 @@ Refuses, writing nothing, if any of the chosen findings no longer matches."
             (format t "~&Expanded ~d of ~d in ~a; ~d remain~@[, plus ~d without a suggestion~]. ~
                        Run compass check to confirm, and review with git diff.~%"
                     count available (uiop:native-namestring file) (- available count)
-                    (let ((n (- (length findings) available))) (and (plusp n) n))))))))
+                    (let ((n (- (length findings) available))) (and (plusp n) n)))
+            (when (< count available)
+              (format t "The remaining entries are now numbered afresh; list the file again ~
+                         before choosing more.~%")))))))
 
 ;;; Command line
 
 (defparameter *expand-usage*
-  "Usage: expand-short-records PATH [--count N] [--dry-run] [--json REPORT|-] [--compass PROGRAM]")
+  "Usage: expand-short-records PATH [--count N [--offset K] [--skip LIST] | --only LIST] [--dry-run] [--json REPORT|-] [--compass PROGRAM]
+LIST is listing numbers separated by commas, with inclusive ranges: 1,4,7-9")
 
-(defun parse-count (string)
-  (let ((n (and string (ignore-errors (parse-integer string)))))
-    (unless (and n (plusp n))
-      (expand-fail "--count needs a positive integer, not ~s" string))
+(defun parse-natural (string option &key (minimum 1))
+  "STRING, the value given to OPTION, as an integer of at least MINIMUM."
+  (let ((n (and string (every #'digit-char-p string) (plusp (length string))
+                (parse-integer string))))
+    (unless (and n (>= n minimum))
+      (expand-fail "~a needs a~:[ positive~; non-negative~] integer, not ~s"
+                   option (zerop minimum) string))
     n))
+
+(defun parse-number-list (string option)
+  "STRING, the value given to OPTION, such as \"1,4,7-9\", as a sorted list of
+distinct positive integers. Refuses an empty item, a reversed range, a zero,
+and a number given twice."
+  (unless (and string (plusp (length string)))
+    (expand-fail "~a needs a list of listing numbers, such as 1,4,7-9" option))
+  (let ((numbers '()))
+    (dolist (item (uiop:split-string string :separator ","))
+      (when (zerop (length item))
+        (expand-fail "~a ~a has an empty item" option string))
+      (let* ((dash (position #\- item))
+             (low (parse-natural (if dash (subseq item 0 dash) item) option))
+             (high (if dash (parse-natural (subseq item (1+ dash)) option) low)))
+        (when (< high low)
+          (expand-fail "~a ~a has the reversed range ~a" option string item))
+        (loop for n from low to high
+              do (when (member n numbers)
+                   (expand-fail "~a ~a names #~d twice" option string n))
+                 (push n numbers))))
+    (sort numbers #'<)))
 
 (defun expand-short-records-main (arguments)
   "Run the script on ARGUMENTS, a list of strings as on the command line, and
 return the exit status: 0 on success, 2 on a usage error or refusal."
   (handler-case
-      (let (file count dry-run json program)
-        (loop while arguments
-              do (let ((argument (pop arguments)))
-                   (cond ((string= argument "--count") (setf count (parse-count (pop arguments))))
-                         ((string= argument "--dry-run") (setf dry-run t))
-                         ((string= argument "--json")
-                          (setf json (or (pop arguments) (expand-fail "--json needs a file, or -"))))
-                         ((string= argument "--compass")
-                          (setf program (or (pop arguments) (expand-fail "--compass needs a program"))))
-                         ((member argument '("-h" "--help") :test #'string=)
-                          (format t "~a~%" *expand-usage*)
-                          (return-from expand-short-records-main 0))
-                         ((and (> (length argument) 1) (char= (char argument 0) #\-))
-                          (expand-fail "unknown option ~a~%~a" argument *expand-usage*))
-                         (file (expand-fail "give one path at a time~%~a" *expand-usage*))
-                         (t (setf file argument)))))
-        (when (and count (null file))
-          (expand-fail "--count needs a FILE: expansion works on one file at a time"))
-        (when (and dry-run (null count))
-          (expand-fail "--dry-run previews a --count; without one, nothing is written anyway"))
+      (let (file count offset skip only dry-run json program (given-options '()))
+        (flet ((value (option)
+                 ;; The next argument, unless it is missing or another option.
+                 (let ((next (first arguments)))
+                   (when (or (null next) (uiop:string-prefix-p "--" next))
+                     (expand-fail "~a needs a value" option))
+                   (pop arguments))))
+          (loop while arguments
+                do (let ((argument (pop arguments)))
+                     (when (member argument '("--count" "--offset" "--skip" "--only")
+                                   :test #'string=)
+                       (when (member argument given-options :test #'string=)
+                         (expand-fail "~a is given twice; give it once" argument))
+                       (push argument given-options))
+                     (cond ((string= argument "--count")
+                            (setf count (parse-natural (value argument) argument)))
+                           ((string= argument "--offset")
+                            (setf offset (parse-natural (value argument) argument :minimum 0)))
+                           ((string= argument "--skip")
+                            (setf skip (parse-number-list (value argument) argument)))
+                           ((string= argument "--only")
+                            (setf only (parse-number-list (value argument) argument)))
+                           ((string= argument "--dry-run") (setf dry-run t))
+                           ((string= argument "--json") (setf json (value argument)))
+                           ((string= argument "--compass") (setf program (value argument)))
+                           ((member argument '("-h" "--help") :test #'string=)
+                            (format t "~a~%" *expand-usage*)
+                            (return-from expand-short-records-main 0))
+                           ((and (> (length argument) 1) (char= (char argument 0) #\-))
+                            (expand-fail "unknown option ~a~%~a" argument *expand-usage*))
+                           (file (expand-fail "give one path at a time~%~a" *expand-usage*))
+                           (t (setf file argument))))))
+        (when (and only (or count offset skip))
+          (expand-fail "--only picks entries by itself; give it without --count, --offset, or --skip"))
+        (when (and (or offset skip) (null count))
+          (expand-fail "~:[--skip~;--offset~] works with --count, which says how many to rewrite"
+                       offset))
+        (let ((selecting (or count only)))
+          (when (and selecting (null file))
+            (expand-fail "~:[--only~;--count~] needs a FILE: expansion works on one file at a time"
+                         count))
+          (when (and dry-run (null selecting))
+            (expand-fail "--dry-run previews a --count or --only; without one, nothing is written anyway")))
         (let* ((given (and file (merge-pathnames file (uiop:getcwd))))
                (directory (and given (uiop:directory-exists-p given)))
                (target (and given (not directory)
                             (or (probe-file given) (expand-fail "~a does not exist" file)))))
-          (when (and directory count)
-            (expand-fail "--count needs a file, not the directory ~a" file))
+          (when (and directory (or count only))
+            (expand-fail "~:[--only~;--count~] needs a file, not the directory ~a" count file))
           (let* ((report (cond ((null json) (run-compass-check (or program (default-compass))))
                                ((string= json "-") (uiop:slurp-stream-string *standard-input*))
                                (t (or (and (probe-file json)
@@ -307,8 +412,12 @@ return the exit status: 0 on success, 2 on a usage error or refusal."
                                                      (and true (uiop:subpathp true directory))))
                                                  findings))
                                  (t findings))))
-            (if count
-                (expand-findings target selected count :dry-run dry-run)
+            (if (or count only)
+                (expand-findings target selected
+                                 (select-findings
+                                  (remove nil selected :key #'short-finding-suggestion)
+                                  :count count :offset (or offset 0) :skip skip :only only)
+                                 :dry-run dry-run)
                 (list-findings selected))))
         0)
     (expand-failure (e)
