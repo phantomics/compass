@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-authoring-assistance-log
+id:            COMPASS-0012
 title:         Compass Authoring-Assistance Development Log
 genre:         Log
 scope:         component
@@ -19,10 +19,10 @@ relates-to:
   - COMPASS-0011
   - COMPASS-0007
 decisions:
-  - COMPASS-DRAFT-authoring-assistance-log-D1
-  - COMPASS-DRAFT-authoring-assistance-log-D2
-  - COMPASS-DRAFT-authoring-assistance-log-D3
-  - COMPASS-DRAFT-authoring-assistance-log-D4
+  - COMPASS-D49
+  - COMPASS-D50
+  - COMPASS-D51
+  - COMPASS-D52
 ---
 
 # Compass Authoring-Assistance: Development Log
@@ -87,9 +87,9 @@ The work carried out these existing decisions:
 Four further decisions were made in the work. They are proposals for the
 steward.
 
-### COMPASS-DRAFT-authoring-assistance-log-D1 — One shared toolchain guide, and a short summary in each skill
+### COMPASS-D49 — One shared toolchain guide, and a short summary in each skill
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Three skills run `compass` and need the same facts: where the
 executable is, which commands it has, what each exit code means, how to read
@@ -112,9 +112,9 @@ both sections.
   out: none of the three agents opened the guide, and all three acted on the
   summary in their skill.
 
-### COMPASS-DRAFT-authoring-assistance-log-D2 — Review checks the whole corpus and separates the change's findings
+### COMPASS-D50 — Review checks the whole corpus and separates the change's findings
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A review concerns the documents a change touches, but a
 repository that is migrating to Compass may have many errors elsewhere: Classic
@@ -136,7 +136,7 @@ corpus is reported, since the toolchain did not check it.
   could not say how many errors the corpus already had.
 - All findings, unseparated. Rejected for the reason above.
 
-### COMPASS-DRAFT-authoring-assistance-log-D3 — Drift tests accept what exists or what the plan lists
+### COMPASS-D51 — Drift tests accept what exists or what the plan lists
 
 **Status:** Proposed
 
@@ -158,9 +158,9 @@ be described in the guide.
   0.2.
 - A list of allowed names in the tests. Rejected: a second copy of the plan.
 
-### COMPASS-DRAFT-authoring-assistance-log-D4 — Templates give new decisions the status Proposed
+### COMPASS-D52 — Templates give new decisions the status Proposed
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** The Plan, Log, and Architecture templates set `**Status:**
 Accepted` on their decision record. An agent filling in a template would set
@@ -215,7 +215,7 @@ registry until version 0.2, and what to use until then.
   with `compass show` that a provisional identifier is free;
 - gives records provisional identifiers formed from the document's
   (`<NS>-DRAFT-<slug>-D1`), and new decisions the status `Proposed`
-  (COMPASS-DRAFT-authoring-assistance-log-D4);
+  (COMPASS-D52);
 - finds a component's memo host through `compass index --stdout`, and reads its
   records with `outline` and `show`;
 - removes leftover placeholders, then runs `compass check <path>` and fixes
@@ -227,7 +227,7 @@ registry until version 0.2, and what to use until then.
 ### compass-review
 
 `skills/compass-review/SKILL.md@07b9643` begins with a toolchain step
-(COMPASS-DRAFT-authoring-assistance-log-D2): the changed Markdown files from
+(COMPASS-D50): the changed Markdown files from
 `git diff --name-only`, a whole-corpus `compass check --format json`, findings
 split between the change and the rest, skipped files and unverified references
 noted, and `compass rules` and `compass version` recorded. The judgment step
@@ -254,7 +254,7 @@ that its one derivation is the namespace index. The skill remains a stub.
 
 - `templates/Plan.template.md@07b9643` and the Log, Architecture, and Survey
   templates write records as `<NAMESPACE>-DRAFT-<slug>-D1` and `-O1`, and
-  decisions as `Proposed` (COMPASS-DRAFT-authoring-assistance-log-D4).
+  decisions as `Proposed` (COMPASS-D52).
   Filled in, the old form `<NAMESPACE>-D<n>` produced `TEST-Dsample`, which
   `fm/types` rejects.
 - The Reference and Architecture templates give `glossary:` an identifier
@@ -266,7 +266,7 @@ that its one derivation is the namespace index. The skill remains a stub.
 ### Tests
 
 `tests/test-skills.lisp@fcdec0c` holds seven tests
-(COMPASS-DRAFT-authoring-assistance-log-D3):
+(COMPASS-D51):
 
 - `tests/test-skills.lisp:skills-name-only-known-commands@07b9643` and
   `tests/test-skills.lisp:skills-name-only-known-rules@07b9643` compare the
@@ -278,7 +278,7 @@ that its one derivation is the namespace index. The skill remains a stub.
   requires the guide to describe every command, using
   `src/cli.lisp:command-names@07b9643`.
 - `tests/test-skills.lisp:skills-use-the-toolchain@07b9643` requires each
-  skill to point to the guide (COMPASS-DRAFT-authoring-assistance-log-D1).
+  skill to point to the guide (COMPASS-D49).
 - `tests/test-skills.lisp:filled-templates-pass-check@07b9643` fills in all
   ten templates with
   `tests/test-skills.lisp:fill-template@07b9643` and requires them to pass
@@ -328,7 +328,7 @@ roadmap step 8 done for version 0.1.
    check.
 3. **Templates that set `Accepted`.** Found by reading the templates while
    running the author workflow by hand on a scratch repository
-   (COMPASS-DRAFT-authoring-assistance-log-D4).
+   (COMPASS-D52).
 4. **An invented federation file.** `compass-lookup` told agents to look for a
    `compass.federation` file that no part of Compass defines; `compass.sexp`
    already holds the federation.
@@ -412,7 +412,7 @@ for the two files placed in the clone for the test.
 - **The skills are found and followed without being named.** Ordinary requests
   loaded the right skill in every run, and each agent ran the documented
   commands, read their exit codes correctly, and stayed within its permissions.
-- **The summary in each skill carried the rules (COMPASS-DRAFT-authoring-assistance-log-D1).** No agent opened
+- **The summary in each skill carried the rules (COMPASS-D49).** No agent opened
   `skills/reference/toolchain.md`; each worked from its skill's own section.
 - **Agents still make small errors.** The reviewer reported "all 28 rules
   passed" (there are 25), and tried `rg`, which is not installed, before
@@ -429,18 +429,18 @@ Table: Files added or changed. Those in `compass` are in commits `07b9643` and
 
 | Repo | File | Action | Description |
 |------|------|--------|-------------|
-| compass | `skills/reference/toolchain.md` | **New** | The shared guide to running `compass` (COMPASS-DRAFT-authoring-assistance-log-D1) |
+| compass | `skills/reference/toolchain.md` | **New** | The shared guide to running `compass` (COMPASS-D49) |
 | compass | `skills/reference/README.md` | Modified | Names the guide and `compass rules` |
 | compass | `skills/reference/references.md` | Modified | No registry before version 0.2 |
 | compass | `skills/compass-author/SKILL.md` | Modified | Checks its drafts; provisional record identifiers |
-| compass | `skills/compass-review/SKILL.md` | Modified | Toolchain findings first (COMPASS-DRAFT-authoring-assistance-log-D2) |
+| compass | `skills/compass-review/SKILL.md` | Modified | Toolchain findings first (COMPASS-D50) |
 | compass | `skills/compass-lookup/SKILL.md` | Modified | `show`, `outline`, `refs`, `index --stdout` |
 | compass | `skills/compass-derive/SKILL.md` | Modified | Records the namespace index |
-| compass | `templates/Plan.template.md`, `Log`, `Arch`, `Survey` | Modified | Provisional record identifiers; `Proposed` (COMPASS-DRAFT-authoring-assistance-log-D4) |
+| compass | `templates/Plan.template.md`, `Log`, `Arch`, `Survey` | Modified | Provisional record identifiers; `Proposed` (COMPASS-D52) |
 | compass | `templates/Ref.template.md` | Modified | `glossary:` takes an identifier |
 | compass | `templates/README.md` | Modified | Record placeholders; templates must pass the check |
 | compass | `templates/AGENTS.snippet.md` | Modified | `compass check`; command location; migration |
-| compass | `tests/test-skills.lisp` | **New** | Seven tests (COMPASS-DRAFT-authoring-assistance-log-D3) |
+| compass | `tests/test-skills.lisp` | **New** | Seven tests (COMPASS-D51) |
 | compass | `src/cli.lisp`, `src/packages.lisp` | Modified | `command-names`, `command-option-names` |
 | compass | `compass.asd` | Modified | The new test file |
 | compass | `compass.sexp` | Modified | Federation with Classic, Origin, and Lexter |

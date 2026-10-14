@@ -100,3 +100,8 @@
 (:id "COMPASS-D46" :kind :decision :draft "COMPASS-DRAFT-toolchain-log-D2" :host "COMPASS-0011" :date "2026-10-13" :by "Andrew Sengul")
 (:id "COMPASS-D47" :kind :decision :draft "COMPASS-DRAFT-toolchain-log-D3" :host "COMPASS-0011" :date "2026-10-13" :by "Andrew Sengul")
 (:id "COMPASS-D48" :kind :decision :draft "COMPASS-DRAFT-toolchain-log-D4" :host "COMPASS-0011" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-0012" :kind :document :draft "COMPASS-DRAFT-authoring-assistance-log" :path "doc/Log.AuthoringAssistance.md" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-D49" :kind :decision :draft "COMPASS-DRAFT-authoring-assistance-log-D1" :host "COMPASS-0012" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-D50" :kind :decision :draft "COMPASS-DRAFT-authoring-assistance-log-D2" :host "COMPASS-0012" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-D51" :kind :decision :draft "COMPASS-DRAFT-authoring-assistance-log-D3" :host "COMPASS-0012" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-D52" :kind :decision :draft "COMPASS-DRAFT-authoring-assistance-log-D4" :host "COMPASS-0012" :date "2026-10-13" :by "Andrew Sengul")

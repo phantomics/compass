@@ -21,7 +21,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0009](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Accepted | security |
 | [COMPASS-0010](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Accepted | agent-context |
 | [COMPASS-0011](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Accepted | toolchain |
-| [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
+| [COMPASS-0012](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
 | [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
 
@@ -77,10 +77,10 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D46](Log.Toolchain.md#compass-d46--problems-found-while-loading-are-rules-too) | Decision | Problems found while loading are rules too | Accepted | COMPASS-0011 |
 | [COMPASS-D47](Log.Toolchain.md#compass-d47--checking-one-path-still-checks-the-whole-corpus) | Decision | Checking one path still checks the whole corpus | Accepted | COMPASS-0011 |
 | [COMPASS-D48](Log.Toolchain.md#compass-d48--a-closed-output-stream-ends-the-command-quietly) | Decision | A closed output stream ends the command quietly | Accepted | COMPASS-0011 |
-| [COMPASS-DRAFT-authoring-assistance-log-D1](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d1--one-shared-toolchain-guide-and-a-short-summary-in-each-skill) | Decision | One shared toolchain guide, and a short summary in each skill | Proposed | COMPASS-DRAFT-authoring-assistance-log |
-| [COMPASS-DRAFT-authoring-assistance-log-D2](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d2--review-checks-the-whole-corpus-and-separates-the-changes-findings) | Decision | Review checks the whole corpus and separates the change's findings | Proposed | COMPASS-DRAFT-authoring-assistance-log |
-| [COMPASS-DRAFT-authoring-assistance-log-D3](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d3--drift-tests-accept-what-exists-or-what-the-plan-lists) | Decision | Drift tests accept what exists or what the plan lists | Proposed | COMPASS-DRAFT-authoring-assistance-log |
-| [COMPASS-DRAFT-authoring-assistance-log-D4](Log.AuthoringAssistance.md#compass-draft-authoring-assistance-log-d4--templates-give-new-decisions-the-status-proposed) | Decision | Templates give new decisions the status Proposed | Proposed | COMPASS-DRAFT-authoring-assistance-log |
+| [COMPASS-D49](Log.AuthoringAssistance.md#compass-d49--one-shared-toolchain-guide-and-a-short-summary-in-each-skill) | Decision | One shared toolchain guide, and a short summary in each skill | Accepted | COMPASS-0012 |
+| [COMPASS-D50](Log.AuthoringAssistance.md#compass-d50--review-checks-the-whole-corpus-and-separates-the-changes-findings) | Decision | Review checks the whole corpus and separates the change's findings | Accepted | COMPASS-0012 |
+| [COMPASS-D51](Log.AuthoringAssistance.md#compass-d51--drift-tests-accept-what-exists-or-what-the-plan-lists) | Decision | Drift tests accept what exists or what the plan lists | Proposed | COMPASS-0012 |
+| [COMPASS-D52](Log.AuthoringAssistance.md#compass-d52--templates-give-new-decisions-the-status-proposed) | Decision | Templates give new decisions the status Proposed | Accepted | COMPASS-0012 |
 | [COMPASS-DRAFT-critique-D1](Plan.Critique.md#compass-draft-critique-d1--critique-is-a-subtype-of-eval) | Decision | Critique is a subtype of Eval | Proposed | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-D2](Plan.Critique.md#compass-draft-critique-d2--a-critique-pins-its-target-and-declares-its-stance) | Decision | A critique pins its target and declares its stance | Proposed | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-D3](Plan.Critique.md#compass-draft-critique-d3--each-finding-defends-the-choice-before-attacking-it-and-is-grounded) | Decision | Each finding defends the choice before attacking it, and is grounded | Proposed | COMPASS-DRAFT-critique |

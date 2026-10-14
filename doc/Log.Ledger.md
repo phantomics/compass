@@ -1127,7 +1127,7 @@ The plan's stage 1 also listed `git grep`; nothing needed it.
   | `6e4f02d`, in Classic | 3 | unverified; 3 with `--federation` |
 
   They are in this Log (71), [COMPASS-0011](Log.Toolchain.md)
-  (62), [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md)
+  (62), [COMPASS-0012](Log.AuthoringAssistance.md)
   (24), and one each in three other documents. Every reference that names a
   symbol or lines names a Lisp file, and every symbol was found by a definition
   form; the patterns for other languages are so far exercised only by the
@@ -1696,7 +1696,7 @@ What remains after version 0.2:
   rewritten, `assign` refuses it.
 - **Assigning the accepted documents**: COMPASS-0007,
   COMPASS-0005, COMPASS-0011, and
-  COMPASS-DRAFT-authoring-assistance-log, and later this Log and the plans once
+  COMPASS-0012, and later this Log and the plans once
   accepted.
 - **Classic's duplicated open questions**, as its `AGENTS.md` now describes.
 - **Speed.** A check takes about 405 ms; `ref/short-record` is about 140 ms of

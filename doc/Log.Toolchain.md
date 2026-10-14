@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-0003
   - COMPASS-0007
-  - COMPASS-DRAFT-authoring-assistance-log
+  - COMPASS-0012
 decisions:
   - COMPASS-D45
   - COMPASS-D46
@@ -592,7 +592,7 @@ Table: Files added or changed in commit `ee5f765`.
 ## Update 2026-10-08 — fresh executables and federation
 
 The skills were wired to the toolchain in commit `07b9643`, which
-[COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md)
+[COMPASS-0012](Log.AuthoringAssistance.md)
 chronicles. This update records the toolchain's part of that work and of the
 follow-up commit `fcdec0c`, and closes two items of the Outstanding Work above.
 Code references in this section are pinned to the commit named with each.
