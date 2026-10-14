@@ -23,7 +23,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0011](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Accepted | toolchain |
 | [COMPASS-0012](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-0013](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Accepted | toolchain |
-| [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
+| [COMPASS-0014](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Accepted | standard |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
 
@@ -87,12 +87,12 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D56](Log.Ledger.md#compass-d56--the-index-is-checked-only-where-one-exists-and-line-endings-do-not-count) | Decision | The index is checked only where one exists, and line endings do not count | Proposed | COMPASS-0013 |
 | [COMPASS-D57](Log.Ledger.md#compass-d57--the-status-form-that-compass-d9-replaced-is-an-error) | Decision | The status form that COMPASS-D9 replaced is an error | Proposed | COMPASS-0013 |
 | [COMPASS-D58](Log.Ledger.md#compass-d58--the-build-fails-when-a-compass-function-replaces-another) | Decision | The build fails when a compass function replaces another | Proposed | COMPASS-0013 |
-| [COMPASS-DRAFT-critique-D1](Plan.Critique.md#compass-draft-critique-d1--critique-is-a-subtype-of-eval) | Decision | Critique is a subtype of Eval | Proposed | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-D2](Plan.Critique.md#compass-draft-critique-d2--a-critique-pins-its-target-and-declares-its-stance) | Decision | A critique pins its target and declares its stance | Proposed | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-D3](Plan.Critique.md#compass-draft-critique-d3--each-finding-defends-the-choice-before-attacking-it-and-is-grounded) | Decision | Each finding defends the choice before attacking it, and is grounded | Proposed | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-D4](Plan.Critique.md#compass-draft-critique-d4--findings-are-open-question-records-and-a-person-disposes-of-each) | Decision | Findings are open-question records, and a person disposes of each | Proposed | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-D5](Plan.Critique.md#compass-draft-critique-d5--a-threat-model-is-a-critique-of-security-with-its-own-method) | Decision | A threat model is a critique of security, with its own method | Proposed | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-D6](Plan.Critique.md#compass-draft-critique-d6--the-conversation-is-scratch-the-critique-is-its-distillation) | Decision | The conversation is scratch; the critique is its distillation | Proposed | COMPASS-DRAFT-critique |
+| [COMPASS-D59](Plan.Critique.md#compass-d59--critique-is-a-subtype-of-eval) | Decision | Critique is a subtype of Eval | Accepted | COMPASS-0014 |
+| [COMPASS-D60](Plan.Critique.md#compass-d60--a-critique-pins-its-target-and-declares-its-stance) | Decision | A critique pins its target and declares its stance | Accepted | COMPASS-0014 |
+| [COMPASS-D61](Plan.Critique.md#compass-d61--each-finding-defends-the-choice-before-attacking-it-and-is-grounded) | Decision | Each finding defends the choice before attacking it, and is grounded | Accepted | COMPASS-0014 |
+| [COMPASS-D62](Plan.Critique.md#compass-d62--findings-are-open-question-records-and-a-person-disposes-of-each) | Decision | Findings are open-question records, and a person disposes of each | Accepted | COMPASS-0014 |
+| [COMPASS-D63](Plan.Critique.md#compass-d63--a-threat-model-is-a-critique-of-security-with-its-own-method) | Decision | A threat model is a critique of security, with its own method | Accepted | COMPASS-0014 |
+| [COMPASS-D64](Plan.Critique.md#compass-d64--the-conversation-is-scratch-the-critique-is-its-distillation) | Decision | The conversation is scratch; the critique is its distillation | Accepted | COMPASS-0014 |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |
@@ -133,9 +133,9 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O38](Eval.PriorArt.AgentContext.md#compass-o38--a-systematic-search) | Open question | A systematic search | — | COMPASS-0010 |
 | [COMPASS-O39](Eval.PriorArt.AgentContext.md#compass-o39--contact-with-closest-work) | Open question | Contact with closest work | — | COMPASS-0010 |
 | [COMPASS-O40](Eval.PriorArt.AgentContext.md#compass-o40--keeping-this-evaluation-current) | Open question | Keeping this evaluation current | — | COMPASS-0010 |
-| [COMPASS-DRAFT-critique-O1](Plan.Critique.md#compass-draft-critique-o1--toolchain-checks-for-findings) | Open question | Toolchain checks for findings | — | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-O2](Plan.Critique.md#compass-draft-critique-o2--the-severity-scale) | Open question | The severity scale | — | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-O3](Plan.Critique.md#compass-draft-critique-o3--critique-across-namespaces) | Open question | Critique across namespaces | — | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-O4](Plan.Critique.md#compass-draft-critique-o4--open-findings-and-agents) | Open question | Open findings and agents | — | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-O5](Plan.Critique.md#compass-draft-critique-o5--stale-critiques) | Open question | Stale critiques | — | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-critique-O6](Plan.Critique.md#compass-draft-critique-o6--critiques-of-the-standard-itself) | Open question | Critiques of the standard itself | — | COMPASS-DRAFT-critique |
+| [COMPASS-O41](Plan.Critique.md#compass-o41--toolchain-checks-for-findings) | Open question | Toolchain checks for findings | — | COMPASS-0014 |
+| [COMPASS-O42](Plan.Critique.md#compass-o42--the-severity-scale) | Open question | The severity scale | — | COMPASS-0014 |
+| [COMPASS-O43](Plan.Critique.md#compass-o43--critique-across-namespaces) | Open question | Critique across namespaces | — | COMPASS-0014 |
+| [COMPASS-O44](Plan.Critique.md#compass-o44--open-findings-and-agents) | Open question | Open findings and agents | — | COMPASS-0014 |
+| [COMPASS-O45](Plan.Critique.md#compass-o45--stale-critiques) | Open question | Stale critiques | — | COMPASS-0014 |
+| [COMPASS-O46](Plan.Critique.md#compass-o46--critiques-of-the-standard-itself) | Open question | Critiques of the standard itself | — | COMPASS-0014 |

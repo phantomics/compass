@@ -1,12 +1,16 @@
 ---
-id:            COMPASS-DRAFT-critique
+id:            COMPASS-0014
 title:         Compass Critique — Adversarial Evaluation of a Project's Own Systems
 genre:         Plan
 scope:         program
 program:       Compass
 component:     standard
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-13
 provenance:
   assistant:   opencode
 relates-to:
@@ -44,19 +48,19 @@ cites:
     locator:   "threatmodelingmanifesto.org, 2020; the four questions"
     external:  true
 decisions:
-  - COMPASS-DRAFT-critique-D1
-  - COMPASS-DRAFT-critique-D2
-  - COMPASS-DRAFT-critique-D3
-  - COMPASS-DRAFT-critique-D4
-  - COMPASS-DRAFT-critique-D5
-  - COMPASS-DRAFT-critique-D6
+  - COMPASS-D59
+  - COMPASS-D60
+  - COMPASS-D61
+  - COMPASS-D62
+  - COMPASS-D63
+  - COMPASS-D64
 open-questions:
-  - COMPASS-DRAFT-critique-O1
-  - COMPASS-DRAFT-critique-O2
-  - COMPASS-DRAFT-critique-O3
-  - COMPASS-DRAFT-critique-O4
-  - COMPASS-DRAFT-critique-O5
-  - COMPASS-DRAFT-critique-O6
+  - COMPASS-O41
+  - COMPASS-O42
+  - COMPASS-O43
+  - COMPASS-O44
+  - COMPASS-O45
+  - COMPASS-O46
 ---
 
 # Compass Critique: Development Plan
@@ -126,9 +130,9 @@ form for what such a conversation produces:
 
 All six decisions are proposals for the steward.
 
-### COMPASS-DRAFT-critique-D1 — Critique is a subtype of Eval
+### COMPASS-D59 — Critique is a subtype of Eval
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A critique judges a system against criteria, under scenarios,
 with evidence: the evidential analysis against a rubric that §4 gives the
@@ -151,7 +155,7 @@ project's own system.
 - Under COMPASS-D16 an accepted critique weighs Contextual: it
   explains, and never overrides an Authoritative document. An objection changes
   the system only when a decision in the system's own documents adopts it
-  (COMPASS-DRAFT-critique-D4).
+  (COMPASS-D62).
 - File names follow §10; the convention `Eval.Critique.<Topic>.md` keeps
   critiques together, as `Eval.PriorArt.AgentContext.md` does for prior art.
   The generated index already shows the subtype, as `Eval (critique)`.
@@ -170,9 +174,9 @@ project's own system.
   method, scenarios, and rubric would be lost, and one critique often spans
   several documents.
 
-### COMPASS-DRAFT-critique-D2 — A critique pins its target and declares its stance
+### COMPASS-D60 — A critique pins its target and declares its stance
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A critique of code goes stale when the code changes, and a
 critique of a design when the design does. A reader also needs to know what
@@ -200,9 +204,9 @@ different things, and each leaves different things unexamined.
   Rejected: in a solo namespace there is no one else. The stance declares
   independence where it exists, and the steward weighs it.
 
-### COMPASS-DRAFT-critique-D3 — Each finding defends the choice before attacking it, and is grounded
+### COMPASS-D61 — Each finding defends the choice before attacking it, and is grounded
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** An objection that misstates what it attacks is a strawman, and one
 that names no evidence cannot be checked. Rapoport's rules, as Dennett states
@@ -232,9 +236,9 @@ Synthesis as a seed, or proposed as a `Survey`.
   findings to agents and in the index; a speculative idea is what a `Survey`
   is for.
 
-### COMPASS-DRAFT-critique-D4 — Findings are open-question records, and a person disposes of each
+### COMPASS-D62 — Findings are open-question records, and a person disposes of each
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** A finding is a known unresolved issue of the target, which is what
 §8 defines an open-question record to be. Inspection practice, since Fagan,
@@ -272,9 +276,9 @@ renditions, between the Rubric and the Synthesis.
 - Dispositions by the critic. Rejected: the critic is a party to the dispute,
   and acceptance is a person's act (§6).
 
-### COMPASS-DRAFT-critique-D5 — A threat model is a critique of security, with its own method
+### COMPASS-D63 — A threat model is a critique of security, with its own method
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** [COMPASS-0009](Survey.SecureDevelopment.md)
 proposes an `Eval` subtype `threat-model`, pending in the toolchain, following
@@ -286,7 +290,7 @@ as STRIDE, is a practice of its own.
 
 **Decision:** `threat-model` stays a subtype of its own, specified by
 COMPASS-0009, and is the security specialisation of
-`critique`. The rules of COMPASS-DRAFT-critique-D2 to COMPASS-DRAFT-critique-D4
+`critique`. The rules of COMPASS-D60 to COMPASS-D62
 apply to it:
 - its Method names the system, the revision, and the threat-modelling method;
 - each threat is a finding record, whose `**Severity:**` follows the method's
@@ -305,9 +309,9 @@ threat model lives, this decision leaves them to it.
 - Keep the two unrelated. Rejected: a threat model would then lack the rules
   that make a critique fair, grounded, and disposed of.
 
-### COMPASS-DRAFT-critique-D6 — The conversation is scratch; the critique is its distillation
+### COMPASS-D64 — The conversation is scratch; the critique is its distillation
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Context:** Critique often arises in a conversation, with a person or an
 assistant, that mixes good objections with weak ones and with ideas. §2 makes
@@ -325,7 +329,7 @@ check.
   permissions of [COMPASS-D41](Plan.AgentWorkflow.md#compass-d41--what-an-agent-may-do-by-scope)
   allow for any document. It never writes a resolution, and never moves a
   critique to `Accepted`.
-- The grounding rule of COMPASS-DRAFT-critique-D3 is the control on an
+- The grounding rule of COMPASS-D61 is the control on an
   assistant's objections: one it cannot ground is a seed, not a finding.
 - A conversation is promoted to `Ideation` only when it set a project's
   direction, as a considered editorial act, never as the record of a critique.
@@ -348,7 +352,7 @@ Table: The critique section shape, mapped onto the Eval spine.
 
 | Eval section (§14) | Critique content |
 |---|---|
-| Method | The target (documents, and the revision of any code), the stance, the evidence standard, and what was left out (COMPASS-DRAFT-critique-D2) |
+| Method | The target (documents, and the revision of any code), the stance, the evidence standard, and what was left out (COMPASS-D60) |
 | The Shared Scenario | The use cases, workloads, failure modes, or adversaries the target is put through |
 | The Rubric | The qualities assessed, as `C1`…`Cn`, each with what holding up means |
 | Findings (the renditions) | One open-question record per finding, in order of severity, with the fields below |
@@ -418,7 +422,7 @@ Table: Documents close to a critique, and the form each takes.
 | Judges another project's design, to learn from it | A `prior-art` Eval |
 | Compares several alternatives side by side | A `comparison` Eval |
 | Weighs options for a decision not yet taken | A `tradeoff` Eval |
-| Attacks a system's security with a threat-modelling method | A `threat-model` Eval (COMPASS-DRAFT-critique-D5) |
+| Attacks a system's security with a threat-modelling method | A `threat-model` Eval (COMPASS-D63) |
 | States the weaknesses a design accepts, by its own authors | The design's Tensions and Risks section, or a decision's Alternatives, as a Rust RFC's Drawbacks do |
 | Proposes an improvement with no weakness to show | A `Survey` |
 | States a verified property of running software | A memo |
@@ -432,9 +436,9 @@ under §13.
 
 | Section | Change | Class | Decision |
 |---|---|---|---|
-| §4 | `critique` among the `Eval` subtypes; a sentence on critique leading back up the maturity ladder | minor | COMPASS-DRAFT-critique-D1 |
-| §8 | Open-question records may appear under `## Findings` in a critique, with the finding fields | minor | COMPASS-DRAFT-critique-D3, COMPASS-DRAFT-critique-D4 |
-| §14 | The critique section shape, under `Eval` | minor | COMPASS-DRAFT-critique-D2, COMPASS-DRAFT-critique-D4 |
+| §4 | `critique` among the `Eval` subtypes; a sentence on critique leading back up the maturity ladder | minor | COMPASS-D59 |
+| §8 | Open-question records may appear under `## Findings` in a critique, with the finding fields | minor | COMPASS-D61, COMPASS-D62 |
+| §14 | The critique section shape, under `Eval` | minor | COMPASS-D60, COMPASS-D62 |
 
 Accepted together, the three would make `Compass.md` 0.4.0. The `threat-model`
 subtype is amended into §4 by COMPASS-0009, not by this
@@ -442,7 +446,7 @@ plan.
 
 ## Open Questions
 
-### COMPASS-DRAFT-critique-O1 — Toolchain checks for findings
+### COMPASS-O41 — Toolchain checks for findings
 
 Should the toolchain check finding records, as `memo/fields` and `memo/basis`
 check memos: the required fields present, and `**Evidence:**` grounded? The
@@ -451,13 +455,13 @@ cheap. The current thinking is an error for a missing field or ungrounded
 evidence, as for memos, once the subtype is accepted, and a warning while it is
 pending.
 
-### COMPASS-DRAFT-critique-O2 — The severity scale
+### COMPASS-O42 — The severity scale
 
 Is `high | medium | low`, by consequence, enough, or should severity weigh
 likelihood as a threat model does? Should it be a controlled vocabulary the
 toolchain checks, or prose?
 
-### COMPASS-DRAFT-critique-O3 — Critique across namespaces
+### COMPASS-O43 — Critique across namespaces
 
 When a critique in one namespace attacks a system another namespace owns, the
 finding lives in the critic's repository and its resolution is decided in the
@@ -466,7 +470,7 @@ that its steward disposes of findings where they are recorded, or may it stay
 with the critic, with the resolution naming the target's decision across the
 federation?
 
-### COMPASS-DRAFT-critique-O4 — Open findings and agents
+### COMPASS-O44 — Open findings and agents
 
 Open-question records carry no weight, so the session catalog does not list
 them (COMPASS-D16). An agent about to change a system may not
@@ -474,14 +478,14 @@ learn of an open finding against it. Should the catalog list open findings
 against the documents an agent is working from, or is `compass refs` on the
 target, which lists the critique as a relation, enough?
 
-### COMPASS-DRAFT-critique-O5 — Stale critiques
+### COMPASS-O45 — Stale critiques
 
 A critique pins the revision it examined. When the target has changed a great
 deal since, its open findings may no longer hold. Is a later critique that
 supersedes it the only remedy, or should the toolchain report a critique whose
 pinned revision is far behind its target's code?
 
-### COMPASS-DRAFT-critique-O6 — Critiques of the standard itself
+### COMPASS-O46 — Critiques of the standard itself
 
 §23 is the standard's standing record of its own limitations. Should an
 accepted finding about the standard that is not resolved at once become a §23
@@ -494,12 +498,12 @@ Table: Prior systems and what this plan draws from each.
 | System | What to draw from |
 |---|---|
 | ATAM (SEI architecture tradeoff analysis) | Scenarios and a quality-attribute tree as the instruments of evaluation; risks, non-risks, and tradeoffs as its output: the Shared Scenario, the Rubric, Findings, and What Held Up |
-| Fagan inspections; IEEE 1028 reviews and audits | Each anomaly recorded and dispositioned by someone other than its finder: COMPASS-DRAFT-critique-D4 |
+| Fagan inspections; IEEE 1028 reviews and audits | Each anomaly recorded and dispositioned by someone other than its finder: COMPASS-D62 |
 | Red teaming (UK MoD Red Teaming Handbook) | A declared adversarial stance and scope, with findings reported to the decision-maker rather than acted on by the red team |
 | Pre-mortem (Klein) | A stance: assume the target has failed, and explain why |
 | Rapoport's rules (Dennett) | Restate the target's case fairly before objecting: the `**Rationale:**` field |
 | PEP 12's Rejected Ideas; the Rust RFC template's Drawbacks and Rationale and alternatives | Rejected objections kept with their reasons; a design's self-critique inside the design itself |
-| Threat Modeling Manifesto | The four questions behind the `threat-model` specialisation (COMPASS-DRAFT-critique-D5) |
+| Threat Modeling Manifesto | The four questions behind the `threat-model` specialisation (COMPASS-D63) |
 | Compass memos (COMPASS-D36) and §23 | The grounding rule of a memo's basis; a standard's standing record of its own limitations |
 
 ## Roadmap
@@ -507,7 +511,7 @@ Table: Prior systems and what this plan draws from each.
 1. **This plan (now).** The decisions, the section shape, and the amendments,
    for the steward's review.
 2. **Acceptance.** The steward accepts, amends, or rejects
-   COMPASS-DRAFT-critique-D1 to COMPASS-DRAFT-critique-D6.
+   COMPASS-D59 to COMPASS-D64.
 3. **Toolchain and template.** `critique` becomes a pending `Eval` subtype
    naming this plan (COMPASS-D24), so `vocab/pending` warns on
    it until the amendment lands. The `Eval` template's subtype comment lists
@@ -520,7 +524,7 @@ Table: Prior systems and what this plan draws from each.
 5. **Amendments.** On acceptance, §4, §8, and §14 are amended as
    `Compass.md` 0.4.0, the subtype's standing becomes accepted, and
    `vocabularies.md` lists it.
-6. **Checks**, if COMPASS-DRAFT-critique-O1 settles on them.
+6. **Checks**, if COMPASS-O41 settles on them.
 7. **First critiques.** A critique of part of Compass, such as the ledger, as
    the worked example; and, at Classic's choice, its `securityPoints.md`
    rewritten as a `threat-model` Eval (COMPASS-O37).
