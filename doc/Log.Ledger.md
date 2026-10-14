@@ -1410,7 +1410,7 @@ COMPASS-D9's, increments the minor number. Section by section:
 
   Two references to the old labels, in
   [COMPASS-0004](Plan.Toolchain.md) and
-  [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md), and the
+  [COMPASS-0009](Survey.SecureDevelopment.md), and the
   listing in `doc/README.md`, follow.
 - **Captions.** Compass.md's nine tables and the templates' eight gained
   `Table:` captions; every other document already had them.

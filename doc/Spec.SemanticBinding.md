@@ -17,7 +17,7 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0002
   - COMPASS-0007
-  - COMPASS-DRAFT-secure-development
+  - COMPASS-0009
   - COMPASS-DRAFT-agent-context-prior-art
 cites:
   - title:     "RFC 4151 — The 'tag' URI Scheme"
@@ -321,7 +321,7 @@ Table: Concept schemes and their members.
 | Scheme | Members | Source |
 |---|---|---|
 | `cscope:` | `component`, `project`, `program` | §5 |
-| `csubtype:` | `prior-art`, `comparison`, `tradeoff`, `threat-model` (pending), `tutorial`, `howto` | §4; `threat-model` from COMPASS-DRAFT-secure-development |
+| `csubtype:` | `prior-art`, `comparison`, `tradeoff`, `threat-model` (pending), `tutorial`, `howto` | §4; `threat-model` from COMPASS-0009 |
 | `cstatus:` | `Draft`, `Proposed`, `In-Review`, `Accepted`, `Implemented`, `Design-Record`, `Deprecated`, `Superseded`, `Rejected`, `Withdrawn`, `Current` | §6, as amended by COMPASS-D9 |
 | `cconcern:` | `security-boundary`, `concurrency`, `wire-format`, `persistent-format`, `public-api`, `ffi`, `hot-path` | COMPASS-0002 |
 | `cstability:` | `experimental`, `stable`, `deprecated` | COMPASS-0002 |
@@ -605,14 +605,14 @@ has not been exhaustive; see
 - **Federated stores.** Loading several namespaces' exports into one store
   merges data of differing trust. Queries whose results feed agents should
   respect the federation trust levels proposed in
-  [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) (candidate 2).
+  [COMPASS-0009](Survey.SecureDevelopment.md) (candidate 2).
 - **JSON-LD remote contexts.** A JSON-LD processor that fetches
   `https://w3id.org/compass/context.jsonld` at load time depends on that host
   and can be fed a substituted context. Consumers SHOULD pin a local copy of the
   context, as JSON-LD 1.1 §10 advises.
 - **Disclosure.** Security-related `O`-records and memos are exported like any
   other record. A public export is subject to the same disclosure care as the
-  public corpus (COMPASS-DRAFT-secure-development-O4).
+  public corpus (COMPASS-O35).
 - **Exported text is still text.** With `--with-text`, record prose enters the
   store. Anything that later delivers query results to an agent faces the
   prompt-injection risks described in the secure-development survey.

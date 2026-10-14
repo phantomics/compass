@@ -11,7 +11,7 @@ provenance:
   assistant:   opencode
 relates-to:
   - COMPASS-0001
-  - COMPASS-DRAFT-secure-development
+  - COMPASS-0009
   - COMPASS-0007
   - COMPASS-0003
   - COMPASS-0004
@@ -69,7 +69,7 @@ to accept or reject. The form is a new subtype of the `Eval` genre, `critique`,
 rather than a new genre. Its findings are open-question records, resolved by
 decisions in the documents that own the system criticised. The security
 threat model proposed by
-[COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) becomes
+[COMPASS-0009](Survey.SecureDevelopment.md) becomes
 critique's specialisation for security, keeping its own method. The plan
 assumes the review gates and agent permissions of
 [COMPASS-0007](Plan.AgentWorkflow.md), and the vocabulary
@@ -276,7 +276,7 @@ renditions, between the Rubric and the Synthesis.
 
 **Status:** Proposed
 
-**Context:** [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md)
+**Context:** [COMPASS-0009](Survey.SecureDevelopment.md)
 proposes an `Eval` subtype `threat-model`, pending in the toolchain, following
 the Threat Modeling Manifesto's four questions: what are we working on, what
 can go wrong, what are we going to do about it, and did we do a good job. A
@@ -285,7 +285,7 @@ its method, of assets, data flows, trust boundaries, and threat categories such
 as STRIDE, is a practice of its own.
 
 **Decision:** `threat-model` stays a subtype of its own, specified by
-COMPASS-DRAFT-secure-development, and is the security specialisation of
+COMPASS-0009, and is the security specialisation of
 `critique`. The rules of COMPASS-DRAFT-critique-D2 to COMPASS-DRAFT-critique-D4
 apply to it:
 - its Method names the system, the revision, and the threat-modelling method;
@@ -437,7 +437,7 @@ under §13.
 | §14 | The critique section shape, under `Eval` | minor | COMPASS-DRAFT-critique-D2, COMPASS-DRAFT-critique-D4 |
 
 Accepted together, the three would make `Compass.md` 0.4.0. The `threat-model`
-subtype is amended into §4 by COMPASS-DRAFT-secure-development, not by this
+subtype is amended into §4 by COMPASS-0009, not by this
 plan.
 
 ## Open Questions
@@ -523,4 +523,4 @@ Table: Prior systems and what this plan draws from each.
 6. **Checks**, if COMPASS-DRAFT-critique-O1 settles on them.
 7. **First critiques.** A critique of part of Compass, such as the ledger, as
    the worked example; and, at Classic's choice, its `securityPoints.md`
-   rewritten as a `threat-model` Eval (COMPASS-DRAFT-secure-development-O6).
+   rewritten as a `threat-model` Eval (COMPASS-O37).

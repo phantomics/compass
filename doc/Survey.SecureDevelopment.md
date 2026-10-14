@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-secure-development
+id:            COMPASS-0009
 title:         Compass and Secure Development in the Age of Coding Agents
 genre:         Survey
 scope:         program
@@ -52,12 +52,12 @@ cites:
     locator:   "docs/troubleshooting.md (index linter, private-path leaks)@e394f1c"
     external:  true
 open-questions:
-  - COMPASS-DRAFT-secure-development-O1
-  - COMPASS-DRAFT-secure-development-O2
-  - COMPASS-DRAFT-secure-development-O3
-  - COMPASS-DRAFT-secure-development-O4
-  - COMPASS-DRAFT-secure-development-O5
-  - COMPASS-DRAFT-secure-development-O6
+  - COMPASS-O32
+  - COMPASS-O33
+  - COMPASS-O34
+  - COMPASS-O35
+  - COMPASS-O36
+  - COMPASS-O37
 ---
 
 # Compass and Secure Development: Survey
@@ -360,38 +360,38 @@ evaluation, which leaves time.
 
 ## Open Questions
 
-### COMPASS-DRAFT-secure-development-O1 — Security-boundary lint severity
+### COMPASS-O32 — Security-boundary lint severity
 
 Should a `security-boundary` file without `Tests:` or `See:` be a warning, as
 proposed, or an error? An error enforces the chain but would block adoption in
 repositories with many boundary files and no tests yet.
 
-### COMPASS-DRAFT-secure-development-O2 — Injection lint precision
+### COMPASS-O33 — Injection lint precision
 
 What does "injection-like phrasing" mean precisely enough to lint? A pattern
 list catches crude attempts and produces false positives on legitimate routing
 lines ("Read-if: you must change the codec"). Is a lint worth its noise, or
 should the controls rest on length limits, framing, and review?
 
-### COMPASS-DRAFT-secure-development-O3 — Where threat models live
+### COMPASS-O34 — Where threat models live
 
 Should a threat model always be a separate `threat-model` Eval, or may a small
 project's threat model live entirely in an `Arch`'s or `Plan`'s Security
 Considerations section, with records but no separate document?
 
-### COMPASS-DRAFT-secure-development-O4 — Security memos and disclosure
+### COMPASS-O35 — Security memos and disclosure
 
 A memo stating a security property ("receivers are not authenticated") is also
 a statement of a weakness. Should security-relevant memos be marked, held back
 from public catalogs, or kept out of public corpora until mitigated?
 
-### COMPASS-DRAFT-secure-development-O5 — A `security` audience
+### COMPASS-O36 — A `security` audience
 
 The §21 audience extension (`developer | end-user | both`) may need a
 `security-reviewer` persona (cf. §23 GO5), so that a projection can produce a
 security review packet from the corpus. Is that worth defining?
 
-### COMPASS-DRAFT-secure-development-O6 — Migrating Classic's analysis
+### COMPASS-O37 — Migrating Classic's analysis
 
 Should Classic's `securityPoints.md` be the first migrated document, as a
 `threat-model` Eval with six `O`-records, and if so, before or after the

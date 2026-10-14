@@ -18,11 +18,11 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0006](Eval.AgentContext.md) | Compass as Agent Context — Evaluating Quality Over Time | Eval (comparison) | program | Accepted | agent-context |
 | [COMPASS-0007](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-0008](Spec.SemanticBinding.md) | Compass Semantic Binding — RDF Vocabulary, Identity, and Shapes | Spec | program | Current | semantic-binding |
+| [COMPASS-0009](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Accepted | security |
 | [COMPASS-DRAFT-agent-context-prior-art](Eval.PriorArt.AgentContext.md) | Prior Art for Compass as Agent Context and Queryable Corpus | Eval (prior-art) | program | Draft | agent-context |
 | [COMPASS-DRAFT-authoring-assistance-log](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-critique](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Draft | standard |
 | [COMPASS-DRAFT-ledger-log](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Draft | toolchain |
-| [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) | Compass and Secure Development in the Age of Coding Agents | Survey | program | Accepted | security |
 | [COMPASS-DRAFT-toolchain-log](Log.Toolchain.md) | Compass Toolchain Development Log | Log | component | Accepted | toolchain |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
@@ -124,6 +124,12 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O29](Spec.SemanticBinding.md#compass-o29--record-text-by-default) | Open question | Record text by default | — | COMPASS-0008 |
 | [COMPASS-O30](Spec.SemanticBinding.md#compass-o30--ontology-profile) | Open question | Ontology profile | — | COMPASS-0008 |
 | [COMPASS-O31](Spec.SemanticBinding.md#compass-o31--alignment-with-oslc) | Open question | Alignment with OSLC | — | COMPASS-0008 |
+| [COMPASS-O32](Survey.SecureDevelopment.md#compass-o32--security-boundary-lint-severity) | Open question | Security-boundary lint severity | — | COMPASS-0009 |
+| [COMPASS-O33](Survey.SecureDevelopment.md#compass-o33--injection-lint-precision) | Open question | Injection lint precision | — | COMPASS-0009 |
+| [COMPASS-O34](Survey.SecureDevelopment.md#compass-o34--where-threat-models-live) | Open question | Where threat models live | — | COMPASS-0009 |
+| [COMPASS-O35](Survey.SecureDevelopment.md#compass-o35--security-memos-and-disclosure) | Open question | Security memos and disclosure | — | COMPASS-0009 |
+| [COMPASS-O36](Survey.SecureDevelopment.md#compass-o36--a-security-audience) | Open question | A security audience | — | COMPASS-0009 |
+| [COMPASS-O37](Survey.SecureDevelopment.md#compass-o37--migrating-classics-analysis) | Open question | Migrating Classic's analysis | — | COMPASS-0009 |
 | [COMPASS-DRAFT-agent-context-prior-art-O1](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o1--a-systematic-search) | Open question | A systematic search | — | COMPASS-DRAFT-agent-context-prior-art |
 | [COMPASS-DRAFT-agent-context-prior-art-O2](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o2--contact-with-closest-work) | Open question | Contact with closest work | — | COMPASS-DRAFT-agent-context-prior-art |
 | [COMPASS-DRAFT-agent-context-prior-art-O3](Eval.PriorArt.AgentContext.md#compass-draft-agent-context-prior-art-o3--keeping-this-evaluation-current) | Open question | Keeping this evaluation current | — | COMPASS-DRAFT-agent-context-prior-art |
@@ -133,9 +139,3 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-critique-O4](Plan.Critique.md#compass-draft-critique-o4--open-findings-and-agents) | Open question | Open findings and agents | — | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-O5](Plan.Critique.md#compass-draft-critique-o5--stale-critiques) | Open question | Stale critiques | — | COMPASS-DRAFT-critique |
 | [COMPASS-DRAFT-critique-O6](Plan.Critique.md#compass-draft-critique-o6--critiques-of-the-standard-itself) | Open question | Critiques of the standard itself | — | COMPASS-DRAFT-critique |
-| [COMPASS-DRAFT-secure-development-O1](Survey.SecureDevelopment.md#compass-draft-secure-development-o1--security-boundary-lint-severity) | Open question | Security-boundary lint severity | — | COMPASS-DRAFT-secure-development |
-| [COMPASS-DRAFT-secure-development-O2](Survey.SecureDevelopment.md#compass-draft-secure-development-o2--injection-lint-precision) | Open question | Injection lint precision | — | COMPASS-DRAFT-secure-development |
-| [COMPASS-DRAFT-secure-development-O3](Survey.SecureDevelopment.md#compass-draft-secure-development-o3--where-threat-models-live) | Open question | Where threat models live | — | COMPASS-DRAFT-secure-development |
-| [COMPASS-DRAFT-secure-development-O4](Survey.SecureDevelopment.md#compass-draft-secure-development-o4--security-memos-and-disclosure) | Open question | Security memos and disclosure | — | COMPASS-DRAFT-secure-development |
-| [COMPASS-DRAFT-secure-development-O5](Survey.SecureDevelopment.md#compass-draft-secure-development-o5--a-security-audience) | Open question | A security audience | — | COMPASS-DRAFT-secure-development |
-| [COMPASS-DRAFT-secure-development-O6](Survey.SecureDevelopment.md#compass-draft-secure-development-o6--migrating-classics-analysis) | Open question | Migrating Classic's analysis | — | COMPASS-DRAFT-secure-development |

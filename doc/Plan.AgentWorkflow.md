@@ -460,7 +460,7 @@ as leads to verify against their basis, never as present truth.
 
 Two limits keep unreviewed text from crowding out or masquerading as reviewed
 knowledge, which the injection concerns of
-[COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md) call for:
+[COMPASS-0009](Survey.SecureDevelopment.md) call for:
 - unreviewed memos come after every Authoritative, Directive, and Contextual
   entry, so they are the first entries dropped when the catalog exceeds its
   budget (COMPASS-D15);

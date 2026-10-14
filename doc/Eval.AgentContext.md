@@ -21,7 +21,7 @@ relates-to:
   - COMPASS-0007
   - COMPASS-0002
   - COMPASS-0003
-  - COMPASS-DRAFT-secure-development
+  - COMPASS-0009
   - COMPASS-DRAFT-agent-context-prior-art
 cites:
   - title:     "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (Gloaguen, Mündler, Müller, Raychev, Vechev; MemAgents @ ICLR 2026)"
@@ -498,7 +498,7 @@ here?") before re-reading how the corpus words it.
 
 **Security-invariant tasks** test whether an agent preserves the security checks
 Classic already has while extending the system near them. They were added at the
-recommendation of [COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md).
+recommendation of [COMPASS-0009](Survey.SecureDevelopment.md).
 Classic's security model is immature (its own analysis, `securityPoints.md`,
 mostly lists what is missing), so these tasks test preservation rather than
 construction. Illustrative candidates, to be confirmed against the code at
@@ -516,7 +516,7 @@ Each has a negative test that attempts the bypass, alongside the functional
 tests. Where the guarding rule is documented only in `securityPoints.md` or a
 development log, the task also measures whether the corpus delivered it. If
 Classic's security analysis is migrated to Compass form before the protocol is
-frozen (COMPASS-DRAFT-secure-development-O6), A1 carries the original and
+frozen (COMPASS-O37), A1 carries the original and
 A2–A4 the migrated form, as for every other document.
 
 **Seeded-supersession tasks** test the claim that typing keeps history from
@@ -767,6 +767,6 @@ Table: Sections of this evaluation and the primary sources each draws on.
 | Statistics | Schuirmann (1987); Khatri (2026) on equivalence testing in this setting |
 | The Shared Scenario | Classic repository history, surveyed at `6e4f02d` |
 | Track 1 setups | Gloaguen et al. (2026) and Khatri (2026) settings, adapted |
-| Security-invariant tasks | COMPASS-DRAFT-secure-development; Classic's `securityPoints.md` |
+| Security-invariant tasks | COMPASS-0009; Classic's `securityPoints.md` |
 | Seeded-supersession and rejected-alternative tasks; ablation setups | The Specification Gap (2026); MOOSEDev (2026); ADR violation detection (2026); COMPASS-DRAFT-agent-context-prior-art |
 | Research Agenda | COMPASS-DRAFT-agent-context-prior-art; Spec-Driven Test Generation (SpecOps '26) |

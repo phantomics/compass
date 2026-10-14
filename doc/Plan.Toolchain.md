@@ -720,7 +720,7 @@ that Compass front-matter uses. Three findings settle it:
   must then reject values it never wanted converted.
 - **The native parser is a liability.** In CI the toolchain reads pull
   requests, including ones from forks. libyaml exposes a native parsing surface
-  to that input ([COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md)).
+  to that input ([COMPASS-0009](Survey.SecureDevelopment.md)).
   It also makes every binary depend on a shared library that must be bundled or
   installed on each platform (COMPASS-D23).
 
@@ -864,7 +864,7 @@ development and testing. Apple notarization needs a paid developer account.
 **Context:** The toolchain must recognise vocabulary that decisions have
 introduced but the standard has not yet adopted: the `Superseded` status (COMPASS-D9),
 status sets for `Glossary` and `Ideation` (COMPASS-D16), the `threat-model` subtype
-([COMPASS-DRAFT-secure-development](Survey.SecureDevelopment.md)), and the
+([COMPASS-0009](Survey.SecureDevelopment.md)), and the
 `read-if:` extension key (COMPASS-D17). Rejecting these values would fail documents the
 skills already write, since they write COMPASS-D9's form. Accepting them silently would
 let the toolchain run ahead of the standard.
