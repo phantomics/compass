@@ -290,8 +290,8 @@ accumulate while a system is built and used, and the memos of a component are
 eventually folded into its `Ref` or `Spec`.
 
 A critique (an `Eval` with `subtype: critique`) is how the ladder is climbed
-again: a critique of what exists, a `Ref` or a `Log`'s result, leads back to a
-`Survey` or `Plan` for what should change.
+again: a critique of something built, what a `Ref` describes or a `Log`
+records, leads back to a `Survey` or `Plan` for what should change.
 
 
 ## 5. Identity, Scope, and Numbering
@@ -632,7 +632,7 @@ Table: The fields of a finding record in a critique.
 | `**Rationale:**` | yes | The target's own case for the choice, citing the decision record or document that made it, or saying that none did |
 | `**Objection:**` | yes | What is wrong, under which scenario or rubric criterion |
 | `**Evidence:**` | yes | At least one commit-pinned code reference (§9), Compass identifier, or title of an entry in the critique's `cites:`, then how the weakness was shown |
-| `**Severity:**` | yes | `high`, `medium`, or `low`, by the consequence if the objection holds; a threat model uses its method's measure |
+| `**Severity:**` | yes | `high`, `medium`, or `low`, by the consequence if the objection holds; a threat model, once adopted, uses its method's measure |
 | `**Seed:**` | no | The improvement the objection suggests |
 | `**Resolution:**` | added by a person | The date, then accepted, naming the decision or change that answers it, or rejected, with the reason |
 

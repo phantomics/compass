@@ -14,7 +14,6 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0013
   - COMPASS-0001
-  - COMPASS-0014
 ---
 
 # The Allocation Ledger: Critique

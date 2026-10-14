@@ -372,12 +372,14 @@ Table: The fields of a finding record.
 | `**Seed:**` | no | The improvement the objection suggests |
 | `**Resolution:**` | added by a person | The date, then accepted, naming what answers it, or rejected, with the reason |
 
-An illustrative finding, in a critique of the ledger:
+An illustrative finding, in a critique of the ledger, with a placeholder
+identifier (it is an example, not a finding of
+[COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md)):
 
 ```
-### COMPASS-DRAFT-ledger-critique-O1 — One ledger serializes unrelated namespaces
+### <NS>-DRAFT-<slug>-O1 — One ledger serializes unrelated namespaces
 
-**Rationale:** COMPASS-DRAFT-toolchain-D22 keeps one ledger per repository, so
+**Rationale:** COMPASS-D26 keeps one ledger per repository, so
 that every allocation in the repository is in one sequence and two branches
 that allocate anything conflict; it rejected a ledger per namespace for that
 reason.
@@ -530,6 +532,7 @@ Table: Prior systems and what this plan draws from each.
    `vocabularies.md` lists it. *Done (2026-10-13): `Compass.md` 0.4.0.*
 6. **Checks**, if COMPASS-O41 settles on them.
 7. **First critiques.** A critique of part of Compass, such as the ledger, as
-   the worked example (begun as COMPASS-DRAFT-ledger-critique, a scaffold with
-   its method, scenario, and rubric, and no findings yet); and, at Classic's choice, its `securityPoints.md`
-   rewritten as a `threat-model` Eval (COMPASS-O37).
+   the worked example, begun as
+   [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md): a scaffold with its
+   method, scenario, and rubric, and no findings yet; and, at Classic's choice,
+   its `securityPoints.md` rewritten as a `threat-model` Eval (COMPASS-O37).
