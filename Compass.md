@@ -1613,6 +1613,7 @@ Table: Genuinely open limitations, in priority order.
 | GO3 | End-user documentation as a first-class output | Seamed by §21 and tracked as S5, but not solved: user-doc derivation is a large body of work. Prior-art notes to seed the Plan appear after this table. |
 | GO4 | Reviewer capture from forge PR data | `reviewers` is currently hand-maintained; harvesting from GitHub/GitLab PR review data is a plausible extension, unspecified |
 | GO5 | Multi-persona audience axis | `audience: developer \| end-user \| both` (§21) may need to become a small vocabulary (administrator, integrator, end-user) rather than three fixed values |
+| GO7 | Identifiers in fenced code go stale silently | Fenced code blocks hold examples, so the toolchain neither checks the identifiers in them nor rewrites them when numbers are assigned (§13). An example that cites a real record keeps the provisional identifier after assignment, with no warning; `ref/stale-alias` sees only text and front-matter. A warning, never an error, for a ledger alias inside a fence would let authors update examples deliberately |
 
 ### Prior-art notes for GO3 (user-doc derivation)
 

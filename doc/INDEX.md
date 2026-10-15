@@ -94,6 +94,7 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D62](Plan.Critique.md#compass-d62--findings-are-open-question-records-and-a-person-disposes-of-each) | Decision | Findings are open-question records, and a person disposes of each | Accepted | COMPASS-0014 |
 | [COMPASS-D63](Plan.Critique.md#compass-d63--a-threat-model-is-a-critique-of-security-with-its-own-method) | Decision | A threat model is a critique of security, with its own method | Accepted | COMPASS-0014 |
 | [COMPASS-D64](Plan.Critique.md#compass-d64--the-conversation-is-scratch-the-critique-is-its-distillation) | Decision | The conversation is scratch; the critique is its distillation | Accepted | COMPASS-0014 |
+| [COMPASS-DRAFT-authoring-assistance-D1](Plan.AuthoringAssistance.md#compass-draft-authoring-assistance-d1--a-fifth-skill-sets-a-repository-up-for-compass) | Decision | A fifth skill sets a repository up for Compass | Proposed | COMPASS-0003 |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |

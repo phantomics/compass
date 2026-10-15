@@ -6,7 +6,7 @@ Compass is a formalized methodology for documenting software projects. It includ
 
 ## The toolchain
 
-`compass` checks a repository's documents against the standard, shows documents and records by identifier, generates the namespace index, and assigns identifiers through an append-only ledger, so that no number is ever allocated twice. Version 0.2 adds the ledger and its rules, `assign` and `renumber`, fields derived from Git, checks of commit-pinned code references, federation, and CI; see [COMPASS-DRAFT-toolchain](doc/Plan.Toolchain.md) for the plan and its later releases, and [COMPASS-DRAFT-ledger-log](doc/Log.Ledger.md) for how version 0.2 was built.
+`compass` checks a repository's documents against the standard, shows documents and records by identifier, generates the namespace index, and assigns identifiers through an append-only ledger, so that no number is ever allocated twice. Version 0.2 adds the ledger and its rules, `assign` and `renumber`, fields derived from Git, checks of commit-pinned code references, federation, and CI; see [COMPASS-0004](doc/Plan.Toolchain.md) for the plan and its later releases, and [COMPASS-0013](doc/Log.Ledger.md) for how version 0.2 was built.
 
 Build and test it with SBCL and Quicklisp:
 
@@ -16,7 +16,19 @@ make test         # runs the test suite
 make check        # builds, then checks this repository
 ```
 
-Use it from anywhere inside a repository:
+Add the `/bin` directory to your PATH and then you're ready to use compass from the CLI.
+
+### Adding Compass to a project
+
+The `compass-adopt` skill sets a folder up for Compass in one step. This repository's `opencode.json` registers the skills in `skills/` for work here; to use them in other folders, add this repository's `skills` directory to `skills.paths` in `~/.config/opencode/opencode.json`. Then open an OpenCode session in the folder, an empty one or an existing repository, and ask:
+
+> Set up Compass here.
+
+The skill asks for the namespace the project will own, its steward, and whether the steward approves alone, then writes a `.mailmap`, the manifest `compass.sexp` (with `compass init`), the `doc/` directory with an empty allocation ledger (with `compass init --ledger`), and the Compass block of `AGENTS.md`, and runs `compass check`. It commits nothing: review the files, commit them, and restart the session so that `AGENTS.md` is loaded. Write the first document with the `compass-author` skill, usually a Survey or a Plan.
+
+A mature codebase with many existing documents needs more than this. The skill sets Compass up beside them and leaves them untouched, checking with `compass check --skip-unmarked`; converting them to Compass, one document at a time, is a specialized workflow whose tools are now being created.
+
+Use `compass` from anywhere inside a repository:
 
 ```sh
 compass check [PATH...] [--format text|json] [--strict] [--skip-unmarked]

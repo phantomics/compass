@@ -22,6 +22,7 @@ decisions:
   - COMPASS-D2
   - COMPASS-D3
   - COMPASS-D4
+  - COMPASS-DRAFT-authoring-assistance-D1
 open-questions:
   - COMPASS-O1
   - COMPASS-O2
@@ -131,6 +132,36 @@ read on demand. The OpenCode `SKILL.md` layout is the reference implementation
 duplication drifts); one reference file (rejected: coarse; four focused files
 map to the concerns skills actually query).
 
+### COMPASS-DRAFT-authoring-assistance-D1 — A fifth skill sets a repository up for Compass
+
+**Status:** Proposed
+**Context:** COMPASS-D1 splits the layer into four skills for drafting,
+review, retrieval, and derivation, all of which assume a repository already
+set up for Compass. Setting one up takes several steps that must happen in
+order and that are easy to get wrong: a `.mailmap` before the first allocation,
+since a ledger entry's allocator can never be corrected; the manifest
+(`compass init`); the document directory and its ledger
+(`compass init --ledger`); and the Compass block of `AGENTS.md`, filled with
+the repository's facts. In an existing repository the same setup must leave
+the documents already there untouched.
+**Decision:** Add a fifth skill, `compass-adopt`, agent-shaped like
+`compass-author`. It asks for and confirms the namespace, steward, approval
+mode, document directory, and federation; writes the `.mailmap`, the manifest,
+the ledger, and the `AGENTS.md` block, in that order; and checks the result. It
+writes no documents and migrates none: in a repository with existing
+documents it sets Compass up beside them, checks with
+`compass check --skip-unmarked`, and leaves their conversion to a separate,
+document-by-document workflow. It never commits. Amends COMPASS-D1's four-way
+split; the §23 S9 naming is unaffected, since S9 names the skills it lists
+without excluding others.
+**Alternatives:** Extend `compass init` to write the `.mailmap` and
+`AGENTS.md` (rejected for now: the namespace, steward, and canonical names are
+judgments the user confirms, and the `AGENTS.md` block is prose filled from
+them; a non-interactive scaffold may follow once the facts are settled); fold
+adoption into `compass-author`'s first-document step (rejected: setup is
+needed before any document, and in an existing repository no document is
+written at all).
+
 ## The skill set
 
 - **`compass-author`** — scaffolds a new document: gathers `genre`/`scope`/
@@ -145,13 +176,19 @@ map to the concerns skills actually query).
   genre fit (§4), §14 section-shape adherence, `D`-record quality (§8), memo
   admission, cross-reference plausibility (§9), and prior-art coverage; emits a
   report for the §6 editor. Never sets `approved-by`.
+- **`compass-adopt`** — sets a folder up for Compass
+  (COMPASS-DRAFT-authoring-assistance-D1): confirms the namespace, steward,
+  approval mode, document directory, and federation, then writes a
+  `.mailmap`, the manifest (`compass init`), the ledger
+  (`compass init --ledger`), and the Compass block of `AGENTS.md`, and checks
+  the result. Writes no documents and migrates none.
 - **`compass-lookup`** — read-only retrieval across the federation with
   `compass show`, `outline`, `refs`, and `index --stdout`: resolve an `id` or
   section anchor, a `D`/`O`/M record, relationship queries
   (`relates-to`/`supersedes`/`cites` and inbound references), and namespace
   listings (§9, §10, §13).
 
-All three find the `compass` executable, check which commands it has, and
+All four find the `compass` executable, check which commands it has, and
 interpret its exit codes as `skills/reference/toolchain.md` describes, and fall
 back to working from the files, saying so, when it is absent.
 - **`compass-derive`** — deferred (COMPASS-D3). Wraps the derivation pipeline (§16) with
@@ -254,7 +291,11 @@ Table: Prior systems and what this plan draws from each.
      code-reference findings; `compass-lookup` follows aliases, reads authors
      and dates from `outline`, and the manifest from `manifest --json`. See
      [COMPASS-0013](Log.Ledger.md).
-7. **Cross-harness adapters (future).** Re-envelope the neutral core for Claude
+7. **Adoption skill (done, 2026-10-13).** `compass-adopt`
+   (COMPASS-DRAFT-authoring-assistance-D1); the README describes it after the
+   build instructions. A migration skill for existing documents is planned
+   separately.
+8. **Cross-harness adapters (future).** Re-envelope the neutral core for Claude
    Code, Cursor/Copilot, and MCP (§23 S9).
 
 ## Outstanding Work
