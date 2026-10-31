@@ -20,6 +20,7 @@ and the documents that support them, live here as they are written:
 - `COMPASS-0008` — RDF vocabulary, identity, and shapes (Spec)
 - `COMPASS-0010` — Prior-art Eval for the agent-context work (non-exhaustive)
 - `COMPASS-DRAFT-positioning` — Survey positioning Compass among agent-memory tools, as the engineering record
+- `COMPASS-DRAFT-emacs-review` — toolchain write commands for review, and an Emacs package that drives them (S9)
 
 Files follow the standard's naming (`Plan.*.md`, `Log.*.md`, `Ref.*.md`, …)
 and front-matter (§7). Provisional identifiers use `COMPASS-DRAFT-<slug>` until

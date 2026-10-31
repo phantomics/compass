@@ -24,6 +24,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0012](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-0013](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Accepted | toolchain |
 | [COMPASS-0014](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Accepted | standard |
+| [COMPASS-DRAFT-emacs-review](Plan.EmacsReview.md) | Compass Review in Emacs — Write Commands and an Emacs Package | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
 | [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 
@@ -96,6 +97,15 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D63](Plan.Critique.md#compass-d63--a-threat-model-is-a-critique-of-security-with-its-own-method) | Decision | A threat model is a critique of security, with its own method | Accepted | COMPASS-0014 |
 | [COMPASS-D64](Plan.Critique.md#compass-d64--the-conversation-is-scratch-the-critique-is-its-distillation) | Decision | The conversation is scratch; the critique is its distillation | Accepted | COMPASS-0014 |
 | [COMPASS-DRAFT-authoring-assistance-D1](Plan.AuthoringAssistance.md#compass-draft-authoring-assistance-d1--a-fifth-skill-sets-a-repository-up-for-compass) | Decision | A fifth skill sets a repository up for Compass | Proposed | COMPASS-0003 |
+| [COMPASS-DRAFT-emacs-review-D1](Plan.EmacsReview.md#compass-draft-emacs-review-d1--writes-live-in-the-toolchain-editors-drive-them) | Decision | Writes live in the toolchain; editors drive them | Proposed | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-D2](Plan.EmacsReview.md#compass-draft-emacs-review-d2--four-write-commands) | Decision | Four write commands | Proposed | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-D3](Plan.EmacsReview.md#compass-draft-emacs-review-d3--acts-reserved-for-people-are-enforced-by-the-commands) | Decision | Acts reserved for people are enforced by the commands | Proposed | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-D4](Plan.EmacsReview.md#compass-draft-emacs-review-d4--a-read-command-reports-review-state-as-json) | Decision | A read command reports review state as JSON | Proposed | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-D5](Plan.EmacsReview.md#compass-draft-emacs-review-d5--emacs-291-with-transient-magit-section-and-eglot) | Decision | Emacs 29.1, with transient, magit-section, and Eglot | Proposed | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-D6](Plan.EmacsReview.md#compass-draft-emacs-review-d6--the-package-lives-in-srcmodemacs-in-three-layers) | Decision | The package lives in src/mod/emacs, in three layers | Proposed | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-D7](Plan.EmacsReview.md#compass-draft-emacs-review-d7--emacs-lisp-source-headers-follow-the-emacs-library-header-convention) | Decision | Emacs Lisp source headers follow the Emacs library-header convention | Proposed | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-D8](Plan.EmacsReview.md#compass-draft-emacs-review-d8--editor-language-features-come-from-a-language-server-through-eglot) | Decision | Editor language features come from a language server, through Eglot | Proposed | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-D9](Plan.EmacsReview.md#compass-draft-emacs-review-d9--installation-from-the-repository-tests-in-ci-a-version-handshake) | Decision | Installation from the repository, tests in CI, a version handshake | Proposed | COMPASS-DRAFT-emacs-review |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |
@@ -142,6 +152,11 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O44](Plan.Critique.md#compass-o44--open-findings-and-agents) | Open question | Open findings and agents | — | COMPASS-0014 |
 | [COMPASS-O45](Plan.Critique.md#compass-o45--stale-critiques) | Open question | Stale critiques | — | COMPASS-0014 |
 | [COMPASS-O46](Plan.Critique.md#compass-o46--critiques-of-the-standard-itself) | Open question | Critiques of the standard itself | — | COMPASS-0014 |
+| [COMPASS-DRAFT-emacs-review-O1](Plan.EmacsReview.md#compass-draft-emacs-review-o1--should-accepting-a-decision-update-its-hosts-approval) | Open question | Should accepting a decision update its host's approval? | — | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-O2](Plan.EmacsReview.md#compass-draft-emacs-review-o2--should-approval-also-record-the-approver-as-a-reviewer) | Open question | Should approval also record the approver as a reviewer? | — | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-O3](Plan.EmacsReview.md#compass-draft-emacs-review-o3--interim-language-features-in-emacs-lisp) | Open question | Interim language features in Emacs Lisp | — | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-O4](Plan.EmacsReview.md#compass-draft-emacs-review-o4--review-across-a-federation) | Open question | Review across a federation | — | COMPASS-DRAFT-emacs-review |
+| [COMPASS-DRAFT-emacs-review-O5](Plan.EmacsReview.md#compass-draft-emacs-review-o5--publishing-the-package) | Open question | Publishing the package | — | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-positioning-O1](Survey.Positioning.md#compass-draft-positioning-o1--which-name-to-lead-with) | Open question | Which name to lead with | — | COMPASS-DRAFT-positioning |
 | [COMPASS-DRAFT-positioning-O2](Survey.Positioning.md#compass-draft-positioning-o2--integrate-with-memory-tools-or-compete) | Open question | Integrate with memory tools, or compete | — | COMPASS-DRAFT-positioning |
 | [COMPASS-DRAFT-positioning-O3](Survey.Positioning.md#compass-draft-positioning-o3--agent-journals-and-decision-records) | Open question | Agent journals and decision records | — | COMPASS-DRAFT-positioning |
