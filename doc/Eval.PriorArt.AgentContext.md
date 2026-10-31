@@ -22,6 +22,7 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0008
   - COMPASS-0002
+  - COMPASS-DRAFT-positioning
 cites:
   - title:     "Ontology-Grounded Project Memory for Coding Agents (Adam; NeSy 2026)"
     locator:   "arXiv:2608.13662, abstract and §2–§3"
@@ -408,7 +409,9 @@ Table: Assessment of each element against the prior art found.
    now cites Handoff Debt, Codified Context, and MOOSEDev and states its gap
    narrowly; [COMPASS-0005](Survey.OperatorMemory.md) and
    [COMPASS-0008](Spec.SemanticBinding.md) record the further
-   prior art.
+   prior art; [COMPASS-DRAFT-positioning](Survey.Positioning.md) draws on the
+   third round, and on the side-by-side comparison, to position Compass among
+   agent-memory tools.
 
 ## Open Questions
 

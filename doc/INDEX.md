@@ -25,6 +25,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0013](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Accepted | toolchain |
 | [COMPASS-0014](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Accepted | standard |
 | [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
+| [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
 
@@ -141,3 +142,9 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O44](Plan.Critique.md#compass-o44--open-findings-and-agents) | Open question | Open findings and agents | — | COMPASS-0014 |
 | [COMPASS-O45](Plan.Critique.md#compass-o45--stale-critiques) | Open question | Stale critiques | — | COMPASS-0014 |
 | [COMPASS-O46](Plan.Critique.md#compass-o46--critiques-of-the-standard-itself) | Open question | Critiques of the standard itself | — | COMPASS-0014 |
+| [COMPASS-DRAFT-positioning-O1](Survey.Positioning.md#compass-draft-positioning-o1--which-name-to-lead-with) | Open question | Which name to lead with | — | COMPASS-DRAFT-positioning |
+| [COMPASS-DRAFT-positioning-O2](Survey.Positioning.md#compass-draft-positioning-o2--integrate-with-memory-tools-or-compete) | Open question | Integrate with memory tools, or compete | — | COMPASS-DRAFT-positioning |
+| [COMPASS-DRAFT-positioning-O3](Survey.Positioning.md#compass-draft-positioning-o3--agent-journals-and-decision-records) | Open question | Agent journals and decision records | — | COMPASS-DRAFT-positioning |
+| [COMPASS-DRAFT-positioning-O4](Survey.Positioning.md#compass-draft-positioning-o4--the-first-proof-of-the-records-value) | Open question | The first proof of the record's value | — | COMPASS-DRAFT-positioning |
+| [COMPASS-DRAFT-positioning-O5](Survey.Positioning.md#compass-draft-positioning-o5--becoming-a-standard-in-fact) | Open question | Becoming a standard in fact | — | COMPASS-DRAFT-positioning |
+| [COMPASS-DRAFT-positioning-O6](Survey.Positioning.md#compass-draft-positioning-o6--stating-the-positioning-in-the-standard) | Open question | Stating the positioning in the standard | — | COMPASS-DRAFT-positioning |
