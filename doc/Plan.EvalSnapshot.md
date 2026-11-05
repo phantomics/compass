@@ -9,6 +9,7 @@ language:      en
 status:        Draft
 provenance:
   assistant:   opencode
+  session:     "Design conversation on Track 1, 2026-11-01 to 2026-11-05"
 relates-to:
   - COMPASS-0006
   - COMPASS-0010
@@ -80,6 +81,7 @@ decisions:
   - COMPASS-DRAFT-eval-snapshot-D13
   - COMPASS-DRAFT-eval-snapshot-D14
   - COMPASS-DRAFT-eval-snapshot-D15
+  - COMPASS-DRAFT-eval-snapshot-D16
 open-questions:
   - COMPASS-DRAFT-eval-snapshot-O1
   - COMPASS-DRAFT-eval-snapshot-O2
@@ -87,6 +89,7 @@ open-questions:
   - COMPASS-DRAFT-eval-snapshot-O4
   - COMPASS-DRAFT-eval-snapshot-O5
   - COMPASS-DRAFT-eval-snapshot-O6
+  - COMPASS-DRAFT-eval-snapshot-O7
 ---
 
 # Compass Snapshot Study: Development Plan
@@ -149,6 +152,8 @@ problems of four kinds:
   - A2 adds an instruction to consult documents that A1 lacks. Khatri found
     that a difference in the channel that delivers context confounds its
     comparisons.
+  - A2's instructions direct the agent to the `compass` toolchain and skills,
+    but the protocol does not say whether they are present in any workspace.
   - The assistant that helped design the study, Claude Opus 5.5, is also the
     pilot's subject model.
 
@@ -171,8 +176,8 @@ problems of four kinds:
 
 ## Settled Decisions
 
-All fifteen decisions are proposals for the steward. Several were agreed in
-the design conversation of 2026-11-01 to 2026-11-03 and are marked so; the
+All sixteen decisions are proposals for the steward. Several were agreed in
+the design conversation of 2026-11-01 to 2026-11-05 and are marked so; the
 steward accepts them.
 
 ### COMPASS-DRAFT-eval-snapshot-D1 — Track 1 runs and reports ahead of Track 2
@@ -210,10 +215,16 @@ documents were migrated, and its code did not load correctly. Classic's `src/`, 
 
 **Decision:** The snapshot's code tree is Classic's at `807640b`; its
 documents, for every setup, derive from Classic's at `bad2094`. The new package
-test is part of the visible suite. The snapshot is accepted only when the full
-suite passes at it on 20 consecutive runs in the study's container; a test that
-fails on any of them is recorded as flaky and excluded from every oracle
-(COMPASS-DRAFT-eval-snapshot-D7).
+test is part of the visible suite. The full suite is run 20 times at the
+snapshot in the study's container:
+- a test that fails on some runs but not all is recorded as flaky and excluded
+  from every oracle (COMPASS-DRAFT-eval-snapshot-D7);
+- a test that fails on every run blocks acceptance until the snapshot is
+  corrected;
+- the snapshot is accepted when every test not recorded as flaky passes on all
+  20 runs.
+
+*Wording agreed in conversation.*
 
 **Alternatives:** The parent of `bad2094` (`2e6e88c`), the last commit whose
 code was probably sound, loses `bad2094`'s document changes and requires a
@@ -246,6 +257,22 @@ that A2 tests Compass as practised.
 - **No new text.** The conversion adds no prose. The HEAD annotations that
   record later knowledge, such as migration notes and staleness remarks, are
   not carried over.
+- **No dates in the base corpus.** Workspaces have no history
+  (COMPASS-DRAFT-eval-snapshot-D6), so Git can supply no dates or authors, and
+  explicit `created` or `updated` fields in A2 alone would give it facts A1
+  lacks. No setup's base corpus carries dates. Seeded pairs carry the same
+  explicit dates in every setup (COMPASS-DRAFT-eval-snapshot-D4).
+- **Files at the root.** `securityPoints.md` stays outside the corpus at HEAD
+  by Classic's own decision (CLASSIC-0032, Scope and Non-Goals), so it has no
+  HEAD status to reproduce. It is unchanged and untyped in every setup, unless
+  COMPASS-O37 is resolved and the analysis migrated before the freeze, in which
+  case A2–A4 carry the migrated form, as COMPASS-0006 provides. `README.md` is
+  unchanged in every setup.
+- **The manifest and ledger.** A2–A4 carry a `compass.sexp` that declares the
+  CLASSIC namespace with no federation, and a ledger holding only the
+  baseline's documents and records, so that it names no later document.
+  Before the freeze, `compass check` (COMPASS-DRAFT-eval-snapshot-D16) must
+  report no errors on the A2 workspace.
 - **Records of the conversion.**
   - A conversion table lists each document, its HEAD counterpart, and the
     fields set.
@@ -286,9 +313,14 @@ Hand-editing several corpora invites unrecorded differences.
 - **Tests of each transform.** Each transform has tests showing that it
   removes its feature and leaves every other byte unchanged.
 - **Seeded pairs.** A pair is an overlay applied to a task's workspace in
-  every setup. A1 carries both documents untyped, each with its date. A2–A4
-  mark the earlier one `Superseded`, with a `superseded-by` link. A2−S drops
-  those markers.
+  every setup, and each of its documents carries its date explicitly and
+  identically in every setup. A1 carries both documents untyped. A2–A4 mark
+  the earlier one `Superseded`, with a `superseded-by` link. A2−S drops those
+  markers.
+- **Catalog and map follow the overlay.** Where a task has an overlay, A3's
+  catalog and A4's catalog and map are rebuilt for that task's corpus, by the
+  same procedure as the base catalog, so that the catalog never omits a
+  document the corpus holds.
 - **Real pairs first.** A pair is taken from Classic's history where a later
   version of a document reverses an earlier one. Otherwise it is written for
   the study, identified as constructed, and reported separately.
@@ -310,11 +342,15 @@ the channel delivering context confounded his comparisons.
 - **Every setup has a root `AGENTS.md`.**
   - In A1 it says where the documents are and asks the agent to consult them
     before changing code, at roughly the snippet's length.
-  - In A2 it is the Compass snippet, filled for Classic.
+  - In A2 it is the Compass snippet, filled for Classic, including the same
+    sentence asking the agent to consult the documents before changing code.
   - In A3 it is the snippet followed by the catalog.
   - In A4 it is A3's, with the source map's top level.
   - The screening setup A0 (COMPASS-DRAFT-eval-snapshot-D7) gets a neutral
     file of the same length that names no documents.
+  - Only the snippet names the Compass toolchain and skills. They are present
+    in every setup (COMPASS-DRAFT-eval-snapshot-D16), but A0's and A1's files
+    do not mention them.
 - **The files are fixed at freeze.** Their texts are recorded, and their token
   counts are reported as the injected context of each setup (G8).
 
@@ -390,7 +426,11 @@ is later compared would bias that comparison through regression to the mean.
   - A control task is kept for a model only if it is neither always passed nor
     always failed there.
   - A trap task is kept if its trap is triggered at least once on A0. A trap
-    no one falls into without documents does not test them.
+    no one falls into without documents does not test them. Traps graded by
+    the judge, such as design churn (G11), need judge passes on the screening
+    runs, which adds to the screening cost.
+  - Because tasks are kept per model, the models' task sets may differ. This
+    is intended; comparisons between models use only the tasks they share.
   - Screening runs are never pooled into the study.
 
 **Alternatives:** Screening on A1, which biases the A1 comparisons; no
@@ -479,14 +519,22 @@ form possible later.
   model of each binary measure, with setup as a fixed effect and a random
   intercept per task, fitted with `lme4`.
 - **Paired contrasts.** Each pair of setups is compared with a task-clustered
-  bootstrap (10,000 resamples) of the difference in pass rates, and an exact
-  permutation test within tasks. Fisher's exact test is not used.
-- **Primary endpoint on trap tasks.** A *clean pass*: G1, G2, and G3 all hold.
-  Each component is reported as well.
+  bootstrap (10,000 resamples) of the difference in pass rates, and a Monte
+  Carlo permutation test that permutes setup labels within tasks. Fisher's
+  exact test is not used.
+- **Primary endpoints, by hypothesis.**
+  - T1-H1 and T1-H6: a *clean pass*, meaning G1, G2, and G3 all hold.
+  - T1-H2 and T1-H7: supersession errors (G7).
+  - T1-H8: design churn (G11).
+  - T1-H9: the endpoint of the task's category, as above.
+
+  Each component of a clean pass is reported as well.
 - **Partial credit.** The share of hidden tests passed is a secondary measure,
   as in *The Specification Gap*.
 - **Cost (G8).** Analysed on log scale, with ratios and task-clustered
-  intervals. The 20% rule compares A3 with A2.
+  intervals. COMPASS-0006's rule that A3 must not add more than 20% cost names
+  no baseline. This plan reads it as A3 against A2, the setup A3 extends; the
+  steward confirms that reading in the update to COMPASS-0006.
 - **Families.** Holm's correction is applied within each family, for each
   model:
   - trap tasks: T1-H1, T1-H6, T1-H7, T1-H8;
@@ -564,7 +612,9 @@ when it does.
   `compass-eval`, outside `compass.asd`, with FiveAM tests in a
   `compass-eval/tests` system and source headers as in `src/`. It runs
   OpenCode, the container runtime, and Git as external programs, always with
-  argument lists.
+  argument lists. The repository's own guards, such as
+  `no-stray-format-strings`, scan only `src/`; `compass-eval/tests` carries
+  its own where they apply.
 - **Snapshot descriptors.** Each repository is described by a descriptor
   under `eval/snapshots/` that names:
   - the code and document revisions;
@@ -591,8 +641,10 @@ when it does.
 - **A Python harness** departs from the repository's language.
 - **An analysis in Lisp** would replace the mixed-effects model with bootstrap
   tests alone, a change to the protocol.
-- **A separate repository** was the earlier proposal; the steward chose
-  `eval/`.
+- **A separate repository** was the earlier proposal. Keeping the harness in
+  `eval/`, beside the toolchain and the corpus, keeps the protocol, its inputs,
+  the harness, and the record of the study in one versioned place, frozen by
+  one commit.
 
 ### COMPASS-DRAFT-eval-snapshot-D13 — What each run records, and when a run counts
 
@@ -609,8 +661,9 @@ metrics that mean the same across agents, rather than turns.
   - the setup's injected context, as text and as tokens, measured by one
     probe request per setup;
   - every document the agent read, from its tool calls;
-  - whether the setup's `AGENTS.md` appears in the session's first request (a
-    manipulation check);
+  - whether the setup's `AGENTS.md` appears in the session's first request,
+    and whether the Compass skills are listed there (manipulation checks);
+  - every `compass` command and skill the agent invoked;
   - the container image digest;
   - the harness commit.
 - **Order.** Runs are interleaved in a random order, blocked by task, so that
@@ -642,7 +695,9 @@ needs a record that is pinned to its commits.
 - **This Plan** holds the design of Track 1 and its roadmap.
 - **COMPASS-0006 is revised before the freeze.** The steward adds an
   `## Update <date> — Track 1 protocol revisions` section that applies:
-  - COMPASS-DRAFT-eval-snapshot-D1 to COMPASS-DRAFT-eval-snapshot-D11;
+  - COMPASS-DRAFT-eval-snapshot-D1 to COMPASS-DRAFT-eval-snapshot-D11,
+    COMPASS-DRAFT-eval-snapshot-D13, and COMPASS-DRAFT-eval-snapshot-D16;
+  - the reading of the 20% cost rule (COMPASS-DRAFT-eval-snapshot-D10);
   - the dropped security candidates;
   - the corrected statistics;
   - the resolution of COMPASS-O19 for Track 1.
@@ -665,10 +720,12 @@ corpus.
 **Status:** Proposed
 
 **Context:** The steward plans an arXiv preprint followed by a conference
-submission. A paper is not a Compass genre; it is a curated derivation of the
-record, in the sense of §16. Reviewers in empirical software engineering
-expect the ACM SIGSOFT Empirical Standards. The design used an assistant from
-one of the subject models' labs.
+submission. A paper is not a Compass genre; it is a derivation of the record
+plus curation, in the sense of §21. Reviewers in empirical software
+engineering expect the ACM SIGSOFT Empirical Standards. The design used an
+assistant from one of the subject models' labs. Major software-engineering
+conferences review double-blind, and a paper about Compass by its designer,
+with a preprint already public, is hard to anonymise.
 
 **Decision:**
 - **Location and format.** The paper lives in `pub/snapshot-study/`, outside
@@ -683,12 +740,55 @@ one of the subject models' labs.
   - every result, null results included.
 - **Release.** The harness, corpora, tasks, redacted transcripts, and analysis
   are deposited with a DOI when the preprint is posted.
+- **Double-blind review.** The conference is chosen with its anonymity and
+  preprint policies in view. The submitted version refers to Compass, Classic,
+  and the steward in the third person and points to an anonymised copy of the
+  deposit, as the venue's policy allows (COMPASS-DRAFT-eval-snapshot-O7).
 
 *arXiv preprint then conference, and `pub/`, agreed in conversation.*
 
 **Alternatives:** The paper as a Compass document, which would bind a
 venue's format to the corpus's rules. A journal first, which delays the
 preprint.
+
+### COMPASS-DRAFT-eval-snapshot-D16 — The Compass toolchain and skills are present in every workspace
+
+**Status:** Proposed
+
+**Context:** A2's Compass snippet tells the agent to use the `compass-*`
+skills and to run `compass` commands such as `check`, `show`, and `outline`.
+If they are absent, A2's instructions point at tools that do not exist, and
+the study does not test Compass as it is meant to be used. If they are present
+only in A2–A4, those setups differ from A1 in the tools available as well as
+in typing. `compass show` and `outline` are navigation aids in their own right.
+The toolchain and skills are part of what the study evaluates.
+
+**Decision:**
+- **Every workspace,** in every setup including A0 and the ablations, has the
+  same Compass installation:
+  - the `compass` executable, built at the freeze commit, on the path;
+  - the `compass-*` skills with their reference bundle and the standard,
+    installed where OpenCode discovers skills, outside the workspace.
+- **What differs between setups** is only the corpus and `AGENTS.md`
+  (COMPASS-DRAFT-eval-snapshot-D5). A2–A4 also carry the manifest and ledger
+  (COMPASS-DRAFT-eval-snapshot-D3), without which the toolchain cannot read a
+  corpus.
+- **Consequences.**
+  - A2 against A1 measures typing and the snippet with the tools held constant.
+  - In A1 the tools are available, but neither `AGENTS.md` nor the untyped
+    documents point to them.
+  - Each run records which commands and skills were used
+    (COMPASS-DRAFT-eval-snapshot-D13). Use of the tools by setup is reported
+    as a mechanism measure.
+
+*Agreed in conversation.*
+
+**Alternatives:**
+- **No tools in any workspace.** This leaves the snippet's instructions
+  pointing at nothing, and tests a reduced Compass.
+- **Tools only in A2–A4.** This is closer to how an adopting project looks,
+  but it confounds typing with tooling, and the comparison of A2 with A1 could
+  no longer be attributed to the form of the documents.
 
 ## The Snapshot and Its Corpora
 
@@ -711,7 +811,11 @@ Table: What each Track 1 setup receives, and how it is produced.
   other setups leave untouched; grading applies the agent's diff to the
   workspace it was made in.
 - Per-task overlays (seeded pairs, withheld tests) are applied after the setup
-  is assembled.
+  is assembled. Where an overlay adds documents, A3's catalog and A4's catalog
+  and map are rebuilt for the task (COMPASS-DRAFT-eval-snapshot-D4).
+- Every setup, A0 included, has the same Compass toolchain and skills
+  installed (COMPASS-DRAFT-eval-snapshot-D16). A2–A4 also carry Classic's
+  manifest and a ledger limited to the baseline.
 
 ## Tasks
 
@@ -753,7 +857,9 @@ hypotheses, measures, margins, and decision rules do not.
 ## The Paper
 
 Working title: *Do Typed Project Records Keep Coding Agents Off Superseded and
-Rejected Designs? A Pre-registered Ablation Study.*
+Rejected Designs? An Ablation Study.* The title adds "Pre-registered" only if
+the protocol is registered outside this repository before the runs
+(COMPASS-DRAFT-eval-snapshot-O5).
 
 Table: Outline of the paper and the record each part is derived from.
 
@@ -845,6 +951,16 @@ candidates for reduction are the third model, the ablations' second model, the
 number of control tasks, and runs per cell (5 to 3). What is the budget, and in
 which order are these cut?
 
+### COMPASS-DRAFT-eval-snapshot-O7 — The conference and anonymity
+
+The steward plans an arXiv preprint, then a conference. Venues differ in
+whether they review double-blind and whether they accept papers whose preprint
+is public. Compass's name, Classic's history, and the deposit all identify the
+author. Which conference is the target? Is the preprint posted before
+submission, or held until the venue's policy allows it? Is an anonymised
+version of the deposit enough, or should the conference be chosen among those
+that review single-blind?
+
 ## Prior Art
 
 Table: Prior studies and what this plan takes from each.
@@ -859,7 +975,7 @@ Table: Prior studies and what this plan takes from each.
 | MOOSEDev (2026) | Unaltered transcripts that can be re-graded; a check that the mechanism fired; gold answers from primary sources; a judge validated on known answers |
 | *The Specification Gap* (2026) | The share of tests passed as a graded outcome; a layered ablation design |
 | Tufano et al. (2026) | Task-level bootstrap; randomised, anonymised judging with a majority over passes |
-| *Spec Kit Agents* (2026) | A caution: one run per cell, a judge-only outcome, and a small human check that disagreed with the judge |
+| *Spec Kit Agents* (2026) | A caution: one run per cell, a judge-only outcome, and a small human check whose votes, on our reading of its Table 2, leaned the other way from the judge |
 | Ben Sghaier et al. (2026) | The harness version pinned, since it alone moves results |
 | SWE-smith (2025) | Tasks synthesised by breaking a repository's existing tests |
 | ACM SIGSOFT Empirical Standards | The reporting checklist for the paper |
@@ -873,15 +989,18 @@ Each stage that builds harness code ends with `compass-eval/tests` passing.
    resolves COMPASS-O17 and COMPASS-O20 for Track 1.
 2. **Harness skeleton and snapshot.**
    - The `compass-eval` system and descriptor reader; Classic's descriptor.
-   - The container images; workspace construction with the isolation checks
-     of COMPASS-DRAFT-eval-snapshot-D6.
+   - The container images, with the Compass toolchain and skills installed
+     (COMPASS-DRAFT-eval-snapshot-D16); workspace construction with the
+     isolation checks of COMPASS-DRAFT-eval-snapshot-D6.
    - Twenty consecutive runs of the full suite at the snapshot, with any
      flaky tests recorded.
    - `AGENTS.md` is updated with the facts of `eval/` and `pub/`.
    - The first part of `doc/Log.EvalSnapshot.md` is written after the
      commit.
 3. **Corpora.**
-   - A1 extracted; A2 converted, with its conversion table and review.
+   - A1 extracted; A2 converted, with its conversion table and review, its
+     manifest, and its ledger; `compass check` reporting no errors on the A2
+     workspace.
    - The A3 catalog; A4's headers and map.
    - The transform and overlay programs, with their tests.
 4. **Task bank.**

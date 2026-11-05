@@ -1483,7 +1483,7 @@ COMPASS-D9's, increments the minor number. Section by section:
 - **Classic**, commit `be4fe84`: its `AGENTS.md` says that the duplicated
   CLASSIC-O1 to CLASSIC-O6 also block `compass init --ledger`, and should become
   provisional identifiers formed from each Survey's own. The same commit adds
-  [CLASSIC-DRAFT-compass-integration](../../classic/doc/survey/Survey.CompassIntegration.md),
+  [CLASSIC-0031](../../classic/doc/survey/Survey.CompassIntegration.md),
   a Survey of how a Compass corpus could be composed from Classic's base schema
   rather than its wiki preset, and of the extensions Classic needs for it. Its
   findings bear on the RDF export of COMPASS-D21: §17's
