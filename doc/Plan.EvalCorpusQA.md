@@ -79,9 +79,11 @@ competency questions of [COMPASS-DRAFT-positioning](Survey.Positioning.md).
   requirement stops affecting behaviour. Track 1 observes only the last stage.
 - **The supersession claim rests on retrieval evidence alone.** MOOSEDev
   showed that typed records answer supersession, completeness, and negation
-  questions where vector retrieval fails. Its agents answered from the store
-  alone, not from a repository with code and documents, and the documents
-  were not in a standard form.
+  questions where vector memory and flat notes fail. Its records were typed by
+  the project's own ontologies and held in its own graph store, not written as
+  documents under a published standard, and its questions tested what the
+  memory could answer, not how agents fare in a repository whose documents are
+  typed.
 - **Statuses as practised make the question sharper.** Track 1 reproduces
   Classic's statuses at HEAD, where stale documents are `Current`
   (COMPASS-DRAFT-eval-snapshot-D3). Whether such labels mislead an agent is
@@ -135,6 +137,10 @@ blur what it registers. The steward wants the study pre-registered.
   - the Compass tools in every workspace (COMPASS-DRAFT-eval-snapshot-D16).
 
   A change to one of these applies to both studies, and is recorded in both.
+  A change made after this study's freeze, such as a fault fixed during its
+  operational review (COMPASS-DRAFT-eval-corpus-qa-D2), is recorded as a
+  deviation in its protocol Eval, and the sessions it affected are rerun
+  under the corrected version.
 - **Its own protocol and freeze.** Its hypotheses, measures, and analysis are
   frozen in a protocol Eval of its own (COMPASS-DRAFT-eval-corpus-qa-D10),
   separately from and earlier than Track 1's.
@@ -156,27 +162,31 @@ blur what it registers. The steward wants the study pre-registered.
 
 **Status:** Proposed
 
-**Context:** The study needs Track 1's corpora, workspaces, runner, recorder,
-and judge, but not its test grading, so it can run as soon as those exist. Run
-early, it shakes down the harness. But if its results by setup were seen
-before Track 1 is frozen, they could shape Track 1's tasks, sizes, or
-analysis: an undeclared choice made after seeing data.
+**Context:** The study needs Track 1's corpora, its trap tasks (for the linked
+questions), and its workspaces, runner, recorder, and judge, but not its test
+grading, so it can run as soon as those exist. Run early, it shakes down the
+harness. But if its results by setup were seen before Track 1 is frozen, they
+could shape Track 1's tasks, sizes, or analysis: an undeclared choice made
+after seeing data. Cost by setup is such a result: it is this study's measure
+for QA-H7 and bears on Track 1's rule about the cost of the catalog.
 
 **Decision:**
-- **When it runs.** After its own freeze, between Track 1's roadmap stage 3
-  (corpora) and stage 7 (Track 1's freeze).
-- **What is seen at once.** Operational data are examined immediately:
-  - failed and rerun sessions;
-  - cost and duration;
-  - manipulation checks;
-  - redaction;
+- **When it runs.** After its own freeze, between Track 1's roadmap stage 5
+  (runner, recorder, grader, and judge) and stage 7 (Track 1's freeze). It is
+  on Track 1's critical path, and Track 1's roadmap records it.
+- **What is seen at once.** Operational data are examined immediately, pooled
+  across setups:
+  - cost, duration, and tokens;
+  - manipulation checks and redaction;
   - the judge's validation and the steward's calibration grades.
 
-  Faults they reveal in the shared instruments are fixed before Track 1's
-  freeze and recorded in both studies' Logs.
-- **What is sealed.** Results broken down by setup are not computed or shown
-  to the steward until Track 1 is frozen. Calibration grading is blind to
-  setup, as in Track 1.
+  Only counts of failed, invalid, and rerun sessions are shown by setup, so
+  that a setup the harness handles badly is found. Faults these data reveal in
+  the shared instruments are fixed before Track 1's freeze and recorded in both
+  studies' Logs (COMPASS-DRAFT-eval-corpus-qa-D1).
+- **What is sealed.** Every other result broken down by setup, cost included,
+  is not computed or shown to the steward until Track 1 is frozen. Calibration
+  grading is blind to setup, as in Track 1.
 - **After Track 1's freeze,** the analysis is run and reported.
 
 *Running before the pilot agreed in conversation.*
@@ -201,10 +211,17 @@ code and documents both.
 - **The setups:** A0 (the code, no documents), A1, A2, A3, A2−S, A2−R, and
   A2−L, as Track 1 defines them. A4 is optional and included if the budget
   allows (COMPASS-DRAFT-eval-corpus-qa-O1).
+- **A0 is analysed here.** In Track 1, A0 is used only to screen tasks and is
+  never analysed (COMPASS-DRAFT-eval-snapshot-D7). In this study it is a setup
+  like the others, the floor against which the classes the code can answer are
+  reported.
 - **The workspace.** Every session gets the full workspace of its setup: code,
   documents, `AGENTS.md`, and the Compass tools.
 - **Seeded supersession.** Questions use the overlays of the linked Track 1
-  tasks.
+  tasks, and the further seeded pairs this study adds
+  (COMPASS-DRAFT-eval-corpus-qa-D4), built and applied in the same way
+  (COMPASS-DRAFT-eval-snapshot-D4). Overlays apply in the setups that have
+  documents, not in A0.
 - **Real-history supersession** is answered under statuses as practised and
   reported separately, as in Track 1.
 
@@ -239,8 +256,22 @@ Table: Question classes, with an example of each and what it tests.
 | Rationale | Why does federation receipt not use `attempt-transition` for retractions? | Whether reasons are found, not only outcomes |
 | False premise | Why did the project choose to sign federation messages with a key per peer? | Whether the agent rejects a false premise rather than inventing an answer; no such decision was made |
 
+- **Classing a question.** A question about current guidance that a stale
+  document in the baseline contradicts is classed as supersession (real
+  history), not current truth, so that the cases statuses as practised make
+  hardest are analysed as such. The current-truth example above is one.
 - **Linked items.** Each Track 1 trap task has one linked question about the
   knowledge its trap turns on. These count within the 120.
+- **Seeded pairs used only by this study.** Track 1 plans 2–3 seeded pairs,
+  too few for QA-H2 to be tested. This study adds about 8 more, each with one
+  question, so that seeded-supersession questions number about 10–12 in all.
+  - They follow Track 1's rules (COMPASS-DRAFT-eval-snapshot-D4): a pair is
+    taken from Classic's history where a later version of a document reverses
+    an earlier one, and is otherwise written for the study and identified as
+    constructed.
+  - Results on historical and on constructed pairs are reported separately as
+    well as together.
+  - The pairs are not used in Track 1, so that its tasks are unchanged.
 - **Gates.** A question enters the bank only when:
   - its answer can be established from A1's workspace;
   - its answer key was written from primary sources (the `bad2094`
@@ -259,6 +290,8 @@ Table: Question classes, with an example of each and what it tests.
 - **Fewer, broader questions.** These lose power and make grading harder.
 - **Questions only about the trap tasks.** These lose the classes that have
   no trap.
+- **Only Track 1's seeded pairs.** These leave QA-H2 with 2–3 items, too few
+  to test.
 - **Answer keys written from A2.** These would let the typed form define what
   counts as correct.
 
@@ -291,23 +324,36 @@ in the questions.
 
 **Status:** Proposed
 
-**Context:** Free answers are graded only by a judge. A list answer can be
-scored mechanically if it is a list. Which source an agent relied on shows, on
-a supersession question, whether it trusted the stale document or its
-successor, but sources name paths and identifiers that reveal the setup to a
-judge. A final chat message is awkward to parse reliably.
+**Context:** Free answers are graded only by a judge. A list answer, or a yes
+or no, can be scored mechanically if it is given in a field of its own. Which
+source an agent relied on shows, on a supersession question, whether it
+trusted the stale document or its successor, but sources name paths and
+identifiers that reveal the setup to a judge. A final chat message is awkward
+to parse reliably. A field asking whether a question's premise is false would
+tell the agent that some premises are, and prime it to doubt every question.
 
 **Decision:**
 - **The answer file.** The agent writes `answer.json` at the workspace root,
   outside `doc/`. It holds:
   - a short answer;
+  - a yes or no, filled only when the question is put as a yes-or-no question;
   - a list of items, for completeness and location questions;
   - the files relied on;
-  - a confidence between 0 and 1.
+  - a confidence between 0 and 1, used for a descriptive measure of
+    calibration (COMPASS-DRAFT-eval-corpus-qa-D9).
+
+  It has no field about the question's premise.
 - **One file per turn.** In a batched session (COMPASS-DRAFT-eval-corpus-qa-D8)
   each question is its own turn. The harness collects `answer.json` when the
-  turn ends and removes it before the next turn, so that no answer remains in
-  the workspace for a later question to read.
+  turn ends and removes it before the next turn, so that a file left from one
+  question is never collected as the answer to the next. The earlier answer
+  stays in the session's context; that is carry-over, which
+  COMPASS-DRAFT-eval-corpus-qa-D8 and COMPASS-DRAFT-eval-corpus-qa-D9 deal
+  with.
+- **No other changes to the repository.** The prompt asks the agent not to
+  change the repository. Between turns, the harness records and reverts every
+  change other than `answer.json`, so that notes or files written for one
+  question are not there for the next. The changes are recorded per turn.
 - **The schema** is given in each question's prompt, identically in every
   setup.
 - **Invalid answers.** A missing or malformed file scores as wrong and is
@@ -328,11 +374,14 @@ Tufano randomises and anonymises what the judge sees.
 
 **Decision:**
 - **Mechanical scoring.**
-  - Location, negation, and false-premise answers are scored against the key.
+  - Negation answers are scored from the yes-or-no field, and location answers
+    from the list of items, against the key.
   - Completeness answers are scored by set overlap (F1), with full credit at
     an F1 of 1 and the F1 itself as a secondary measure.
-- **The judge.** Current truth, supersession, rejected-alternative, and
-  rationale answers are graded by Gemini 4 Argon (COMPASS-DRAFT-eval-snapshot-D11).
+- **The judge.** Current truth, supersession, rejected-alternative, rationale,
+  and false-premise answers are graded by Gemini 4 Argon
+  (COMPASS-DRAFT-eval-snapshot-D11). A false-premise answer is correct when
+  it rejects the premise or says the decision was never made.
   - It grades against the key, strictly.
   - It sees the question, the key, and the short answer only: no sources and
     no paths.
@@ -341,8 +390,11 @@ Tufano randomises and anonymises what the judge sees.
   - a *supersession error*, where the answer gives the superseded guidance the
     key names;
   - a *confabulation*, where the answer accepts a false premise.
-- **Attribution.** The cited sources are compared mechanically with the key's
-  sources, to classify which document the agent relied on.
+- **Attribution.** The sources an agent cites are its own report. They are
+  compared mechanically with the key's sources, to classify which document the
+  agent relied on, and with the documents it actually read in that turn
+  (COMPASS-DRAFT-eval-snapshot-D13). Answers that cite a document they never
+  read are counted and reported.
 - **Human calibration.** The steward blind-grades a stratified sample of 20%
   of judged answers. A measure is accepted for the judge at Cohen's κ ≥ 0.6;
   otherwise the steward grades it.
@@ -383,20 +435,23 @@ session across turns; this study would build and test that first.
   - no question's wording reveals another's answer, which the steward checks
     when reviewing batches;
   - each batch mixes classes and holds at most one false-premise question.
-- **Order.** The five cyclic orders of each batch are assigned across the six
-  combinations of model and run, so that every question is asked first at
-  least once. A given model and run uses the same order in every setup, so
-  comparisons between setups stay paired.
-- **Questions with overlays run alone.** A question that needs its linked
-  Track 1 task's overlay (seeded supersession) adds documents that could affect
-  the rest of a batch. It runs one per session, in the setups that have
-  documents.
+- **Order.** Each batch gets six random orders, one for each combination of
+  model and run, drawn so that every question comes first at least once.
+  Random orders, unlike cyclic rotations, vary which question follows which,
+  so that no pair's carry-over is repeated in every order. A given model and
+  run uses the same order in every setup, so comparisons between setups stay
+  paired. The orders are drawn before the freeze, from a recorded seed.
+- **Questions with overlays run alone.** A seeded-supersession question, from
+  Track 1's pairs or this study's, adds documents that could affect the rest
+  of a batch. It runs one per session, in the setups that have documents.
+- **Between turns,** the harness reverts any change to the repository other
+  than the answer file (COMPASS-DRAFT-eval-corpus-qa-D6).
 - **Limits.** 15 minutes of wall-clock time per turn, and a token limit per
   session, both fixed at freeze.
 - **Runs.** Each batch, and each question that runs alone, runs twice per setup
   and model, for all three models, interleaved in a random order blocked by
-  batch. With about 22 batches and 8–15 questions that run alone, that is
-  roughly 1,200–1,500 sessions holding about 5,000 answers.
+  batch. With about 22 batches and 10–12 questions that run alone, that is
+  about 1,300 sessions holding about 5,000 answers.
 - **The dry run decides the design before the freeze.**
   - Ten questions kept out of the bank are run on A1 and A2 with Claude Opus
     5.5, twice: as two batches of five in turns, and singly. That is about 50
@@ -404,15 +459,26 @@ session across turns; this study would build and test that first.
   - It checks the answer format, collection between turns, and the scorer.
   - It measures tokens per answer batched against single (the ratio r), and
     the difference in accuracy between first and later positions.
-- **The rule applied to the dry run's results.**
-  - If r is above 0.7, batching does not save enough to justify its risks:
-    the study uses single-question sessions with one run.
-  - Otherwise it uses batches with two runs if their projected cost is within
-    the budget, and batches with one run if not.
-  - The ablations move to Claude Opus 5.5 and GPT-6 Sol only, as in Track 1,
-    if the chosen design is still over budget.
+  - r is measured with one model on two setups. It is taken to hold for the
+    others, and is measured again for every model and setup in the
+    operational review, pooled across setups.
+- **The rule applied to the dry run's results.** Answers in a batch share an
+  exploration, so batches of five give about 1/(1 + 4ρ) of their answers'
+  worth in independent observations, where ρ is the correlation of answers
+  within a session. ρ is taken as 0.2, the value the power simulation assumes,
+  unless the dry run estimates it more precisely.
+  - Batching is more efficient than single-question sessions only if
+    r < 1/(1 + 4ρ), about 0.56 at ρ = 0.2. Because batching also risks bias
+    from carry-over, it is used only if r is at most 0.8 of that bound, about
+    0.45 at ρ = 0.2.
+  - Among the designs within the token budget (batches or single questions;
+    one run or two; the ablations on all three models or on Claude Opus 5.5
+    and GPT-6 Sol only, as in Track 1), the study uses the one with the most
+    effective answers that the first bullet allows.
+  - If none is within the budget, the steward reduces the bank or the setups
+    before the freeze (COMPASS-DRAFT-eval-corpus-qa-O1).
 
-  The design chosen, with r and the projected cost, is recorded before the
+  The design chosen, with r, ρ, and the projected cost, is recorded before the
   freeze. The dry run is not otherwise analysed.
 
 **Alternatives:**
@@ -446,17 +512,22 @@ counterparts.
 | # | Hypothesis | Measure | Track 1 counterpart |
 |---|---|---|---|
 | QA-H1 | A2 answers rejected-alternative questions better than A1 | Accuracy on the class | T1-H8 |
-| QA-H2 | A2 and A3 make fewer supersession errors than A1 on seeded pairs, and A2−S loses the gain | Supersession errors | T1-H7 |
-| QA-H3 | A2 answers completeness and negation questions better than A1 | Accuracy; F1 | T1-H1 |
+| QA-H2 | A2 and A3 make fewer supersession errors than A1 on seeded pairs, and A2−S loses the gain | Supersession errors, on Track 1's pairs and this study's together | T1-H7 |
+| QA-H3 | A2 answers completeness and negation questions better than A1 | Accuracy (full credit); F1 is secondary | T1-H1 |
 | QA-H4 | A2 confabulates less than A1 on false-premise questions | Confabulations | — |
 | QA-H5 | Each ablation lowers accuracy on its classes: A2−S on supersession, A2−R on rejected alternatives and rationale, A2−L on completeness and location | Accuracy by class | T1-H9 |
-| QA-H6 | A3 answers more accurately than A2, or at a lower cost per correct answer | Accuracy; cost | T1-H3 |
+| QA-H6 | A3 answers more accurately than A2 | Accuracy, all classes | T1-H3 |
+| QA-H7 | A3 costs less per correct answer than A2 | Tokens per correct answer | T1-H3 |
 
 - **Exploratory and descriptive.**
   - Real-history supersession under statuses as practised is exploratory and
-    tested two-sided.
+    tested two-sided. It includes the questions about current guidance that a
+    stale document contradicts (COMPASS-DRAFT-eval-corpus-qa-D4).
+  - QA-H2 is also reported separately for historical and for constructed pairs.
   - Current truth, location, and rationale are reported descriptively against
     A0.
+  - Calibration: the Brier score of the agents' stated confidence, by setup
+    and model.
 - **Model.** For each model separately, a mixed-effects logistic model fitted
   with `lme4`:
   - setup as a fixed effect;
@@ -470,14 +541,21 @@ counterparts.
   - *A sensitivity analysis* repeats each confirmatory test on first-position
     answers only, about a fifth of the data, which no earlier question in the
     session can have informed. A confirmatory result is reported as robust
-    only if this analysis agrees with it in direction.
+    only if this analysis agrees with it in direction. For each model the
+    first-position answers cover only about two of each batch's five
+    questions, so this check has little power and is read as a check of
+    direction, not as a test in its own right.
   - *The interaction of position and setup* is estimated and reported. It is
     the term that would show carry-over differing between setups, and so
     biasing their comparison.
-- **Cost.** QA-H6's cost per correct answer is computed per turn, from the
-  tokens recorded for each question.
+- **Cost.** QA-H7's cost per correct answer is computed per turn, from the
+  tokens recorded for each question. In a batch, A3's catalog is delivered once
+  for up to five questions, so its cost per answer depends on the design. QA-H7
+  is reported within the design chosen (COMPASS-DRAFT-eval-corpus-qa-D8), and
+  is not taken to carry over to Track 1's single-task sessions.
 - **Families.** Holm's correction is applied within each family, for each
-  model: knowledge (QA-H1 to QA-H4), ablation (QA-H5), and delivery (QA-H6).
+  model: knowledge (QA-H1 to QA-H4), ablation (QA-H5), and delivery (QA-H6
+  and QA-H7).
 - **Power.** A power simulation before the freeze gives the smallest
   detectable effect of each confirmatory test. It allows for the correlation of
   answers within a session (a design effect of 1 + 4ρ for batches of five),
@@ -542,7 +620,8 @@ results are strong.
    to answer from the repository. The prompt is identical in every setup.
 3. The agent explores and writes `answer.json`. When the turn ends, the harness
    collects the file, records the turn (COMPASS-DRAFT-eval-snapshot-D13), and
-   removes the file from the workspace.
+   removes the file from the workspace. It records and reverts any other change
+   the agent made to the repository.
 4. The harness continues the same session with the next question, and repeats
    step 3 until the batch is done or a limit is reached.
 5. The harness scores the mechanical classes. It strips the sources from
@@ -570,7 +649,8 @@ results are strong.
   (COMPASS-DRAFT-eval-corpus-qa-O5).
 - **The seal.** It relies on the harness not computing results by setup
   before Track 1 is frozen. The analysis scripts refuse to run before a flag
-  that records the date of Track 1's freeze is set.
+  that records the date of Track 1's freeze is set. The operational reports
+  pool every measure across setups except counts of failed and rerun sessions.
 - **Shared instruments.** A fault found here changes Track 1's harness before
   its freeze. It must be recorded in both Logs, and any sessions it affected
   are rerun.
@@ -609,10 +689,13 @@ before Track 1 ends? And which workshop?
 
 ### COMPASS-DRAFT-eval-corpus-qa-O5 — The steward's time, and a second verifier
 
-The steward verifies every answer key and grades a 20% sample of judged
-answers. Should a second person verify a sample of the keys, which would allow
-agreement on the keys to be reported, and should the time spent be recorded
-for study 10 of COMPASS-0006's research agenda?
+The steward verifies every answer key (about 120), checks the wording of about
+22 batches, and grades a 20% sample of judged answers. Five of the eight
+classes go to the judge, so with about 5,000 answers the sample is roughly 600.
+Should a second person verify a sample of the keys, which would allow agreement
+on the keys to be reported? Should the sample be smaller for classes where the
+judge's agreement is high early on? Should the time spent be recorded for
+study 10 of COMPASS-0006's research agenda?
 
 ## Prior Art
 
@@ -622,7 +705,7 @@ Table: Prior work and what this plan takes from each.
 |---|---|
 | MOOSEDev (Adam, 2026) | The classes of completeness, negation, and supersession; a strict judge; answer keys from primary sources; currency trials with real reversals of decisions |
 | Xue (2026) | The stages at which a requirement is lost, and the separation of acquiring a requirement from carrying it out |
-| Gloaguen et al. (2026) | The finding that context helps most when no other documentation supplies the knowledge, which A0 tests directly |
+| Gloaguen et al. (2026) | The finding that context files helped only when the repository's other documentation was removed, a reason to measure what the code alone answers; A0 gives that floor |
 | Khatri (2026) | More items rather than more repeats; a probe of whether the manipulation took effect |
 | Tufano et al. (2026) | Randomised, anonymised judging with a majority over passes |
 | COMPASS-DRAFT-positioning | The competency questions, whose classes this bank shares |
@@ -638,13 +721,17 @@ Table: Prior work and what this plan takes from each.
    - The steward reviews each question and verifies each answer key.
    - The gates of COMPASS-DRAFT-eval-corpus-qa-D4 are applied, with the scan
      for Compass vocabulary.
+   - The further seeded pairs are built, historical where possible, with their
+     overlays and questions (COMPASS-DRAFT-eval-corpus-qa-D4).
    - The batches are built: the harness checks their answer keys for shared
      sources, and the steward checks their wording.
-   - The cyclic orders are assigned to each combination of model and run.
+   - The random orders are drawn, from a recorded seed, for each combination
+     of model and run.
 3. **Harness additions,** with tests in `compass-eval/tests`:
    - a question as a kind of task in the snapshot descriptor;
    - sessions continued across turns, with `answer.json` collected, validated,
-     and removed after each turn, and cost recorded per turn;
+     and removed after each turn, other changes to the repository reverted,
+     and cost recorded per turn;
    - the mechanical scorer;
    - the judge's rubric for answers;
    - the seal on the analysis.
@@ -658,23 +745,26 @@ Table: Prior work and what this plan takes from each.
      data allow, the correlation of answers within a session.
    - Before the freeze, with the token budget stated
      (COMPASS-DRAFT-eval-corpus-qa-O1), apply the rule of
-     COMPASS-DRAFT-eval-corpus-qa-D8 and record the design chosen, with r and
-     the projected cost, in the Log.
+     COMPASS-DRAFT-eval-corpus-qa-D8 and record the design chosen, with r, ρ,
+     and the projected cost, in the Log.
 5. **Freeze.**
    - The power simulation, for the design chosen, and the table of smallest
      detectable effects.
    - The protocol Eval written.
    - The steward's commit and tag.
-6. **Runs,** interleaved: for the batched design with two runs, roughly
-   1,200–1,500 sessions holding about 5,000 answers.
-7. **Operational review:**
-   - failures, cost, and manipulation checks;
+6. **Runs,** interleaved, after Track 1's stage 5 and before its freeze: for
+   the batched design with two runs, about 1,300 sessions holding about 5,000
+   answers.
+7. **Operational review** (COMPASS-DRAFT-eval-corpus-qa-D2):
+   - cost, tokens, and manipulation checks, pooled across setups, with r
+     measured again for every model;
+   - counts of failed, invalid, and rerun sessions by setup;
    - the judge's validation;
    - the steward's calibration sample;
-   - any faults in the shared instruments fixed and recorded, with affected
-     sessions rerun.
+   - any faults in the shared instruments fixed and recorded as deviations,
+     with affected sessions rerun.
 
-   Results by setup stay sealed.
+   Every other result by setup, cost included, stays sealed.
 8. **Unsealing,** after Track 1's freeze.
    - The analysis, appended to the protocol Eval as a dated update.
    - A short dated update to COMPASS-0006.

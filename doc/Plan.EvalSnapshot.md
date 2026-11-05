@@ -19,6 +19,7 @@ relates-to:
   - COMPASS-0009
   - COMPASS-0001
   - COMPASS-DRAFT-positioning
+  - COMPASS-DRAFT-eval-corpus-qa
 cites:
   - title:     "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (Gloaguen, Mündler, Müller, Raychev, Vechev; MemAgents @ ICLR 2026)"
     locator:   "arXiv:2602.11988v2, §3.2, §4.1, App. A–C"
@@ -1014,6 +1015,12 @@ Each stage that builds harness code ends with `compass-eval/tests` passing.
    - The power simulation from assumed parameters, and the table of smallest
      detectable effects.
    - The contamination probe for each model.
+   - The question-answering study
+     ([COMPASS-DRAFT-eval-corpus-qa](Plan.EvalCorpusQA.md)) runs between this
+     stage and the freeze, as the harness's shakedown. Its results by setup
+     stay sealed until this study is frozen, and faults it finds in the shared
+     instruments are fixed before the freeze and recorded in both Logs. This
+     study's freeze waits for its operational review.
 7. **Freeze.** The steward commits and tags the protocol, the corpora, the task
    bank, the harness, and the table of smallest detectable effects.
 8. **Pilot.**
