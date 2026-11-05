@@ -304,10 +304,15 @@ judge. A final chat message is awkward to parse reliably.
   - a list of items, for completeness and location questions;
   - the files relied on;
   - a confidence between 0 and 1.
-- **The schema** is given in the session's prompt, identically in every
+- **One file per turn.** In a batched session (COMPASS-DRAFT-eval-corpus-qa-D8)
+  each question is its own turn. The harness collects `answer.json` when the
+  turn ends and removes it before the next turn, so that no answer remains in
+  the workspace for a later question to read.
+- **The schema** is given in each question's prompt, identically in every
   setup.
 - **Invalid answers.** A missing or malformed file scores as wrong and is
-  counted in its own denominator. It is not rerun.
+  counted in its own denominator. It is not rerun. The batch continues with its
+  next question.
 
 **Alternatives:** Free answers in the final message, which cannot be scored
 mechanically. Sources left out, which loses the attribution measure.
@@ -345,27 +350,82 @@ Tufano randomises and anonymises what the judge sees.
 **Alternatives:** A judge for every answer, which spends judgement on what can
 be counted. A judge that sees sources, which reveals the setup.
 
-### COMPASS-DRAFT-eval-corpus-qa-D8 — One question per session, two runs, three models
+### COMPASS-DRAFT-eval-corpus-qa-D8 — Batches of five questions, asked in turns, two runs, three models
 
 **Status:** Proposed
 
-**Context:** Several questions in one session cost less, but an earlier answer
-can inform a later one, and their order then matters. Khatri finds that more
-items buy more power than more repeats. The models are those of COMPASS-0006.
+**Context:** One question per session, with two runs on seven setups and three
+models, is about 5,000 sessions. The budget is set in tokens, and this is over
+it. Each session spends tokens orienting itself before it answers. Asking
+several questions in one session shares that cost, but brings three problems:
+- **Carry-over.** Exploring for one question teaches the agent things it uses
+  on the next, and a question's wording can give away another's answer. If
+  carry-over differs by setup (a typed corpus may make one exploration more
+  reusable), it biases the comparison of setups rather than only adding noise.
+- **Correlated answers.** Answers in one session share an exploration.
+- **Attribution.** If all questions arrive at once, cost and documents read can
+  no longer be assigned to a question.
+
+Khatri finds that more items buy more power than more repeats. The models are
+those of COMPASS-0006. Track 2's R1 condition needs the harness to continue one
+session across turns; this study would build and test that first.
 
 **Decision:**
-- **Sessions.** Each session asks one question, in a fresh workspace, with a
-  wall-clock limit of 15 minutes and a token limit fixed at freeze.
-- **Runs.** Each question runs twice per setup and model, for all three
-  models, interleaved in a random order blocked by question. That is about
-  5,000 sessions (120 × 7 × 3 × 2), or about 5,800 with A4.
-- **Dry run.** A run of 10 questions kept out of the bank, on A1 and A2 with
-  Claude Opus 5.5, checks the answer format and the scorer before the freeze.
-  It is not analysed.
+- **Turns.** A session asks up to five questions, one per turn. The harness
+  waits for each answer (COMPASS-DRAFT-eval-corpus-qa-D6) before it continues
+  the session with the next question. The first question is therefore asked
+  with no knowledge of the later ones. Tokens, tool calls, and documents read
+  are recorded per turn.
+- **Composition of batches.** Batches are built once, before the freeze, and
+  are the same in every setup:
+  - their questions come from different subsystems and share no source file
+    in their answer keys, which the harness checks from the keys;
+  - no question's wording reveals another's answer, which the steward checks
+    when reviewing batches;
+  - each batch mixes classes and holds at most one false-premise question.
+- **Order.** The five cyclic orders of each batch are assigned across the six
+  combinations of model and run, so that every question is asked first at
+  least once. A given model and run uses the same order in every setup, so
+  comparisons between setups stay paired.
+- **Questions with overlays run alone.** A question that needs its linked
+  Track 1 task's overlay (seeded supersession) adds documents that could affect
+  the rest of a batch. It runs one per session, in the setups that have
+  documents.
+- **Limits.** 15 minutes of wall-clock time per turn, and a token limit per
+  session, both fixed at freeze.
+- **Runs.** Each batch, and each question that runs alone, runs twice per setup
+  and model, for all three models, interleaved in a random order blocked by
+  batch. With about 22 batches and 8–15 questions that run alone, that is
+  roughly 1,200–1,500 sessions holding about 5,000 answers.
+- **The dry run decides the design before the freeze.**
+  - Ten questions kept out of the bank are run on A1 and A2 with Claude Opus
+    5.5, twice: as two batches of five in turns, and singly. That is about 50
+    sessions.
+  - It checks the answer format, collection between turns, and the scorer.
+  - It measures tokens per answer batched against single (the ratio r), and
+    the difference in accuracy between first and later positions.
+- **The rule applied to the dry run's results.**
+  - If r is above 0.7, batching does not save enough to justify its risks:
+    the study uses single-question sessions with one run.
+  - Otherwise it uses batches with two runs if their projected cost is within
+    the budget, and batches with one run if not.
+  - The ablations move to Claude Opus 5.5 and GPT-6 Sol only, as in Track 1,
+    if the chosen design is still over budget.
 
-**Alternatives:** Batches of five questions per session, which are cheaper but
-confounded by order and carry-over (COMPASS-DRAFT-eval-corpus-qa-O1). Five runs
-per cell, as in Track 1, which spends the budget on repeats rather than items.
+  The design chosen, with r and the projected cost, is recorded before the
+  freeze. The dry run is not otherwise analysed.
+
+**Alternatives:**
+- **One question per session, as first proposed.** This is the cleanest
+  design, but over budget.
+- **All five questions in one prompt.** This is cheaper still, but loses the
+  clean first answer and the attribution of cost.
+- **One unbatched run.** This halves cost and keeps answers independent, but
+  gives about half the answer observations. It stays as the fallback if
+  batching saves too little.
+- **Batches of fewer or more than five.** These were not examined: five keeps
+  sessions short enough that compaction is unlikely and context growth is
+  small.
 
 ### COMPASS-DRAFT-eval-corpus-qa-D9 — Hypotheses by class, a model per family, and a linkage analysis
 
@@ -397,14 +457,32 @@ counterparts.
     tested two-sided.
   - Current truth, location, and rationale are reported descriptively against
     A0.
-- **Model.** For each model separately, a mixed-effects logistic model with
-  setup as a fixed effect and a random intercept per question, fitted with
-  `lme4`. Pairs of setups are compared with question-clustered bootstrap
-  intervals.
+- **Model.** For each model separately, a mixed-effects logistic model fitted
+  with `lme4`:
+  - setup as a fixed effect;
+  - a random intercept per question;
+  - when the study is batched (COMPASS-DRAFT-eval-corpus-qa-D8), position in
+    the batch as a fixed effect and a random intercept per session.
+
+  Pairs of setups are compared with question-clustered bootstrap intervals,
+  resampling whole batches together with their questions.
+- **Carry-over checks,** pre-registered when the study is batched.
+  - *A sensitivity analysis* repeats each confirmatory test on first-position
+    answers only, about a fifth of the data, which no earlier question in the
+    session can have informed. A confirmatory result is reported as robust
+    only if this analysis agrees with it in direction.
+  - *The interaction of position and setup* is estimated and reported. It is
+    the term that would show carry-over differing between setups, and so
+    biasing their comparison.
+- **Cost.** QA-H6's cost per correct answer is computed per turn, from the
+  tokens recorded for each question.
 - **Families.** Holm's correction is applied within each family, for each
   model: knowledge (QA-H1 to QA-H4), ablation (QA-H5), and delivery (QA-H6).
 - **Power.** A power simulation before the freeze gives the smallest
-  detectable effect of each confirmatory test.
+  detectable effect of each confirmatory test. It allows for the correlation of
+  answers within a session (a design effect of 1 + 4ρ for batches of five),
+  taking ρ from the dry run where it can be estimated and otherwise assuming
+  0.2.
 - **Linkage analysis.** This is specified at freeze and run after Track 1's
   full study.
   - For each trap task, setup, and model, the linked question's accuracy is
@@ -456,14 +534,18 @@ results are strong.
 
 ## Workflow of a Session
 
-1. The harness assembles the workspace of the setup, applies the overlay of
-   the question's linked Track 1 task if it has one, and starts a session in an
-   isolated container.
-2. The prompt gives the question and the schema of `answer.json`, and asks the
-   agent to answer from the repository. It is identical in every setup.
-3. The agent explores and writes `answer.json`. The harness records the run
-   (COMPASS-DRAFT-eval-snapshot-D13).
-4. The harness scores the mechanical classes. It strips the sources from
+1. The harness assembles the workspace of the setup. For a question that runs
+   alone, it applies the overlay of the linked Track 1 task. It then starts a
+   session in an isolated container.
+2. The first turn gives the first question of the batch, in the order assigned
+   to this model and run, with the schema of `answer.json`, and asks the agent
+   to answer from the repository. The prompt is identical in every setup.
+3. The agent explores and writes `answer.json`. When the turn ends, the harness
+   collects the file, records the turn (COMPASS-DRAFT-eval-snapshot-D13), and
+   removes the file from the workspace.
+4. The harness continues the same session with the next question, and repeats
+   step 3 until the batch is done or a limit is reached.
+5. The harness scores the mechanical classes. It strips the sources from
    answers in the other classes and queues them for the judge.
 
 ## Tensions and Risks
@@ -476,8 +558,16 @@ results are strong.
   but do not remove, a bias towards questions the typed form answers well.
   False-premise and location questions, which typing should not help much,
   serve partly as a check on this.
-- **The steward's time.** Verifying about 120 answer keys and grading a 20%
-  sample is substantial (COMPASS-DRAFT-eval-corpus-qa-O5).
+- **Carry-over in batches.** Despite disjoint batches, turns, and rotated
+  orders, what an agent learns on one question may help it on the next, and
+  may help more in some setups than others. The first-position analysis and
+  the interaction of position and setup (COMPASS-DRAFT-eval-corpus-qa-D9) detect
+  it but cannot remove it. If carry-over is strong and differs by setup, the
+  confirmatory claims rest on first-position answers alone, and detect only
+  larger effects.
+- **The steward's time.** Verifying about 120 answer keys, checking about 22
+  batches for revealing wording, and grading a 20% sample is substantial
+  (COMPASS-DRAFT-eval-corpus-qa-O5).
 - **The seal.** It relies on the harness not computing results by setup
   before Track 1 is frozen. The analysis scripts refuse to run before a flag
   that records the date of Track 1's freeze is set.
@@ -487,18 +577,20 @@ results are strong.
 
 ## Open Questions
 
-### COMPASS-DRAFT-eval-corpus-qa-O1 — Batching and A4, if the budget is short
+### COMPASS-DRAFT-eval-corpus-qa-O1 — The token budget, and A4
 
-About 5,000 sessions is the default. If the budget is short, the candidates are
-batching questions five to a session in random order, dropping a model, and
-leaving out A4. Which comes first, and should a small batched arm be run anyway
-to measure the effect of order?
+The budget is set in tokens. COMPASS-DRAFT-eval-corpus-qa-D8 chooses between
+batched and single-question designs from the dry run's ratio r and the budget,
+so the budget must be stated, as a number of tokens or a sum per model, before
+the dry run. What is it? Is A4, which adds a seventh of the cost, included if
+the chosen design leaves room?
 
 ### COMPASS-DRAFT-eval-corpus-qa-O2 — A documents-only arm
 
 A setup in which the agent sees only the documents would test retrieval as
-MOOSEDev did, and make the two studies comparable. It would add about 700
-sessions. Is the comparison worth it, and in which setups?
+MOOSEDev did, and make the two studies comparable. It would add about a sixth
+to the cost for each setup it covers. Is the comparison worth it, and in which
+setups?
 
 ### COMPASS-DRAFT-eval-corpus-qa-O3 — A structured-query arm
 
@@ -546,18 +638,35 @@ Table: Prior work and what this plan takes from each.
    - The steward reviews each question and verifies each answer key.
    - The gates of COMPASS-DRAFT-eval-corpus-qa-D4 are applied, with the scan
      for Compass vocabulary.
+   - The batches are built: the harness checks their answer keys for shared
+     sources, and the steward checks their wording.
+   - The cyclic orders are assigned to each combination of model and run.
 3. **Harness additions,** with tests in `compass-eval/tests`:
    - a question as a kind of task in the snapshot descriptor;
-   - collection and validation of `answer.json`;
+   - sessions continued across turns, with `answer.json` collected, validated,
+     and removed after each turn, and cost recorded per turn;
    - the mechanical scorer;
    - the judge's rubric for answers;
    - the seal on the analysis.
-4. **Dry run** on 10 questions kept out of the bank.
+4. **Dry run,** on 10 questions kept out of the bank, with Claude Opus 5.5 on
+   A1 and A2.
+   - Run twice: as two batches of five in turns, and singly, about 50 sessions
+     in all.
+   - Check the answer format, the collection between turns, and the scorer.
+   - Measure the ratio r of tokens per answer batched to single, the
+     difference in accuracy between first and later positions, and, where the
+     data allow, the correlation of answers within a session.
+   - Before the freeze, with the token budget stated
+     (COMPASS-DRAFT-eval-corpus-qa-O1), apply the rule of
+     COMPASS-DRAFT-eval-corpus-qa-D8 and record the design chosen, with r and
+     the projected cost, in the Log.
 5. **Freeze.**
-   - The power simulation and the table of smallest detectable effects.
+   - The power simulation, for the design chosen, and the table of smallest
+     detectable effects.
    - The protocol Eval written.
    - The steward's commit and tag.
-6. **Runs:** about 5,000 sessions, interleaved.
+6. **Runs,** interleaved: for the batched design with two runs, roughly
+   1,200–1,500 sessions holding about 5,000 answers.
 7. **Operational review:**
    - failures, cost, and manipulation checks;
    - the judge's validation;
