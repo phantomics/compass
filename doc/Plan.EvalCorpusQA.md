@@ -17,6 +17,7 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0008
   - COMPASS-DRAFT-positioning
+  - COMPASS-DRAFT-eval-defect-detection
 cites:
   - title:     "Ontology-Grounded Project Memory for Coding Agents (Adam; NeSy 2026)"
     locator:   "arXiv:2608.13662, §3 (question classes, strict judge, currency trials) and §4 (lessons)"
@@ -91,9 +92,12 @@ competency questions of [COMPASS-DRAFT-positioning](Survey.Positioning.md).
 - **Track 1 has few items.** Its trap hypotheses can detect only large
   effects. Questions are cheap to write and to run, so a study of knowledge can
   have many more items and far better power.
-- **The harness has no shakedown.** Track 1's first real sessions are its
-  pilot. A cheaper study run first would exercise the workspaces, the runner,
-  the recorder, and the judge before any Track 1 data exist.
+- **The harness's use of Track 1's corpora has no shakedown.** The
+  defect-detection study ([COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md))
+  runs first and shakes down the runner, the recorder, and the judge, but on
+  other repositories. Track 1's own workspaces, setups, and overlays are first
+  used in its pilot. A cheaper study run before that would exercise them
+  before any Track 1 data exist.
 
 ## Goals
 
@@ -165,7 +169,9 @@ blur what it registers. The steward wants the study pre-registered.
 **Context:** The study needs Track 1's corpora, its trap tasks (for the linked
 questions), and its workspaces, runner, recorder, and judge, but not its test
 grading, so it can run as soon as those exist. Run early, it shakes down the
-harness. But if its results by setup were seen before Track 1 is frozen, they
+parts of the harness that use Track 1's corpora, after the defect-detection
+study (COMPASS-DRAFT-eval-defect-detection-D1) has shaken down the rest. But
+if its results by setup were seen before Track 1 is frozen, they
 could shape Track 1's tasks, sizes, or analysis: an undeclared choice made
 after seeing data. Cost by setup is such a result: it is this study's measure
 for QA-H7 and bears on Track 1's rule about the cost of the catalog.
@@ -727,7 +733,8 @@ Table: Prior work and what this plan takes from each.
      sources, and the steward checks their wording.
    - The random orders are drawn, from a recorded seed, for each combination
      of model and run.
-3. **Harness additions,** with tests in `compass-eval/tests`:
+3. **Harness additions,** with tests in `compass-eval/tests`, to the harness
+   the defect-detection study builds:
    - a question as a kind of task in the snapshot descriptor;
    - sessions continued across turns, with `answer.json` collected, validated,
      and removed after each turn, other changes to the repository reverted,

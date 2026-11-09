@@ -20,6 +20,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-DRAFT-positioning
   - COMPASS-DRAFT-eval-corpus-qa
+  - COMPASS-DRAFT-eval-defect-detection
 cites:
   - title:     "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (Gloaguen, Mündler, Müller, Raychev, Vechev; MemAgents @ ICLR 2026)"
     locator:   "arXiv:2602.11988v2, §3.2, §4.1, App. A–C"
@@ -989,7 +990,14 @@ Each stage that builds harness code ends with `compass-eval/tests` passing.
    then adds the Track 1 revisions to COMPASS-0006 as a dated update, and
    resolves COMPASS-O17 and COMPASS-O20 for Track 1.
 2. **Harness skeleton and snapshot.**
-   - The `compass-eval` system and descriptor reader; Classic's descriptor.
+   - The defect-detection study
+     ([COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md))
+     runs first. It builds the `compass-eval` system, the runner, the
+     recorder, and the judge's pipeline, and proposes revisions to this Plan
+     from what it teaches. Its workspaces have no Git; whether this study's
+     should too is its open question COMPASS-DRAFT-eval-defect-detection-O4.
+   - The `compass-eval` system and descriptor reader, as that study leaves
+     them; Classic's descriptor.
    - The container images, with the Compass toolchain and skills installed
      (COMPASS-DRAFT-eval-snapshot-D16); workspace construction with the
      isolation checks of COMPASS-DRAFT-eval-snapshot-D6.
@@ -1017,7 +1025,9 @@ Each stage that builds harness code ends with `compass-eval/tests` passing.
    - The contamination probe for each model.
    - The question-answering study
      ([COMPASS-DRAFT-eval-corpus-qa](Plan.EvalCorpusQA.md)) runs between this
-     stage and the freeze, as the harness's shakedown. Its results by setup
+     stage and the freeze, as the shakedown of the parts of the harness that
+     use this study's corpora, after the defect-detection study has shaken
+     down the rest. Its results by setup
      stay sealed until this study is frozen, and faults it finds in the shared
      instruments are fixed before the freeze and recorded in both Logs. This
      study's freeze waits for its operational review.

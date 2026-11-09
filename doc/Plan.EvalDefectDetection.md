@@ -56,13 +56,15 @@ open-questions:
   - COMPASS-DRAFT-eval-defect-detection-O3
   - COMPASS-DRAFT-eval-defect-detection-O4
   - COMPASS-DRAFT-eval-defect-detection-O5
+  - COMPASS-DRAFT-eval-defect-detection-O6
 ---
 
 # Compass Defect-Detection Study: Development Plan
 
 This plan sets out a small study of Compass's review layer. Known defects are
-seeded into real Compass documents from four repositories, and reviewers are
-asked to review each document before it is accepted:
+seeded into real Compass documents from three repositories (Classic, Origin,
+and Lexter), and reviewers are asked to review each document before it is
+accepted:
 - the toolchain alone;
 - an agent with the `compass-review` skill and the toolchain;
 - an agent with the toolchain but no skill;
@@ -166,8 +168,10 @@ skill and the rules, not on decisions COMPASS-0006's rules act on.
 - **No decision rules.** Its results are reported as evidence for revising
   `compass-review`, the toolchain's rules and their severities, and COMPASS-0003.
   The steward decides on those revisions.
-- **Frozen tools.** The skill and the toolchain are frozen at the freeze
-  commit, and any revision to them waits until the results are in.
+- **The tools measured.** The study uses the skill and the toolchain as built
+  at its freeze commit. Their development continues meanwhile, but revisions
+  prompted by this study's results come after the results are in, and the
+  study's sessions never use a later version.
 
 *Agreed in conversation.*
 
@@ -217,15 +221,26 @@ the skill's own invocation for V1, which confounds instruction with the
 skill. The skill installed in every condition, as Track 1 does
 (COMPASS-DRAFT-eval-snapshot-D16), which lets V2 become V1.
 
-### COMPASS-DRAFT-eval-defect-detection-D4 — Documents from four corpora, pinned before the study's plans
+### COMPASS-DRAFT-eval-defect-detection-D4 — Documents from three corpora: Classic, Origin, and Lexter
 
 **Status:** Proposed
 
 **Context:** Reviewers should face real documents of every genre, written by
-several hands and assistants, in more than one project. The Compass corpus at
-HEAD contains this study's own Plan, which describes the kinds of defect
-seeded. Lightdrive's documents were written after its code, and are less
-typical of how Compass is used.
+several hands and assistants, in more than one project.
+- **The Compass corpus cannot be used.** At HEAD it contains this study's own
+  Plan, which describes the kinds of defect seeded. Even at a revision before
+  the study Plans, such as `8716fc9`, its repository:
+  - registers its own `skills/` directory as OpenCode's skill path in
+    `opencode.json`, so the `compass-*` skills would load in every condition;
+  - holds the toolchain's source and build files, so an agent without the
+    toolchain could build it.
+
+  Removing those files would change the repository, and the toolchain would
+  then report findings the real repository does not.
+- **Lightdrive** was left out because its documents were written after its
+  code, and are less typical of how Compass is used.
+- **The other three corpora** have no `opencode.json` and no `skills/` at their
+  pinned revisions.
 
 **Decision:**
 - **The corpora.**
@@ -234,35 +249,49 @@ Table: Corpora from which documents are drawn.
 
 | Corpus | Revision | Documents |
 |---|---|---|
-| Compass | `8716fc9`, before any of the evaluation plans | about 16, and the standard |
 | Classic | `807640b` | 42 |
 | Origin | `8bfc394` | 19 |
 | Lexter | `4dcb194` | 21 |
 
-- **Sampling.** Documents are sampled across genres and corpora, and each
-  hosts at most two mutants.
+- **Sampling.** Documents are sampled across genres and corpora. Each hosts at
+  most two mutants, except for the two kinds about critiques: the corpora hold
+  one critique (`LEXTER:doc/Eval.Critique.DataStructures1e.md@4dcb194`), so it
+  hosts every mutant of those kinds, each on a different finding
+  (COMPASS-DRAFT-eval-defect-detection-D5).
 - **Clean documents.** About 40 documents are left unmutated, sampled across
   genres and corpora.
 - **The workspace** for a document is its whole repository at the pinned
   revision, prepared as COMPASS-DRAFT-eval-defect-detection-D7 describes.
 
-*Agreed in conversation.*
+*Agreed in conversation, with the Compass corpus dropped after review.*
 
-**Alternatives:** The Compass corpus at HEAD, which describes the study.
-Documents from one repository, which tests one style of writing. Lightdrive,
-whose documents were written after its code.
+**Alternatives:**
+- **The Compass corpus at a revision before the study Plans.** The skills and
+  the toolchain's source come with it, and they undo the comparison of
+  reviewers.
+- **The Compass corpus for V0 and V1 only,** as descriptive results. This
+  adds about 16 documents outside every comparison.
+- **Documents from one repository,** which tests one style of writing.
+- **Lightdrive,** whose documents were written after its code.
 
-### COMPASS-DRAFT-eval-defect-detection-D5 — Fifteen kinds of defect, eight of each, and forty clean documents
+### COMPASS-DRAFT-eval-defect-detection-D5 — Fourteen kinds of defect, eight of each, and forty clean documents
 
 **Status:** Proposed
 
 **Context:** Mutation testing seeds small, plausible faults of known kinds and
 counts how many are found (DeMillo et al.). The kinds should cover what
 `compass-review` claims to judge, plus a few mechanical faults the toolchain
-must catch, as controls.
+must catch, as controls. A kind can be seeded only where the corpora have
+documents that could host it.
+- **Memo admission cannot be seeded.** None of the three corpora has a document
+  of genre Memo, and the study adds no documents.
+- **Critiques have one host.** The one critique,
+  `LEXTER:doc/Eval.Critique.DataStructures1e.md@4dcb194`, has 22 findings
+  and no resolutions. That is enough for eight mutants of each critique kind,
+  each on a different finding, but all in one document.
 
-**Decision:** About 120 mutants, eight of each of fifteen kinds, and about 40
-clean documents, about 160 documents in all:
+**Decision:** About 112 mutants, eight of each of fourteen kinds, and about 40
+clean documents, about 150 documents in all:
 
 Table: Kinds of defect seeded, with the review dimension each tests.
 
@@ -273,8 +302,7 @@ Table: Kinds of defect seeded, with the review dimension each tests.
 | Restated context | A decision's context replaced by a restatement of the decision | Decision-record quality |
 | Wrong document | A link to a real document that does not concern what the text claims | Cross-reference plausibility |
 | Wrong symbol | A code reference to a symbol that exists but is not the code described | Code-reference discipline |
-| Contradicted claim | A statement about the code that the code at the pinned revision contradicts | Code-reference discipline |
-| Memo admission | A memo whose claim is evident from the code, or is a design choice | Memo admission |
+| Contradicted claim | A statement about the code that the code in the workspace contradicts, as does the code at the revision a reference names where that is older | Code-reference discipline |
 | Critique strawman | A finding's rationale that misstates the decision it attacks | Critique quality |
 | Written resolution | A critique finding given a resolution by its critic | Critique quality |
 | Accessibility | A table without a caption, or a skipped heading level | Accessibility |
@@ -287,16 +315,23 @@ Table: Kinds of defect seeded, with the review dimension each tests.
 - **Mutant specifications.** Each mutant is specified by its document, its
   kind, the original passage, the mutated passage, and a description of the
   defect for the judge.
-- **Kinds without hosts.** A kind for which the corpora have too few hosts,
-  such as critique findings, is seeded as often as its hosts allow, and its
-  results are reported as descriptive.
+- **The critique kinds** are seeded in the one critique, each mutant on a
+  different finding, so all sixteen share a document. They are reported as
+  descriptive, and their clustering is modelled
+  (COMPASS-DRAFT-eval-defect-detection-D10).
+- **Memo admission** is left for a later study, once memo documents exist
+  (COMPASS-DRAFT-eval-defect-detection-O6).
 
-*Agreed in conversation.*
+*Agreed in conversation, with the memo kind dropped after review.*
 
-**Alternatives:** Mechanical faults only, which tests the toolchain and not the
-skill. Defects of one kind, which says little about the dimensions. Defects
-written into documents made for the study, which would not be real Compass
-documents.
+**Alternatives:**
+- **Mechanical faults only.** This tests the toolchain, not the skill.
+- **Defects of one kind.** This says little about the dimensions.
+- **Defects written into documents made for the study,** including a memo
+  host. These would not be real Compass documents.
+- **Another kind in place of memo admission,** such as an open-question
+  record rewritten to state something already settled. This was considered,
+  and set aside to keep the kinds to those the steward chose.
 
 ### COMPASS-DRAFT-eval-defect-detection-D6 — Mutants are drafted by a non-subject model, reviewed by the steward, and leave the toolchain unchanged
 
@@ -318,7 +353,7 @@ reviewer a clue no real defect would.
 - **The gate for mechanical mutants.** `compass check` must report exactly one
   new finding, from the intended rule.
 - **The gate for clean documents.** The steward confirms that each clean
-  document has no defect of the fifteen kinds that he knows of.
+  document has no defect of the fourteen kinds that he knows of.
 
 *Agreed in conversation.*
 
@@ -357,6 +392,8 @@ reviewer checking a reference would see.
 - **The mutant** is then applied to the document under review.
 - **Expected notes.** The notes the toolchain reports in this workspace are
   expected and the same for every document. The prompt does not mention them.
+  Findings about these notes, or about the written-out fields, are study
+  artefacts (COMPASS-DRAFT-eval-defect-detection-D11).
 - **Before the freeze,** the harness confirms for each corpus that
   `compass check` reports the same findings in the prepared workspace as in the
   real repository, apart from those notes.
@@ -373,17 +410,22 @@ which can expose the original. A wrapper that runs `compass check` with
 **Context:** The skill writes a report in its own format, and an agent without
 it writes whatever it likes. A judge that sees the report's format can tell the
 conditions apart. A finding should count only if it identifies the defect, not
-if it merely points at the right section.
+if it merely points at the right section. Severities graded against the
+skill's guidance would favour V1, the only reviewer that has read it. In a
+batch, one recommendation cannot be scored against several documents.
 
 **Decision:**
 - **The findings file.** The prompt asks every reviewer to write
-  `review.json`, with:
+  `review.json`. For each document reviewed, it holds:
   - a list of findings, each with its location (file, section, or line), a
-    description, and a severity of error, warning, or note;
+    description, and a severity;
   - a recommendation: accept, revise, reconsider genre, or needs a person's
     decision.
 
   Whatever else the reviewer writes is kept but not graded.
+- **Severities defined in the prompt,** the same for every reviewer: an
+  *error* blocks acceptance, a *warning* should be fixed, and a *note* is a
+  suggestion.
 - **Matching.**
   - A toolchain finding is matched to a mechanical mutant by its rule and
     location, mechanically.
@@ -392,10 +434,13 @@ if it merely points at the right section.
     without severities, recommendations, or any other text. A finding matches
     only if it names both the location and the nature of the defect.
 - **Severity.** The severity of a matched finding is graded against the
-  skill's guidance on what each severity means.
-- **Recommendation.** A recommendation is correct if it is to revise for a
-  mutant, and to accept for a clean document, unless a defect already in that
-  document is confirmed (COMPASS-DRAFT-eval-defect-detection-D11).
+  definitions in the prompt. Each mutant's specification states the severity
+  its defect warrants under those definitions.
+- **Recommendation.** For each document:
+  - for a mutant, any recommendation other than accept is correct;
+  - for a clean document, accept is correct, unless a defect already in it is
+    confirmed (COMPASS-DRAFT-eval-defect-detection-D11), in which case any
+    other recommendation is correct.
 - **Human calibration.** The steward blind-grades a stratified sample of 20%
   of the judge's matches. A measure is accepted for the judge at Cohen's
   κ ≥ 0.6; otherwise the steward grades it.
@@ -413,8 +458,8 @@ points at the right place for the wrong reason.
 
 **Status:** Proposed
 
-**Context:** One document per session, with one run, is about 1,120 sessions:
-160 documents × (two conditions × three models + one). Each session loads the
+**Context:** One document per session, with one run, is about 1,050 sessions:
+150 documents × (two conditions × three models + one). Each session loads the
 skill and its reference bundle and runs `compass check` over the corpus, which
 is the larger part of its cost. A reviewer often reviews several documents at
 once, as in a pull request, which shares that cost. Reviewing several documents
@@ -429,7 +474,9 @@ together correlates their findings. The budget is set in tokens.
   - as two batches of four reviewed together, as in a pull request.
 
   It checks the workspace, the findings file, the matching, and the judge. It
-  measures r, the tokens per document reviewed in a batch against singly.
+  measures r, the tokens per document reviewed in a batch against singly, and
+  V2's rate of false alarms on clean documents, from which DD-H2's margin is
+  set (COMPASS-DRAFT-eval-defect-detection-D10).
 - **The rule.** Batches of four are used only if r is at most 0.8 of
   1/(1 + 3ρ), where ρ is the correlation of outcomes within a batch, taken as
   0.2 unless the dry run estimates it (a bound of about 0.5). Otherwise each
@@ -455,7 +502,10 @@ which saves tokens but correlates findings without first measuring the saving.
 **Context:** The comparisons that matter are the skill against no skill (V1
 against V2), and the toolchain against none (V1 against V3). Each needs to be
 stated before the runs. Saying that the skill raises no more false alarms is a
-claim of non-inferiority, and needs a margin.
+claim of non-inferiority, and needs a margin. A margin chosen without data is
+arbitrary, and a margin small next to the false-alarm rate itself would be
+unreachable. V0 involves no agent: the gates of
+COMPASS-DRAFT-eval-defect-detection-D6 fix its results in advance.
 
 **Decision:** The proposed hypotheses, to be fixed in the protocol Eval at the
 freeze:
@@ -464,16 +514,16 @@ Table: Proposed hypotheses of the defect-detection study.
 
 | # | Hypothesis | Measure |
 |---|---|---|
-| DD-H1 | V1 finds more judgement-level defects than V2 | Recall of the thirteen judgement-level kinds |
-| DD-H2 | V1 raises no more false alarms on clean documents than V2, within a margin of 0.5 per document | False alarms per clean document, from the adjudicated sample |
+| DD-H1 | V1 finds more judgement-level defects than V2 | Recall of the twelve judgement-level kinds |
+| DD-H2 | V1 raises no more false alarms on clean documents than V2, within a margin of half V2's rate in the dry run, fixed at the freeze | False alarms per clean document, every unmatched finding adjudicated (COMPASS-DRAFT-eval-defect-detection-D11) |
 | DD-H3 | V1 finds more mechanical defects than V3 | Recall of the two mechanical kinds |
 
 - **Descriptive measures:**
   - recall by kind, for every reviewer;
   - whether V1 reports every finding the toolchain reports, expected to be all
     of them, with every miss examined;
-  - V0's recall, which is near zero for judgement-level kinds by construction
-    (COMPASS-DRAFT-eval-defect-detection-D6), and complete for mechanical ones;
+  - V0, reported as a reference line set by the gates rather than a measured
+    result: no judgement-level defect and every mechanical one;
   - whether severities and recommendations fit;
   - breaches of the read-only rule;
   - whether the skill was loaded in V1 and V3, and the `compass` commands run;
@@ -484,21 +534,26 @@ Table: Proposed hypotheses of the defect-detection study.
 - **Analysis.**
   - For each model separately, a mixed-effects logistic model of detection,
     with reviewer as a fixed effect and random intercepts per mutant and per
-    document, fitted with `lme4`. If the study is batched, a random intercept
-    per batch is added.
+    document, fitted with `lme4`. The random intercept per document carries
+    the clustering of the critique kinds in their one host. If the study is
+    batched, a random intercept per batch is added.
   - False alarms are modelled as counts per clean document.
   - DD-H2 is tested by whether the upper bound of a one-sided 95% interval,
     from a bootstrap clustered by document, lies below the margin.
   - Holm's correction is applied across DD-H1 to DD-H3 for each model. DD-H3
     is tested on Claude Opus 5.5 only.
 - **Power.** A power simulation before the freeze gives the smallest
-  detectable difference in recall for DD-H1 and DD-H3.
+  detectable difference in recall for DD-H1 and DD-H3, and the power of
+  DD-H2's non-inferiority test at the margin set from the dry run. With about
+  40 clean documents per model, DD-H2 may be underpowered. If the simulation
+  shows that, DD-H2 is reported as descriptive and the protocol says so before
+  the runs.
 
 **Alternatives:** Only descriptive results, which gives up the rehearsal of
 confirmatory analysis. A hypothesis for each kind, which spends the correction
 on kinds with eight instances.
 
-### COMPASS-DRAFT-eval-defect-detection-D11 — Findings beyond the seeded defect are adjudicated by sample, and reported, not fixed
+### COMPASS-DRAFT-eval-defect-detection-D11 — Unmatched findings are adjudicated, wholly on clean documents and by sample on mutated ones
 
 **Status:** Proposed
 
@@ -506,23 +561,39 @@ on kinds with eight instances.
 `Current` references are one example (COMPASS-DRAFT-eval-snapshot-D3). A
 finding that does not match a mutant may be true. Counting every such finding
 as a false alarm would penalise a careful reviewer, and adjudicating every one
-would cost too much of the steward's time.
+would cost too much of the steward's time. But scoring a clean document's
+recommendation, and measuring DD-H2, both need every finding on that document
+judged. The workspaces also write out derived fields
+(COMPASS-DRAFT-eval-defect-detection-D7), which a reviewer may flag although
+the original documents do not have them.
 
 **Decision:**
-- **Adjudication.** The steward adjudicates a stratified sample of findings
-  that match no mutant, as true or false. Precision and false-alarm rates are
-  estimated from the sample, with intervals.
+- **Clean documents.** The steward adjudicates every finding on the clean
+  documents that matches no mutant, as true or false. DD-H2's false-alarm
+  counts, and the scoring of clean documents' recommendations, use these
+  judgements.
+- **Mutated documents.** The steward adjudicates a stratified sample of their
+  unmatched findings. Precision on mutated documents is estimated from the
+  sample, with intervals.
+- **Study artefacts.** Findings about the written-out `authors`, `created`, and
+  `updated` fields, or about the notes the toolchain reports without Git, are
+  study artefacts. They are recorded and counted, but excluded from false
+  alarms and from adjudication. This rule is fixed before the runs.
 - **Real defects.** Defects confirmed in a document are reported to the
   steward for the repository they belong to. They are not fixed during the
   study, which would change its inputs.
 - **Recommendations.** A clean document with a confirmed defect is scored as
-  a document needing revision.
+  a document needing revision (COMPASS-DRAFT-eval-defect-detection-D8).
 
-*Agreed in conversation.*
+*Adjudication by sample agreed in conversation; full adjudication of clean
+documents added after review.*
 
-**Alternatives:** Counting every unmatched finding as false, which penalises
-true findings. Adjudicating every finding, which costs too much. Fixing defects
-as they are found, which changes the documents mid-study.
+**Alternatives:**
+- **Counting every unmatched finding as false.** This penalises true findings.
+- **Adjudicating every finding.** This costs too much on mutated documents.
+- **Adjudicating clean documents by sample too.** This leaves some clean
+  documents' recommendations unscorable, and puts sampling error into DD-H2.
+- **Fixing defects as they are found.** This changes the documents mid-study.
 
 ### COMPASS-DRAFT-eval-defect-detection-D12 — A protocol Eval and a Log, published internally first
 
@@ -588,6 +659,10 @@ before the results are known.
   no longer the skill in use.
 - **Small numbers per kind.** Eight mutants per kind gives wide intervals for
   each kind. Only the pooled comparisons are confirmatory.
+- **Gaps in coverage.** Memo admission is not tested, and the critique kinds
+  rest on one document, so the study cannot speak for review of memos, nor say
+  much about review of critiques. The Compass corpus, the one most likely to
+  have been written with the skill in mind, is not reviewed.
 
 ## Open Questions
 
@@ -628,6 +703,14 @@ The steward writes some mutants and reviews all of them. How many should he
 write himself, so that both sources are represented in every kind, and should
 results be reported by source?
 
+### COMPASS-DRAFT-eval-defect-detection-O6 — Memo admission, once memo documents exist
+
+None of the three corpora has a Memo document, so the kind that tests whether
+review applies the memo admission tests (COMPASS-D36) is left out. When memo
+hosts exist in one or more corpora, should that kind be seeded in a short
+follow-up run on the same harness and protocol? And should the follow-up also
+cover kinds whose hosts are few today, such as critiques?
+
 ## Prior Art
 
 Table: Prior work and what this plan takes from each.
@@ -646,7 +729,7 @@ Table: Prior work and what this plan takes from each.
 1. **This Plan.** The steward accepts its decisions and states the token budget
    (COMPASS-DRAFT-eval-defect-detection-O1).
 2. **Harness, first part,** with tests in `compass-eval/tests`:
-   - the `compass-eval` system and descriptors for the four corpora;
+   - the `compass-eval` system and descriptors for the three corpora;
    - workspace preparation without Git, with derived fields written out, and
      the check that the toolchain's findings match the real repository's;
    - the runner, recorder, and installation of each condition;
@@ -671,7 +754,8 @@ Table: Prior work and what this plan takes from each.
 7. **Operational review and grading.**
    - Failures, cost, and manipulation checks.
    - The judge's validation and the steward's calibration sample.
-   - Adjudication of the sample of unmatched findings.
+   - Adjudication of every unmatched finding on clean documents, and of a
+     sample on mutated ones.
 8. **Results.**
    - The analysis appended to the protocol Eval as a dated update.
    - Real defects reported to the steward.
