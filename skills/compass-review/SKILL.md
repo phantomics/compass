@@ -197,24 +197,43 @@ Produce a report for the human editor (§6), not an edit. Structure:
 ```
 # Review — <id or filename> (<genre>, <scope>)
 
-**Summary:** <one-line overall assessment and recommendation>
+**Summary:** <one-line overall assessment and recommendation, naming the
+findings that drive it, such as "Revise (minor): E1 and W1–W2">
 **Checked with:** <compass version>, or "not checked by the toolchain"
 
 ## Toolchain findings
-- <severity> <rule> — <path>:<line> — <message>
+- **T1** <severity> <rule> — <path>:<line> — <message>
 - <n> errors and <n> warnings elsewhere in the corpus, not part of this change
 - <n> files skipped; <n> references unverified
 
 ## Findings
-- [ERROR]   <dimension> — <finding and where> — <suggested fix>
-- [WARNING] <dimension> — <finding> — <suggested fix>
-- [NOTE]    <dimension> — <observation>
+- **E1** ERROR — <dimension> — <finding and where> — <suggested fix>
+- **W1** WARNING — <dimension> — <finding> — <suggested fix>
+- **W2** WARNING — <dimension> — <finding> — <suggested fix>
+- **N1** NOTE — <dimension> — <observation>
 
 ## Strengths
 - <what the document does well>
 
 ## Recommendation: <Accept | Revise | Reconsider genre | Needs human decision>
+<the findings it rests on, by number>
 ```
+
+Number every finding so that the editor can answer by number ("fix E1 and
+T1–T3; leave N2"):
+
+- **Labels:** `T` for a toolchain finding, `E` for an ERROR, `W` for a WARNING,
+  `N` for a NOTE, each followed by a number, in bold, before the severity.
+- **Order:** list the judgment findings grouped by severity — errors, then
+  warnings, then notes — and number each group from 1 in the order listed;
+  number toolchain findings from T1 in the order the toolchain reports them.
+  The summary lines about the rest of the corpus and skipped files take no
+  number.
+- **Scope:** numbers are unique across the whole report. A review of several
+  documents, such as a pull request, numbers continuously and never restarts
+  per document; say which document each finding concerns.
+- **Lifetime:** numbers belong to one report. A re-review numbers afresh; where
+  it repeats an earlier finding, it may say so, as in "(was W2)".
 
 Severity guidance, mirroring §22: reserve **ERROR** for things that would block
 merge (wrong genre, missing required §14 sections, empty/strawman decision
@@ -243,3 +262,6 @@ conformance was **not** checked by the toolchain, and recommend running
   `--format json` output, is fine.
 - Complement, do not duplicate, the toolchain: report its findings as it gives
   them, and spend the review's judgment on what it does not check.
+- Finding numbers (T1, E1, W1, N1) are labels within one report, not Compass
+  identifiers. Never write them into a document, and never confuse them with a
+  critique's findings, which are open-question records with full identifiers.
