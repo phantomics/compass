@@ -29,6 +29,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md) | Compass Defect-Detection Study — Does Review Find What Is Wrong with a Document? | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-snapshot](Plan.EvalSnapshot.md) | Compass Snapshot Study — Planning Track 1 of the Agent-Context Evaluation | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
+| [COMPASS-DRAFT-migration](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
@@ -147,6 +148,14 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-D14](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d14--the-study-is-chronicled-in-this-plan-a-log-and-updates-to-compass-0006) | Decision | The study is chronicled in this Plan, a Log, and updates to COMPASS-0006 | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D15](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d15--the-paper-lives-in-pub-as-an-acm-preprint-derived-from-the-record) | Decision | The paper lives in pub/, as an ACM preprint derived from the record | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D16](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d16--the-compass-toolchain-and-skills-are-present-in-every-workspace) | Decision | The Compass toolchain and skills are present in every workspace | Proposed | COMPASS-DRAFT-eval-snapshot |
+| [COMPASS-DRAFT-migration-D1](Plan.Migration.md#compass-draft-migration-d1--migration-is-a-skill-one-document-at-a-time) | Decision | Migration is a skill, one document at a time | Proposed | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-D2](Plan.Migration.md#compass-draft-migration-d2--migration-reshapes-form-only) | Decision | Migration reshapes form only | Proposed | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-D3](Plan.Migration.md#compass-draft-migration-d3--a-migrated-document-names-its-original-in-provenance) | Decision | A migrated document names its original in provenance | Proposed | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-D4](Plan.Migration.md#compass-draft-migration-d4--move-and-rename-first-in-a-commit-of-its-own) | Decision | Move and rename first, in a commit of its own | Proposed | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-D5](Plan.Migration.md#compass-draft-migration-d5--code-references-are-pinned-to-the-originals-revision) | Decision | Code references are pinned to the original's revision | Proposed | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-D6](Plan.Migration.md#compass-draft-migration-d6--records-take-provisional-identifiers-keeping-the-originals-numbering) | Decision | Records take provisional identifiers, keeping the original's numbering | Proposed | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-D7](Plan.Migration.md#compass-draft-migration-d7--the-assistant-proposes-statuses-the-steward-sets-them) | Decision | The assistant proposes statuses; the steward sets them | Proposed | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-D8](Plan.Migration.md#compass-draft-migration-d8--a-migration-log-records-the-backlog) | Decision | A migration Log records the backlog | Proposed | COMPASS-DRAFT-migration |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |
@@ -208,6 +217,7 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-defect-detection-O3](Plan.EvalDefectDetection.md#compass-draft-eval-defect-detection-o3--publication) | Open question | Publication | — | COMPASS-DRAFT-eval-defect-detection |
 | [COMPASS-DRAFT-eval-defect-detection-O4](Plan.EvalDefectDetection.md#compass-draft-eval-defect-detection-o4--the-same-workspace-problem-in-track-1) | Open question | The same workspace problem in Track 1 | — | COMPASS-DRAFT-eval-defect-detection |
 | [COMPASS-DRAFT-eval-defect-detection-O5](Plan.EvalDefectDetection.md#compass-draft-eval-defect-detection-o5--how-many-mutants-the-steward-writes) | Open question | How many mutants the steward writes | — | COMPASS-DRAFT-eval-defect-detection |
+| [COMPASS-DRAFT-eval-defect-detection-O6](Plan.EvalDefectDetection.md#compass-draft-eval-defect-detection-o6--memo-admission-once-memo-documents-exist) | Open question | Memo admission, once memo documents exist | — | COMPASS-DRAFT-eval-defect-detection |
 | [COMPASS-DRAFT-eval-snapshot-O1](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o1--making-the-no-harm-test-confirmatory) | Open question | Making the no-harm test confirmatory | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O2](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o2--a-second-repository) | Open question | A second repository | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O3](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o3--statuses-as-practised-and-what-they-can-show) | Open question | Statuses as practised and what they can show | — | COMPASS-DRAFT-eval-snapshot |
@@ -215,6 +225,11 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-O5](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o5--pre-registration-and-the-release-of-tasks) | Open question | Pre-registration and the release of tasks | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O6](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o6--the-budget-and-what-is-cut-first) | Open question | The budget and what is cut first | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O7](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o7--the-conference-and-anonymity) | Open question | The conference and anonymity | — | COMPASS-DRAFT-eval-snapshot |
+| [COMPASS-DRAFT-migration-O1](Plan.Migration.md#compass-draft-migration-o1--documents-that-mix-genres) | Open question | Documents that mix genres | — | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-O2](Plan.Migration.md#compass-draft-migration-o2--listing-the-backlog) | Open question | Listing the backlog | — | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-O3](Plan.Migration.md#compass-draft-migration-o3--checking-that-a-migration-is-form-only) | Open question | Checking that a migration is form-only | — | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-O4](Plan.Migration.md#compass-draft-migration-o4--dates-older-than-the-repository) | Open question | Dates older than the repository | — | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-O5](Plan.Migration.md#compass-draft-migration-o5--links-from-outside-the-repository) | Open question | Links from outside the repository | — | COMPASS-DRAFT-migration |
 | [COMPASS-DRAFT-positioning-O1](Survey.Positioning.md#compass-draft-positioning-o1--which-name-to-lead-with) | Open question | Which name to lead with | — | COMPASS-DRAFT-positioning |
 | [COMPASS-DRAFT-positioning-O2](Survey.Positioning.md#compass-draft-positioning-o2--integrate-with-memory-tools-or-compete) | Open question | Integrate with memory tools, or compete | — | COMPASS-DRAFT-positioning |
 | [COMPASS-DRAFT-positioning-O3](Survey.Positioning.md#compass-draft-positioning-o3--agent-journals-and-decision-records) | Open question | Agent journals and decision records | — | COMPASS-DRAFT-positioning |
