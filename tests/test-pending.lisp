@@ -335,3 +335,58 @@ and a summary of the whole listing, even with --ready."
     (multiple-value-bind (code out) (run-cli "pending" (root-arg root))
       (is (= 0 code))
       (is (string= (lines "Nothing is waiting for a number.") out)))))
+
+;;; The note in compass check (COMPASS-D81)
+
+(defun ready-note-p (text)
+  (search "ready to be numbered with compass assign" text))
+
+(test check-notes-ready-documents
+  "check notes how many of the documents it checked are ready, only when at
+least one is, counting only the paths it was given."
+  (with-git-repository (root (pending-files))
+    (flet ((check-out (&rest paths)
+             (nth-value 1 (apply #'run-cli "check" "--skip-unmarked" (root-arg root)
+                                 (mapcar (lambda (p) (uiop:native-namestring (root-file root p)))
+                                         paths)))))
+      (is (search "Note: 2 documents checked are ready to be numbered with compass assign; compass pending --ready lists them."
+                  (check-out)))
+      (is (search "Note: 1 document checked is ready to be numbered with compass assign; compass pending --ready lists it."
+                  (check-out "doc/Plan.A.md")))
+      (is (search "Note: 2 documents checked" (check-out "doc/")))
+      (is (not (ready-note-p (check-out "doc/Plan.C.md"))) "a blocked document is not ready")
+      (is (not (ready-note-p (check-out "doc/Plan.D.md"))) "nor is a draft")
+      (is (search "Note: 1 document checked" (check-out "doc/Plan.B.md" "doc/Plan.C.md"))))))
+
+(test check-ready-note-is-information
+  "The note appears in the JSON report's notes and never changes the exit
+status, under --strict too; it is not added when the ledger has problems."
+  (with-git-repository (root (list (list "compass.sexp" *ledger-manifest*)
+                                   (list "doc/REGISTRY.sexp"
+                                         (ledger-file
+                                          (entry-line "TEST-0001" :document :draft "TEST-DRAFT-alpha"
+                                                                            :path "doc/Plan.A.md")
+                                          (entry-line "TEST-D1" :decision :draft "TEST-DRAFT-alpha-D1"
+                                                                          :host "TEST-0001")))
+                                   (list "doc/Plan.A.md"
+                                         (canonical-doc
+                                          "TEST-0001"
+                                          :extra '("decisions:" "  - TEST-D1" "  - TEST-DRAFT-alpha-D2")
+                                          :body (lines "# Alpha" "" "### TEST-D1 — Old" ""
+                                                       "**Status:** Accepted" ""
+                                                       "### TEST-DRAFT-alpha-D2 — New" ""
+                                                       "**Status:** Accepted")))))
+    (multiple-value-bind (code out) (run-cli "check" "--strict" (root-arg root))
+      (is (= 0 code) out)
+      (is (ready-note-p out)))
+    (multiple-value-bind (code out) (run-cli "check" "--format" "json" (root-arg root))
+      (is (= 0 code))
+      (is (some #'ready-note-p (coerce (gethash "notes" (shasht:read-json out)) 'list)))))
+  (with-git-repository (root (pending-files
+                              :ledger (ledger-file
+                                       (entry-line "TEST-0001" :document :draft "TEST-DRAFT-alpha"
+                                                                         :path "doc/Plan.A.md")
+                                       "=======")))
+    (multiple-value-bind (code out) (run-cli "check" "--skip-unmarked" (root-arg root))
+      (is (= 1 code) "the ledger's problems are errors")
+      (is (not (ready-note-p out))))))

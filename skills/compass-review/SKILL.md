@@ -71,8 +71,11 @@ Read from the shared bundle to ground the review in the standard:
    review. Findings elsewhere existed before the change; count them and leave
    them out of the recommendation.
 4. **Note what the check left out:** skipped files, unverified references
-   (references into namespaces this repository does not load), and any notes,
-   such as a rule that did not run because Git was missing.
+   (references into namespaces this repository does not load), and notes that
+   say what the check could not do, such as a rule that did not run because Git
+   was missing. A note that gives information instead, such as how many
+   documents checked are ready to be numbered, limits nothing; mention it where
+   it bears on the review.
 5. **Read the ledger findings with care.** A `ledger/*` error means numbers were
    allocated outside `compass assign`, or the ledger was edited, or a merge
    conflict in it was resolved by hand; the fix is `compass renumber` or the

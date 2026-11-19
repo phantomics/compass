@@ -184,6 +184,39 @@ a second value of NIL if there is no such subcommand."
     (values (mapcar #'first (and command (command-options command)))
             (and command t))))
 
+(defun document-selected-p (document limit)
+  "True if DOCUMENT is among LIMIT, the repository-relative paths of files and
+of directories (ending in /) a check was limited to, or if LIMIT is NIL."
+  (or (null limit)
+      (some (lambda (p)
+              (or (string= p (document-path document))
+                  (and (ends-with-p "/" p) (starts-with-p p (document-path document)))))
+            limit)))
+
+(defun note-ready-documents (corpus limit)
+  "Note how many of the documents checked, those among LIMIT, compass assign
+would number now (COMPASS-D81). Information, not a limit of the check: it never
+changes the exit status."
+  (let ((ready (and (some (lambda (document)
+                            ;; Only a checked document assign would accept, and with
+                            ;; something to number, can be ready: without one, the
+                            ;; listing, and its scan for short references, is skipped.
+                            (and (document-selected-p document limit)
+                                 (member (document-status document) +accepted-statuses+
+                                         :test #'equal)
+                                 (document-identifier document)
+                                 (identifiers-to-number document)))
+                          (corpus-documents corpus))
+                    (count-if (lambda (pending)
+                                (and (eq (pending-document-group pending) :ready)
+                                     (document-selected-p (pending-document-document pending)
+                                                          limit)))
+                              (pending-listing-documents (list-pending corpus))))))
+    (when (and ready (plusp ready))
+      (note corpus "~d document~:p checked ~:*~[are~;is~:;are~] ready to be numbered with ~
+                    compass assign; compass pending --ready lists ~:*~[them~;it~:;them~]"
+            ready))))
+
 (define-command "check"
     (:synopsis "check [PATH...] [--root DIR] [--format text|json] [--strict] [--skip-unmarked] [--rule NAME...] [--exclude NAME...] [--base REV] [--federation]"
      :summary "Check the corpus against the standard; report findings"
@@ -211,17 +244,12 @@ a second value of NIL if there is no such subcommand."
                (findings (check-corpus corpus :only only :exclude exclude :paths limit
                                               :base (base-revision options root)))
                (checked (and limit
-                             (count-if (lambda (document)
-                                         (some (lambda (p)
-                                                 (or (string= p (document-path document))
-                                                     (and (ends-with-p "/" p)
-                                                          (starts-with-p
-                                                           p (document-path document)))))
-                                               limit))
+                             (count-if (lambda (document) (document-selected-p document limit))
                                        (corpus-documents corpus)))))
           (when (and (option options "federation") (null (corpus-federation corpus)))
             (note corpus "--federation loaded nothing: compass.sexp lists no repositories ~
                           under :federation"))
+          (note-ready-documents corpus limit)
           (write-findings findings *standard-output* :format format :corpus corpus
                                                      :version +version+ :checked checked)
           (exit-code findings :strict (option options "strict")))))))

@@ -137,9 +137,12 @@ With `--format json` the output is one object:
   load, or into revisions a shallow clone lacks. They are not findings; report
   how many there were. `--federation` loads the repositories `compass.sexp`
   lists and checks references into them.
-- **Notes** (`Note: …` lines, or `notes` in JSON) say what the check could not
-  do, such as a rule that needs Git when Git is missing. Report them: a clean
-  check with notes checked less than a clean check without.
+- **Notes** (`Note: …` lines, or `notes` in JSON) are of two kinds. Most say
+  what the check could not do, such as a rule that needs Git when Git is
+  missing; report them, since a clean check with such notes checked less than
+  a clean check without. Others give information about what was checked, such
+  as how many of the documents checked are ready to be numbered with
+  `compass assign`; these limit nothing. Neither kind changes the exit status.
 - `--skip-unmarked` skips files without front-matter. Use it in repositories
   that are still migrating older documents, and say how many were skipped.
 - `compass check PATH...` still loads and checks the whole corpus, so that
