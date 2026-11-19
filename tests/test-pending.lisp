@@ -1,4 +1,4 @@
-;;;; test-pending.lisp — Tests for the listing of what is waiting for a number: its groups, its agreement with assign, and the files not yet migrated
+;;;; test-pending.lisp — Tests for the listing of what is waiting for a number and the pending command: groups, agreement with assign, files not yet migrated, text, and JSON
 
 (in-package #:compass.tests)
 
@@ -198,3 +198,140 @@ the blocker that says why."
         (is (null (pending-listing-documents listing)))
         (is (equal '("doc/Design.md" "doc/notes/Old.md")
                    (pending-listing-unmarked listing)))))))
+
+;;; The command
+
+(defun joined (&rest lines)
+  "LINES joined by newlines, without a final one, to match a partial last line."
+  (format nil "~{~a~^~%~}" lines))
+
+(defun occurrences (part text)
+  (loop for start = 0 then (+ found (length part))
+        for found = (search part text :start2 start)
+        while found count t))
+
+(test pending-command-text
+  "compass pending lists the groups in order, each document with its counts,
+flags, blockers, and the reason it waits, then the files not yet migrated and
+a summary; it exits 0 whatever it lists."
+  (with-git-repository (root (pending-files))
+    (multiple-value-bind (code out err) (run-cli "pending" (root-arg root))
+      (is (= 0 code))
+      (is (string= "" err))
+      (is (search (joined "Ready to assign (2):"
+                         "  TEST-0001  doc/Plan.A.md  Accepted"
+                         "    1 decision"
+                         "  TEST-DRAFT-beta  doc/Plan.B.md  Accepted"
+                         "    the document, 2 decisions, 1 open question; TEST-DRAFT-beta-D2 is Proposed"
+                         "Blocked (1):"
+                         "  TEST-DRAFT-gamma  doc/Plan.C.md  Accepted"
+                         "    the document, 1 decision"
+                         "    1 short reference would change meaning once these records are numbered; write it as full identifiers first (or assign with --force):"
+                         "      doc/Plan.C.md:")
+                  out)
+          out)
+      (is (search (joined "Waiting for acceptance (2):"
+                         "  TEST-0002  doc/Memo.Notes.md  Current"
+                         "    1 memo"
+                         "    waits for its memos: the memo is Draft, which assign skips"
+                         "  TEST-DRAFT-delta  doc/Plan.D.md  Draft"
+                         "    the document, 1 decision"
+                         "    waits for its status: Draft is not one assign accepts"
+                         "    1 short reference would change meaning")
+                  out)
+          out)
+      (is (search (lines "Not yet migrated (2):" "  doc/Design.md" "  doc/notes/Old.md" ""
+                         "5 documents hold provisional identifiers: 2 ready, 1 blocked, 2 waiting;"
+                         "2 files are not yet migrated.")
+                  out)
+          out))))
+
+(test pending-command-options
+  "--ready prints only the ready group and the summary; --namespace leaves out
+the files not yet migrated, and naming a namespace not owned is a failed
+lookup."
+  (with-git-repository (root (pending-files))
+    (multiple-value-bind (code out) (run-cli "pending" "--ready" (root-arg root))
+      (is (= 0 code))
+      (is (search "Ready to assign (2):" out))
+      (is (not (search "Blocked" out)))
+      (is (not (search "Waiting" out)))
+      (is (not (search "Not yet migrated" out)))
+      (is (search "5 documents hold provisional identifiers" out)))
+    (multiple-value-bind (code out) (run-cli "pending" "--namespace" "TEST" (root-arg root))
+      (is (= 0 code))
+      (is (search "Blocked (1):" out))
+      (is (not (search "Not yet migrated (2):" out))))
+    (multiple-value-bind (code out err) (run-cli "pending" "--namespace" "OTHER" (root-arg root))
+      (is (= 1 code))
+      (is (string= "" out))
+      (is (search "OTHER is not a namespace this repository owns; it owns TEST" err)))
+    (is (= 2 (run-cli "pending" "doc/Plan.A.md" (root-arg root))))
+    (is (= 2 (run-cli "pending" "--format" "xml" (root-arg root))))))
+
+(test pending-command-json
+  "The JSON lists the namespaces, corpus-wide blockers, each document with its
+group, counts, records, flags, blockers, and reason, the files not yet migrated,
+and a summary of the whole listing, even with --ready."
+  (with-git-repository (root (pending-files))
+    (multiple-value-bind (code out) (run-cli "pending" "--format" "json" (root-arg root))
+      (is (= 0 code))
+      (let* ((json (shasht:read-json out))
+             (documents (gethash "documents" json))
+             (beta (find "TEST-DRAFT-beta" documents :key (lambda (d) (gethash "id" d))
+                                                     :test #'equal))
+             (delta (find "TEST-DRAFT-delta" documents :key (lambda (d) (gethash "id" d))
+                                                       :test #'equal)))
+        (is (equal "compass" (gethash "tool" json)))
+        (is (equalp #("TEST") (gethash "namespaces" json)))
+        (is (= 0 (length (gethash "blockers" json))))
+        (is (= 5 (length documents)))
+        (is (equal "ready" (gethash "group" beta)))
+        (is (equal "doc/Plan.B.md" (gethash "path" beta)))
+        (is (equal "TEST" (gethash "namespace" beta)))
+        (is (= 2 (gethash "decision" (gethash "counts" beta))))
+        (is (= 3 (length (gethash "records" beta))) "the document's own identifier is not a record")
+        (is (equalp #("TEST-DRAFT-beta-D2") (gethash "flagged" beta)))
+        (is (equal "waiting" (gethash "group" delta)))
+        (is (equal "status" (gethash "reason" delta)))
+        (is (equal "short-references" (gethash "kind" (aref (gethash "blockers" delta) 0))))
+        (is (eq t (gethash "forcible" (aref (gethash "blockers" delta) 0))))
+        (is (equalp #("doc/Design.md" "doc/notes/Old.md") (gethash "unmarked" json)))
+        (let ((summary (gethash "summary" json)))
+          (is (equal '(5 2 1 2 2)
+                     (mapcar (lambda (k) (gethash k summary))
+                             '("documents" "ready" "blocked" "waiting" "unmarked")))))))
+    (multiple-value-bind (code out) (run-cli "pending" "--ready" "--format" "json" (root-arg root))
+      (is (= 0 code))
+      (let ((json (shasht:read-json out)))
+        (is (= 2 (length (gethash "documents" json))))
+        (is (= 0 (length (gethash "unmarked" json))))
+        (is (= 1 (gethash "blocked" (gethash "summary" json))))))))
+
+(test pending-command-corpus-blockers-and-nothing
+  "A corpus-wide blocker is printed once, before the groups; a manifest without
+:namespaces says to add them; with nothing pending, one line says so."
+  (with-git-repository (root (pending-files
+                              :ledger (ledger-file
+                                       (entry-line "TEST-0001" :document :draft "TEST-DRAFT-alpha"
+                                                                         :path "doc/Plan.A.md")
+                                       "=======")))
+    (multiple-value-bind (code out) (run-cli "pending" (root-arg root))
+      (is (= 0 code))
+      (is (starts-with-p "Blocking every assignment: the ledger has 1 error" out))
+      (is (= 1 (occurrences "the ledger has" out)))
+      (is (search "Blocked (3):" out))))
+  (with-git-repository (root (pending-files :manifest "(:doc-directory \"doc/\")" :ledger nil))
+    (multiple-value-bind (code out) (run-cli "pending" (root-arg root))
+      (is (= 0 code))
+      (is (search "add :namespaces to compass.sexp" out))
+      (is (search "Not yet migrated (2):" out))
+      (is (search "No document holds a provisional identifier." out))))
+  (with-git-repository (root (list (list "compass.sexp" *ledger-manifest*)
+                                   (list "doc/REGISTRY.sexp"
+                                         (ledger-file (entry-line "TEST-0001" :document
+                                                                  :path "doc/Plan.A.md")))
+                                   (list "doc/Plan.A.md" (canonical-doc "TEST-0001"))))
+    (multiple-value-bind (code out) (run-cli "pending" (root-arg root))
+      (is (= 0 code))
+      (is (string= (lines "Nothing is waiting for a number.") out)))))

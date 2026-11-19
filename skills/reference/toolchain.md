@@ -42,6 +42,7 @@ Table: Commands of toolchain version 0.2.
 | `compass show ID[#ANCHOR]` | Print a document, one section, or one record | No |
 | `compass outline ID[#ANCHOR]` | List a document's headings, anchors, and line ranges | No |
 | `compass refs ID[#ANCHOR]` | List everything that refers to an identifier or section | No |
+| `compass pending [--ready]` | List the documents holding provisional identifiers, grouped as `assign` would decide, and the files not yet migrated | No |
 | `compass index --stdout` | Print the generated namespace index | No |
 | `compass index` | Write `INDEX.md` in the document directory | Yes |
 | `compass index --check` | Say whether `INDEX.md` is current; exit 1 if not | No |
@@ -55,11 +56,11 @@ Table: Commands of toolchain version 0.2.
 | `compass rules` | List the rules the toolchain checks | No |
 | `compass version`, `compass help [COMMAND]` | Version and usage | No |
 
-`check`, `outline`, `refs`, and `rules` take `--format json`. Every command
-that reads a corpus takes `--root DIR`. `check`, `next`, `assign`, and
-`renumber` take `--base REV`, the branch a change will be merged into. Later
-versions add `compass diff` and others; use them only when `compass help`
-lists them.
+`check`, `outline`, `refs`, `pending`, and `rules` take `--format json`.
+Every command that reads a corpus takes `--root DIR`. `check`, `next`,
+`assign`, and `renumber` take `--base REV`, the branch a change will be merged
+into. Later versions add `compass diff` and others; use them only when
+`compass help` lists them.
 
 ## Numbers and the ledger
 
@@ -76,6 +77,14 @@ lists them.
   `Design-Record`, or `Current`); never set that status to make it run, and
   never use `--force` unless the user asks for it. Run it with `--dry-run`
   first and show the user the report.
+- **What is waiting for a number:** `compass pending` lists each document
+  that holds a provisional identifier as ready (`assign` would number it now),
+  blocked (with the reasons `assign` would refuse), or waiting (for its status,
+  or because its only provisional records are `Draft` memos), then the files
+  without front-matter. It flags a ready document's records whose own status
+  is not accepted, such as a `Proposed` decision, since `assign` numbers them
+  too. It changes nothing; tell the user what it lists, and leave `assign` to
+  them. `--namespace NS` lists one namespace the repository owns.
 - **Short references** such as `D6` change meaning when records are numbered,
   so `assign` refuses while any point at the records it would number. Rewrite
   each as the full identifier the `ref/short-record` warning suggests, after
@@ -93,7 +102,7 @@ Table: What each exit code means.
 | Code | Meaning | What to do |
 |---|---|---|
 | 0 | Success; for `check`, no errors (warnings may remain) | Continue |
-| 1 | `check` found errors; `index --check` found `INDEX.md` stale; `show` or `outline` found nothing for the identifier; `refs` found it neither defined nor referenced; `assign`, `renumber`, or `init` refused, saying why | Read the output and act on it |
+| 1 | `check` found errors; `index --check` found `INDEX.md` stale; `show` or `outline` found nothing for the identifier; `refs` found it neither defined nor referenced; `pending --namespace` named a namespace the repository does not own; `assign`, `renumber`, or `init` refused, saying why | Read the output and act on it |
 | 2 | Usage or internal error, such as a path that is not a document of the corpus | Report the message; fix the command, do not retry it unchanged |
 | 141 | The output was closed early, as by `head` | Normal; run again without the pipe if the whole output is needed |
 

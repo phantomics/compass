@@ -1,7 +1,7 @@
 ;;;; cli.lisp — The compass command: argument parsing, subcommands, and the executable entry point
 ;;;;
 ;;;; Read-if: adding a subcommand or option, or changing exit codes
-;;;; See: COMPASS-DRAFT-toolchain, COMPASS-DRAFT-toolchain-D19
+;;;; See: COMPASS-DRAFT-toolchain, COMPASS-DRAFT-toolchain-D19, COMPASS-DRAFT-toolchain-D30
 ;;;; Invariant: exit 0 on success, 1 on findings or a failed lookup, 2 on usage or internal error
 ;;;; Tests: tests/test-cli.lisp
 
@@ -504,6 +504,169 @@ output, its path, its line, and its host document's identifier."
               (t (format *error-output* "compass: ~a is neither defined nor referenced in ~
                                          this corpus~%" reference)
                  1))))))
+
+;;; pending (COMPASS-DRAFT-toolchain-D30)
+
+(defparameter *pending-groups*
+  '((:ready "Ready to assign") (:blocked "Blocked") (:waiting "Waiting for acceptance"))
+  "The groups of compass pending, in the order listed, with their headings.")
+
+(defun pending-group-count (documents group)
+  (count group documents :key #'pending-document-group))
+
+(defun pending-counts-text (document)
+  "The provisional identifiers DOCUMENT holds, as \"the document, 3 decisions\"."
+  (format nil "~{~a~^, ~}"
+          (mapcar (lambda (count)
+                    (destructuring-bind (kind . n) count
+                      (if (eq kind :document)
+                          "the document"
+                          (format nil "~d ~a~p" n (kind-name kind) n))))
+                  (pending-counts document))))
+
+(defun draft-memo-count (document)
+  (count-if (lambda (record) (eq (record-kind record) :memo))
+            (provisional-records document)))
+
+(defun write-indented (text indent stream)
+  "Write each line of TEXT on STREAM, after INDENT spaces."
+  (loop for line across (split-lines (string-right-trim '(#\Newline) text))
+        do (format stream "~a~a~%" (make-string indent :initial-element #\Space) line)))
+
+(defun write-pending-document (pending stream)
+  (let ((document (pending-document-document pending)))
+    (format stream "  ~a  ~a  ~a~%" (document-id document) (document-path document)
+            (or (document-status document) "(no status)"))
+    (format stream "    ~a~@[; ~{~a~^, ~}~]~%" (pending-counts-text document)
+            (mapcar (lambda (record)
+                      (format nil "~a is ~a" (record-id record) (record-field record "Status")))
+                    (pending-document-flagged pending)))
+    (case (pending-document-reason pending)
+      (:status
+       (format stream "    waits for its status: ~a is not one assign accepts~%"
+               (or (document-status document) "no status")))
+      (:draft-memos
+       (format stream "    waits for its memos: ~[~;the memo is~;both are~:;all ~:*~d are~] ~
+                       Draft, which assign skips~%"
+               (draft-memo-count document))))
+    (dolist (blocker (pending-document-blockers pending))
+      (write-indented (blocker-message blocker) 4 stream))))
+
+(defun write-pending-text (listing full ready stream)
+  "Write LISTING on STREAM, with the summary of FULL, the listing unfiltered.
+With READY, only the ready group and the summary."
+  (let ((documents (pending-listing-documents listing))
+        (all (pending-listing-documents full))
+        (unmarked (pending-listing-unmarked full)))
+    (dolist (blocker (pending-listing-corpus-blockers listing))
+      (if (eq (blocker-kind blocker) :no-namespaces)
+          (format stream "compass.sexp declares no namespaces this repository owns, so ~
+                          nothing here can be numbered; add :namespaces to compass.sexp.~%")
+          (format stream "Blocking every assignment: ~a~%" (blocker-message blocker))))
+    (cond
+      ((and (null all) (null unmarked))
+       (format stream "Nothing is waiting for a number.~%"))
+      (t
+       (loop for (group heading) in *pending-groups*
+             for members = (remove group documents :key #'pending-document-group
+                                                   :test-not #'eq)
+             when (and members (or (not ready) (eq group :ready)))
+               do (format stream "~a (~d):~%" heading (length members))
+                  (dolist (pending members) (write-pending-document pending stream)))
+       (when (and (pending-listing-unmarked listing) (not ready))
+         (format stream "Not yet migrated (~d):~%" (length unmarked))
+         (dolist (path unmarked) (format stream "  ~a~%" path)))
+       (when (or documents (and unmarked (not ready))) (terpri stream))
+       (if all
+           (format stream "~d document~:p hold~:[s~;~] provisional identifiers: ~d ready, ~
+                           ~d blocked, ~d waiting~:[.~;;~]~%"
+                   (length all) (/= 1 (length all))
+                   (pending-group-count all :ready) (pending-group-count all :blocked)
+                   (pending-group-count all :waiting) unmarked)
+           (format stream "No document holds a provisional identifier.~%"))
+       (when unmarked
+         (format stream "~d file~:p ~:*~[are~;is~:;are~] not yet migrated.~%"
+                 (length unmarked)))))))
+
+(defun pending-json (corpus listing full)
+  (flet ((blocker-json (blocker)
+           (json-object "kind" (string-downcase (symbol-name (blocker-kind blocker)))
+                        "message" (blocker-message blocker)
+                        "forcible" (if (blocker-forcible blocker) t :false))))
+    (let ((all (pending-listing-documents full)))
+      (json-object
+       "tool" "compass"
+       "version" +version+
+       "root" (uiop:native-namestring (corpus-root corpus))
+       "namespaces" (coerce (pending-listing-namespaces listing) 'vector)
+       "blockers" (coerce (mapcar #'blocker-json (pending-listing-corpus-blockers listing))
+                          'vector)
+       "documents"
+       (coerce
+        (mapcar
+         (lambda (pending)
+           (let* ((document (pending-document-document pending))
+                  (identifier (document-identifier document)))
+             (json-object
+              "id" (document-id document)
+              "path" (document-path document)
+              "namespace" (identifier-namespace identifier)
+              "status" (document-status document)
+              "group" (string-downcase (symbol-name (pending-document-group pending)))
+              "reason" (let ((reason (pending-document-reason pending)))
+                         (and reason (string-downcase (symbol-name reason))))
+              "counts" (let ((table (make-hash-table :test #'equal)))
+                         (loop for (kind . n) in (pending-counts document)
+                               do (setf (gethash (string-downcase (symbol-name kind)) table)
+                                        n))
+                         table)
+              "records" (coerce
+                         (mapcar (lambda (record)
+                                   (json-object "id" (record-id record)
+                                                "kind" (string-downcase
+                                                        (symbol-name (record-kind record)))
+                                                "status" (record-field record "Status")))
+                                 (provisional-records document))
+                         'vector)
+              "flagged" (coerce (mapcar #'record-id (pending-document-flagged pending))
+                                'vector)
+              "blockers" (coerce (mapcar #'blocker-json (pending-document-blockers pending))
+                                 'vector))))
+         (pending-listing-documents listing))
+        'vector)
+       "unmarked" (coerce (pending-listing-unmarked listing) 'vector)
+       "summary" (json-object "documents" (length all)
+                              "ready" (pending-group-count all :ready)
+                              "blocked" (pending-group-count all :blocked)
+                              "waiting" (pending-group-count all :waiting)
+                              "unmarked" (length (pending-listing-unmarked full)))))))
+
+(define-command "pending"
+    (:synopsis "pending [--namespace NS] [--ready] [--format text|json] [--root DIR]"
+     :summary "List what is waiting for a number, and the files not yet migrated"
+     :options (("root" :value) ("namespace" :value) ("ready" :flag) ("format" :value)))
+    (args)
+  (multiple-value-bind (positional options)
+      (parse-arguments args (command-options (find-command "pending")))
+    (when positional (usage-error "pending takes no arguments"))
+    (let* ((format (output-format options))
+           (corpus (load-corpus-for-command (repository-root options)))
+           (namespace (option options "namespace"))
+           (ready (option options "ready"))
+           (owned (manifest-namespaces (corpus-manifest corpus))))
+      (cond
+        ((and namespace (not (member namespace owned :test #'string=)))
+         (format *error-output* "compass: ~a is not a namespace this repository owns~
+                                 ~:[ (compass.sexp declares none)~;; it owns ~:*~{~a~^, ~}~]~%"
+                 namespace owned)
+         1)
+        (t
+         (let* ((full (list-pending corpus :namespace namespace))
+                (listing (if ready (list-pending corpus :namespace namespace :ready t) full)))
+           (if (eq format :json)
+               (write-json-value (pending-json corpus listing full))
+               (write-pending-text listing full ready *standard-output*))
+           0))))))
 
 (defun parse-kind (name &key (allowed '("document" "decision" "open-question" "memo")))
   (let ((kind (and (member name allowed :test #'string=)
