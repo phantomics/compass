@@ -1302,7 +1302,7 @@ identifiers that are aliases-to-be.
   number of files not yet migrated, in one line, naming the ready documents.
 
 The design and the stages are in
-[COMPASS-DRAFT-pending-tool](Plan.PendingTool.md).
+[COMPASS-0017](Plan.PendingTool.md).
 
 **Alternatives:**
 - A section of the generated `INDEX.md`. Rejected: the index is committed, and
@@ -1727,7 +1727,7 @@ designed so that later steps extend it rather than rewrite it.
   comes first (see the [Roadmap](#roadmap)).
 - `compass pending`, the `check` note of ready documents, and the `/orient`
   mention (COMPASS-DRAFT-toolchain-D30), staged in
-  [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md).
+  [COMPASS-0017](Plan.PendingTool.md).
 
 **v0.3 — RDF export** (part of roadmap step 5):
 - The `:authorities` manifest key and `manifest/authority`.
@@ -1917,7 +1917,7 @@ place:
   without front-matter and counts them.
 - **The backlog** is listed by `compass pending`, which finds the files without
   front-matter that a migration has still to reach
-  (COMPASS-DRAFT-toolchain-D30, COMPASS-DRAFT-pending-tool-D5).
+  (COMPASS-DRAFT-toolchain-D30, COMPASS-D83).
 - **The conversion** is a skill, `compass-migrate`, not a `compass migrate`
   command (COMPASS-D68): one document at a time, form only, with
   `provenance.migrated-from` naming the original (§7, Compass 0.5.0).
