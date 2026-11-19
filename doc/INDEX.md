@@ -30,6 +30,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot](Plan.EvalSnapshot.md) | Compass Snapshot Study — Planning Track 1 of the Agent-Context Evaluation | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
 | [COMPASS-DRAFT-migration](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Accepted | authoring-assistance |
+| [COMPASS-DRAFT-migration-log](Log.Migration.md) | Compass Migration Skill Development Log | Log | component | Draft | authoring-assistance |
 | [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md) | Compass Pending — Listing What Is Waiting for a Number | Plan | component | Draft | toolchain |
 | [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 
@@ -160,6 +161,9 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-migration-D9](Plan.Migration.md#compass-draft-migration-d9--section-numbers-that-are-cited-elsewhere-are-kept) | Decision | Section numbers that are cited elsewhere are kept | Proposed | COMPASS-DRAFT-migration |
 | [COMPASS-DRAFT-migration-D10](Plan.Migration.md#compass-draft-migration-d10--a-repositorys-own-migration-plan-takes-precedence) | Decision | A repository's own migration plan takes precedence | Proposed | COMPASS-DRAFT-migration |
 | [COMPASS-DRAFT-migration-D11](Plan.Migration.md#compass-draft-migration-d11--the-skill-ends-at-the-reshape-revision-is-a-separate-edit-before-acceptance-where-it-matters) | Decision | The skill ends at the reshape; revision is a separate edit, before acceptance where it matters | Proposed | COMPASS-DRAFT-migration |
+| [COMPASS-DRAFT-migration-log-D1](Log.Migration.md#compass-draft-migration-log-d1--migrated-from-is-checked-by-a-rule-of-its-own) | Decision | migrated-from is checked by a rule of its own | Proposed | COMPASS-DRAFT-migration-log |
+| [COMPASS-DRAFT-migration-log-D2](Log.Migration.md#compass-draft-migration-log-d2--the-revision-is-a-commits-hash-never-a-branch-or-tag) | Decision | The revision is a commit's hash, never a branch or tag | Proposed | COMPASS-DRAFT-migration-log |
+| [COMPASS-DRAFT-migration-log-D3](Log.Migration.md#compass-draft-migration-log-d3--the-pending-check-for-provenance-keys-keeps-a-test-after-both-keys-are-accepted) | Decision | The pending check for provenance keys keeps a test after both keys are accepted | Proposed | COMPASS-DRAFT-migration-log |
 | [COMPASS-DRAFT-pending-tool-D1](Plan.PendingTool.md#compass-draft-pending-tool-d1--assigns-checks-are-factored-out-and-shared) | Decision | assign's checks are factored out and shared | Proposed | COMPASS-DRAFT-pending-tool |
 | [COMPASS-DRAFT-pending-tool-D2](Plan.PendingTool.md#compass-draft-pending-tool-d2--short-references-are-found-once-per-corpus) | Decision | Short references are found once per corpus | Proposed | COMPASS-DRAFT-pending-tool |
 | [COMPASS-DRAFT-pending-tool-D3](Plan.PendingTool.md#compass-draft-pending-tool-d3--the-note-counts-only-the-documents-check-checked) | Decision | The note counts only the documents check checked | Proposed | COMPASS-DRAFT-pending-tool |
