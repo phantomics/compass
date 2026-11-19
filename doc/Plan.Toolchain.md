@@ -76,6 +76,7 @@ decisions:
   - COMPASS-D31
   - COMPASS-D32
   - COMPASS-D33
+  - COMPASS-DRAFT-toolchain-D30
 open-questions:
   - COMPASS-O4
   - COMPASS-O5
@@ -1256,6 +1257,59 @@ the federation.
 - Load the federation whenever its paths exist. Rejected: a check's result would
   depend on what happens to be checked out next to the repository.
 
+### COMPASS-DRAFT-toolchain-D30 — `compass pending` lists what is waiting for a number
+
+**Status:** Proposed
+
+**Context:** A document keeps its provisional identifier, and a record added to
+a numbered document keeps its own (COMPASS-D27), until the steward runs
+`compass assign` (COMPASS-D28). Nothing reminds the steward to: `index` lists
+provisional identifiers among the numbered ones, and `assign` reports only on
+the one file it is given. As a corpus grows, accepted documents and records
+added to them stay provisional unnoticed, and other documents cite them by
+identifiers that are aliases-to-be.
+
+**Decision:**
+- `compass pending [--namespace NS] [--ready] [--format text|json] [--root
+  DIR]` lists every document in a namespace this repository owns that has a
+  provisional identifier or provisional records, with its path, its status, and
+  how many provisional records of each kind it holds. It groups them as:
+  - **ready**: `assign` would number it now;
+  - **blocked**: its status allows `assign`, but `assign` would refuse, with
+    the reason, such as short references to its records;
+  - **waiting**: its status is not yet one `assign` accepts, or its only
+    provisional records are `Draft` memos, which `assign` skips.
+- Readiness is decided by the same checks `assign` makes, so that the two
+  cannot disagree. A problem in the ledger that blocks every assignment is
+  reported once, not against each document.
+- A ready document's records whose own status is not yet accepted, such as a
+  `Proposed` decision added to an `Implemented` plan, are flagged, not
+  treated as blockers: `assign` numbers them, and the steward may set their
+  status first.
+- `--ready` lists only the ready documents. `--namespace` limits the listing
+  to one owned namespace; naming one the repository does not own is a failed
+  lookup.
+- The exit status is 0 whatever is listed, 1 for a failed lookup, and 2 for a
+  usage error: it is a listing, not a gate.
+- `compass check` adds a note, which never changes its exit status, when any of
+  the documents it checked is ready: how many, and that `compass pending
+  --ready` lists them.
+- The `/orient` command reports the ready and waiting counts.
+
+The design and the stages are in
+[COMPASS-DRAFT-pending-tool](Plan.PendingTool.md).
+
+**Alternatives:**
+- A section of the generated `INDEX.md`. Rejected: the index is committed, and
+  readiness changes with status edits, so it would add churn and still not say
+  why a document is blocked.
+- An `assign --all --dry-run`. Rejected: mixes a listing into the command that
+  writes the ledger, and its output would be the rewrites, not the backlog.
+- A warning from `check`. Rejected: a provisional identifier is not a defect,
+  and warnings fail `--strict`.
+- Covering federated namespaces. Rejected: only a namespace's steward assigns
+  its numbers, so another repository's backlog is not actionable here.
+
 ## The uniqueness guarantee
 
 The guarantee is a set of invariants. The validator enforces them, and the
@@ -1574,6 +1628,10 @@ Table: Initial rule set, with severity and the section each rule enforces.
   that document (COMPASS-D27). Before the ledger exists (baseline
   v0.1), it computes the preview from the highest number found by scanning the
   corpus, and says that the result is advisory.
+- `compass pending [--namespace NS] [--ready] [--format text|json]` lists the
+  documents with provisional identifiers or records, grouped as ready for
+  `assign`, blocked, or waiting for acceptance; `check` notes how many are
+  ready (COMPASS-DRAFT-toolchain-D30).
 - `compass index [--check]` writes the namespace index, or with `--check` exits
   1 if the committed one differs from what would be written (COMPASS-D10).
 - `compass show ID[#anchor]`, which
@@ -1660,6 +1718,9 @@ designed so that later steps extend it rather than rewrite it.
   container image; the `pre-commit` hook definition
   (`.pre-commit-hooks.yaml`). A short spike on the macOS and Windows runners
   comes first (see the [Roadmap](#roadmap)).
+- `compass pending`, the `check` note of ready documents, and the `/orient`
+  mention (COMPASS-DRAFT-toolchain-D30), staged in
+  [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md).
 
 **v0.3 — RDF export** (part of roadmap step 5):
 - The `:authorities` manifest key and `manifest/authority`.
