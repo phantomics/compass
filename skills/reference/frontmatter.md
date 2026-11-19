@@ -127,8 +127,9 @@ set or preserve this when they touch a document.
 
 A document migrated from one written before Compass also carries
 `migrated-from:`, which pins the original as `<path>@<commit>`: its path from
-the repository root, before the move, and the last commit that changed it,
-written as 7 to 40 hexadecimal digits. For example:
+the repository root, before the move, and the last commit that changed it
+before the migration touched it, written as 7 to 40 hexadecimal digits. For
+example:
 
 ```yaml
 provenance:

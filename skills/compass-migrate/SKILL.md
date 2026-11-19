@@ -84,9 +84,10 @@ Check each of these, and stop at the first that fails, saying why:
    under `skipped`, and Markdown files outside the document directory may be
    more. If the repository keeps a migration Log, that Log is the record. If it
    does not, and more than three documents were unmarked when the first
-   migration began, the record is a new `Log.Migration.md`, which
-   `compass-author` writes after the first reshape is committed. Otherwise the
-   record is the migration line in `AGENTS.md`.
+   migration began, the record is a new `Log.CompassMigration.md`, which
+   `compass-author` writes after the first reshape is committed, naming the
+   commit the migration began from. Otherwise the record is the migration line
+   in `AGENTS.md`.
 
 ## Workflow
 
@@ -119,8 +120,13 @@ Propose, giving the reasons, and let the user confirm or correct:
   `<NS>-DRAFT-<slug>`. `compass show <NS>-DRAFT-<slug>` must exit 1, meaning
   the slug is free.
 - **The original's revision**, for `migrated-from`: the last commit that changed
-  it, `git log -1 --format=%h -- <path>`. If the user has already renamed it,
-  read it through the rename, with `git log --follow`.
+  it before the migration touched it (COMPASS-DRAFT-migration-D3). An earlier
+  document's move may have updated a link in this one, and that commit does
+  not count. Where the migration Log names the commit the migration began
+  from, use `git log -1 --format=%h <that commit> -- <path>`; otherwise list
+  `git log --format='%h %s' -- <path>` and take the first commit that is not a
+  move, reshape, or link update of the migration. If the user has already
+  renamed it, read it through the rename, with `git log --follow`.
 - **Records.** The original's decisions, numbered or not, and its open
   questions, with the identifiers they will take. Numbered ones keep their
   numbers: "Decision 3" becomes `<NS>-DRAFT-<slug>-D3`
@@ -190,7 +196,9 @@ following any differences the repository's own plan makes:
     write `approved-by`, `reviewers`, or `reviewed`.
 - **Header lines:** remove the lines that only state what the front-matter now
   holds: a title line the new heading replaces, a version line, and a status
-  line. Keep a line giving the author's date.
+  line. Where a status line also states a fact, as "**Status:** Conceptual. No
+  implementation has begun." does, remove only the status and keep the fact as
+  a line. Keep a line giving the author's date.
 - **Sections:** rename them to follow the genre's §14 spine, keeping their text
   and any cited numbers, as in "4. Required Core Tag Vocabulary". Text a renamed
   heading displaces, such as the expansion of a name, stays as a line under the
@@ -201,6 +209,8 @@ following any differences the repository's own plan makes:
 - **Gaps:** where the spine requires a section or field the original fills
   elsewhere, point to that place with a link or a full identifier: "See
   [Problem](#problem).", or "Deferred; see `<record>`." in Outstanding Work.
+  Where a decision's own sentence names the option it rejects ("Rather than
+  discrete … systems, …"), its Alternatives field is "See the Decision.".
   Where the original lacks it altogether, write "Not recorded in the
   original."
 - **Records:** each decision becomes
@@ -211,24 +221,28 @@ following any differences the repository's own plan makes:
   original does not give anywhere is "Not recorded in the original.", never
   one reconstructed from the code or history. Open questions become `-O<n>`
   records the same way. Explanatory text that fits no field stays after the
-  fields. Rewrite every reference to them in
-  the document as the full identifier. An identifier that looks canonical but
-  is not in the ledger becomes provisional, and the report names the
-  collision.
+  fields. Rewrite every reference to them in the document as the full
+  identifier. An identifier that looks canonical but is not in the ledger
+  becomes provisional, and the report names the collision.
 - **Accessibility (§12):** a `Table:` caption before each table and a
   `Description:` paragraph after each diagram. Where a lead-in such as "Tag
   mappings:" introduces a table, the lead-in becomes its caption.
-- **Links:** a link to another document of the corpus is written with its
-  identifier as the text, and its path as the target.
+- **Links:** a link to, or a backticked path or file name of, another document
+  already in the corpus is written as a link with its identifier as the text
+  and its path as the target, and the identifier goes in `relates-to`. A
+  document not yet migrated keeps its path; it becomes a link when that
+  document is migrated (step 7).
 - **Code references:** pin each to the revision chosen in step 2
   (COMPASS-DRAFT-migration-D5).
   - A file and line become `path:symbol@revision`, naming the definition that
     encloses the line at that revision (read it with
     `git show <revision>:<path>`), or `path#L<n>@revision` where none does.
   - A file the original names is pinned in place, `path@revision`.
-  - Where the original names a symbol defined, at that revision, in a file it
-    names, add `path:symbol@revision` beside its first mention, in parentheses,
-    or in place of a bare symbol name such as the head of a list item.
+  - Where a passage names a symbol together with the file that defines it at
+    that revision, add `path:symbol@revision` in that passage, in parentheses,
+    or in place of a bare symbol name such as the head of a list item. Do not
+    pin a symbol the text says was removed or replaced, even if the file still
+    defines one by that name; note it instead.
   - A reference whose file did not exist at that revision stays as it was, and
     goes in the report.
   - Paths that record history, such as a Log's Files table, are not pinned.
@@ -238,17 +252,22 @@ are; write down what you notice for the report.
 
 ### 5. Check
 
-- Run `compass check <new path>`, with `--skip-unmarked` while other documents
-  remain unmarked and `--federation` when the document cites other
-  repositories. Fix every error the reshape introduced, such as
-  `register/mirrored`, `ref/doc-resolves`, `ref/code-exists`, or `fm/types`, and
-  run it again until there are none.
+- If the document directory has an `INDEX.md`, regenerate it first, with
+  `compass index`.
+- Then check the whole corpus, not only the new path: `compass check`, with
+  `--skip-unmarked` while other documents remain unmarked and `--federation`
+  when the document cites other repositories. Checking one path hides findings
+  in other files, such as `index/current` on `INDEX.md`. Fix every error the
+  migration introduced, such as `register/mirrored`, `ref/doc-resolves`,
+  `ref/code-exists`, `fm/types`, or `index/current`, and run it again until
+  there are none.
 - Expect one `vocab/pending` warning, for `migrated-from`, and report it. Fix
   `ref/short-record` warnings by writing the full identifier, and check each
   `ref/code-exists` warning against the history. `ref/migrated-from` must
   report nothing: if it does, the original's path or revision is wrong.
-- If the document directory has an `INDEX.md`, regenerate it with
-  `compass index`.
+- Check your own links and relations: every document of the corpus that the
+  original names, by link, backticked path, or file name, is a link with its
+  identifier as the text and is listed in `relates-to`.
 - Read your own diff against the original (`git diff`). Every word removed must
   now be in the front-matter, a heading, or a field label, and every word added
   must be front-matter, a heading, a field label, an identifier, a pin, a
@@ -291,12 +310,20 @@ Then hand off (COMPASS-DRAFT-migration-D11):
 
 ### 7. After the reshape is committed
 
-Update the backlog record (COMPASS-DRAFT-migration-D8):
+Update the mentions of it, then the backlog record:
 
-- **A migration Log:** draft an `## Update <date> — <title>` section naming the
-  document, its original path and `migrated-from` revision, its move and
-  reshape commits, and the notes on stale content, with code references pinned
-  to the reshape commit. The first time, write the Log with `compass-author`.
+- **Mentions in documents already migrated** (COMPASS-DRAFT-migration-D4).
+  Search them for this document's old and new paths, as links, backticked
+  paths, and file names. Rewrite each as a link with its identifier as the
+  text, `[<ID>](<path>)`, and add the identifier to that document's
+  `relates-to`. Leave mentions that record history, such as a Log's Files
+  table. Regenerate the index and check the corpus again.
+- **A migration Log** (COMPASS-DRAFT-migration-D8): draft an
+  `## Update <date> — <title>` section naming the document, its original path
+  and `migrated-from` revision, its move and reshape commits, and the notes on
+  stale content, with code references pinned to the reshape commit. The first
+  time, write `Log.CompassMigration.md` with `compass-author`, naming the
+  commit the migration began from.
 - **The `AGENTS.md` line:** name the documents still unmarked. When none remain,
   remove the line and its advice to use `--skip-unmarked`.
 
@@ -356,6 +383,7 @@ If no executable is found, do the steps by hand and say so in the report:
 - **Never record a session that is not verified** (COMPASS-DRAFT-migration-D3).
 - **Change only** the document, the links to it in this repository's Markdown
   files, the `AGENTS.md` migration line, the generated index, and, after the
-  reshape commit, the migration Log. Never move a file that is not a document.
+  reshape commit, the mentions of it in documents already migrated and the
+  migration Log. Never move a file that is not a document.
 - This skill **proposes**; the toolchain checks, and a person accepts. Report
   what `compass check` found, never that the migration is correct beyond it.

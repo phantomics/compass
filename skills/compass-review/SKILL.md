@@ -205,9 +205,16 @@ toolchain does not check yet; the dimensions below cover it.
       current text: edits after the reshape commit are ordinary revisions,
       reviewed by the other dimensions (COMPASS-DRAFT-migration-D11).
     - **The pin.** The `migrated-from` revision should be the last commit that
-      changed the original before its move:
-      `git log -1 --format=%h <move commit>^ -- <old path>`. A later or an
-      earlier one is a WARNING.
+      changed the original before the migration touched it
+      (COMPASS-DRAFT-migration-D3): `git log -1 --format=%h <move commit>^ --
+      <old path>`, or, for a document not moved, the last commit before the
+      one the migration Log names as the migration's start. Commits in which
+      an earlier document's move only updated a link in this one do not
+      count. A later or an earlier pin is a WARNING.
+    - **Links and relations.** Every document of the corpus the original
+      names should be a link with its identifier as the text and be in
+      `relates-to`; a path left for a document migrated since is a NOTE, for
+      the link update of COMPASS-DRAFT-migration-D4.
     - **Removed text.** Every passage of the original must survive, in the body
       or as front-matter, a heading, or a field label. Only a title line, a
       version line, and a status line the front-matter replaces may go; a date
