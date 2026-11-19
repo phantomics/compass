@@ -44,7 +44,8 @@
                    (:file "refs")
                    (:file "short")
                    (:file "rewrite")
-                   (:file "allocate")))
+                   (:file "allocate")
+                   (:file "pending")))
      (:module "rules"
       :serial t
       :components ((:file "engine")
@@ -83,6 +84,7 @@
                  (:file "test-ledger")
                  (:file "test-cli")
                  (:file "test-allocate")
+                 (:file "test-pending")
                  (:file "test-concurrency")
                  (:file "test-code-refs")
                  (:file "test-federation")

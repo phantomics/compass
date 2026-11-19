@@ -121,8 +121,10 @@ preview: another branch may take the number before this one merges."
       (refuse "~a" (blocker-message first)))))
 
 (defun corpus-git-name (corpus)
-  "The name the ledger records for the person using Git at CORPUS's root, or NIL."
-  (corpus-cached corpus :git-name (lambda () (git-identity (corpus-root corpus)))))
+  "The name the ledger records for the person using Git at CORPUS's root, or NIL,
+also when Git cannot be run."
+  (corpus-cached corpus :git-name
+                 (lambda () (and (git-available-p) (git-identity (corpus-root corpus))))))
 
 (defun namespaces-blocker (corpus)
   (unless (and (manifest-path (corpus-manifest corpus))
@@ -132,11 +134,16 @@ preview: another branch may take the number before this one merges."
               (:namespaces), so no number can be allocated here")))
 
 (defun git-name-blocker (corpus)
-  (unless (corpus-git-name corpus)
-    (new-blocker :no-git-name
-             "Git has no user.name here; set one with git config user.name, so the ~
-              ledger can record who allocated each number (the repository's .mailmap, ~
-              if it has one, maps it to the name recorded)")))
+  (cond ((corpus-git-name corpus) nil)
+        ((not (git-available-p))
+         (new-blocker :no-git-name
+                      "Git was not found; assign needs it to record who allocated each ~
+                       number"))
+        (t
+         (new-blocker :no-git-name
+                      "Git has no user.name here; set one with git config user.name, so the ~
+                       ledger can record who allocated each number (the repository's ~
+                       .mailmap, if it has one, maps it to the name recorded)"))))
 
 (defun allocator (corpus)
   (refuse-for-blockers (list (git-name-blocker corpus)))

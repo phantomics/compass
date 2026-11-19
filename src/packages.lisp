@@ -153,6 +153,11 @@
            #:plan-assign #:plan-renumber #:plan-seed #:execute-allocation
            #:blocker #:blocker-kind #:blocker-message #:blocker-forcible #:blocker-data
            #:+blocker-kinds+ #:corpus-blockers #:document-blockers #:identifiers-to-number
+           #:pending-listing #:pending-listing-namespaces #:pending-listing-corpus-blockers
+           #:pending-listing-documents #:pending-listing-unmarked
+           #:pending-document #:pending-document-document #:pending-document-group
+           #:pending-document-reason #:pending-document-blockers #:pending-document-flagged
+           #:list-pending #:pending-counts #:provisional-records
            #:strip-conflict-markers
            #:rewrite #:rewrite-path #:rewrite-old-text #:rewrite-new-text
            #:rewrite-changed-lines #:plan-rewrites #:rewrite-line
