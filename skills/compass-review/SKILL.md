@@ -1,6 +1,6 @@
 ---
 name: compass-review
-description: Review a Compass document or pull request — first with the compass toolchain's mechanical checks, then for the judgment-level conformance it cannot check — genre fit, section shape, decision-record quality, memo admission, critique quality, prior-art coverage, cross-reference plausibility, accessibility, and README-transclusion drift. Use before accepting or merging a Compass document.
+description: Review a Compass document or pull request — first with the compass toolchain's mechanical checks, then for the judgment-level conformance it cannot check — genre fit, section shape, decision-record quality, memo admission, critique quality, prior-art coverage, cross-reference plausibility, accessibility, README-transclusion drift, and, for a migrated document, fidelity to its original. Use before accepting or merging a Compass document, and after a compass-migrate reshape.
 ---
 
 # compass-review
@@ -16,7 +16,8 @@ substance* for its genre.
 
 Use before **accepting or merging** a Compass document, or when the user asks to
 "review this doc", "check this Plan/Log/Survey", or "look over this PR for the
-docs". Also use to sanity-check a document `compass-author` just scaffolded.
+docs". Also use to sanity-check a document `compass-author` just scaffolded,
+and to review a document `compass-migrate` just reshaped against its original.
 
 Do **not** use to create documents (`compass-author`) or to resolve
 cross-references and registers (`compass-lookup`). Do not treat this skill as the
@@ -71,7 +72,9 @@ Read from the shared bundle to ground the review in the standard:
    them out of the recommendation.
 4. **Note what the check left out:** skipped files, unverified references
    (references into namespaces this repository does not load), and any notes,
-   such as a rule that did not run because Git was missing.
+   such as a rule that did not run because Git was missing. A migrated
+   document's `vocab/pending` warning for `migrated-from` is expected until the
+   standard adopts the key; report it as a toolchain finding, not a defect.
 5. **Read the ledger findings with care.** A `ledger/*` error means numbers were
    allocated outside `compass assign`, or the ledger was edited, or a merge
    conflict in it was resolved by hand; the fix is `compass renumber` or the
@@ -189,6 +192,52 @@ toolchain does not check yet; the dimensions below cover it.
     declares that person its steward with `:approval :solo`? When `authors` is
     left to Git, `compass outline <ID>` shows the derived authors. The toolchain
     does not check this yet.
+
+12. **Migration fidelity (COMPASS-DRAFT-migration-D2).** For a document whose
+    `provenance` has `migrated-from: <old path>@<revision>`, a migration changed
+    only its form; judge whether it did. `ref/migrated-from` checks only that the
+    original exists.
+    - **Find the three states.** The original is `git show <revision>:<old path>`.
+      The reshape commit is the oldest of
+      `git log --follow -S'migrated-from:' --format=%h -- <path>`, or the one a
+      migration Log records. Under review before it is committed, the reshape
+      is the working file. Compare the original with the reshape, not with the
+      current text: edits after the reshape commit are ordinary revisions,
+      reviewed by the other dimensions (COMPASS-DRAFT-migration-D11).
+    - **The pin.** The `migrated-from` revision should be the last commit that
+      changed the original before its move:
+      `git log -1 --format=%h <move commit>^ -- <old path>`. A later or an
+      earlier one is a WARNING.
+    - **Removed text.** Every passage of the original must survive, in the body
+      or as front-matter, a heading, or a field label. Only a title line, a
+      version line, and a status line the front-matter replaces may go; a date
+      line stays. A lost passage is an ERROR.
+    - **Added text.** Allowed: front-matter, headings, field labels, record
+      identifiers and full identifiers for the original's numbering, pinned
+      code references, link targets, `Table:` captions and `Description:`
+      paragraphs (a caption may replace a table's lead-in), a heading's
+      displaced text kept as a line under it, and "Not recorded in the
+      original.". Anything else is an ERROR when it adds or updates a fact,
+      such as an alternative the original never gave or a corrected stale
+      claim, and a WARNING when it only rewords.
+    - **The form choices.** Records keep the original's numbering
+      (COMPASS-DRAFT-migration-D6); section numbers cited elsewhere are kept
+      (COMPASS-DRAFT-migration-D9; search for "§" and "Section" citations);
+      historical paths in a Log are left as they were
+      (COMPASS-DRAFT-migration-D4); a Log's code references are pinned to the
+      commit of its work, and other genres' to the `migrated-from` revision
+      (COMPASS-DRAFT-migration-D5).
+    - **Provenance and status.** `session:` should name the session that wrote
+      the original, and only where its transcript shows that; an unverified one
+      is a WARNING (COMPASS-DRAFT-migration-D3). A proposed or set status must
+      come from the genre's vocabulary, and `Current` on a Spec, Ref, or Guide
+      claims that it matches the code as it is now (COMPASS-DRAFT-migration-D7).
+    - **The repository's own plan.** Where the repository has a migration plan,
+      judge the reshape against its decisions where they differ from
+      COMPASS-DRAFT-migration (COMPASS-DRAFT-migration-D10).
+
+    Report the stale content the migration rightly left as NOTES, for the
+    revision that follows, not as findings against the migration.
 
 ## Report format
 

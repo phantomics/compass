@@ -584,6 +584,40 @@ Table: What the Classic migration showed, and the decision each bears on.
 | Two originals were split during migration (CLASSIC-D101, CLASSIC-D102), and the pieces do not record what they came from | COMPASS-DRAFT-migration-O1 |
 | A Log, CLASSIC-0036, recorded each batch's commits and what was left | COMPASS-DRAFT-migration-D8, confirmed for a large backlog |
 
+### Trial: Lexis replayed with the skill
+
+On 2026-11-18 the drafted `compass-migrate` skill was followed, step by step,
+in a scratch clone of Lexis at `cf1147b`, the state the steward's migration
+began from, with the Compass toolchain at `6a7c860`. It migrated the Log, then
+the Spec, in six commits: a move, a reshape, and an update of the `AGENTS.md`
+line for each. The result checks with no errors and one `vocab/pending`
+warning per document, and Git still derives each document's authors and
+creation date through its rename. The reshape of the Spec added 36 lines and
+removed 12, against the steward's 36 and 17 (`c471246`).
+
+The two results agree on the genre, scope, identifier, title,
+`migrated-from`, heading spine, and records of both documents. The table lists
+where they differ.
+
+Table: Where the skill's migration of Lexis differed from the steward's, and what each difference suggests.
+
+| Difference | Suggests |
+|---|---|
+| The skill left out the Log's `session:`: the transcript of that session ends at the plan for the work, before the Log was written. The steward's Log names it | COMPASS-DRAFT-migration-D3 working as intended |
+| The skill named the session that wrote the Spec, found in its transcript; the steward's reshape named one that had only extended it, which its review caught | COMPASS-DRAFT-migration-D3 working as intended |
+| The skill kept both date lines; the steward removed them | COMPASS-DRAFT-migration-D2 as amended |
+| The skill's search for cited section numbers also found citations in `README.md` and `examples/demo.lisp`, which the steward's plan had not listed | COMPASS-DRAFT-migration-D9 working as intended |
+| Where a decision's context or alternatives are given elsewhere in the original, the skill wrote "Not recorded in the original."; the steward wrote "See [Problem](#problem).", and in Outstanding Work, "Deferred; see" the record of the deferral | A pointer to where the original records it, rather than "Not recorded", which is untrue there |
+| The skill pinned only the paths the original names; the steward also added a pinned reference to each symbol the original names in a named file | Adding a pinned reference beside a symbol the original names, as a permitted addition |
+| Both moved sections the original already had in an order the Log spine accepts | Reordering only where the original's order breaks the spine |
+| The skill marked a Spec chapter "Required" only where its text states requirements, leaving chapters 3 and 7 unmarked; the steward marked both, and the review later found chapter 7 was not normative | Proposing each chapter's normativity, with its evidence, for the user to decide |
+| The skill kept the words of a heading and of a table's lead-in, such as "Core" and "Tag mappings."; the steward dropped "Core" and expanded the captions | COMPASS-DRAFT-migration-D2 working as intended |
+| The skill proposed the Spec first, as the order of migration says; the steward chose the Log first | The order is a proposal; the user names the document |
+
+The four differences in the middle of the table are open for the steward's
+decision; until then the skill and COMPASS-DRAFT-migration-D2 stand as they
+are.
+
 ## Tradeoffs and Non-Goals
 
 - **Not an editor.** Migration never makes a document more correct. A migrated
@@ -642,6 +676,15 @@ original by design. So the comparison is between the original at
 Log records that commit (COMPASS-DRAFT-migration-D8); where there is no Log,
 should the reshape commit be found from Git, as the first commit to give the
 file front-matter, or recorded in the front-matter beside `migrated-from`?
+
+**Resolved (2026-11-18):** the comparison is a `compass-review` dimension,
+"Migration fidelity", applied whenever `migrated-from` is present; a
+mechanical aid may extend it later, but is not built now. The reshape commit is
+found from Git, with no new field: it is the oldest commit that added the
+`migrated-from:` line, `git log --follow -S'migrated-from:' -- <path>`, or the
+one a migration Log records. In Lexis this finds `c471246` for the Spec and
+`aea04fd` for the Log, and `git log -1 <move commit>^ -- <old path>` confirms
+both `migrated-from` revisions.
 
 ### COMPASS-DRAFT-migration-O4 — Dates older than the repository
 
@@ -711,9 +754,11 @@ Table: Prior systems and practices and what this plan draws from each.
    snippet, and the README's note on mature codebases name it. The §23 S9 row
    of COMPASS-0001 is unchanged, since it names the skills it lists without
    excluding others, as COMPASS-0003 found for `compass-adopt`.
-4. **Review.** `compass-review` checks a migrated document against its
-   original at its reshape commit, by the answer to COMPASS-DRAFT-migration-O3.
-5. **Trials.** In scratch clones, so that neither repository changes:
+4. **Review (done, 2026-11-18).** `compass-review` gains a "Migration
+   fidelity" dimension, which compares a migrated document at its reshape
+   commit with its original at `migrated-from`, as COMPASS-DRAFT-migration-O3
+   was resolved.
+5. **Trials (now).** In scratch clones, so that neither repository changes:
    - Lexis from `cf1147b`, migrating both documents, compared with the
      steward's results (`836f386` and `aea04fd`; `8d7bae4` and `c471246`);
    - Classic from `dfeb862`, migrating five documents one at a time (a Ref in a
