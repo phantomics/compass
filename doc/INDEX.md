@@ -29,7 +29,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md) | Compass Defect-Detection Study — Does Review Find What Is Wrong with a Document? | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-snapshot](Plan.EvalSnapshot.md) | Compass Snapshot Study — Planning Track 1 of the Agent-Context Evaluation | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
-| [COMPASS-DRAFT-migration](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Draft | authoring-assistance |
+| [COMPASS-DRAFT-migration](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md) | Compass Pending — Listing What Is Waiting for a Number | Plan | component | Draft | toolchain |
 | [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 

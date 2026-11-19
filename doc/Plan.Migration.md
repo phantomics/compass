@@ -6,7 +6,11 @@ scope:         program
 program:       Compass
 component:     authoring-assistance
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-11-19
 provenance:
   assistant:   opencode
 relates-to:
@@ -174,7 +178,8 @@ decided at the time.
 **Decision:** Migration changes only the form of a document. The permitted
 changes are:
 
-- adding front-matter;
+- adding front-matter, including an explicit `created` where the user accepts
+  an earlier date the original gives (COMPASS-DRAFT-migration-O4);
 - removing lines that state only what the front-matter now holds: a title line
   the new heading replaces, a version line (`schema-version` or
   `api-version`), and a status line, which would otherwise be a second,
@@ -560,7 +565,7 @@ Table: The steps of migrating one document, and who acts at each.
 | Step | The skill | The user |
 |---|---|---|
 | 1. Choose | Lists candidate files without front-matter, current documents first, and proposes one | Names the document to migrate |
-| 2. Classify | Proposes a genre, subtype, scope, slug, and title, giving the reasons; for a document mixing genres, names the closest two; finds citations of its section numbers | Confirms or corrects |
+| 2. Classify | Proposes a genre, subtype, scope, slug, and title, giving the reasons; for a document mixing genres, names the closest two; finds citations of its section numbers; checks Git's date against the document's own, and proposes an earlier `created` with its evidence | Confirms or corrects |
 | 3. Move | `git mv` to `<doc-dir>/<Genre>.<Topic>.md`, or in place in its subdirectory; updates links but not historical paths; updates the `AGENTS.md` migration line; lists the links it could not update | Commits the move |
 | 4. Reshape | Adds front-matter with `provenance.migrated-from`; arranges the §14 shape, keeping cited section numbers; adds §12 captions; marks records; rewrites numbering and links; pins code references | Reviews the diff |
 | 5. Check | Regenerates the index, runs `compass check` over the whole corpus, and fixes errors it introduced; checks its own links, relations, and diff | — |
@@ -761,6 +766,35 @@ text says was removed; COMPASS-DRAFT-migration-D8 names the migration Log
 `Log.CompassMigration.md`; and the skill's check regenerates the index, checks
 the whole corpus, and checks its own links and relations.
 
+### Check of the rules added after the trials
+
+On 2026-11-19 the rules added after the Classic trial and in Compass 0.5.0 were
+exercised in the same scratch clone of Classic, with the toolchain at
+`207b23c`:
+
+- **The `migrated-from` revision** (COMPASS-DRAFT-migration-D3): for the
+  unmarked `Survey.MusicPublishing.md`, the rule passed over the move
+  `09356c7`, which had updated its links, and stopped at `1cabbcf`, which
+  renamed fourteen documents but came before Classic adopted Compass.
+- **Later mentions** (COMPASS-DRAFT-migration-D4): of the three mentions of
+  `SchemaContract.md` in the migrated `Log.DistFactorization.md`, the one that
+  cites the document became an identifier link and a `relates-to` entry; the
+  account of the work's changes and the Files row stayed as history.
+- **Dates** (COMPASS-DRAFT-migration-O4): over every document present at
+  `dfeb862`, the signals flagged eight. Five have a date line earlier than
+  Git's date: the two Surveys (2026-07-04 against 2026-08-24) and three Logs,
+  whose date lines may give the date of the work rather than of the writing,
+  which is why the skill proposes and the user decides. Three were added by one
+  commit of four documents and have no date lines, so Git's date stands. The
+  eight documents of 2026-05-26 were not flagged. The Survey written with
+  `created: 2026-07-04` is reported by `compass outline` as dated from its
+  front-matter.
+- **`original-assistant`** (COMPASS-DRAFT-migration-O6): accepted on
+  `Ref.Model`, and with it every migrated document checks with no warnings, now
+  that `migrated-from` is no longer pending.
+
+The review's lookup still finds each reshape commit after these later edits.
+
 ## Tradeoffs and Non-Goals
 
 - **Not an editor.** Migration never makes a document more correct. A migrated
@@ -858,6 +892,36 @@ day earlier, and COMPASS-DRAFT-migration-D2 now keeps such date lines in the
 body. The skill therefore leaves `created` to Git and reports any date line
 that differs from it. A bulk import, where Git's date may be years late, is
 still open.
+
+**Resolved (2026-11-19):** a bulk addition is recognised by its commit, not by
+its date, and the document's own date line is the clearest guide. Counting
+documents that share a date fails both ways in the case studies: eight of
+Classic's documents were genuinely written on 2026-05-26, in six commits,
+while of the documents Git dates late, Classic's two Surveys share their date
+only with each other, and the Lexis Spec with no other document.
+
+- **Signals** that Git's date may be late, each a reason to look, none a date
+  in itself: the document's own date line is earlier than Git's `created`; its
+  first commit added more than three documents, or was the repository's first
+  commit; or it came from elsewhere, as another repository's history or a
+  transcript's write call shows. Classic's `Survey.TTRPGHost.md` and
+  `Survey.MusicPublishing.md` say 2026-07-04 and were first committed in
+  `1cabbcf` on 2026-08-24, with fourteen other files; the Lexis Spec says
+  2026-05-22 and arrived in Lexis's first commit, of 18 files, on 2026-05-23.
+- **Evidence,** strongest first: the document's date line; the original's
+  history in the repository it came from; the commit message.
+- **Proposal:** wherever a signal shows and the evidence gives an earlier date,
+  the skill proposes an explicit `created:` with that date, citing the
+  evidence and the difference from Git's, however small, and the user decides.
+  A written `created` overrides the derived one (§7), so the toolchain needs no
+  change; `updated` stays with Git. Where the only evidence is a range, such as
+  a transcript's session dates, the skill leaves `created` to Git and reports
+  the range.
+
+The skill's step 2 and `compass-review`'s migration fidelity dimension follow
+this. Classic's two Surveys keep Git's date of 2026-08-24 for now; proposing
+`created: 2026-07-04` for them is a follow-up for Classic's steward, not made
+here.
 
 ### COMPASS-DRAFT-migration-O5 — Links from outside the repository
 

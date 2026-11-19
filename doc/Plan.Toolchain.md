@@ -1605,6 +1605,7 @@ Table: Initial rule set, with severity and the section each rule enforces.
 | `ref/prose-mention` | warning | §9 document named without a link |
 | `ref/code-pinned` | error in Log/Plan, else warning | §9 commit-pinned code references (COMPASS-D32) |
 | `ref/code-exists` | error; a missing symbol or line, warning | §9 the revision, path, and symbol exist (COMPASS-D32) |
+| `ref/migrated-from` | error | §7, §9 `provenance.migrated-from` names a commit that exists, and a file there (COMPASS-DRAFT-migration-D3) |
 | `cite/well-formed` | error | §9 `cites` entries have `title`, `locator`, `external: true` |
 | `git/derivable` | error | §7 `authors`/`created`/`updated` present or derivable (COMPASS-D31) |
 | `shape/sections` | warning | §14 spine sections present and in order |

@@ -244,6 +244,11 @@ toolchain does not check yet; the dimensions below cover it.
       (COMPASS-DRAFT-migration-D4); a Log's code references are pinned to the
       commit of its work, and other genres' to the `migrated-from` revision
       (COMPASS-DRAFT-migration-D5).
+    - **Dates.** A written `created:` should cite evidence of an earlier date,
+      such as the original's own date line, in the migration's report or Log
+      (COMPASS-DRAFT-migration-O4). A date line earlier than Git's `created`,
+      or a first commit that added more than three documents, with no written
+      `created` and no note, is a NOTE.
     - **Provenance and status.** `session:` should name the session that wrote
       the original, and only where its transcript shows that; an unverified one
       is a WARNING (COMPASS-DRAFT-migration-D3). `original-assistant:` should

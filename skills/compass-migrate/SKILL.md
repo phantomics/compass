@@ -149,6 +149,17 @@ Propose, giving the reasons, and let the user confirm or correct:
   (commits, dates, and files it names) and the history of those files, and the
   commit before the work for code it describes as it was before. For every
   other genre, the `migrated-from` revision. Give the evidence.
+- **Dates** (COMPASS-DRAFT-migration-O4). Git dates the document from the
+  first commit that added it (`git log --follow --diff-filter=A -- <path>`).
+  Look for an earlier date when the document's own date line is earlier than
+  that, when that commit added more than three documents or was the
+  repository's first (`git show --stat <commit>`), or when the document came
+  from another repository or a transcript. Take the date from the date line,
+  then from the original's history where it came from, then from the commit
+  message. Where one gives an earlier date, propose `created:` with it, citing
+  the evidence and the difference from Git's, however small; the user decides.
+  Where the only evidence is a range, such as a session's dates, leave
+  `created` to Git and report the range.
 - **Provenance** (COMPASS-DRAFT-migration-D3). Ask whether the original was
   written with an assistant, which one, and in which session. Record the
   assistant as `original-assistant:` (COMPASS-DRAFT-migration-O6), taking it
@@ -199,8 +210,9 @@ following any differences the repository's own plan makes:
     where the original was written with an assistant and the user or its
     transcript says which, `session:` only if verified, and
     `migrated-from: <old path>@<revision>` (§7).
-  - Leave out `authors`, `created`, and `updated`, which come from Git. Never
-    write `approved-by`, `reviewers`, or `reviewed`.
+  - Leave out `authors` and `updated`, which come from Git, and `created`
+    unless the user accepted an earlier date in step 2. Never write
+    `approved-by`, `reviewers`, or `reviewed`.
 - **Header lines:** remove the lines that only state what the front-matter now
   holds: a title line the new heading replaces, a version line, and a status
   line. Where a status line also states a fact, as "**Status:** Conceptual. No
@@ -294,6 +306,8 @@ version). Then:
   skill could not update, including links from other repositories.
 - **Differences from the repository's own plan,** each with both decisions'
   identifiers.
+- **Dates:** Git's `created`, any earlier date found, with its evidence, and
+  what was written; or the range found, and why `created` was left to Git.
 - **Proposed statuses** for the document and each record, from the genre's own
   vocabulary (`../reference/vocabularies.md`): a Log `Implemented`, a Spec or
   Ref `Current`, a Plan `Accepted` or `Implemented`, decisions `Accepted` or
