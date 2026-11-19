@@ -1279,6 +1279,10 @@ identifiers that are aliases-to-be.
     the reason, such as short references to its records;
   - **waiting**: its status is not yet one `assign` accepts, or its only
     provisional records are `Draft` memos, which `assign` skips.
+
+  It also lists, by path, the files a migration has still to reach: those
+  without front-matter that `check --skip-unmarked` skips, the step before a
+  number (COMPASS-DRAFT-migration-O2).
 - Readiness is decided by the same checks `assign` makes, so that the two
   cannot disagree. A problem in the ledger that blocks every assignment is
   reported once, not against each document.
@@ -1294,7 +1298,8 @@ identifiers that are aliases-to-be.
 - `compass check` adds a note, which never changes its exit status, when any of
   the documents it checked is ready: how many, and that `compass pending
   --ready` lists them.
-- The `/orient` command reports the ready and waiting counts.
+- The `/orient` command reports the ready, blocked, and waiting counts, and the
+  number of files not yet migrated, in one line, naming the ready documents.
 
 The design and the stages are in
 [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md).
@@ -1630,8 +1635,9 @@ Table: Initial rule set, with severity and the section each rule enforces.
   corpus, and says that the result is advisory.
 - `compass pending [--namespace NS] [--ready] [--format text|json]` lists the
   documents with provisional identifiers or records, grouped as ready for
-  `assign`, blocked, or waiting for acceptance; `check` notes how many are
-  ready (COMPASS-DRAFT-toolchain-D30).
+  `assign`, blocked, or waiting for acceptance, and the files without
+  front-matter not yet migrated; `check` notes how many are ready
+  (COMPASS-DRAFT-toolchain-D30).
 - `compass index [--check]` writes the namespace index, or with `--check` exits
   1 if the committed one differs from what would be written (COMPASS-D10).
 - `compass show ID[#anchor]`, which
@@ -1901,6 +1907,22 @@ should migration be a separate `compass migrate` assistant?
 The same question applies to source headers: the ancestor repositories use four
 header forms (see [COMPASS-0002](Spec.SourceHeaders.md#afterword-limits)),
 and most of the reshaping is mechanical enough for an assistant to propose.
+
+**Resolved for documents (2026-11-19):** by
+[COMPASS-DRAFT-migration](Plan.Migration.md), each of the three, in its own
+place:
+
+- **The legacy mode** is `compass check --skip-unmarked`, which skips files
+  without front-matter and counts them.
+- **The backlog** is listed by `compass pending`, which finds the files without
+  front-matter that a migration has still to reach
+  (COMPASS-DRAFT-toolchain-D30, COMPASS-DRAFT-pending-tool-D5).
+- **The conversion** is a skill, `compass-migrate`, not a `compass migrate`
+  command (COMPASS-DRAFT-migration-D1): one document at a time, form only, with
+  `provenance.migrated-from` naming the original (§7, Compass 0.5.0).
+
+Source headers remain open: COMPASS-DRAFT-migration leaves them to a later
+stage, under the same form-only rule.
 
 ### COMPASS-O9 — Detecting stale source headers
 

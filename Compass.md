@@ -6,7 +6,7 @@ scope:         program
 program:       Compass
 language:      en
 status:        Draft
-schema-version: "0.4.0"
+schema-version: "0.5.0"
 authors:
   - Andrew Sengul
 provenance:
@@ -501,6 +501,8 @@ reviewed:      2026-06-28              # → review date
 provenance:                            # → PROV-O; records the assisted process
   assistant:  claude
   session:    Ideation.PsycheGenesis
+  original-assistant: ~                # migrated documents only: the original's assistant
+  migrated-from:      ~                # migrated documents only: <path>@<commit> → prov:wasDerivedFrom
 supersedes:    ~                       # → prov:wasRevisionOf (inverse of superseded-by)
 superseded-by: ~                       # → the successor; only with status Superseded (§6)
 relates-to:                            # → typed internal links (§9)
@@ -529,6 +531,24 @@ history, per the rules below.
 `superseded-by` names the successor of a document whose status is
 `Superseded`, and appears only with that status (§6). A status that names its
 successor, such as `Superseded-by: <id>`, is not valid YAML.
+
+`provenance` records how a document was produced with an assistant (§22).
+`assistant` names the assistant that authored or reviewed it, and `session`,
+where meaningful, the conversation that produced its content. A document
+migrated into Compass from one written before it, changing only its form,
+carries two further keys:
+
+- `migrated-from: <path>@<commit>` pins the original: its path from the
+  repository root before the move, and the last commit that changed it before
+  the migration touched it, as 7 to 40 hexadecimal digits. It states that the
+  assistant reshaped the form of that original and that the content is the
+  original's, and it stays when the document is later edited. A document split
+  from an original carries it too, naming the same original. It maps to
+  `prov:wasDerivedFrom`.
+- `original-assistant` names the assistant that wrote the original, where it
+  was written with one. `assistant` then names the assistant that reshaped it,
+  and `session` names the session that wrote the original, only where that
+  session's transcript shows the original being written.
 
 ### The YAML subset
 
@@ -1479,7 +1499,8 @@ authority for conformance: a document is conformant only when the toolchain
 says so, and human editorial review (§6) remains the approval gate. LLM
 assistance is subject to the standard's provenance discipline — a document
 authored or reviewed with LLM help carries `provenance:` in front-matter
-(§7). These layers are tracked as S9 (§23).
+(§7), and a document migrated from one written before Compass names its
+original there (`migrated-from`, §7). These layers are tracked as S9 (§23).
 
 
 ## 23. Appendix — Known Limitations and Outstanding Issues

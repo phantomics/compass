@@ -150,9 +150,11 @@ Propose, giving the reasons, and let the user confirm or correct:
   commit before the work for code it describes as it was before. For every
   other genre, the `migrated-from` revision. Give the evidence.
 - **Provenance** (COMPASS-DRAFT-migration-D3). Ask whether the original was
-  written with an assistant, and in which session. Record `session:` only when
-  its transcript shows the original being written, not merely read or extended;
-  otherwise leave it out.
+  written with an assistant, which one, and in which session. Record the
+  assistant as `original-assistant:` (COMPASS-DRAFT-migration-O6), taking it
+  from the transcript where there is one, and `session:` only when its
+  transcript shows the original being written, not merely read or extended;
+  otherwise leave each out.
 
 ### 3. Move
 
@@ -193,8 +195,10 @@ following any differences the repository's own plan makes:
   - `decisions:` and `open-questions:`, mirroring the records in the body.
   - `relates-to:` only for documents of the corpus the original names, and
     `cites:` only for outside sources the original cites.
-  - `provenance:` with `assistant:` (this assistant), `session:` only if
-    verified, and `migrated-from: <old path>@<revision>`.
+  - `provenance:` with `assistant:` (this assistant), `original-assistant:`
+    where the original was written with an assistant and the user or its
+    transcript says which, `session:` only if verified, and
+    `migrated-from: <old path>@<revision>` (§7).
   - Leave out `authors`, `created`, and `updated`, which come from Git. Never
     write `approved-by`, `reviewers`, or `reviewed`.
 - **Header lines:** remove the lines that only state what the front-matter now
@@ -265,8 +269,7 @@ are; write down what you notice for the report.
   migration introduced, such as `register/mirrored`, `ref/doc-resolves`,
   `ref/code-exists`, `fm/types`, or `index/current`, and run it again until
   there are none.
-- Expect one `vocab/pending` warning, for `migrated-from`, and report it. Fix
-  `ref/short-record` warnings by writing the full identifier, and check each
+- Fix `ref/short-record` warnings by writing the full identifier, and check each
   `ref/code-exists` warning against the history. `ref/migrated-from` must
   report nothing: if it does, the original's path or revision is wrong.
 - Check your own links and relations: every document of the corpus that the
@@ -308,7 +311,8 @@ Then hand off (COMPASS-DRAFT-migration-D11):
 3. The content is revised, where the notes call for it, in an ordinary assisted
    edit, after the reshape commit, and for a Spec, Ref, or Guide before the
    steward sets `Current`. A new document such as a split part is written with
-   `compass-author`.
+   `compass-author`, and carries `provenance.migrated-from` naming the same
+   original (COMPASS-DRAFT-migration-O1).
 4. The steward sets the statuses and `approved-by`, and asks for
    `compass assign` when ready, which runs with `--dry-run` first.
 

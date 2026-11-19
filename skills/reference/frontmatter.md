@@ -128,20 +128,23 @@ set or preserve this when they touch a document.
 A document migrated from one written before Compass also carries
 `migrated-from:`, which pins the original as `<path>@<commit>`: its path from
 the repository root, before the move, and the last commit that changed it
-before the migration touched it, written as 7 to 40 hexadecimal digits. For
-example:
+before the migration touched it, written as 7 to 40 hexadecimal digits. Where
+the original was written with an assistant, `original-assistant:` names that
+assistant. For example:
 
 ```yaml
 provenance:
-  assistant:     claude-opus-5-5
-  session:       ses_1adfe7ad9ffeXhdMKb49yDBuUQ
-  migrated-from: doc/DevLog.Passthrough.md@9ebd54f
+  assistant:          claude-opus-5-5
+  original-assistant: claude-opus-4-6
+  session:            ses_19dbea21bffeo3uM4zNagXcJtq
+  migrated-from:      doc/model/Model.md@5c4c9a8
 ```
 
 `assistant:` names the assistant that reshaped the document. `session:` names
 the session that wrote the original, and only when that is verified from its
 transcript; otherwise it is left out. `migrated-from` stays when the document
-is later edited. The key is pending (COMPASS-DRAFT-migration-D3): `compass
-check` warns on it under `vocab/pending`, checks its form under `fm/types`, and
-checks under `ref/migrated-from` that the commit exists and that the path was a
-file there.
+is later edited, and a document split from a migrated original carries it too,
+naming the same original. Both keys are defined in §7 (Compass 0.5.0):
+`compass check` checks their form under `fm/types`, and under
+`ref/migrated-from` that the commit exists and that the path was a file
+there.

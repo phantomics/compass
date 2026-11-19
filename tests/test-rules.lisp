@@ -55,6 +55,12 @@
                                 (format nil "  migrated-from: ~a" bad))
                          "fm/types" :severity :error)
           "~a is not <path>@<commit>" bad))
+    (is (null (types "provenance:" "  assistant: x" "  original-assistant: y"))
+        "original-assistant is a known key")
+    (is (has-finding-p (types "provenance:" "  assistant: x" "  original-assistant:"
+                              "    - y")
+                       "fm/types" :severity :error)
+        "original-assistant is a single value")
     (is (has-finding-p (types "provenance:" "  assistant: x" "  migrated-from:"
                               "    - doc/old.md@abc1234")
                        "fm/types" :severity :error)
@@ -126,15 +132,22 @@ COMPASS-D62)."
   (is (has-finding-p (check-one (doc :extra '("read-if: changing things"))
                                 :rules '("vocab/pending"))
                      "vocab/pending"))
-  (let ((findings (check-one (doc :extra '("provenance:" "  assistant: x"
-                                           "  migrated-from: doc/old.md@abc1234"))
-                             :rules '("vocab/pending"))))
-    (is (has-finding-p findings "vocab/pending" :line 12 :severity :warning)
-        "the pending provenance key, on its own line: ~a" (describe-findings findings))
-    (is (search "COMPASS-DRAFT-migration-D3" (finding-message (first findings)))))
-  (is (null (check-one (doc :extra '("provenance:" "  assistant: x" "  session: s"))
+  (is (null (check-one (doc :extra '("provenance:" "  assistant: x" "  session: s"
+                                     "  original-assistant: y"
+                                     "  migrated-from: doc/old.md@abc1234"))
                        :rules '("vocab/pending")))
-      "assistant and session are accepted")
+      "every provenance key is accepted since Compass 0.5.0")
+  ;; A key that is pending, as migrated-from was before 0.5.0, is reported on
+  ;; its own line, naming the decision that introduces it.
+  (let ((compass.vocab::*provenance-keys*
+          (append compass.vocab::*provenance-keys*
+                  (compass.vocab::make-terms '(("trial-key" :pending "TEST-D1"))))))
+    (let ((findings (check-one (doc :extra '("provenance:" "  assistant: x"
+                                             "  trial-key: y"))
+                               :rules '("vocab/pending"))))
+      (is (has-finding-p findings "vocab/pending" :line 12 :severity :warning)
+          "the pending provenance key, on its own line: ~a" (describe-findings findings))
+      (is (search "TEST-D1" (finding-message (first findings))))))
   (is (null (check-one (doc :genre "Memo" :status "Current") :rules '("vocab/pending")))
       "the Memo genre is accepted"))
 

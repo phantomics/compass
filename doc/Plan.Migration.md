@@ -259,8 +259,9 @@ form of that original and that the content is the original's, and it gives a
 reviewer exactly what to compare against. It maps to PROV-O's
 `prov:wasDerivedFrom`, as the rest of `provenance` maps to PROV-O (§7). If the
 content is later edited with an assistant's help, `migrated-from` stays, and
-the edit's history is in Git. §7 is amended to define the key; until then, the
-toolchain accepts it as pending.
+the edit's history is in Git. Where the original was itself written with an
+assistant, a second key, `original-assistant`, names that assistant
+(COMPASS-DRAFT-migration-O6). §7 defines both keys, since Compass 0.5.0.
 
 `session` names the session that wrote the original, when the original was
 written with an assistant and the session is verified: its transcript shows the
@@ -522,7 +523,8 @@ calling a macro that does not exist.
 Its report hands off: to `compass-review` for a review against the original,
 and, for content changes, to an ordinary assisted edit, with
 `compass-author` for any new document such as a split part or the migration
-Log. The report lists the notes on stale content as the starting point for that
+Log. A split part carries `migrated-from` naming the same original
+(COMPASS-DRAFT-migration-O1). The report lists the notes on stale content as the starting point for that
 edit. For a reference genre whose content does not match the code, the report
 advises that the revision come after the reshape is committed and before the
 steward sets `Current` (COMPASS-DRAFT-migration-D7), so that the reshape commit
@@ -794,6 +796,13 @@ not split, and reports the mix instead. If a split is made in the edit that
 follows, should each new piece carry `migrated-from` naming the original, as
 the piece that keeps the original's history does?
 
+**Resolved (2026-11-19):** yes. A document split from a migrated original
+carries `migrated-from` naming the same original, and `original-assistant`
+where the original has one, so that every piece says where its text came
+from. §7 says so, `compass-author` sets it when it writes a split part, and
+`compass-review` judges each piece's text against the original, with the rest
+in the other pieces.
+
 ### COMPASS-DRAFT-migration-O2 — Listing the backlog
 
 `--skip-unmarked` reports only a count. The skill can find files without
@@ -803,13 +812,13 @@ report the backlog. Is that worth a toolchain change, and should a file left
 deliberately unmarked be declared in `compass.sexp` instead?
 
 **Resolved (2026-11-19):** the backlog is listed by `compass pending`, planned
-in [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md), with a group added for
-the files without front-matter that a migration has still to reach, apart from
-those the backlog record says are left deliberately. `compass pending` already
-lists what waits for a number; the files waiting for a migration are the step
-before it, and the same command lists both. No declaration in `compass.sexp` is
-needed: the backlog record (COMPASS-DRAFT-migration-D8) already gives the
-reasons.
+in [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md), whose
+COMPASS-DRAFT-pending-tool-D5 adds a group for the files without front-matter
+that a migration has still to reach. `compass pending` already lists what waits
+for a number; the files waiting for a migration are the step before it, and the
+same command lists both. It lists every such file, since the backlog record is
+prose; the record (COMPASS-DRAFT-migration-D8) says which are left
+deliberately and why, so no declaration in `compass.sexp` is needed.
 
 ### COMPASS-DRAFT-migration-O3 — Checking that a migration is form-only
 
@@ -860,6 +869,10 @@ In Lexis, the one such link was Seed's `SEED-0011`, which cited the Spec's old
 path. Reporting it was enough: once the Spec was numbered, Seed replaced the
 path with a `relates-to` entry. Neither case study left a stub.
 
+**Resolved (2026-11-19):** the skill reports each link it cannot update, and
+leaves no stub. The user applies whatever fix suits each one: an edit in the
+other repository, a redirect on the forge or site, or a stub of their own.
+
 ### COMPASS-DRAFT-migration-O6 — Two assistants in one `provenance`
 
 When the original was itself written with an assistant, a migrated document
@@ -871,6 +884,12 @@ conversation that wrote the original. A reader may take the two fields to
 describe one process. Should `provenance` also name the original's assistant,
 with a key such as `original-assistant`, or is the session, which names it,
 enough?
+
+**Resolved (2026-11-19):** `provenance` names it, with the key
+`original-assistant`. `assistant` names the assistant that reshaped the
+document, `original-assistant` the one that wrote the original, and `session`
+the session that wrote the original, where verified
+(COMPASS-DRAFT-migration-D3). §7 defines the key, since Compass 0.5.0.
 
 ## Prior Art
 
@@ -897,8 +916,9 @@ Table: Prior systems and practices and what this plan draws from each.
    (`vocab/pending`); `fm/types` checks that it is `<path>@<commit>`, and a new
    rule, `ref/migrated-from`, that the commit exists and that the path was a
    file there; `skills/reference/frontmatter.md`, `vocabularies.md`, and
-   `toolchain.md` describe it; tests cover each. On acceptance, §7 is amended
-   to define it.
+   `toolchain.md` describe it; tests cover each. *Done (2026-11-19): §7
+   defines `migrated-from` and `original-assistant` in `Compass.md` 0.5.0,
+   both keys are accepted, and `vocab/pending` no longer warns on them.*
 3. **The skill (drafted, 2026-11-18).** `skills/compass-migrate/SKILL.md`;
    COMPASS-0003's skill set and roadmap list it; `compass-adopt`, the AGENTS
    snippet, and the README's note on mature codebases name it. The §23 S9 row
@@ -922,6 +942,7 @@ Table: Prior systems and practices and what this plan draws from each.
 6. **Acceptance.** The steward accepts, amends, or rejects
    COMPASS-DRAFT-migration-D1 to COMPASS-DRAFT-migration-D11.
 7. **COMPASS-O8.** The steward records this plan as its answer for documents,
-   in COMPASS-0004.
+   in COMPASS-0004. *Done (2026-11-19): COMPASS-O8 is resolved for documents,
+   with source headers left open.*
 8. **Source headers (later).** Reshaping older source headers into the form of
    COMPASS-0002, under the same form-only rule.

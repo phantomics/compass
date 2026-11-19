@@ -235,10 +235,12 @@ COMPASS-DRAFT-toolchain-D5 replaced with `Superseded` plus the
 ;;; Keys of `provenance` (§7)
 
 (defparameter *provenance-keys*
-  (make-terms '("assistant" "session"
-                ("migrated-from" :pending "COMPASS-DRAFT-migration-D3")))
+  (make-terms '("assistant" "session" "original-assistant" "migrated-from"))
   "The keys a `provenance` mapping may hold. `migrated-from` pins the original
-a migrated document was reshaped from, as `<path>@<commit>`.")
+a migrated document was reshaped from, as `<path>@<commit>`, and
+`original-assistant` names the assistant that wrote that original; both are
+accepted (COMPASS-DRAFT-migration-D3 and COMPASS-DRAFT-migration-O6, in
+Compass 0.5.0).")
 
 (defun provenance-keys () *provenance-keys*)
 

@@ -13,11 +13,13 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0013
   - COMPASS-0003
+  - COMPASS-DRAFT-migration
 decisions:
   - COMPASS-DRAFT-pending-tool-D1
   - COMPASS-DRAFT-pending-tool-D2
   - COMPASS-DRAFT-pending-tool-D3
   - COMPASS-DRAFT-pending-tool-D4
+  - COMPASS-DRAFT-pending-tool-D5
 open-questions:
   - COMPASS-DRAFT-pending-tool-O1
   - COMPASS-DRAFT-pending-tool-O2
@@ -28,7 +30,8 @@ open-questions:
 
 This plan builds `compass pending`, a read-only command that lists the
 documents of a corpus still holding provisional identifiers, and says which of
-them `compass assign` would number now. With it, `compass check` notes how many
+them `compass assign` would number now, together with the files a migration
+has still to reach. With it, `compass check` notes how many
 documents are ready, and the `/orient` command reports the counts. What the
 command does is decided in COMPASS-DRAFT-toolchain-D30, in
 [COMPASS-0004](Plan.Toolchain.md#compass-draft-toolchain-d30--compass-pending-lists-what-is-waiting-for-a-number);
@@ -55,11 +58,15 @@ on a document they have accepted (COMPASS-D28). Nothing tracks what is left:
 - **The listing can be had only by parsing the index.** A pipeline over
   `compass index --stdout` finds the provisional identifiers, but depends on
   the index's table layout and cannot tell ready from blocked.
+- **The migration backlog is only counted.** `check --skip-unmarked` reports
+  how many files it skipped for having no front-matter, not which
+  (COMPASS-DRAFT-migration-O2).
 
 ## Goals
 
 - One command that answers "what is waiting for a number, and what can I
-  number now?" for the namespaces a repository owns.
+  number now?" for the namespaces a repository owns, and "what is still to be
+  migrated?" for the repository.
 - Agreement with `assign` by construction: a document listed as ready is one
   `assign` accepts, and a blocked one is listed with the reason `assign` would
   give.
@@ -71,7 +78,7 @@ on a document they have accepted (COMPASS-D28). Nothing tracks what is left:
 
 ## Settled Decisions
 
-All four decisions are proposals for the steward. They concern how
+All five decisions are proposals for the steward. They concern how
 COMPASS-DRAFT-toolchain-D30 is built; the command's behaviour is decided there.
 
 ### COMPASS-DRAFT-pending-tool-D1 — `assign`'s checks are factored out and shared
@@ -90,8 +97,10 @@ and duplicates), and one returning a document's blockers, each blocker a
 structure with a kind and the message `assign` prints today. `plan-assign`
 refuses with the first blocker, as now, so its messages and tests are
 unchanged; `pending` reports all of them. A document's status not being
-accepted is one blocker kind; `pending` groups a document with only that
-blocker, or with only `Draft` memos, as waiting rather than blocked.
+accepted is one blocker kind. A document whose status `assign` does not
+accept is waiting, whatever else blocks it, and its other blockers are shown
+as information; so is a document whose only provisional records are `Draft`
+memos. Only a document whose status `assign` accepts is ever blocked.
 **Alternatives:** Call `plan-assign` for each document and catch the refusal
 (rejected: it consults the base revision's ledger through Git for every
 document, reports only the first reason, and plans rewrites it then discards);
@@ -102,16 +111,20 @@ reimplement the checks in `pending` (rejected: the two would drift).
 **Status:** Proposed
 **Context:** The short-reference blocker searches the whole corpus
 (`src/corpus/short.lisp:short-references-to@2e839c9`), and finding short
-references is already the slowest part of `check` (about 140 ms of about
-400 ms on this repository). Asking it once per pending document would
-multiply that cost by the number of documents; `check`, which already finds
-every short reference for `ref/short-record`, would find them all again for
-its note.
+references is already the slowest part of `check` (about 210 ms of about
+530 ms on this repository's 22 documents, measured on 2026-11-19). Asking it
+once per pending document would multiply that cost by the number of
+documents; `check`, which already finds every short reference for
+`ref/short-record`, would find them all again for its note.
 **Decision:** Cache each document's short references in the loaded corpus the
 first time they are found, so that `ref/short-record`, `short-references-to`,
-`pending`, and the note share one scan. The cache lives as long as the corpus
-object, which commands load once and never modify in place; `assign` and
-`renumber` reload before checking their result, as they do now.
+`pending`, and the note share one scan. The corpus already has a general
+per-load cache,
+`corpus-cached` (`src/corpus/corpus.lisp:corpus-cached@207b23c`), which code
+references, revisions, and Git's state use; the short references are kept
+there, keyed by document, and need no new slot. The cache lives as long as the
+corpus object, which commands load once and never modify in place; `assign`
+and `renumber` reload before checking their result, as they do now.
 **Alternatives:** Pass a precomputed table to the blocker function (rejected:
 every caller would have to build it, and `check` could not share its own scan
 with the note); skip the short-reference blocker in the note (rejected: the
@@ -129,9 +142,18 @@ added only when the count is at least one, through the corpus's existing notes,
 so that it appears in the text report and in the JSON report's `notes`, and it
 never changes the exit status, under `--strict` too. It is not added when the
 ledger has problems, since `check` already reports those as errors.
+
+Notes are redefined to match: a note either says what the check could not do,
+such as a rule that needs Git when Git is missing, or gives information about
+what it checked, such as this count. Only the first kind means the check
+checked less. `skills/reference/toolchain.md` and Step 1 of `compass-review`,
+which today read every note as a limitation, say so.
 **Alternatives:** Always count the whole corpus (rejected: noise in a check of
 one file); a separate summary line (rejected: notes are the existing channel,
-which the skills and `/orient` already read).
+which the skills and `/orient` already read); keep notes for limitations only
+and give the count a channel of its own (rejected by the steward on
+2026-11-19: a second channel for one line of information costs every reader of
+the report, where redefining notes costs two paragraphs of the skills).
 
 ### COMPASS-DRAFT-pending-tool-D4 — `/orient` runs `pending` as a read-only step
 
@@ -141,13 +163,41 @@ repository by running only commands that read; its step 4 already reports
 `check`'s notes, so the note arrives there unaided. The note says only how many
 documents are ready, not how many are waiting.
 **Decision:** Step 3 of `/orient`, which summarises the index, also runs
-`compass pending` and reports the ready, blocked, and waiting counts in one
-line, naming the ready documents. `pending` writes nothing, so `/orient`
+`compass pending` and reports the ready, blocked, and waiting counts, and the
+number of files not yet migrated (COMPASS-DRAFT-pending-tool-D5), in one line,
+naming the ready documents. `pending` writes nothing, so `/orient`
 remains read-only. Like the rest of `/orient`, the step is retired with it
 when the session catalog exists.
 **Alternatives:** Rely on the note alone (rejected: it says nothing about
 waiting or blocked documents); a separate step (rejected: the counts belong
 with the summary of the index).
+
+### COMPASS-DRAFT-pending-tool-D5 — Files not yet migrated are listed as a fourth group
+
+**Status:** Proposed
+**Context:** COMPASS-DRAFT-migration-O2 asked for a listing of the migration
+backlog: the files without front-matter that `check --skip-unmarked` skips and
+reports only by count. It was resolved on 2026-11-19 by placing the listing in
+`compass pending`, since a file waiting for migration is at the step before a
+document waiting for a number, and one command can show both. Such a file has
+no identifier, no namespace, and no status, so none of the three groups fits
+it.
+**Decision:** `pending` lists a fourth group, **unmarked**, after the other
+three: each file of the corpus that the loader skips for having no
+front-matter, by path, in path order. The loader already records them, so
+listing them costs nothing. Since they have no namespace, they are listed only
+when `--namespace` is not given, and never with `--ready`; the summary line
+counts them separately. `pending` does not read the backlog record of
+COMPASS-DRAFT-migration-D8, which is prose: it lists every unmarked file, and
+the backlog record says which are left deliberately and why. Files outside the
+document directory that the loader does not consider, such as `README.md`, are
+not listed.
+**Alternatives:** A separate command or a `check` option listing the skipped
+files (rejected: two listings of one pipeline, and `check --format json`
+already lists them for tools); leave out the files the backlog record calls
+deliberate (rejected: the record is prose, and declaring them in
+`compass.sexp` was rejected by COMPASS-DRAFT-migration-O2's resolution); list
+them under every `--namespace` (rejected: they belong to none).
 
 ## Design
 
@@ -156,7 +206,10 @@ with the summary of the index).
 Every document in a namespace the repository owns (the manifest's
 `:namespaces`) whose identifier is provisional, or which defines a provisional
 record. Documents of federated repositories, and documents in this repository
-carrying another namespace, are not listed. Each is placed in one group:
+carrying another namespace, are not listed. A document whose front-matter
+cannot be read has no identifier to list; `check` reports it under
+`fm/syntax`. Each document is placed in one group, and the files not yet
+migrated make a fourth (COMPASS-DRAFT-pending-tool-D5):
 
 Table: The groups of `compass pending`, and what places a document in each.
 
@@ -164,7 +217,8 @@ Table: The groups of `compass pending`, and what places a document in each.
 |---|---|---|
 | ready | `assign` would number it now | Records whose own status is not accepted, flagged |
 | blocked | Its status allows `assign`, but a blocker remains | Each blocker's message, as `assign` would give it |
-| waiting | Its status is not one `assign` accepts, or its only provisional records are `Draft` memos | Its status |
+| waiting | Its status is not one `assign` accepts, whatever else blocks it, or its only provisional records are `Draft` memos | Its status, and any other blockers as information |
+| unmarked | A file the loader skips for having no front-matter | Its path |
 
 A corpus-wide blocker, such as a ledger with errors, is printed once before the
 groups, and every document whose status allows `assign` is then counted as
@@ -184,23 +238,30 @@ Blocked (1):
     2 short references would change meaning once these records are numbered;
     write them as full identifiers first
 Waiting for acceptance (6):
-  COMPASS-DRAFT-migration  doc/Plan.Migration.md  Draft
-    the document, 8 decisions, 5 open questions
+  COMPASS-DRAFT-sample  doc/Plan.Sample.md  Draft
+    the document, 4 decisions, 2 open questions
   ...
+Not yet migrated (2):
+  doc/Design.md
+  doc/notes/Roadmap.md
 
-9 documents hold provisional identifiers: 2 ready, 1 blocked, 6 waiting.
+9 documents hold provisional identifiers: 2 ready, 1 blocked, 6 waiting;
+2 files are not yet migrated.
 ```
 
-The identifiers above are illustrative. With `--ready`, only the first group and
-the summary line are printed. With nothing pending, a single line says so.
+The identifiers and paths above are illustrative, apart from COMPASS-0003. With
+`--ready`, only the first group and the summary line are printed. With nothing
+pending, a single line says so.
 
 ### JSON output
 
 An object with the tool's name and version, the corpus root, the namespaces
-listed, any corpus-wide blockers, and a `documents` array. Each entry has the
+listed, any corpus-wide blockers, a `documents` array, and an `unmarked` array
+of paths. Each entry has the
 identifier, path, namespace, status, group, the counts of provisional records
 by kind, the provisional records with their own statuses, and the blockers.
-`--ready` filters the array the same way.
+`--ready` filters the `documents` array the same way and leaves `unmarked`
+empty.
 
 ### Where the code goes
 
@@ -209,8 +270,8 @@ Table: The files each part of the work touches.
 | Part | File |
 |---|---|
 | Blockers shared with `assign` (COMPASS-DRAFT-pending-tool-D1) | `src/corpus/allocate.lisp` |
-| Short-reference cache (COMPASS-DRAFT-pending-tool-D2) | `src/corpus/short.lisp`, and a slot of the corpus in `src/corpus/corpus.lisp` |
-| The listing | `src/corpus/pending.lisp` (new), in the corpus layer |
+| Short-reference cache (COMPASS-DRAFT-pending-tool-D2) | `src/corpus/short.lisp`, through the existing `corpus-cached` |
+| The listing, and the unmarked files the loader records (COMPASS-DRAFT-pending-tool-D5) | `src/corpus/pending.lisp` (new), in the corpus layer |
 | The command, text and JSON | `src/cli.lisp`, beside `refs` |
 | The note (COMPASS-DRAFT-pending-tool-D3) | the `check` command in `src/cli.lisp` |
 | `/orient` (COMPASS-DRAFT-pending-tool-D4) | `commands/opencode/orient.md` |
@@ -253,9 +314,9 @@ query per document. Is that worth showing, perhaps behind an option?
 
 ### COMPASS-DRAFT-pending-tool-O3 — Reminders beyond the note
 
-`pending` always exits 0, so it cannot fail a hook or CI job. Should the
-pre-commit script or the CI workflow print the ready list, as information, when
-it is not empty?
+`pending` exits 0 whatever it lists, so it cannot fail a hook or CI job.
+Should the pre-commit script or the CI workflow print the ready list, as
+information, when it is not empty?
 
 ## Prior Art
 
@@ -288,8 +349,9 @@ errors.
    repositories: a ready document; a numbered document with one provisional
    record; a document blocked by short references; a draft; a host whose only
    provisional records are `Draft` memos; a flagged `Proposed` record; a
-   ledger with errors; and a document in a namespace the repository does not
-   own, which is not listed.
+   ledger with errors; a document in a namespace the repository does not own,
+   which is not listed; and files without front-matter, listed as unmarked
+   without `--namespace` and not with it (COMPASS-DRAFT-pending-tool-D5).
 6. **The command.** `compass pending` with `--namespace`, `--ready`,
    `--format`, and `--root`; tests through `run-cli` of the text and JSON
    output and of the exit statuses, including a namespace not owned.
@@ -297,7 +359,9 @@ errors.
    when a checked document is ready, counts only checked paths, appears in the
    JSON report's notes, and leaves the exit status alone under `--strict`.
 8. **Skills and `/orient` (COMPASS-DRAFT-pending-tool-D4).** `toolchain.md`
-   documents `pending`, as the skills tests require of every command;
+   documents `pending`, as the skills tests require of every command, and,
+   with Step 1 of `compass-review`, the two kinds of note
+   (COMPASS-DRAFT-pending-tool-D3);
    `/orient` step 3 runs it;
    `compass-author`'s report and `compass-review`'s acceptance advice may
    point to it. The skills tests pass.

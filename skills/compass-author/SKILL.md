@@ -94,7 +94,10 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
    - **Omit `authors`, `created`, `updated`** and let them derive from Git
      (§7), unless the user wants explicit values.
    - Set `provenance: { assistant: <this assistant> }` — required for
-     LLM-assisted authoring (§7). Add `session:` if meaningful.
+     LLM-assisted authoring (§7). Add `session:` if meaningful. A document
+     split from a migrated one also carries the original's `migrated-from:`
+     (and `original-assistant:`, if it has one), naming the same original
+     (§7).
    - Only include optional fields (`relates-to`, `decisions`, `open-questions`,
      `memos`, `cites`, `glossary`) when they have real values; remove empty ones
      rather than leaving `~`. Relations and `glossary` name documents by id.

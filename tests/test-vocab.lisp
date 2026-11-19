@@ -42,12 +42,11 @@
   (is (eq :memo (register-kind-keyword (find-register-kind #\M)))))
 
 (test provenance-keys
-  "`assistant` and `session` are accepted; `migrated-from` is pending, and names
-the decision that introduces it (COMPASS-DRAFT-migration-D3)."
-  (is (eq :accepted (term-standing (find-provenance-key "assistant"))))
-  (is (eq :accepted (term-standing (find-provenance-key "session"))))
-  (is (eq :pending (term-standing (find-provenance-key "migrated-from"))))
-  (is (equal "COMPASS-DRAFT-migration-D3" (term-amendment (find-provenance-key "migrated-from"))))
+  "Every key of `provenance` is accepted: `assistant` and `session`, and, since
+Compass 0.5.0, `migrated-from` and `original-assistant` (COMPASS-DRAFT-migration-D3
+and COMPASS-DRAFT-migration-O6)."
+  (dolist (key '("assistant" "session" "migrated-from" "original-assistant"))
+    (is (eq :accepted (term-standing (find-provenance-key key))) "~a is accepted" key))
   (is (null (find-provenance-key "model")))
   (is (null (find-provenance-key nil))))
 

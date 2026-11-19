@@ -72,9 +72,7 @@ Read from the shared bundle to ground the review in the standard:
    them out of the recommendation.
 4. **Note what the check left out:** skipped files, unverified references
    (references into namespaces this repository does not load), and any notes,
-   such as a rule that did not run because Git was missing. A migrated
-   document's `vocab/pending` warning for `migrated-from` is expected until the
-   standard adopts the key; report it as a toolchain finding, not a defect.
+   such as a rule that did not run because Git was missing.
 5. **Read the ledger findings with care.** A `ledger/*` error means numbers were
    allocated outside `compass assign`, or the ledger was edited, or a merge
    conflict in it was resolved by hand; the fix is `compass renumber` or the
@@ -203,7 +201,10 @@ toolchain does not check yet; the dimensions below cover it.
       migration Log records. Under review before it is committed, the reshape
       is the working file. Compare the original with the reshape, not with the
       current text: edits after the reshape commit are ordinary revisions,
-      reviewed by the other dimensions (COMPASS-DRAFT-migration-D11).
+      reviewed by the other dimensions (COMPASS-DRAFT-migration-D11). A
+      document split from a migrated original names the same original: judge
+      that its text comes from it, with the rest in the other pieces
+      (COMPASS-DRAFT-migration-O1).
     - **The pin.** The `migrated-from` revision should be the last commit that
       changed the original before the migration touched it
       (COMPASS-DRAFT-migration-D3): `git log -1 --format=%h <move commit>^ --
@@ -245,7 +246,9 @@ toolchain does not check yet; the dimensions below cover it.
       (COMPASS-DRAFT-migration-D5).
     - **Provenance and status.** `session:` should name the session that wrote
       the original, and only where its transcript shows that; an unverified one
-      is a WARNING (COMPASS-DRAFT-migration-D3). A proposed or set status must
+      is a WARNING (COMPASS-DRAFT-migration-D3). `original-assistant:` should
+      name the assistant that wrote the original, where one did, and
+      `assistant:` the one that reshaped it (COMPASS-DRAFT-migration-O6). A proposed or set status must
       come from the genre's vocabulary, and `Current` on a Spec, Ref, or Guide
       claims that it matches the code as it is now (COMPASS-DRAFT-migration-D7).
     - **The repository's own plan.** Where the repository has a migration plan,

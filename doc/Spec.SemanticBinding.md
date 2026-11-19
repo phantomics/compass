@@ -363,6 +363,8 @@ Table: Front-matter fields and the triples they produce.
 | `approved-by`, `reviewed` | `compass:acceptance` to a `compass:Acceptance` node, and the shortcut `compass:approvedBy` | see [Review and acceptance](#review-and-acceptance) |
 | `provenance.assistant` | `compass:assistedBy` | agent IRI (`prov:SoftwareAgent`) |
 | `provenance.session` | `compass:assistanceSession` | string |
+| `provenance.original-assistant` | `compass:originalAssistant` | agent IRI (`prov:SoftwareAgent`) of the assistant that wrote the original |
+| `provenance.migrated-from` | `prov:wasDerivedFrom` | a `compass:CodeReference` with `compass:path` and `compass:revision`: the original as it stood ([Body structure](#body-structure)) |
 | `supersedes` | `dcterms:replaces` | document IRI |
 | `superseded-by` | `dcterms:isReplacedBy` | document IRI |
 | `relates-to` | `dcterms:relation` | document IRI |
