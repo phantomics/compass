@@ -18,7 +18,7 @@ relates-to:
   - COMPASS-0001
   - COMPASS-0003
   - COMPASS-0004
-  - COMPASS-DRAFT-pending-tool
+  - COMPASS-0017
   - COMPASS-0008
   - CLASSIC-0032
   - LEXIS-0001
@@ -209,11 +209,11 @@ rename made after the repository adopted Compass is one, since Classic's own
 
 ### The pending tool's review (`d9d09ba`, `f6cea01`)
 
-The steward wrote [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md) in
+The steward wrote [COMPASS-0017](Plan.PendingTool.md) in
 `d9d09ba`, adding COMPASS-DRAFT-toolchain-D30 to
 [COMPASS-0004](Plan.Toolchain.md) with it. A review of the plan found that
 COMPASS-O48's resolution relied on a group it did not plan. The
-steward chose to add it: COMPASS-DRAFT-pending-tool-D5 lists the files not yet
+steward chose to add it: COMPASS-D83 lists the files not yet
 migrated, and COMPASS-DRAFT-toolchain-D30 was amended to match.
 
 ### `Compass.md` 0.5.0 (`f6cea01`)
@@ -302,7 +302,7 @@ Table: Files added or changed in commits `6a7c860` to `5d746f3`, and this Log.
 | `tests/test-vocab.lisp`, `test-rules.lisp`, `test-code-refs.lisp` | Modified | Tests of the keys, their types, the pending warning, and the rule |
 | `Compass.md` | Modified | Version 0.5.0: §7 and §22 |
 | `doc/Plan.Migration.md` | Modified | Case studies, trials, amendments, resolutions |
-| `doc/Plan.PendingTool.md` | **New** | The plan, written by the steward (`d9d09ba`); review fixes; COMPASS-DRAFT-pending-tool-D5 |
+| `doc/Plan.PendingTool.md` | **New** | The plan, written by the steward (`d9d09ba`); review fixes; COMPASS-D83 |
 | `doc/Plan.Toolchain.md` | Modified | COMPASS-DRAFT-toolchain-D30 added (`d9d09ba`) and amended (`f6cea01`); COMPASS-O8 resolved; the rule's row |
 | `doc/Plan.EvalDefectDetection.md` | Modified | COMPASS-DRAFT-eval-defect-detection-O6 listed in `open-questions:`, the steward's fix |
 | `doc/Plan.AuthoringAssistance.md` | Modified | The skill set and roadmap name `compass-migrate` |
@@ -333,9 +333,9 @@ Table: Files added or changed in commits `6a7c860` to `5d746f3`, and this Log.
   the skill. A migration by a new session, given only the skill, would test
   whether the text alone is enough.
 - **The pending tool.** `compass pending`, its group of files not yet migrated
-  (COMPASS-DRAFT-pending-tool-D5), and the redefinition of notes in the skills
-  (COMPASS-DRAFT-pending-tool-D3) are built by
-  [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md).
+  (COMPASS-D83), and the redefinition of notes in the skills
+  (COMPASS-D81) are built by
+  [COMPASS-0017](Plan.PendingTool.md).
 - **Follow-ups in other repositories,** for their stewards: Classic's
   `Survey.TTRPGHost.md` and `Survey.MusicPublishing.md` say 2026-07-04 but are
   dated 2026-08-24 by Git; Lexis's Log,

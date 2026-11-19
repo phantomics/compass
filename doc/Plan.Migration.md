@@ -23,7 +23,7 @@ relates-to:
   - CLASSIC-0036
   - LEXIS-0001
   - LEXIS-DRAFT-passthrough
-  - COMPASS-DRAFT-pending-tool
+  - COMPASS-0017
 cites:
   - title:     "Lexis repository: the migration of doc/DevLog.Passthrough.md and doc/spec.md"
     locator:   "github.com/phantomics/lexis, commits cf1147b to 0efe8a8 (2026-11-15 to 2026-11-17)"
@@ -846,8 +846,8 @@ report the backlog. Is that worth a toolchain change, and should a file left
 deliberately unmarked be declared in `compass.sexp` instead?
 
 **Resolved (2026-11-19):** the backlog is listed by `compass pending`, planned
-in [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md), whose
-COMPASS-DRAFT-pending-tool-D5 adds a group for the files without front-matter
+in [COMPASS-0017](Plan.PendingTool.md), whose
+COMPASS-D83 adds a group for the files without front-matter
 that a migration has still to reach. `compass pending` already lists what waits
 for a number; the files waiting for a migration are the step before it, and the
 same command lists both. It lists every such file, since the backlog record is

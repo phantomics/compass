@@ -6,7 +6,11 @@ scope:         component
 program:       Compass
 component:     toolchain
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-11-19
 provenance:
   assistant:   opencode
 relates-to:
@@ -357,7 +361,7 @@ Table: Prior tools and what this plan draws from each.
 Each stage ends with `make test` passing and `bin/compass check` reporting no
 errors.
 
-1. **This plan (now).** For the steward's review, with
+1. **This plan (done@commit d719336).** For the steward's review, with
    COMPASS-DRAFT-toolchain-D30 in COMPASS-0004.
 2. **Acceptance.** The steward accepts, amends, or rejects
    COMPASS-DRAFT-toolchain-D30 and COMPASS-DRAFT-pending-tool-D1 to

@@ -26,12 +26,12 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0014](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Accepted | standard |
 | [COMPASS-0015](Log.Migration.md) | Compass Migration Skill Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-0016](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Accepted | authoring-assistance |
+| [COMPASS-0017](Plan.PendingTool.md) | Compass Pending — Listing What Is Waiting for a Number | Plan | component | Accepted | toolchain |
 | [COMPASS-DRAFT-emacs-review](Plan.EmacsReview.md) | Compass Review in Emacs — Write Commands and an Emacs Package | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-corpus-qa](Plan.EvalCorpusQA.md) | Compass Corpus Question-Answering Study — Does Project Knowledge Reach the Agent? | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md) | Compass Defect-Detection Study — Does Review Find What Is Wrong with a Document? | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-snapshot](Plan.EvalSnapshot.md) | Compass Snapshot Study — Planning Track 1 of the Agent-Context Evaluation | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
-| [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md) | Compass Pending — Listing What Is Waiting for a Number | Plan | component | Draft | toolchain |
 | [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
@@ -116,6 +116,11 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D76](Plan.Migration.md#compass-d76--section-numbers-that-are-cited-elsewhere-are-kept) | Decision | Section numbers that are cited elsewhere are kept | Proposed | COMPASS-0016 |
 | [COMPASS-D77](Plan.Migration.md#compass-d77--a-repositorys-own-migration-plan-takes-precedence) | Decision | A repository's own migration plan takes precedence | Proposed | COMPASS-0016 |
 | [COMPASS-D78](Plan.Migration.md#compass-d78--the-skill-ends-at-the-reshape-revision-is-a-separate-edit-before-acceptance-where-it-matters) | Decision | The skill ends at the reshape; revision is a separate edit, before acceptance where it matters | Proposed | COMPASS-0016 |
+| [COMPASS-D79](Plan.PendingTool.md#compass-d79--assigns-checks-are-factored-out-and-shared) | Decision | assign's checks are factored out and shared | Proposed | COMPASS-0017 |
+| [COMPASS-D80](Plan.PendingTool.md#compass-d80--short-references-are-found-once-per-corpus) | Decision | Short references are found once per corpus | Proposed | COMPASS-0017 |
+| [COMPASS-D81](Plan.PendingTool.md#compass-d81--the-note-counts-only-the-documents-check-checked) | Decision | The note counts only the documents check checked | Proposed | COMPASS-0017 |
+| [COMPASS-D82](Plan.PendingTool.md#compass-d82--orient-runs-pending-as-a-read-only-step) | Decision | /orient runs pending as a read-only step | Proposed | COMPASS-0017 |
+| [COMPASS-D83](Plan.PendingTool.md#compass-d83--files-not-yet-migrated-are-listed-as-a-fourth-group) | Decision | Files not yet migrated are listed as a fourth group | Proposed | COMPASS-0017 |
 | [COMPASS-DRAFT-authoring-assistance-D1](Plan.AuthoringAssistance.md#compass-draft-authoring-assistance-d1--a-fifth-skill-sets-a-repository-up-for-compass) | Decision | A fifth skill sets a repository up for Compass | Proposed | COMPASS-0003 |
 | [COMPASS-DRAFT-emacs-review-D1](Plan.EmacsReview.md#compass-draft-emacs-review-d1--writes-live-in-the-toolchain-editors-drive-them) | Decision | Writes live in the toolchain; editors drive them | Proposed | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-D2](Plan.EmacsReview.md#compass-draft-emacs-review-d2--four-write-commands) | Decision | Four write commands | Proposed | COMPASS-DRAFT-emacs-review |
@@ -164,11 +169,6 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-D14](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d14--the-study-is-chronicled-in-this-plan-a-log-and-updates-to-compass-0006) | Decision | The study is chronicled in this Plan, a Log, and updates to COMPASS-0006 | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D15](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d15--the-paper-lives-in-pub-as-an-acm-preprint-derived-from-the-record) | Decision | The paper lives in pub/, as an ACM preprint derived from the record | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D16](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d16--the-compass-toolchain-and-skills-are-present-in-every-workspace) | Decision | The Compass toolchain and skills are present in every workspace | Proposed | COMPASS-DRAFT-eval-snapshot |
-| [COMPASS-DRAFT-pending-tool-D1](Plan.PendingTool.md#compass-draft-pending-tool-d1--assigns-checks-are-factored-out-and-shared) | Decision | assign's checks are factored out and shared | Proposed | COMPASS-DRAFT-pending-tool |
-| [COMPASS-DRAFT-pending-tool-D2](Plan.PendingTool.md#compass-draft-pending-tool-d2--short-references-are-found-once-per-corpus) | Decision | Short references are found once per corpus | Proposed | COMPASS-DRAFT-pending-tool |
-| [COMPASS-DRAFT-pending-tool-D3](Plan.PendingTool.md#compass-draft-pending-tool-d3--the-note-counts-only-the-documents-check-checked) | Decision | The note counts only the documents check checked | Proposed | COMPASS-DRAFT-pending-tool |
-| [COMPASS-DRAFT-pending-tool-D4](Plan.PendingTool.md#compass-draft-pending-tool-d4--orient-runs-pending-as-a-read-only-step) | Decision | /orient runs pending as a read-only step | Proposed | COMPASS-DRAFT-pending-tool |
-| [COMPASS-DRAFT-pending-tool-D5](Plan.PendingTool.md#compass-draft-pending-tool-d5--files-not-yet-migrated-are-listed-as-a-fourth-group) | Decision | Files not yet migrated are listed as a fourth group | Proposed | COMPASS-DRAFT-pending-tool |
 | [COMPASS-DRAFT-toolchain-D30](Plan.Toolchain.md#compass-draft-toolchain-d30--compass-pending-lists-what-is-waiting-for-a-number) | Decision | compass pending lists what is waiting for a number | Proposed | COMPASS-0004 |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
@@ -222,6 +222,9 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O50](Plan.Migration.md#compass-o50--dates-older-than-the-repository) | Open question | Dates older than the repository | — | COMPASS-0016 |
 | [COMPASS-O51](Plan.Migration.md#compass-o51--links-from-outside-the-repository) | Open question | Links from outside the repository | — | COMPASS-0016 |
 | [COMPASS-O52](Plan.Migration.md#compass-o52--two-assistants-in-one-provenance) | Open question | Two assistants in one provenance | — | COMPASS-0016 |
+| [COMPASS-O53](Plan.PendingTool.md#compass-o53--should-assign-warn-about-records-not-yet-accepted) | Open question | Should assign warn about records not yet accepted? | — | COMPASS-0017 |
+| [COMPASS-O54](Plan.PendingTool.md#compass-o54--the-age-of-what-is-waiting) | Open question | The age of what is waiting | — | COMPASS-0017 |
+| [COMPASS-O55](Plan.PendingTool.md#compass-o55--reminders-beyond-the-note) | Open question | Reminders beyond the note | — | COMPASS-0017 |
 | [COMPASS-DRAFT-emacs-review-O1](Plan.EmacsReview.md#compass-draft-emacs-review-o1--should-accepting-a-decision-update-its-hosts-approval) | Open question | Should accepting a decision update its host's approval? | — | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-O2](Plan.EmacsReview.md#compass-draft-emacs-review-o2--should-approval-also-record-the-approver-as-a-reviewer) | Open question | Should approval also record the approver as a reviewer? | — | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-O3](Plan.EmacsReview.md#compass-draft-emacs-review-o3--interim-language-features-in-emacs-lisp) | Open question | Interim language features in Emacs Lisp | — | COMPASS-DRAFT-emacs-review |
@@ -245,9 +248,6 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-O5](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o5--pre-registration-and-the-release-of-tasks) | Open question | Pre-registration and the release of tasks | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O6](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o6--the-budget-and-what-is-cut-first) | Open question | The budget and what is cut first | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O7](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o7--the-conference-and-anonymity) | Open question | The conference and anonymity | — | COMPASS-DRAFT-eval-snapshot |
-| [COMPASS-DRAFT-pending-tool-O1](Plan.PendingTool.md#compass-draft-pending-tool-o1--should-assign-warn-about-records-not-yet-accepted) | Open question | Should assign warn about records not yet accepted? | — | COMPASS-DRAFT-pending-tool |
-| [COMPASS-DRAFT-pending-tool-O2](Plan.PendingTool.md#compass-draft-pending-tool-o2--the-age-of-what-is-waiting) | Open question | The age of what is waiting | — | COMPASS-DRAFT-pending-tool |
-| [COMPASS-DRAFT-pending-tool-O3](Plan.PendingTool.md#compass-draft-pending-tool-o3--reminders-beyond-the-note) | Open question | Reminders beyond the note | — | COMPASS-DRAFT-pending-tool |
 | [COMPASS-DRAFT-positioning-O1](Survey.Positioning.md#compass-draft-positioning-o1--which-name-to-lead-with) | Open question | Which name to lead with | — | COMPASS-DRAFT-positioning |
 | [COMPASS-DRAFT-positioning-O2](Survey.Positioning.md#compass-draft-positioning-o2--integrate-with-memory-tools-or-compete) | Open question | Integrate with memory tools, or compete | — | COMPASS-DRAFT-positioning |
 | [COMPASS-DRAFT-positioning-O3](Survey.Positioning.md#compass-draft-positioning-o3--agent-journals-and-decision-records) | Open question | Agent journals and decision records | — | COMPASS-DRAFT-positioning |
