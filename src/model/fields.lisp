@@ -1,7 +1,7 @@
 ;;;; fields.lisp — Typed reading of front-matter fields against the field schema
 ;;;;
 ;;;; Read-if: changing the type of a front-matter field, or how a value is checked
-;;;; See: COMPASS-DRAFT-toolchain-D18, COMPASS-DRAFT-migration-D3
+;;;; See: COMPASS-DRAFT-toolchain-D18, COMPASS-D70
 ;;;; Invariant: types come only from the schema; the parser never converts scalars
 ;;;; Tests: tests/test-rules.lisp
 

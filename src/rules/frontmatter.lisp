@@ -1,7 +1,7 @@
 ;;;; frontmatter.lisp — Rules for front-matter fields, their types, and controlled vocabularies
 ;;;;
 ;;;; Read-if: changing a front-matter or vocabulary rule
-;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D5, COMPASS-DRAFT-toolchain-D20, COMPASS-DRAFT-migration-D3
+;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D5, COMPASS-DRAFT-toolchain-D20, COMPASS-D70
 ;;;; Tests: tests/test-rules.lisp
 
 (in-package #:compass.rules)

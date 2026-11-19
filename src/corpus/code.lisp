@@ -1,7 +1,7 @@
 ;;;; code.lisp — Code references, and the originals migrated documents name: finding them, and resolving them against Git
 ;;;;
 ;;;; Read-if: changing what counts as a code reference, how a revision, path, or symbol is checked, or how `migrated-from` is resolved
-;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D28, COMPASS-DRAFT-toolchain-D29, COMPASS-DRAFT-migration-D3
+;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D28, COMPASS-DRAFT-toolchain-D29, COMPASS-D70
 ;;;; Invariant: resolving every reference of a corpus takes two Git processes per repository, and every `migrated-from` one more
 ;;;; Invariant: a reference that cannot be checked is counted as unverified, never reported
 ;;;; Tests: tests/test-code-refs.lisp
@@ -244,7 +244,7 @@ of its path at that revision."
             (list :missing-symbol))
            (t (list :ok))))))))
 
-;;; The original a migrated document names (COMPASS-DRAFT-migration-D3)
+;;; The original a migrated document names (COMPASS-D70)
 
 (defun document-migrated-from (document)
   "The entry of DOCUMENT's `provenance.migrated-from`, or NIL, and its path and

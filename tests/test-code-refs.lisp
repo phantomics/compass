@@ -306,7 +306,7 @@ is REVISION-LINES, with REV standing for the revision."
                                  :key #'derived-field-name :test #'string=)))
               (is (search "shallow clone" (derived-field-note created))))))))))
 
-;;; The original a migrated document names (COMPASS-DRAFT-migration-D3)
+;;; The original a migrated document names (COMPASS-D70)
 
 (test parse-migrated-from
   (is (equal '("doc/spec.md" "9ebd54f")

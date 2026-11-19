@@ -10,7 +10,7 @@ authoring-assistance layer; see `Compass.md` §22 and §23 S9). It brings one
 document written before Compass into the corpus, and changes only its form: the
 content stays the original's, so that the document still records what its
 author knew and decided at the time. It follows the decisions of
-COMPASS-DRAFT-migration, the plan in the Compass repository
+COMPASS-0016, the plan in the Compass repository
 (`doc/Plan.Migration.md`), which are cited below by identifier.
 
 ## When to use
@@ -23,7 +23,7 @@ Compass, with a `compass.sexp`.
 Do **not** use to set a repository up (`compass-adopt`), to write a new
 document (`compass-author`), to review a document (`compass-review`), or to
 update, correct, or split a document's content. Those come after the migration,
-as ordinary edits (COMPASS-DRAFT-migration-D11).
+as ordinary edits (COMPASS-D78).
 
 ## Using the toolchain
 
@@ -72,14 +72,14 @@ Check each of these, and stop at the first that fails, saying why:
 4. **The repository's own migration plan.** Look for one: a Plan whose subject
    is the migration to Compass, or a document the `AGENTS.md` migration line
    names. If there is one, read its decisions. Where they differ from
-   COMPASS-DRAFT-migration, the repository's decision applies (directory
+   COMPASS-0016, the repository's decision applies (directory
    layout, pins, naming, statuses it leaves to the steward), and the report
    names each difference with both identifiers. It cannot relax this skill's
    [Invariants](#invariants): one document per request, form only, no commits,
    and no authoritative statuses. Where it calls for one of those, as a plan
    for batches would, say so and keep the invariant
-   (COMPASS-DRAFT-migration-D10).
-5. **The backlog record** (COMPASS-DRAFT-migration-D8). Count the documents
+   (COMPASS-D77).
+5. **The backlog record** (COMPASS-D75). Count the documents
    still unmarked: `compass check --skip-unmarked --format json` lists them
    under `skipped`, and Markdown files outside the document directory may be
    more. If the repository keeps a migration Log, that Log is the record. If it
@@ -91,7 +91,7 @@ Check each of these, and stop at the first that fails, saying why:
 
 ## Workflow
 
-One document per request (COMPASS-DRAFT-migration-D1). Propose each step's
+One document per request (COMPASS-D68). Propose each step's
 changes, make them once the user confirms, and stop where the user must
 commit.
 
@@ -101,7 +101,7 @@ commit.
   skipped, and Markdown documents elsewhere in the repository without
   front-matter. Leave out files that are not documents: `README.md`,
   `CHANGELOG.md`, `CONTRIBUTING.md`, `AGENTS.md`, licences, and generated files.
-- Order them as COMPASS-DRAFT-migration suggests: documents that describe the
+- Order them as COMPASS-0016 suggests: documents that describe the
   current system first, then documents of past work, then the rest. Propose
   one, and let the user name the document.
 - Read the whole original before proposing anything.
@@ -114,13 +114,13 @@ Propose, giving the reasons, and let the user confirm or correct:
   [Choosing the genre](#choosing-the-genre)), with its subtype for an `Eval` or
   `Guide`. For a document that mixes genres, name the closest two; the user
   chooses one. Do not split it: report the mix, for an edit after the migration
-  (COMPASS-DRAFT-migration-O1).
+  (COMPASS-O47).
 - **Scope**, **title**, the **namespace** (the first of `:namespaces` in
   `compass.sexp`), and a **slug** for the provisional identifier
   `<NS>-DRAFT-<slug>`. `compass show <NS>-DRAFT-<slug>` must exit 1, meaning
   the slug is free.
 - **The original's revision**, for `migrated-from`: the last commit that changed
-  it before the migration touched it (COMPASS-DRAFT-migration-D3). An earlier
+  it before the migration touched it (COMPASS-D70). An earlier
   document's move may have updated a link in this one, and that commit does
   not count. Where the migration Log names the commit the migration began
   from, use `git log -1 --format=%h <that commit> -- <path>`. Otherwise list
@@ -133,23 +133,23 @@ Propose, giving the reasons, and let the user confirm or correct:
 - **Records.** The original's decisions, numbered or not, and its open
   questions, with the identifiers they will take. Numbered ones keep their
   numbers: "Decision 3" becomes `<NS>-DRAFT-<slug>-D3`
-  (COMPASS-DRAFT-migration-D6).
+  (COMPASS-D73).
 - **For a Spec, which chapters are normative.** For each chapter, give the
   evidence: the requirements its own text states (search for "must", "should",
   "may", "required", and "shall", ignoring case), or its role, such as defining
   conformance or a syntax. Chapters of guidance, examples, or description, and
   chapters that say a step may be skipped, are informative. The user decides
-  which chapters are "Required" (COMPASS-DRAFT-migration-D2).
-- **Cited section numbers** (COMPASS-DRAFT-migration-D9). Search the
+  which chapters are "Required" (COMPASS-D69).
+- **Cited section numbers** (COMPASS-D76). Search the
   repository, and the federated repositories that are checked out, for
   citations of the document's sections by number, such as "§4.3" or "Section
   3.3" in documents, source comments, and tests. If any exist, the numbers stay.
-- **The pin revision for code references** (COMPASS-DRAFT-migration-D5). For a
+- **The pin revision for code references** (COMPASS-D72). For a
   Log, the commit that holds the work it records, found from its own account
   (commits, dates, and files it names) and the history of those files, and the
   commit before the work for code it describes as it was before. For every
   other genre, the `migrated-from` revision. Give the evidence.
-- **Dates** (COMPASS-DRAFT-migration-O4). Git dates the document from the
+- **Dates** (COMPASS-O50). Git dates the document from the
   first commit that added it (`git log --follow --diff-filter=A -- <path>`).
   Look for an earlier date when the document's own date line is earlier than
   that, when that commit added more than three documents or was the
@@ -160,16 +160,16 @@ Propose, giving the reasons, and let the user confirm or correct:
   the evidence and the difference from Git's, however small; the user decides.
   Where the only evidence is a range, such as a session's dates, leave
   `created` to Git and report the range.
-- **Provenance** (COMPASS-DRAFT-migration-D3). Ask whether the original was
+- **Provenance** (COMPASS-D70). Ask whether the original was
   written with an assistant, which one, and in which session. Record the
-  assistant as `original-assistant:` (COMPASS-DRAFT-migration-O6), taking it
+  assistant as `original-assistant:` (COMPASS-O52), taking it
   from the transcript where there is one, and `session:` only when its
   transcript shows the original being written, not merely read or extended;
   otherwise leave each out.
 
 ### 3. Move
 
-(COMPASS-DRAFT-migration-D4.)
+(COMPASS-D71.)
 
 - **The new path:** `<doc-dir>/<Genre-prefix><Topic>.md`. A document already in
   a subdirectory of the document directory stays in that subdirectory, renamed
@@ -194,13 +194,13 @@ Propose, giving the reasons, and let the user confirm or correct:
 ### 4. Reshape
 
 Confirm that the move is committed (`git log -1 --stat` shows the rename, and
-the tree is clean). Then make only these changes (COMPASS-DRAFT-migration-D2),
+the tree is clean). Then make only these changes (COMPASS-D69),
 following any differences the repository's own plan makes:
 
 - **Front-matter,** in the field order of the genre's template:
   - `id: <NS>-DRAFT-<slug>`, `title`, `genre`, `subtype` where it applies,
     `scope`, `program`/`project`/`component`, and `language`.
-  - `status: Draft`, whatever the original implies (COMPASS-DRAFT-migration-D7).
+  - `status: Draft`, whatever the original implies (COMPASS-D74).
   - `schema-version` or `api-version` from the original's version line, for a
     Spec or for a Ref or Guide.
   - `decisions:` and `open-questions:`, mirroring the records in the body.
@@ -253,7 +253,7 @@ following any differences the repository's own plan makes:
   document not yet migrated keeps its path; it becomes a link when that
   document is migrated (step 7).
 - **Code references:** pin each to the revision chosen in step 2
-  (COMPASS-DRAFT-migration-D5).
+  (COMPASS-D72).
   - A file and line become `path:symbol@revision`, naming the definition that
     encloses the line at that revision (read it with
     `git show <revision>:<path>`), or `path#L<n>@revision` where none does.
@@ -313,11 +313,11 @@ version). Then:
   Ref `Current`, a Plan `Accepted` or `Implemented`, decisions `Accepted` or
   `Implemented`. Quote the original's words that support each. For a Spec,
   Ref, or Guide, say whether it matches the code as it is now; if not, propose
-  keeping `Draft` until it is revised (COMPASS-DRAFT-migration-D7).
+  keeping `Draft` until it is revised (COMPASS-D74).
 - **Notes on content,** for the edit that follows: stale facts, gaps, errors,
   contradictions, examples that do not work, and a mix of genres.
 
-Then hand off (COMPASS-DRAFT-migration-D11):
+Then hand off (COMPASS-D78):
 
 1. The user commits the reshape **alone**. That commit is the form-only state a
    reviewer compares with the original at `migrated-from`.
@@ -326,7 +326,7 @@ Then hand off (COMPASS-DRAFT-migration-D11):
    edit, after the reshape commit, and for a Spec, Ref, or Guide before the
    steward sets `Current`. A new document such as a split part is written with
    `compass-author`, and carries `provenance.migrated-from` naming the same
-   original (COMPASS-DRAFT-migration-O1).
+   original (COMPASS-O47).
 4. The steward sets the statuses and `approved-by`, and asks for
    `compass assign` when ready, which runs with `--dry-run` first.
 
@@ -334,13 +334,13 @@ Then hand off (COMPASS-DRAFT-migration-D11):
 
 Update the mentions of it, then the backlog record:
 
-- **Mentions in documents already migrated** (COMPASS-DRAFT-migration-D4).
+- **Mentions in documents already migrated** (COMPASS-D71).
   Search them for this document's old and new paths, as links, backticked
   paths, and file names. Rewrite each as a link with its identifier as the
   text, `[<ID>](<path>)`, and add the identifier to that document's
   `relates-to`. Leave mentions that record history, such as a Log's Files
   table. Regenerate the index and check the corpus again.
-- **A migration Log** (COMPASS-DRAFT-migration-D8): draft an
+- **A migration Log** (COMPASS-D75): draft an
   `## Update <date> — <title>` section naming the document, its original path
   and `migrated-from` revision, its move and reshape commits, and the notes on
   stale content, with code references pinned to the reshape commit. The first
@@ -389,9 +389,9 @@ If no executable is found, do the steps by hand and say so in the report:
 
 ## Invariants
 
-- **One document per request** (COMPASS-DRAFT-migration-D1), whatever a
+- **One document per request** (COMPASS-D68), whatever a
   repository's plan says.
-- **Form only** (COMPASS-DRAFT-migration-D2). Never add a fact the original does
+- **Form only** (COMPASS-D69). Never add a fact the original does
   not contain, update a stale one, fill a gap other than with a pointer to where
   the original fills it or "Not recorded in the original.", reconstruct an
   alternative, or improve the prose. Never split
@@ -399,10 +399,10 @@ If no executable is found, do the steps by hand and say so in the report:
 - **Never commit,** push, rewrite history, or change Git configuration. The move
   and the reshape are committed separately, by the user.
 - **Never set an authoritative status** or `approved-by`, `reviewers`, or
-  `reviewed`; propose statuses only (§6, COMPASS-DRAFT-migration-D7).
+  `reviewed`; propose statuses only (§6, COMPASS-D74).
 - **Never invent a canonical identifier;** provisional ones only. Run
   `compass assign` only when the user asks.
-- **Never record a session that is not verified** (COMPASS-DRAFT-migration-D3).
+- **Never record a session that is not verified** (COMPASS-D70).
 - **Change only** the document, the links to it in this repository's Markdown
   files, the `AGENTS.md` migration line, the generated index, and, after the
   reshape commit, the mentions of it in documents already migrated and the

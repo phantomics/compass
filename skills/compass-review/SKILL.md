@@ -191,7 +191,7 @@ toolchain does not check yet; the dimensions below cover it.
     left to Git, `compass outline <ID>` shows the derived authors. The toolchain
     does not check this yet.
 
-12. **Migration fidelity (COMPASS-DRAFT-migration-D2).** For a document whose
+12. **Migration fidelity (COMPASS-D69).** For a document whose
     `provenance` has `migrated-from: <old path>@<revision>`, a migration changed
     only its form; judge whether it did. `ref/migrated-from` checks only that the
     original exists.
@@ -201,13 +201,13 @@ toolchain does not check yet; the dimensions below cover it.
       migration Log records. Under review before it is committed, the reshape
       is the working file. Compare the original with the reshape, not with the
       current text: edits after the reshape commit are ordinary revisions,
-      reviewed by the other dimensions (COMPASS-DRAFT-migration-D11). A
+      reviewed by the other dimensions (COMPASS-D78). A
       document split from a migrated original names the same original: judge
       that its text comes from it, with the rest in the other pieces
-      (COMPASS-DRAFT-migration-O1).
+      (COMPASS-O47).
     - **The pin.** The `migrated-from` revision should be the last commit that
       changed the original before the migration touched it
-      (COMPASS-DRAFT-migration-D3): `git log -1 --format=%h <move commit>^ --
+      (COMPASS-D70): `git log -1 --format=%h <move commit>^ --
       <old path>`, or, for a document not moved, the last commit before the
       one the migration Log names as the migration's start. A migration move,
       a commit after `compass.sexp` was added that renamed another document
@@ -215,7 +215,7 @@ toolchain does not check yet; the dimensions below cover it.
     - **Links and relations.** Every document of the corpus the original
       names should be a link with its identifier as the text and be in
       `relates-to`; a path left for a document migrated since is a NOTE, for
-      the link update of COMPASS-DRAFT-migration-D4.
+      the link update of COMPASS-D71.
     - **Removed text.** Every passage of the original must survive, in the body
       or as front-matter, a heading, or a field label. Only a title line, a
       version line, and a status line the front-matter replaces may go; a date
@@ -238,27 +238,27 @@ toolchain does not check yet; the dimensions below cover it.
       "Required" whose text states no requirement and whose role is not
       normative is a WARNING.
     - **The form choices.** Records keep the original's numbering
-      (COMPASS-DRAFT-migration-D6); section numbers cited elsewhere are kept
-      (COMPASS-DRAFT-migration-D9; search for "§" and "Section" citations);
+      (COMPASS-D73); section numbers cited elsewhere are kept
+      (COMPASS-D76; search for "§" and "Section" citations);
       historical paths in a Log are left as they were
-      (COMPASS-DRAFT-migration-D4); a Log's code references are pinned to the
+      (COMPASS-D71); a Log's code references are pinned to the
       commit of its work, and other genres' to the `migrated-from` revision
-      (COMPASS-DRAFT-migration-D5).
+      (COMPASS-D72).
     - **Dates.** A written `created:` should cite evidence of an earlier date,
       such as the original's own date line, in the migration's report or Log
-      (COMPASS-DRAFT-migration-O4). A date line earlier than Git's `created`,
+      (COMPASS-O50). A date line earlier than Git's `created`,
       or a first commit that added more than three documents, with no written
       `created` and no note, is a NOTE.
     - **Provenance and status.** `session:` should name the session that wrote
       the original, and only where its transcript shows that; an unverified one
-      is a WARNING (COMPASS-DRAFT-migration-D3). `original-assistant:` should
+      is a WARNING (COMPASS-D70). `original-assistant:` should
       name the assistant that wrote the original, where one did, and
-      `assistant:` the one that reshaped it (COMPASS-DRAFT-migration-O6). A proposed or set status must
+      `assistant:` the one that reshaped it (COMPASS-O52). A proposed or set status must
       come from the genre's vocabulary, and `Current` on a Spec, Ref, or Guide
-      claims that it matches the code as it is now (COMPASS-DRAFT-migration-D7).
+      claims that it matches the code as it is now (COMPASS-D74).
     - **The repository's own plan.** Where the repository has a migration plan,
       judge the reshape against its decisions where they differ from
-      COMPASS-DRAFT-migration (COMPASS-DRAFT-migration-D10).
+      COMPASS-0016 (COMPASS-D77).
 
     Report the stale content the migration rightly left as NOTES, for the
     revision that follows, not as findings against the migration.

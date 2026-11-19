@@ -43,8 +43,8 @@
 
 (test provenance-keys
   "Every key of `provenance` is accepted: `assistant` and `session`, and, since
-Compass 0.5.0, `migrated-from` and `original-assistant` (COMPASS-DRAFT-migration-D3
-and COMPASS-DRAFT-migration-O6)."
+Compass 0.5.0, `migrated-from` and `original-assistant` (COMPASS-D70
+and COMPASS-O52)."
   (dolist (key '("assistant" "session" "migrated-from" "original-assistant"))
     (is (eq :accepted (term-standing (find-provenance-key key))) "~a is accepted" key))
   (is (null (find-provenance-key "model")))

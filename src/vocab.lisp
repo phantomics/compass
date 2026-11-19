@@ -1,7 +1,7 @@
 ;;;; vocab.lisp — Controlled vocabularies, register kinds, and the front-matter field schema
 ;;;;
 ;;;; Read-if: adding or accepting a genre, status, subtype, scope, register kind, front-matter field, or provenance key
-;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D20, COMPASS-DRAFT-migration-D3
+;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D20, COMPASS-D70
 ;;;; Invariant: every value carries a standing; a pending value names the decision that introduces it
 ;;;; Tests: tests/test-vocab.lisp
 
@@ -239,7 +239,7 @@ COMPASS-DRAFT-toolchain-D5 replaced with `Superseded` plus the
   "The keys a `provenance` mapping may hold. `migrated-from` pins the original
 a migrated document was reshaped from, as `<path>@<commit>`, and
 `original-assistant` names the assistant that wrote that original; both are
-accepted (COMPASS-DRAFT-migration-D3 and COMPASS-DRAFT-migration-O6, in
+accepted (COMPASS-D70 and COMPASS-O52, in
 Compass 0.5.0).")
 
 (defun provenance-keys () *provenance-keys*)

@@ -1,7 +1,7 @@
 ;;;; code.lisp — Rules for code references, pinned to a revision and naming what exists there, and for the original a migrated document names
 ;;;;
 ;;;; Read-if: changing how code references or `provenance.migrated-from` are reported
-;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D28, COMPASS-DRAFT-migration-D3
+;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D28, COMPASS-D70
 ;;;; Invariant: without Git, or for a namespace that is not loaded, nothing is reported
 ;;;; Tests: tests/test-code-refs.lisp
 
