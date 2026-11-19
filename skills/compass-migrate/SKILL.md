@@ -125,6 +125,12 @@ Propose, giving the reasons, and let the user confirm or correct:
   questions, with the identifiers they will take. Numbered ones keep their
   numbers: "Decision 3" becomes `<NS>-DRAFT-<slug>-D3`
   (COMPASS-DRAFT-migration-D6).
+- **For a Spec, which chapters are normative.** For each chapter, give the
+  evidence: the requirements its own text states (search for "must", "should",
+  "may", "required", and "shall", ignoring case), or its role, such as defining
+  conformance or a syntax. Chapters of guidance, examples, or description, and
+  chapters that say a step may be skipped, are informative. The user decides
+  which chapters are "Required" (COMPASS-DRAFT-migration-D2).
 - **Cited section numbers** (COMPASS-DRAFT-migration-D9). Search the
   repository, and the federated repositories that are checked out, for
   citations of the document's sections by number, such as "§4.3" or "Section
@@ -185,18 +191,27 @@ following any differences the repository's own plan makes:
 - **Header lines:** remove the lines that only state what the front-matter now
   holds: a title line the new heading replaces, a version line, and a status
   line. Keep a line giving the author's date.
-- **Sections:** rename and reorder them to follow the genre's §14 spine, keeping
-  their text and any cited numbers, as in "4. Required Tag Vocabulary". Text a
-  renamed heading displaces, such as the expansion of a name, stays as a line
-  under the new heading. Where the spine requires a section or field the
-  original lacks, write "Not recorded in the original."
+- **Sections:** rename them to follow the genre's §14 spine, keeping their text
+  and any cited numbers, as in "4. Required Core Tag Vocabulary". Text a renamed
+  heading displaces, such as the expansion of a name, stays as a line under the
+  new heading. Move a section only where the original's order breaks the
+  spine; sections already in an order it accepts, optional ones included, stay
+  where they are. In a Spec, add "Required" only to the chapters the user
+  decided in step 2.
+- **Gaps:** where the spine requires a section or field the original fills
+  elsewhere, point to that place with a link or a full identifier: "See
+  [Problem](#problem).", or "Deferred; see `<record>`." in Outstanding Work.
+  Where the original lacks it altogether, write "Not recorded in the
+  original."
 - **Records:** each decision becomes
   `### <NS>-DRAFT-<slug>-D<n> — <title>`, with `**Status:** Proposed` and
   `**Context:**`, `**Decision:**`, and `**Alternatives:**` filled only with the
-  original's own sentences. An alternative the original does not give is "Not
-  recorded in the original.", never one reconstructed from the code or
-  history. Open questions become `-O<n>` records the same way. Explanatory text
-  that fits no field stays after the fields. Rewrite every reference to them in
+  original's own sentences, or with a pointer to the section of the original
+  that gives them, such as "See [Problem](#problem).". An alternative the
+  original does not give anywhere is "Not recorded in the original.", never
+  one reconstructed from the code or history. Open questions become `-O<n>`
+  records the same way. Explanatory text that fits no field stays after the
+  fields. Rewrite every reference to them in
   the document as the full identifier. An identifier that looks canonical but
   is not in the ledger becomes provisional, and the report names the
   collision.
@@ -205,11 +220,18 @@ following any differences the repository's own plan makes:
   mappings:" introduces a table, the lead-in becomes its caption.
 - **Links:** a link to another document of the corpus is written with its
   identifier as the text, and its path as the target.
-- **Code references:** pin each to the revision chosen in step 2. A file and
-  line become `path:symbol@revision`, naming the definition that encloses the
-  line at that revision (read it with `git show <revision>:<path>`), or
-  `path#L<n>@revision` where none does. A reference whose file did not exist at
-  that revision stays as it was, and goes in the report.
+- **Code references:** pin each to the revision chosen in step 2
+  (COMPASS-DRAFT-migration-D5).
+  - A file and line become `path:symbol@revision`, naming the definition that
+    encloses the line at that revision (read it with
+    `git show <revision>:<path>`), or `path#L<n>@revision` where none does.
+  - A file the original names is pinned in place, `path@revision`.
+  - Where the original names a symbol defined, at that revision, in a file it
+    names, add `path:symbol@revision` beside its first mention, in parentheses,
+    or in place of a bare symbol name such as the head of a list item.
+  - A reference whose file did not exist at that revision stays as it was, and
+    goes in the report.
+  - Paths that record history, such as a Log's Files table, are not pinned.
 
 Change nothing else. Stale facts, gaps, errors, and unclear prose stay as they
 are; write down what you notice for the report.
@@ -230,8 +252,8 @@ are; write down what you notice for the report.
 - Read your own diff against the original (`git diff`). Every word removed must
   now be in the front-matter, a heading, or a field label, and every word added
   must be front-matter, a heading, a field label, an identifier, a pin, a
-  caption, or "Not recorded in the original." List anything else, and undo it
-  unless it is a link or an identifier.
+  caption, a pointer, or "Not recorded in the original." List anything else,
+  and undo it unless it is a link or an identifier.
 
 ### 6. Report
 
@@ -321,8 +343,9 @@ If no executable is found, do the steps by hand and say so in the report:
 - **One document per request** (COMPASS-DRAFT-migration-D1), whatever a
   repository's plan says.
 - **Form only** (COMPASS-DRAFT-migration-D2). Never add a fact the original does
-  not contain, update a stale one, fill a gap other than with "Not recorded in
-  the original.", reconstruct an alternative, or improve the prose. Never split
+  not contain, update a stale one, fill a gap other than with a pointer to where
+  the original fills it or "Not recorded in the original.", reconstruct an
+  alternative, or improve the prose. Never split
   or merge documents.
 - **Never commit,** push, rewrite history, or change Git configuration. The move
   and the reshape are committed separately, by the user.

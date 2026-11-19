@@ -122,7 +122,9 @@ COMPASS-DRAFT-migration-D2, COMPASS-DRAFT-migration-D3,
 COMPASS-DRAFT-migration-D4, COMPASS-DRAFT-migration-D5,
 COMPASS-DRAFT-migration-D7, and COMPASS-DRAFT-migration-D8 were amended on
 2026-11-18 from the [Case studies](#case-studies), and
-COMPASS-DRAFT-migration-D9 to COMPASS-DRAFT-migration-D11 were added then.
+COMPASS-DRAFT-migration-D9 to COMPASS-DRAFT-migration-D11 were added then;
+COMPASS-DRAFT-migration-D2 and COMPASS-DRAFT-migration-D5 were amended again
+after the Lexis trial.
 
 ### COMPASS-DRAFT-migration-D1 — Migration is a skill, one document at a time
 
@@ -170,14 +172,23 @@ changes are:
   uncontrolled status beside the controlled one. A line giving the author's own
   date stays, since it records when the author dated the work, which can differ
   from the dates Git derives (CLASSIC-D109);
-- renaming and reordering sections to follow the genre's §14 shape, keeping
-  their text, and keeping section numbers that are cited elsewhere
+- renaming sections to follow the genre's §14 shape, keeping their text, and
+  keeping section numbers that are cited elsewhere
   (COMPASS-DRAFT-migration-D9). Text a renamed heading displaces, such as the
-  expansion of a name, stays as a line under the new heading;
+  expansion of a name, stays as a line under the new heading. A section is
+  moved only where the original's order breaks the spine; sections already in
+  an order the spine accepts, optional ones included, keep their places. In a
+  Spec, a chapter's heading says "Required" only where the user has decided
+  that the chapter is normative, from the evidence the skill gives: the
+  requirements its own text states, or its role, such as defining conformance;
 - marking passages as records: a heading with a full identifier, and the
   original's sentences placed under the record's fields;
+- where the shape requires a field or section that the original fills
+  elsewhere, a pointer to that place, as a link to the section or the full
+  identifier of the record: "See [Problem](#problem).", or "Deferred; see
+  `<record>`." in Outstanding Work;
 - writing "Not recorded in the original." where the shape requires a field or
-  section the original lacks;
+  section the original lacks altogether;
 - adding what §12 requires: a `Table:` caption before each table and a
   `Description:` after each diagram. Where the original introduces a table with
   a lead-in such as "Tag mappings:", the lead-in becomes the caption;
@@ -197,7 +208,13 @@ as a later step of the same workflow (rejected: an ordinary edit after the
 reshape commit does the same thing with clearer provenance); remove date lines
 too, as the Lexis Spec's migration did (rejected: the author's date is lost
 from the document when it differs from Git's, as the Spec's 2026-05-22 did
-from Git's 2026-05-23).
+from Git's 2026-05-23); write "Not recorded in the original." wherever a
+decision's own text lacks a field (rejected after the Lexis trial: it is untrue
+where the original gives the field in another section); reorder every section
+into the spine's sequence (rejected after the trial: it moves sections the
+spine already accepts); mark every chapter of a Spec "Required" (rejected after
+the trial: the Lexis Spec's chapter 7 was marked so, and its review found the
+chapter was not normative).
 
 ### COMPASS-DRAFT-migration-D3 — A migrated document names its original in `provenance`
 
@@ -296,10 +313,14 @@ Classic's Logs they were not.
 
 A reference with a line is anchored to the definition enclosing that line at
 its revision, `path:symbol@revision`, if there is one, and otherwise to the
-line, `path#L<n>@revision`. A reference whose file did not exist at its
-revision is left as it was and reported, since pinning it would invent a
-meaning. The report lists every pin, so that the user can correct one where the
-document plainly meant another state.
+line, `path#L<n>@revision`. A file the original names is pinned in place,
+`path@revision`. Where the original names a symbol that a file it names
+defines at that revision, a pinned reference to the symbol,
+`path:symbol@revision`, is added beside the first mention, in parentheses or in
+place of a bare symbol name, as the steward's Lexis Log does. A reference whose
+file did not exist at its revision is left as it was and reported, since
+pinning it would invent a meaning. The report lists every pin, so that the user
+can correct one where the document plainly meant another state.
 **Alternatives:** Pin to the current revision (rejected: changes what the
 reference meant); pin to the commit that first added the document (rejected: a
 document edited over years was usually kept true to the code until its last
@@ -614,9 +635,53 @@ Table: Where the skill's migration of Lexis differed from the steward's, and wha
 | The skill kept the words of a heading and of a table's lead-in, such as "Core" and "Tag mappings."; the steward dropped "Core" and expanded the captions | COMPASS-DRAFT-migration-D2 working as intended |
 | The skill proposed the Spec first, as the order of migration says; the steward chose the Log first | The order is a proposal; the user names the document |
 
-The four differences in the middle of the table are open for the steward's
-decision; until then the skill and COMPASS-DRAFT-migration-D2 stand as they
-are.
+The steward accepted the four suggestions in the middle of the Lexis table on
+2026-11-18. COMPASS-DRAFT-migration-D2 now permits pointers, moves only
+sections out of the spine's order, and marks a Spec chapter "Required" only by
+the user's decision; COMPASS-DRAFT-migration-D5 adds pinned references to the
+symbols the original names; and the skill follows them.
+
+### Trial: Classic replayed with the skill
+
+On 2026-11-18 the skill, amended after the Lexis trial, was followed in a
+scratch clone of Classic. At `55c2390`, before Classic's baseline, it stopped
+at its second check: 47 errors, and no ledger. From `dfeb862` it migrated five
+documents one at a time, in 14 commits: `Ref.Model` (a Ref in a
+subdirectory), `Log.DistFactorization` (a Log of work over eleven commits),
+`Spec.SchemaContract` (the Spec Classic later split), `Guide.Forum` (a
+tutorial), and `Survey.TTRPGHost` (a Survey already named and placed). It also
+began `Log.CompassMigration.md`, since 26 documents were unmarked. Every check
+reports no errors and one `vocab/pending` warning per migrated document.
+
+Classic's own plan, CLASSIC-0032, was in force (COMPASS-DRAFT-migration-D10):
+its table gave each document's genre and component, `api-version` and
+`schema-version` came from `classic.asd`, and the Survey lost its "Concept:"
+prefix, as its Phase 2 provides. Its batches, and its separate passes for
+front-matter and records, gave way to one document and one reshape at a time.
+
+Compared with Classic's own migration of the same five documents, the skill
+kept each original's title, where Classic retitled four; kept the original's
+sentences in each record, where Classic paraphrased its contexts and
+alternatives; moved no section the spine accepted, where Classic moved two;
+added to `relates-to` only documents the original names; kept the schema
+contract whole, with its afterword, where Classic split it and its Spec lost
+the afterword; and recorded the sessions that wrote three of the originals,
+found in their transcripts, where Classic recorded none.
+
+Table: What the Classic trial found that the skill does not yet cover.
+
+| Finding | Suggests |
+|---|---|
+| Two earlier moves had updated a link in `Survey.TTRPGHost.md`, so the last commit to change it, which the skill takes for `migrated-from`, was the migration's own | `migrated-from` is the last commit to change the original before the migration touched it; the review's check of the pin, likewise |
+| Checking only the new document's path hid an `index/current` error, and the index was left stale for three migrations | Regenerate the index, then check the whole corpus, in step 5 |
+| Migrating one document at a time leaves backticked paths and file-name links to documents not yet migrated; when such a document is migrated, nothing updates the mentions of it in documents already migrated | After a reshape commit, rewrite mentions of the new document in documents already migrated as identifier links, and add them to `relates-to` |
+| The trial at first missed the identifier links and `relates-to` entries for two documents already in the corpus | Add both to the self-check of step 5 |
+| `Log.Migration.md` would read, in Classic, as the Log of its schema-migration component | Name the migration Log `Log.CompassMigration.md` |
+| Where a decision's own sentence names the rejected option ("Rather than discrete … systems"), "Not recorded in the original." is untrue | A pointer may name the record's own Decision |
+| A status line held a fact besides the status ("Conceptual. No implementation has begun.") | Remove only the status; keep the rest of the line |
+| "Beside its first mention" was ambiguous where symbols are first named in a table, and one symbol the Log says was deleted is still defined | Pin a symbol where a passage names it with the file that defines it at the revision, and not where the text says it was removed |
+
+The eight suggestions are open for the steward's decision.
 
 ## Tradeoffs and Non-Goals
 
@@ -758,7 +823,7 @@ Table: Prior systems and practices and what this plan draws from each.
    fidelity" dimension, which compares a migrated document at its reshape
    commit with its original at `migrated-from`, as COMPASS-DRAFT-migration-O3
    was resolved.
-5. **Trials (now).** In scratch clones, so that neither repository changes:
+5. **Trials (done, 2026-11-18; see [Case studies](#case-studies)).** In scratch clones, so that neither repository changes:
    - Lexis from `cf1147b`, migrating both documents, compared with the
      steward's results (`836f386` and `aea04fd`; `8d7bae4` and `c471246`);
    - Classic from `dfeb862`, migrating five documents one at a time (a Ref in a

@@ -214,12 +214,19 @@ toolchain does not check yet; the dimensions below cover it.
       line stays. A lost passage is an ERROR.
     - **Added text.** Allowed: front-matter, headings, field labels, record
       identifiers and full identifiers for the original's numbering, pinned
-      code references, link targets, `Table:` captions and `Description:`
-      paragraphs (a caption may replace a table's lead-in), a heading's
-      displaced text kept as a line under it, and "Not recorded in the
-      original.". Anything else is an ERROR when it adds or updates a fact,
-      such as an alternative the original never gave or a corrected stale
-      claim, and a WARNING when it only rewords.
+      code references (including a symbol's pin beside its first mention),
+      link targets, `Table:` captions and `Description:` paragraphs (a caption
+      may replace a table's lead-in), a heading's displaced text kept as a line
+      under it, a pointer to where the original gives a field ("See
+      [Problem](#problem)."), and "Not recorded in the original.". Anything
+      else is an ERROR when it adds or updates a fact, such as an alternative
+      the original never gave or a corrected stale claim, and a WARNING when it
+      only rewords. A "Not recorded" for a field the original does give
+      elsewhere is a WARNING: point to it instead.
+    - **Order and normativity.** A section moved though the original's order
+      already suits the spine is a NOTE. In a Spec, a chapter headed
+      "Required" whose text states no requirement and whose role is not
+      normative is a WARNING.
     - **The form choices.** Records keep the original's numbering
       (COMPASS-DRAFT-migration-D6); section numbers cited elsewhere are kept
       (COMPASS-DRAFT-migration-D9; search for "§" and "Section" citations);
