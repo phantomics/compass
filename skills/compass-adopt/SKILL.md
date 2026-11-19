@@ -22,9 +22,10 @@ docs for this new project". Triggers also include a new, empty project folder.
 
 Do **not** use in a folder that already has a `compass.sexp` (it is adopted:
 run `compass check` and report instead), to write documents (`compass-author`),
-or to convert existing documents to Compass. Migrating a mature corpus is a
-separate workflow; this skill sets Compass up beside such documents and leaves
-them as they are (see [Existing documents](#existing-documents)).
+or to convert existing documents to Compass (`compass-migrate`). Migrating a
+mature corpus is a separate workflow; this skill sets Compass up beside such
+documents and leaves them as they are (see
+[Existing documents](#existing-documents)).
 
 ## Using the toolchain
 
@@ -139,8 +140,8 @@ beside it:
 - Tell the user that converting the existing documents is a separate,
   document-by-document workflow — choosing each one's genre, extracting its
   decisions as records, and pinning its code references to the revisions they
-  meant — for which tools are being built. New documents can be written with
-  `compass-author` at once.
+  meant — done with `compass-migrate`, once these files are committed. New
+  documents can be written with `compass-author` at once.
 
 ## Without the toolchain
 

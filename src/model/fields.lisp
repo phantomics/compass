@@ -1,7 +1,7 @@
 ;;;; fields.lisp — Typed reading of front-matter fields against the field schema
 ;;;;
 ;;;; Read-if: changing the type of a front-matter field, or how a value is checked
-;;;; See: COMPASS-DRAFT-toolchain-D18
+;;;; See: COMPASS-DRAFT-toolchain-D18, COMPASS-DRAFT-migration-D3
 ;;;; Invariant: types come only from the schema; the parser never converts scalars
 ;;;; Tests: tests/test-rules.lisp
 
@@ -20,6 +20,22 @@
                for s = (node-string item)
                when s collect s))
         (t '())))
+
+(defun parse-migrated-from (string)
+  "The path and revision of STRING, a `provenance.migrated-from` value written
+`<path>@<commit>`, or NIL if it is not of that form. The path is relative to
+the repository root, and the commit is 7 to 40 hexadecimal digits: a branch or
+tag moves, and the value pins the original as it was."
+  (let ((at (and (stringp string) (position #\@ string :from-end t))))
+    (when at
+      (let ((path (subseq string 0 at))
+            (revision (subseq string (1+ at))))
+        (and (plusp (length path))
+             (not (char= (char path 0) #\/))
+             (notany (lambda (c) (member c '(#\Space #\Tab #\Return #\Newline #\\))) path)
+             (<= 7 (length revision) 40)
+             (every (lambda (c) (digit-char-p c 16)) revision)
+             (values path revision))))))
 
 (defun describe-node (node)
   (cond ((yaml-mapping-p node) "a mapping")
@@ -102,9 +118,22 @@ problems, each (NODE SEVERITY MESSAGE). A null NODE is absent: (values NIL NIL).
                       (scalar (yaml-entry-value assistant) "a single value"))
                   (let ((session (yaml-get node "session")))
                     (unless (yaml-null-p session) (scalar session "a single value")))
+                  (let ((migrated (yaml-get node "migrated-from")))
+                    (unless (yaml-null-p migrated)
+                      (let ((s (node-string migrated)))
+                        (cond ((null s)
+                               (problem migrated "`provenance.migrated-from` must be ~
+                                                  `<path>@<commit>`, not ~a"
+                                        (describe-node migrated)))
+                              ((not (parse-migrated-from s))
+                               (problem migrated "`provenance.migrated-from` value ~s is not ~
+                                                  `<path>@<commit>`: the original's path from ~
+                                                  the repository root, and the commit, in ~
+                                                  7 to 40 hexadecimal digits, it was ~
+                                                  migrated from"
+                                        s))))))
                   (dolist (entry (yaml-mapping-entries node))
-                    (unless (member (yaml-entry-key entry) '("assistant" "session")
-                                    :test #'string=)
+                    (unless (find-provenance-key (yaml-entry-key entry))
                       (warn-about entry "`provenance` has an unrecognised key `~a`"
                                   (yaml-entry-key entry))))
                   node)))

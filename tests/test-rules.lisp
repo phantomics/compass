@@ -47,6 +47,18 @@
     (is (has-finding-p (types "provenance:" "  session: x") "fm/types"))
     (is (has-finding-p (types "provenance:" "  assistant: x" "  model: y") "fm/types"
                        :severity :warning))
+    (is (null (types "provenance:" "  assistant: x" "  migrated-from: doc/old.md@abc1234"))
+        "migrated-from is a known key, and this value is well formed")
+    (dolist (bad '("doc/old.md" "doc/old.md@" "\"@abc1234\"" "doc/old.md@main"
+                   "doc/old.md@abc12" "/doc/old.md@abc1234" "\"doc/my notes.md@abc1234\""))
+      (is (has-finding-p (types "provenance:" "  assistant: x"
+                                (format nil "  migrated-from: ~a" bad))
+                         "fm/types" :severity :error)
+          "~a is not <path>@<commit>" bad))
+    (is (has-finding-p (types "provenance:" "  assistant: x" "  migrated-from:"
+                              "    - doc/old.md@abc1234")
+                       "fm/types" :severity :error)
+        "a list is not a value")
     (is (has-finding-p (types "glossary: Glossary.Terms") "fm/types" :severity :warning)))
   (is (has-finding-p (check-one (doc :title "\"\"") :rules '("fm/types")) "fm/types")))
 
@@ -114,6 +126,15 @@ COMPASS-D62)."
   (is (has-finding-p (check-one (doc :extra '("read-if: changing things"))
                                 :rules '("vocab/pending"))
                      "vocab/pending"))
+  (let ((findings (check-one (doc :extra '("provenance:" "  assistant: x"
+                                           "  migrated-from: doc/old.md@abc1234"))
+                             :rules '("vocab/pending"))))
+    (is (has-finding-p findings "vocab/pending" :line 12 :severity :warning)
+        "the pending provenance key, on its own line: ~a" (describe-findings findings))
+    (is (search "COMPASS-DRAFT-migration-D3" (finding-message (first findings)))))
+  (is (null (check-one (doc :extra '("provenance:" "  assistant: x" "  session: s"))
+                       :rules '("vocab/pending")))
+      "assistant and session are accepted")
   (is (null (check-one (doc :genre "Memo" :status "Current") :rules '("vocab/pending")))
       "the Memo genre is accepted"))
 

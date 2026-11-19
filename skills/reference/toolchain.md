@@ -169,6 +169,9 @@ version 0.2 that includes:
 - the author-time accessibility rules of §12: alt text, table captions, diagram
   descriptions, heading levels, link text;
 - the §14 section shape of each genre;
+- that a migrated document changes only the form of its original:
+  `ref/migrated-from` checks only that the original its `migrated-from` names
+  exists (COMPASS-DRAFT-migration-O3);
 - who may set `approved-by` (never an assistant; the sole author only as the
   declared steward of a solo namespace);
 - the judgments of genre fit, decision quality, memo admission, and prior art.

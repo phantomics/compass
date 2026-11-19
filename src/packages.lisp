@@ -44,6 +44,7 @@
            #:field-spec-derivable-p #:field-spec-genres #:field-spec-extension-p
            #:field-spec-standing #:field-spec-amendment #:field-spec-register-kind
            #:field-specs #:find-field-spec
+           #:provenance-keys #:find-provenance-key
            #:well-formed-language-tag-p
            #:+legacy-superseded-prefix+ #:legacy-superseded-target
            #:non-document-file-p #:true-string-p))
@@ -97,7 +98,7 @@
    #:finding #:make-finding #:finding-rule #:finding-severity #:finding-path
    #:finding-line #:finding-column #:finding-message
    ;; typed fields
-   #:convert-field #:node-string #:node-identifiers
+   #:convert-field #:node-string #:node-identifiers #:parse-migrated-from
    ;; manifest
    #:manifest #:manifest-path #:manifest-namespaces #:manifest-doc-directory
    #:manifest-federation #:manifest-stewards #:manifest-commands
@@ -187,6 +188,7 @@
            #:code-mention-line-start #:code-mention-line-end #:code-mention-line
            #:code-mention-revision #:code-mention-basis-p #:parse-code-mention
            #:document-code-mentions #:resolve-code-mentions #:revision-status
+           #:document-migrated-from #:resolve-migrated-from
            #:symbol-defined-p
            #:federated #:federated-entry #:federated-root #:federated-manifest
            #:federated-corpus #:federated-problem #:corpus-federation

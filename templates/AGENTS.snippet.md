@@ -15,6 +15,8 @@ improvising documents:
 - `compass-review` — the toolchain's checks plus a judgment-level review before
   accepting a doc.
 - `compass-lookup` — resolve identifiers, sections, records, and references.
+- `compass-migrate` — bring a document written before Compass into the corpus,
+  one at a time, changing only its form.
 
 The skills carry the standard and its reference bundle. Load @Compass.md on
 demand only if you need the source text — do not preload it.
@@ -31,7 +33,7 @@ Project-specific facts the skills cannot infer (fill these in):
 - Docs directory: doc/                       <!-- flat; grouping via front-matter -->
 - The `compass` command: <on the PATH, or a path to bin/compass>
 - Federated repositories (if any): <namespace and path of each, as in compass.sexp>
-- Migration (if any): <documents without front-matter remain; run checks with --skip-unmarked>
+- Migration (if any): <documents without front-matter remain, migrated one at a time with compass-migrate; run checks with --skip-unmarked>
 
 Essentials (full rules in Compass.md): every document opens with a §7 YAML
 front-matter block; genre and status use the controlled vocabularies; decision

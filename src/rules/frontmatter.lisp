@@ -1,7 +1,7 @@
 ;;;; frontmatter.lisp — Rules for front-matter fields, their types, and controlled vocabularies
 ;;;;
 ;;;; Read-if: changing a front-matter or vocabulary rule
-;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D5, COMPASS-DRAFT-toolchain-D20
+;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D5, COMPASS-DRAFT-toolchain-D20, COMPASS-DRAFT-migration-D3
 ;;;; Tests: tests/test-rules.lisp
 
 (in-package #:compass.rules)
@@ -195,6 +195,14 @@
         (emit document entry "the field `~a` is pending: it is introduced by ~a, and is ~
                               not yet adopted into the standard"
               (field-spec-name spec) (field-spec-amendment spec)))))
+  (let ((provenance (document-field-node document "provenance")))
+    (when (yaml-mapping-p provenance)
+      (dolist (entry (yaml-mapping-entries provenance))
+        (let ((key (find-provenance-key (yaml-entry-key entry))))
+          (when (and key (eq (term-standing key) :pending))
+            (emit document entry "the `provenance` key `~a` is pending: it is introduced ~
+                                  by ~a, and is not yet adopted into the standard"
+                  (term-name key) (term-amendment key)))))))
   (dolist (record (document-records document))
     (let ((kind (find-register-kind (record-kind record)))
           (status (record-field record "Status")))

@@ -1,7 +1,7 @@
-;;;; code.lisp — Rules for code references: pinned to a revision, and naming what exists there
+;;;; code.lisp — Rules for code references, pinned to a revision and naming what exists there, and for the original a migrated document names
 ;;;;
-;;;; Read-if: changing how code references are reported
-;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D28
+;;;; Read-if: changing how code references or `provenance.migrated-from` are reported
+;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D28, COMPASS-DRAFT-migration-D3
 ;;;; Invariant: without Git, or for a namespace that is not loaded, nothing is reported
 ;;;; Tests: tests/test-code-refs.lisp
 
@@ -82,3 +82,37 @@
                              `~a`"
                             (code-mention-path mention) (code-mention-symbol mention)
                             (code-mention-revision mention) text))))))))
+
+(define-rule "ref/migrated-from" (:severity :error :section "§7, §9"
+                                  :summary "`provenance.migrated-from` names a commit that ~
+                                            exists, and a file that existed at it")
+    (document corpus)
+  (multiple-value-bind (entry path revision) (document-migrated-from document)
+    (when (and entry path)
+      (let ((result (gethash document (resolve-migrated-from corpus)))
+            (where (yaml-entry-value entry)))
+        (when result
+          (ecase (first result)
+            (:ok)
+            (:unverified (unverified document where (format nil "~a@~a" path revision)))
+            (:no-git
+             (note corpus "ref/migrated-from did not run: ~:[~a is not in a Git ~
+                           repository~;Git was not found~*~]"
+                   (not (git-available-p)) (uiop:native-namestring (second result))))
+            (:ambiguous-revision
+             (emit document where "the revision ~a of `provenance.migrated-from` is an ~
+                                   abbreviation of more than one object; write more of it"
+                   revision))
+            (:missing-revision
+             (emit document where "`provenance.migrated-from` names ~a, which is no commit ~
+                                   here; if the history was rewritten, pin the original's ~
+                                   path to the commit that holds it now"
+                   revision))
+            (:missing-path
+             (emit document where "~a does not exist at ~a, so `provenance.migrated-from` ~
+                                   names no original"
+                   path revision))
+            (:directory
+             (emit document where "~a is a directory at ~a; `provenance.migrated-from` ~
+                                   names the original document, which is a file"
+                   path revision))))))))

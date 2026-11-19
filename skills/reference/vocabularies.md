@@ -58,6 +58,10 @@ Table: Subtypes and what each evaluates or teaches.
 COMPASS-0009 proposes it, and `compass check` warns on it under `vocab/pending`.
 All other genres omit `subtype`.
 
+The `provenance` key `migrated-from` is pending in the same way:
+COMPASS-DRAFT-migration-D3 proposes it, for documents migrated from ones
+written before Compass (see `frontmatter.md`).
+
 ## Scope (§5)
 
 The `scope` axis records altitude and is orthogonal to genre.

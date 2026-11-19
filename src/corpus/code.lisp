@@ -1,8 +1,8 @@
-;;;; code.lisp — Code references in documents: finding them, and resolving them against Git
+;;;; code.lisp — Code references, and the originals migrated documents name: finding them, and resolving them against Git
 ;;;;
-;;;; Read-if: changing what counts as a code reference, or how a revision, path, or symbol is checked
-;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D28, COMPASS-DRAFT-toolchain-D29
-;;;; Invariant: resolving every reference of a corpus takes two Git processes per repository
+;;;; Read-if: changing what counts as a code reference, how a revision, path, or symbol is checked, or how `migrated-from` is resolved
+;;;; See: COMPASS-0001, COMPASS-DRAFT-toolchain-D28, COMPASS-DRAFT-toolchain-D29, COMPASS-DRAFT-migration-D3
+;;;; Invariant: resolving every reference of a corpus takes two Git processes per repository, and every `migrated-from` one more
 ;;;; Invariant: a reference that cannot be checked is counted as unverified, never reported
 ;;;; Tests: tests/test-code-refs.lisp
 
@@ -243,6 +243,53 @@ of its path at that revision."
                                         (code-mention-symbol mention) text)))
             (list :missing-symbol))
            (t (list :ok))))))))
+
+;;; The original a migrated document names (COMPASS-DRAFT-migration-D3)
+
+(defun document-migrated-from (document)
+  "The entry of DOCUMENT's `provenance.migrated-from`, or NIL, and its path and
+revision when the value is well formed."
+  (let ((entry (yaml-get-entry (document-field-node document "provenance") "migrated-from")))
+    (when entry
+      (multiple-value-bind (path revision)
+          (parse-migrated-from (node-string (yaml-entry-value entry)))
+        (values entry path revision)))))
+
+(defun resolve-migrated-from (corpus)
+  "Resolve each well-formed `provenance.migrated-from` of CORPUS against its
+history, in one Git process. Return a hash table from each such document to a
+list: (:ok), (:no-git ROOT), (:unverified), (:missing-revision),
+(:ambiguous-revision), (:missing-path), or (:directory)."
+  (corpus-cached
+   corpus :migrated-from
+   (lambda ()
+     (let ((results (make-hash-table :test #'eq))
+           (root (corpus-root corpus))
+           (wanted '()))
+       (dolist (document (corpus-documents corpus))
+         (multiple-value-bind (entry path revision) (document-migrated-from document)
+           (when (and entry path)
+             (push (list document revision (format nil "~a:~a" revision path)) wanted))))
+       (cond
+         ((null wanted))
+         ((not (repository-usable-p corpus root))
+          (dolist (w wanted) (setf (gethash (first w) results) (list :no-git root))))
+         (t
+          (multiple-value-bind (revisions types)
+              (ensure-revisions corpus root (mapcar #'second wanted)
+                                (remove-duplicates (mapcar #'third wanted) :test #'string=))
+            (let ((shallow (repository-shallow-p corpus root)))
+              (loop for (document revision object) in wanted
+                    for type = (gethash revision revisions)
+                    do (setf (gethash document results)
+                             (cond ((eq type :ambiguous) (list :ambiguous-revision))
+                                   ((not (eq type :commit))
+                                    (if shallow (list :unverified) (list :missing-revision)))
+                                   (t (case (gethash object types)
+                                        (:blob (list :ok))
+                                        ((nil) (list :missing-path))
+                                        (t (list :directory)))))))))))
+       results))))
 
 (defun line-count (text)
   "The number of lines in TEXT, a final line without a newline included."

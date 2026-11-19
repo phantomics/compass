@@ -306,6 +306,80 @@ is REVISION-LINES, with REV standing for the revision."
                                  :key #'derived-field-name :test #'string=)))
               (is (search "shallow clone" (derived-field-note created))))))))))
 
+;;; The original a migrated document names (COMPASS-DRAFT-migration-D3)
+
+(test parse-migrated-from
+  (is (equal '("doc/spec.md" "9ebd54f")
+             (multiple-value-list (parse-migrated-from "doc/spec.md@9ebd54f"))))
+  (is (equal '("a@b/c.md" "abcdef0")
+             (multiple-value-list (parse-migrated-from "a@b/c.md@abcdef0")))
+      "the revision follows the last at sign")
+  (is (equal "0123456789abcdef0123456789abcdef01234567"
+             (nth-value 1 (parse-migrated-from
+                           "x.md@0123456789abcdef0123456789abcdef01234567"))))
+  (dolist (bad '("doc/spec.md" "doc/spec.md@" "@9ebd54f" "doc/spec.md@HEAD"
+                 "doc/spec.md@9ebd54" "/doc/spec.md@9ebd54f" "doc/my spec.md@9ebd54f"
+                 "doc\\spec.md@9ebd54f"))
+    (is (null (parse-migrated-from bad)) "~s is not <path>@<commit>" bad))
+  (is (null (parse-migrated-from nil))))
+
+(defun migrated-doc (value)
+  (doc :genre "Spec" :created "2026-10-09"
+       :extra (list "provenance:" "  assistant: x" (format nil "  migrated-from: ~a" value))))
+
+(defun migrated-findings (value-for)
+  "Commit an original, then move it as a migration does, and check a document
+whose `migrated-from` is VALUE-FOR called with the original's commit."
+  (with-git-repository (root (list (list "doc/spec.md" (lines "# Spec" "" "Old text."))
+                                   (list "src/a.lisp" (lines "(defun frob ())"))))
+    (let ((original (head-revision root)))
+      (git-in root "mv" "doc/spec.md" "doc/Spec.Old.md")
+      (commit-all root "move")
+      (write-file root "doc/Spec.Old.md" (migrated-doc (funcall value-for original)))
+      (check-corpus (load-corpus root) :only '("ref/migrated-from")))))
+
+(test migrated-from-resolves
+  (let ((findings (migrated-findings (lambda (rev) (format nil "doc/spec.md@~a" rev)))))
+    (is (null findings) (describe-findings findings))))
+
+(test migrated-from-does-not-resolve
+  (let ((findings (migrated-findings (lambda (rev) (declare (ignore rev)) "doc/spec.md@0000000"))))
+    (is (has-finding-p findings "ref/migrated-from" :line 13 :severity :error))
+    (is (search "names 0000000, which is no commit here" (finding-message (first findings)))))
+  (let ((findings (migrated-findings (lambda (rev) (format nil "doc/other.md@~a" rev)))))
+    (is (has-finding-p findings "ref/migrated-from" :severity :error))
+    (is (search "doc/other.md does not exist at" (finding-message (first findings)))))
+  (let ((findings (migrated-findings (lambda (rev) (format nil "src@~a" rev)))))
+    (is (search "src is a directory at" (finding-message (first findings)))))
+  (let ((findings (migrated-findings (lambda (rev) (declare (ignore rev)) "doc/spec.md"))))
+    (is (null findings) "a malformed value is fm/types's to report")))
+
+(test migrated-from-unverified-and-without-git
+  ;; A revision a shallow clone lacks: counted, not reported.
+  (with-git-repository (origin (list (list "doc/spec.md" (lines "# Spec"))))
+    (let ((original (head-revision origin)))
+      (write-file origin "src/a.lisp" (lines "(defun frob ())"))
+      (commit-all origin "second")
+      (with-temp-repository (scratch '())
+        (let ((clone (merge-pathnames "clone/" scratch)))
+          (git-in scratch "clone" "-q" "--depth" "1"
+                  (concatenate 'string "file://" (uiop:native-namestring origin))
+                  (uiop:native-namestring clone))
+          (write-file clone "doc/Spec.Old.md"
+                      (migrated-doc (format nil "doc/spec.md@~a" original)))
+          (let* ((corpus (load-corpus clone))
+                 (findings (check-corpus corpus :only '("ref/migrated-from"))))
+            (is (null findings) (describe-findings findings))
+            (is (equal (list (format nil "doc/spec.md@~a" original))
+                       (mapcar #'third (corpus-unverified corpus)))))))))
+  ;; Outside a Git repository: a note.
+  (multiple-value-bind (findings corpus)
+      (check-files (list (list "doc/Spec.Old.md" (migrated-doc "doc/spec.md@abc1234")))
+                   :rules '("ref/migrated-from"))
+    (is (null findings))
+    (is (equal '("ref/migrated-from did not run: ")
+               (mapcar (lambda (n) (subseq n 0 (min (length n) 31))) (corpus-notes corpus))))))
+
 (test symbol-definitions
   (is-true (symbol-defined-p "a.lisp" "frob" "(defun frob (x)"))
   (is-true (symbol-defined-p "a.lisp" "FROB" "(DEFUN frob (x)"))

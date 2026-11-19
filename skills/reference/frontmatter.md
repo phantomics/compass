@@ -124,3 +124,23 @@ at acceptance/merge, recording it in the namespace's ledger in the same change
 A document authored or reviewed with LLM help MUST carry `provenance:` (at
 minimum `assistant:`; `session:` where meaningful). The Compass skills always
 set or preserve this when they touch a document.
+
+A document migrated from one written before Compass also carries
+`migrated-from:`, which pins the original as `<path>@<commit>`: its path from
+the repository root, before the move, and the last commit that changed it,
+written as 7 to 40 hexadecimal digits. For example:
+
+```yaml
+provenance:
+  assistant:     claude-opus-5-5
+  session:       ses_1adfe7ad9ffeXhdMKb49yDBuUQ
+  migrated-from: doc/DevLog.Passthrough.md@9ebd54f
+```
+
+`assistant:` names the assistant that reshaped the document. `session:` names
+the session that wrote the original, and only when that is verified from its
+transcript; otherwise it is left out. `migrated-from` stays when the document
+is later edited. The key is pending (COMPASS-DRAFT-migration-D3): `compass
+check` warns on it under `vocab/pending`, checks its form under `fm/types`, and
+checks under `ref/migrated-from` that the commit exists and that the path was a
+file there.

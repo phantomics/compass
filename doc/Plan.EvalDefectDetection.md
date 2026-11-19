@@ -56,6 +56,7 @@ open-questions:
   - COMPASS-DRAFT-eval-defect-detection-O3
   - COMPASS-DRAFT-eval-defect-detection-O4
   - COMPASS-DRAFT-eval-defect-detection-O5
+  - COMPASS-DRAFT-eval-defect-detection-O6
 ---
 
 # Compass Defect-Detection Study: Development Plan

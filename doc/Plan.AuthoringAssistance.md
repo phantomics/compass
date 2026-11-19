@@ -182,13 +182,20 @@ written at all).
   `.mailmap`, the manifest (`compass init`), the ledger
   (`compass init --ledger`), and the Compass block of `AGENTS.md`, and checks
   the result. Writes no documents and migrates none.
+- **`compass-migrate`** — brings one document written before Compass into the
+  corpus, changing only its form, as planned in
+  [COMPASS-DRAFT-migration](Plan.Migration.md): proposes its genre, moves it
+  for the user to commit, then adds front-matter with
+  `provenance.migrated-from`, the genre's section shape, records, and pinned
+  code references, checks the result, and reports, handing content changes to
+  `compass-review` and an ordinary edit. Never commits.
 - **`compass-lookup`** — read-only retrieval across the federation with
   `compass show`, `outline`, `refs`, and `index --stdout`: resolve an `id` or
   section anchor, a `D`/`O`/M record, relationship queries
   (`relates-to`/`supersedes`/`cites` and inbound references), and namespace
   listings (§9, §10, §13).
 
-All four find the `compass` executable, check which commands it has, and
+All five find the `compass` executable, check which commands it has, and
 interpret its exit codes as `skills/reference/toolchain.md` describes, and fall
 back to working from the files, saying so, when it is absent.
 - **`compass-derive`** — deferred (COMPASS-D3). Wraps the derivation pipeline (§16) with
@@ -294,7 +301,9 @@ Table: Prior systems and what this plan draws from each.
 7. **Adoption skill (done, 2026-10-13).** `compass-adopt`
    (COMPASS-DRAFT-authoring-assistance-D1); the README describes it after the
    build instructions. A migration skill for existing documents is planned
-   separately.
+   separately, in [COMPASS-DRAFT-migration](Plan.Migration.md), whose
+   roadmap builds `compass-migrate` (drafted 2026-11-18) and tries it on
+   scratch clones before acceptance.
 8. **Cross-harness adapters (future).** Re-envelope the neutral core for Claude
    Code, Cursor/Copilot, and MCP (§23 S9).
 

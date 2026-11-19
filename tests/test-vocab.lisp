@@ -41,6 +41,16 @@
   (is (eq :pending (field-spec-standing (find-field-spec "read-if"))))
   (is (eq :memo (register-kind-keyword (find-register-kind #\M)))))
 
+(test provenance-keys
+  "`assistant` and `session` are accepted; `migrated-from` is pending, and names
+the decision that introduces it (COMPASS-DRAFT-migration-D3)."
+  (is (eq :accepted (term-standing (find-provenance-key "assistant"))))
+  (is (eq :accepted (term-standing (find-provenance-key "session"))))
+  (is (eq :pending (term-standing (find-provenance-key "migrated-from"))))
+  (is (equal "COMPASS-DRAFT-migration-D3" (term-amendment (find-provenance-key "migrated-from"))))
+  (is (null (find-provenance-key "model")))
+  (is (null (find-provenance-key nil))))
+
 (test language-tags
   (dolist (tag '("en" "no" "pt-BR" "zh-Hant-TW" "sr-Latn" "es-419" "x-private"
                  "de-CH-1901"))
