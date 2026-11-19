@@ -125,3 +125,7 @@
 (:id "COMPASS-O44" :kind :open-question :draft "COMPASS-DRAFT-critique-O4" :host "COMPASS-0014" :date "2026-10-13" :by "Andrew Sengul")
 (:id "COMPASS-O45" :kind :open-question :draft "COMPASS-DRAFT-critique-O5" :host "COMPASS-0014" :date "2026-10-13" :by "Andrew Sengul")
 (:id "COMPASS-O46" :kind :open-question :draft "COMPASS-DRAFT-critique-O6" :host "COMPASS-0014" :date "2026-10-13" :by "Andrew Sengul")
+(:id "COMPASS-0015" :kind :document :draft "COMPASS-DRAFT-migration-log" :path "doc/Log.Migration.md" :date "2026-11-19" :by "Andrew Sengul")
+(:id "COMPASS-D65" :kind :decision :draft "COMPASS-DRAFT-migration-log-D1" :host "COMPASS-0015" :date "2026-11-19" :by "Andrew Sengul")
+(:id "COMPASS-D66" :kind :decision :draft "COMPASS-DRAFT-migration-log-D2" :host "COMPASS-0015" :date "2026-11-19" :by "Andrew Sengul")
+(:id "COMPASS-D67" :kind :decision :draft "COMPASS-DRAFT-migration-log-D3" :host "COMPASS-0015" :date "2026-11-19" :by "Andrew Sengul")

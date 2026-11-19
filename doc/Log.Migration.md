@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-migration-log
+id:            COMPASS-0015
 title:         Compass Migration Skill Development Log
 genre:         Log
 scope:         component
@@ -24,9 +24,9 @@ relates-to:
   - LEXIS-0001
   - LEXIS-DRAFT-passthrough
 decisions:
-  - COMPASS-DRAFT-migration-log-D1
-  - COMPASS-DRAFT-migration-log-D2
-  - COMPASS-DRAFT-migration-log-D3
+  - COMPASS-D65
+  - COMPASS-D66
+  - COMPASS-D67
 ---
 
 # Compass Migration Skill: Development Log
@@ -56,7 +56,7 @@ the plan had not yet used.
 These are the choices made while building; the skill's behaviour is decided in
 COMPASS-DRAFT-migration.
 
-### COMPASS-DRAFT-migration-log-D1 — `migrated-from` is checked by a rule of its own
+### COMPASS-D65 — `migrated-from` is checked by a rule of its own
 
 **Status:** Proposed
 **Context:** A `migrated-from` value is a path at a revision, as a pinned code
@@ -80,7 +80,7 @@ ref/code-exists` would also drop the pin check); check only the form (rejected:
 the Lexis history rewrite changed every hash, and only a check against Git finds
 a pin left stale).
 
-### COMPASS-DRAFT-migration-log-D2 — The revision is a commit's hash, never a branch or tag
+### COMPASS-D66 — The revision is a commit's hash, never a branch or tag
 
 **Status:** Proposed
 **Context:** A code reference may be pinned to `HEAD` or a tag, which move, or
@@ -94,7 +94,7 @@ on it.
 would pin nothing); accept tags (rejected: a tag can be moved or deleted, and
 COMPASS-DRAFT-migration-D3 pins the last commit that changed the original).
 
-### COMPASS-DRAFT-migration-log-D3 — The pending check for `provenance` keys keeps a test after both keys are accepted
+### COMPASS-D67 — The pending check for `provenance` keys keeps a test after both keys are accepted
 
 **Status:** Proposed
 **Context:** `migrated-from` was first pending, naming
@@ -139,9 +139,9 @@ Before any code, the plan was amended from the two migrations:
   hard-coded pair `assistant` and `session` that
   `src/model/fields.lisp:convert-field@6a7c860` had checked against.
   `migrated-from` entered pending.
-- **The form,** under `fm/types` (COMPASS-DRAFT-migration-log-D2), and the
+- **The form,** under `fm/types` (COMPASS-D66), and the
   pending warning, under `vocab/pending`.
-- **The pin,** under the new rule (COMPASS-DRAFT-migration-log-D1), with
+- **The pin,** under the new rule (COMPASS-D65), with
   `src/corpus/code.lisp:document-migrated-from@6a7c860` reading the value.
 - **Tests** of the parser, the types, the pending warning, a migrated original
   that resolves, one that does not in each of three ways, a shallow clone, and a
