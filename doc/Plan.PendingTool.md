@@ -86,21 +86,37 @@ COMPASS-DRAFT-toolchain-D30 is built; the command's behaviour is decided there.
 **Status:** Proposed
 **Context:** `plan-assign` (`src/corpus/allocate.lisp:plan-assign@2e839c9`)
 decides whether a document may be numbered inside one function, refusing at
-the first failure: the document's identifier and namespace, its status, the
-ledger's problems and duplicate numbers, identifiers already assigned, the
-absence of anything provisional, and short references to the records it would
-number. `pending` must reach the same verdict for every document, and must not
-drift from `assign` when a check is added.
+the first failure: a manifest without `:namespaces`, the document's identifier
+and namespace, its status, the ledger's problems and duplicate numbers, a Git
+without `user.name`, identifiers already assigned, the absence of anything
+provisional, and short references to the records it would number. `pending`
+must reach the same verdict for every document, and must not drift from
+`assign` when a check is added.
 **Decision:** Split those checks out of `plan-assign` into two functions in
-the same file: one returning the corpus-wide blockers (the ledger's problems
-and duplicates), and one returning a document's blockers, each blocker a
-structure with a kind and the message `assign` prints today. `plan-assign`
-refuses with the first blocker, as now, so its messages and tests are
-unchanged; `pending` reports all of them. A document's status not being
-accepted is one blocker kind. A document whose status `assign` does not
-accept is waiting, whatever else blocks it, and its other blockers are shown
-as information; so is a document whose only provisional records are `Draft`
-memos. Only a document whose status `assign` accepts is ever blocked.
+the same file: one returning the corpus-wide blockers (a manifest without
+`:namespaces`, the ledger's problems and duplicates, and a Git without
+`user.name`), and one returning a document's blockers, each blocker a structure
+with a kind and the message `assign` prints today. `plan-assign` refuses with
+the first blocker, in the order it refuses now, so its messages and tests are
+unchanged; `pending` reports all of them. The checks for identifiers already
+assigned and for short references now run inside the loop that numbers the
+records, after the base revision's ledger is read; the document's blocker
+function makes them from the provisional identifiers alone, numbering nothing.
+`--force` lets `assign` pass two blockers, a status not accepted and short
+references; `pending` has no such option and reports both whatever `--force`
+would do. A document's status not being accepted is one blocker kind. A
+document whose status `assign` does not accept is waiting, whatever else blocks
+it, and its other blockers are shown as information; so is a document whose
+only provisional records are `Draft` memos. Only a document whose status
+`assign` accepts is ever blocked.
+
+The corpus-wide blockers each name their remedy. A manifest without
+`:namespaces` gives `pending` no namespace to list: it says, in one line, to add
+`:namespaces` to `compass.sexp`, and lists only the files not yet migrated
+(COMPASS-DRAFT-pending-tool-D5). A Git without `user.name` blocks every
+assignment, since the ledger records who allocated each number: it is printed
+once, saying to set `git config user.name`, which the repository's `.mailmap`
+maps to the name the ledger records.
 **Alternatives:** Call `plan-assign` for each document and catch the refusal
 (rejected: it consults the base revision's ledger through Git for every
 document, reports only the first reason, and plans rewrites it then discards);
@@ -217,12 +233,14 @@ Table: The groups of `compass pending`, and what places a document in each.
 |---|---|---|
 | ready | `assign` would number it now | Records whose own status is not accepted, flagged |
 | blocked | Its status allows `assign`, but a blocker remains | Each blocker's message, as `assign` would give it |
-| waiting | Its status is not one `assign` accepts, whatever else blocks it, or its only provisional records are `Draft` memos | Its status, and any other blockers as information |
+| waiting | Its status is not one `assign` accepts, whatever else blocks it, or its only provisional records are `Draft` memos | The reason it waits, and any other blockers as information |
 | unmarked | A file the loader skips for having no front-matter | Its path |
 
-A corpus-wide blocker, such as a ledger with errors, is printed once before the
-groups, and every document whose status allows `assign` is then counted as
-blocked by it.
+A corpus-wide blocker, such as a ledger with errors or a Git without
+`user.name`, is printed once before the groups, with its remedy, and every
+document whose status allows `assign` is then counted as blocked by it. A
+manifest without `:namespaces` leaves only the fourth group
+(COMPASS-DRAFT-pending-tool-D1).
 
 ### Text output
 
@@ -240,6 +258,10 @@ Blocked (1):
 Waiting for acceptance (6):
   COMPASS-DRAFT-sample  doc/Plan.Sample.md  Draft
     the document, 4 decisions, 2 open questions
+    waits for its status: Draft is not one assign accepts
+  COMPASS-0099  doc/Memo.Example.md  Current
+    2 memos
+    waits for its memos: both are Draft, which assign skips
   ...
 Not yet migrated (2):
   doc/Design.md
@@ -249,7 +271,9 @@ Not yet migrated (2):
 2 files are not yet migrated.
 ```
 
-The identifiers and paths above are illustrative, apart from COMPASS-0003. With
+The identifiers and paths above are illustrative, apart from COMPASS-0003.
+Each waiting document says why it waits: its status, or that its only
+provisional records are `Draft` memos. With
 `--ready`, only the first group and the summary line are printed. With nothing
 pending, a single line says so.
 
@@ -257,9 +281,9 @@ pending, a single line says so.
 
 An object with the tool's name and version, the corpus root, the namespaces
 listed, any corpus-wide blockers, a `documents` array, and an `unmarked` array
-of paths. Each entry has the
-identifier, path, namespace, status, group, the counts of provisional records
-by kind, the provisional records with their own statuses, and the blockers.
+of paths. Each entry has the identifier, path, namespace, status, group, the
+counts of provisional records by kind, the provisional records with their own
+statuses, the blockers, and, for a waiting document, the reason it waits.
 `--ready` filters the `documents` array the same way and leaves `unmarked`
 empty.
 
@@ -337,11 +361,14 @@ errors.
    COMPASS-DRAFT-toolchain-D30 in COMPASS-0004.
 2. **Acceptance.** The steward accepts, amends, or rejects
    COMPASS-DRAFT-toolchain-D30 and COMPASS-DRAFT-pending-tool-D1 to
-   COMPASS-DRAFT-pending-tool-D4.
+   COMPASS-DRAFT-pending-tool-D5.
 3. **Shared blockers (COMPASS-DRAFT-pending-tool-D1).** Factor the checks out
-   of `plan-assign`; its refusals and the allocation and concurrency tests stay
-   unchanged. New tests cover each blocker kind and that all of a document's
-   blockers are returned.
+   of `plan-assign`; its refusals, in their order, and the allocation and
+   concurrency tests stay unchanged. The checks for identifiers already
+   assigned and for short references move out of the numbering loop. New tests
+   cover each blocker kind, including a manifest without `:namespaces` and a
+   Git without `user.name`, and that all of a document's blockers are
+   returned, including the two `--force` passes.
 4. **Short-reference cache (COMPASS-DRAFT-pending-tool-D2).** Tests show that
    the rule's findings are unchanged and that a second request does not scan
    again; the time of `check` on this repository is recorded before and after.
@@ -349,21 +376,25 @@ errors.
    repositories: a ready document; a numbered document with one provisional
    record; a document blocked by short references; a draft; a host whose only
    provisional records are `Draft` memos; a flagged `Proposed` record; a
-   ledger with errors; a document in a namespace the repository does not own,
-   which is not listed; and files without front-matter, listed as unmarked
+   ledger with errors; a Git without `user.name`; a manifest without
+   `:namespaces`, which lists only the unmarked files; a document in a
+   namespace the repository does not own, which is not listed; and files
+   without front-matter, listed as unmarked
    without `--namespace` and not with it (COMPASS-DRAFT-pending-tool-D5).
 6. **The command.** `compass pending` with `--namespace`, `--ready`,
    `--format`, and `--root`; tests through `run-cli` of the text and JSON
    output and of the exit statuses, including a namespace not owned.
+   `skills/reference/toolchain.md` documents `pending` in the same stage, since
+   the skills tests require it of every command.
 7. **The note (COMPASS-DRAFT-pending-tool-D3).** Tests that it appears only
    when a checked document is ready, counts only checked paths, appears in the
    JSON report's notes, and leaves the exit status alone under `--strict`.
-8. **Skills and `/orient` (COMPASS-DRAFT-pending-tool-D4).** `toolchain.md`
-   documents `pending`, as the skills tests require of every command, and,
-   with Step 1 of `compass-review`, the two kinds of note
-   (COMPASS-DRAFT-pending-tool-D3);
-   `/orient` step 3 runs it;
-   `compass-author`'s report and `compass-review`'s acceptance advice may
-   point to it. The skills tests pass.
+   `toolchain.md` and Step 1 of `compass-review` describe the two kinds of
+   note in the same stage.
+8. **Skills and `/orient` (COMPASS-DRAFT-pending-tool-D4).** `/orient` step 3
+   runs `pending`. Where `compass-author`'s report hands a document over for
+   acceptance, and where `compass-review` recommends Accept, they point to
+   `compass pending --ready` as the step after acceptance. The skills tests
+   pass.
 9. **Release.** With v0.2.1's binaries; a Log of the work, written after its
    commit; the README's description of the toolchain names the command.
