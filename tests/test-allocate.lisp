@@ -1,4 +1,4 @@
-;;;; test-allocate.lisp — Tests for allocating numbers: seeding the ledger, assign, next --in, rewriting, and short references
+;;;; test-allocate.lisp — Tests for allocating numbers: seeding the ledger, assign and what blocks it, next --in, rewriting, and short references
 
 (in-package #:compass.tests)
 
@@ -304,6 +304,118 @@ three records, and a plan that refers to them, followed by GAMMA-LINES."
       (is (search "needs a Git repository" err))))
   (with-git-repository (root (rest (beta-files)))
     (is (search "does not declare the namespaces"
+                (refusal (lambda () (plan-assign (load-test-corpus root) "doc/Plan.B.md")))))))
+
+;;; What blocks an assignment, shared with pending (COMPASS-D79)
+
+(defun blocker-kinds (blockers)
+  (mapcar #'blocker-kind blockers))
+
+(defun beta-blockers (root)
+  "The corpus-wide and document blockers of doc/Plan.B.md in ROOT, appended."
+  (let ((corpus (load-test-corpus root)))
+    (append (corpus-blockers corpus)
+            (document-blockers corpus (document-at-path corpus "doc/Plan.B.md")))))
+
+(test blockers-of-a-ready-document
+  "A document assign would number has no blockers, and the identifiers it would
+number are the document's own and its records', in order."
+  (with-git-repository (root (beta-files))
+    (let ((corpus (load-test-corpus root)))
+      (is (null (beta-blockers root)))
+      (is (equal '(("TEST-DRAFT-beta" :document) ("TEST-DRAFT-beta-D1" :decision)
+                   ("TEST-DRAFT-beta-D2" :decision) ("TEST-DRAFT-beta-O1" :open-question))
+                 (identifiers-to-number (document-at-path corpus "doc/Plan.B.md")))))))
+
+(test document-blockers-are-all-returned
+  "A document's blockers are all returned, in assign's order, each with the
+message assign refuses with; --force passes only the status and short
+references."
+  (with-git-repository (root (beta-files :status "Proposed"
+                                         :gamma-lines '("" "TEST-DRAFT-beta-D1 and D2 settle it.")))
+    (let ((blockers (beta-blockers root)))
+      (is (equal '(:status :short-references) (blocker-kinds blockers)))
+      (is (every #'blocker-forcible blockers))
+      (is (search "has the status Proposed" (blocker-message (first blockers))))
+      (is (search "1 short reference would change meaning" (blocker-message (second blockers))))
+      (is (= 1 (length (blocker-data (second blockers)))) "the short references themselves")
+      (is (string= (blocker-message (first blockers))
+                   (refusal (lambda () (plan-assign (load-test-corpus root) "doc/Plan.B.md"))))
+          "assign refuses with the first blocker"))))
+
+(test blockers-for-identifiers-already-assigned
+  "An identifier the ledger already assigned blocks the document, and --force
+does not pass it."
+  (with-git-repository (root (list* (list "doc/REGISTRY.sexp"
+                                          (ledger-file
+                                           (entry-line "TEST-0001" :document :path "doc/Plan.A.md")
+                                           (entry-line "TEST-D1" :decision :host "TEST-0001")
+                                           (entry-line "TEST-D9" :decision :draft "TEST-DRAFT-beta-D2"
+                                                                           :host "TEST-0001")))
+                                    (remove "doc/REGISTRY.sexp" (beta-files)
+                                            :key #'first :test #'string=)))
+    (let ((blockers (beta-blockers root)))
+      (is (equal '(:already-assigned) (blocker-kinds blockers)))
+      (is (not (blocker-forcible (first blockers))))
+      (is (search "TEST-DRAFT-beta-D2 was already assigned TEST-D9 (doc/REGISTRY.sexp line"
+                  (refusal (lambda () (plan-assign (load-test-corpus root) "doc/Plan.B.md"
+                                                   :force t))))))))
+
+(test blockers-when-nothing-is-left-to-number
+  "A numbered document with no provisional record, or only Draft memos, has
+nothing to number."
+  (with-git-repository (root (list (list "compass.sexp" *ledger-manifest*)
+                                   (list "doc/REGISTRY.sexp"
+                                         (ledger-file (entry-line "TEST-0001" :document
+                                                                  :path "doc/Memo.Notes.md")))
+                                   (list "doc/Memo.Notes.md"
+                                         (doc :id "TEST-0001" :genre "Memo" :status "Current"
+                                              :scope "component"
+                                              :extra '("memos:" "  - TEST-DRAFT-notes-M1")
+                                              :body (lines "# Notes: Memos" "" "## Memos" ""
+                                                           "### TEST-DRAFT-notes-M1 — Unsettled" ""
+                                                           "**Status:** Draft"
+                                                           "**Read-if:** changing the thing"
+                                                           "**Basis:** observed")))))
+    (let* ((corpus (load-test-corpus root))
+           (document (document-at-path corpus "doc/Memo.Notes.md")))
+      (is (null (identifiers-to-number document)))
+      (is (equal '(:nothing-to-number) (blocker-kinds (document-blockers corpus document)))))))
+
+(test corpus-blockers-are-all-returned
+  "Errors and duplicate numbers in the ledger are both returned, before any
+document's blockers; assign still refuses first for a status not accepted."
+  (with-git-repository (root (list* (list "doc/REGISTRY.sexp"
+                                          (ledger-file
+                                           (entry-line "TEST-0001" :document :path "doc/Plan.A.md")
+                                           (entry-line "TEST-D1" :decision :host "TEST-0001")
+                                           (entry-line "TEST-D1" :decision :host "TEST-0001"
+                                                                           :by "Someone else")
+                                           "======="))
+                                    (remove "doc/REGISTRY.sexp" (beta-files :status "Draft")
+                                            :key #'first :test #'string=)))
+    (let ((corpus (load-test-corpus root)))
+      (is (equal '(:ledger-errors :ledger-duplicates) (blocker-kinds (corpus-blockers corpus))))
+      (is (equal '(:status) (blocker-kinds (document-blockers
+                                             corpus (document-at-path corpus "doc/Plan.B.md")))))
+      (is (search "has the status Draft"
+                  (refusal (lambda () (plan-assign corpus "doc/Plan.B.md")))))
+      (is (search "the ledger has 1 error"
+                  (refusal (lambda () (plan-assign corpus "doc/Plan.B.md" :force t))))))))
+
+(test corpus-blockers-without-namespaces-or-a-git-name
+  "A manifest without :namespaces and a Git without user.name each block every
+assignment, and say what to do."
+  (with-git-repository (root (rest (beta-files)))
+    (let ((blockers (corpus-blockers (load-test-corpus root))))
+      (is (equal '(:no-namespaces) (blocker-kinds blockers)))
+      (is (search "(:namespaces)" (blocker-message (first blockers))))))
+  (with-git-repository (root (beta-files))
+    (git-in root "config" "user.name" "")
+    (let ((blockers (corpus-blockers (load-test-corpus root))))
+      (is (equal '(:no-git-name) (blocker-kinds blockers)))
+      (is (search ".mailmap" (blocker-message (first blockers)))))
+    (is (search "Git has no user.name here; set one with git config user.name"
                 (refusal (lambda () (plan-assign (load-test-corpus root) "doc/Plan.B.md")))))))
 
 ;;; next

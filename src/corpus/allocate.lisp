@@ -1,8 +1,8 @@
-;;;; allocate.lisp — Allocating numbers: assign, renumber, seed the ledger, and suggest the next identifier
+;;;; allocate.lisp — Allocating numbers: assign, renumber, seed the ledger, suggest the next identifier, and say what blocks an assignment
 ;;;;
-;;;; Read-if: changing how numbers are chosen, what assign or renumber does, or how the ledger is seeded
+;;;; Read-if: changing how numbers are chosen, what assign or renumber does, what blocks assign, or how the ledger is seeded
 ;;;; See: COMPASS-DRAFT-toolchain-D9, COMPASS-DRAFT-toolchain-D22, COMPASS-DRAFT-toolchain-D23
-;;;; See: COMPASS-DRAFT-toolchain-D24, COMPASS-DRAFT-toolchain-D25
+;;;; See: COMPASS-DRAFT-toolchain-D24, COMPASS-DRAFT-toolchain-D25, COMPASS-D79
 ;;;; Invariant: planning writes nothing; execute-allocation writes the plan, and nothing else
 ;;;; Invariant: a number already in the ledger, here or at the base revision, is never chosen again
 ;;;; Concerns: persistent-format
@@ -91,20 +91,59 @@ preview: another branch may take the number before this one merges."
   (values (funcall (make-counter corpus namespace (base-ledger-entries corpus base)) kind)
           (and (corpus-ledger corpus) t)))
 
-;;; Who and where
+;;; What blocks an assignment (COMPASS-D79)
 
-(defun allocator (corpus)
-  (let ((name (git-identity (corpus-root corpus))))
-    (unless name
-      (refuse "Git has no user.name here; set one with git config user.name, so the ~
-               ledger can record who allocated each number"))
-    name))
+(defstruct (blocker)
+  kind                                  ; one of +blocker-kinds+
+  message                               ; as assign refuses with it
+  forcible                              ; true if assign --force passes it
+  data)                                 ; the short references, for :short-references
 
-(defun require-ledger-namespaces (corpus)
+(defparameter +blocker-kinds+
+  '(:no-namespaces :status :ledger-errors :ledger-duplicates :no-git-name
+    :already-assigned :nothing-to-number :short-references)
+  "The kinds of blocker, in the order assign refuses for them.")
+
+(defun new-blocker (kind control &rest arguments)
+  (make-blocker :kind kind :message (apply #'format nil control arguments)
+                :forcible (and (member kind '(:status :short-references)) t)))
+
+(defun sort-blockers (blockers)
+  "BLOCKERS in the order assign refuses for them; those of one kind keep theirs."
+  (stable-sort (copy-list blockers) #'<
+               :key (lambda (b) (position (blocker-kind b) +blocker-kinds+))))
+
+(defun refuse-for-blockers (blockers &key force)
+  "Refuse with the first of BLOCKERS, in assign's order, that FORCE does not pass."
+  (let ((first (find-if (lambda (b) (not (and force (blocker-forcible b))))
+                        (sort-blockers blockers))))
+    (when first
+      (refuse "~a" (blocker-message first)))))
+
+(defun corpus-git-name (corpus)
+  "The name the ledger records for the person using Git at CORPUS's root, or NIL."
+  (corpus-cached corpus :git-name (lambda () (git-identity (corpus-root corpus)))))
+
+(defun namespaces-blocker (corpus)
   (unless (and (manifest-path (corpus-manifest corpus))
                (manifest-namespaces (corpus-manifest corpus)))
-    (refuse "this repository's compass.sexp does not declare the namespaces it owns ~
-             (:namespaces), so no number can be allocated here")))
+    (new-blocker :no-namespaces
+             "this repository's compass.sexp does not declare the namespaces it owns ~
+              (:namespaces), so no number can be allocated here")))
+
+(defun git-name-blocker (corpus)
+  (unless (corpus-git-name corpus)
+    (new-blocker :no-git-name
+             "Git has no user.name here; set one with git config user.name, so the ~
+              ledger can record who allocated each number (the repository's .mailmap, ~
+              if it has one, maps it to the name recorded)")))
+
+(defun allocator (corpus)
+  (refuse-for-blockers (list (git-name-blocker corpus)))
+  (corpus-git-name corpus))
+
+(defun require-ledger-namespaces (corpus)
+  (refuse-for-blockers (list (namespaces-blocker corpus))))
 
 (defun ledger-problems (corpus)
   "The errors in the ledger's own lines and duplicates."
@@ -119,6 +158,78 @@ preview: another branch may take the number before this one merges."
           (pushnew (ledger-entry-id entry) duplicates :test #'string=)
           (setf (gethash (ledger-entry-id entry) seen) t)))
     duplicates))
+
+(defun corpus-blockers (corpus)
+  "What blocks every assignment in CORPUS, as BLOCKERs in assign's order: a
+manifest without :namespaces, errors and duplicate numbers in the ledger, and a
+Git without user.name."
+  (let ((problems (ledger-problems corpus))
+        (duplicates (duplicate-ledger-ids (corpus-ledger corpus))))
+    (remove nil
+            (list (namespaces-blocker corpus)
+                  (when problems
+                    (new-blocker :ledger-errors
+                             "the ledger has ~a error~:p; fix ~:*~[~;it~:;them~] first ~
+                              (compass check ~a)"
+                             (length problems) (corpus-ledger-path corpus)))
+                  (when duplicates
+                    (new-blocker :ledger-duplicates
+                             "the ledger allocates ~{~a~^, ~} more than once; run compass ~
+                              renumber"
+                             duplicates))
+                  (git-name-blocker corpus)))))
+
+(defun identifiers-to-number (document)
+  "The provisional identifiers assign would number in DOCUMENT, in order, as
+(ID KIND): its own, then its records', except Draft memos (§13)."
+  (let ((identifier (document-identifier document)))
+    (append
+     (when (and identifier (identifier-provisional-p identifier))
+       (list (list (document-id document) :document)))
+     (loop for record in (document-records document)
+           when (and (identifier-provisional-p (record-identifier record))
+                     (not (and (eq (record-kind record) :memo)
+                               (equal (record-field record "Status") "Draft"))))
+             collect (list (record-id record) (record-kind record))))))
+
+(defun document-blockers (corpus document)
+  "What blocks assigning numbers to DOCUMENT, which has a valid identifier in a
+namespace CORPUS owns, as BLOCKERs in assign's order: a status assign does not
+accept, identifiers the ledger has already assigned, nothing provisional to
+number, and short references to the records it would number. None numbers
+anything."
+  (let* ((id (document-id document))
+         (status (document-status document))
+         (ledger (corpus-ledger corpus))
+         (olds (mapcar #'first (identifiers-to-number document)))
+         (blockers '()))
+    (unless (member status +accepted-statuses+ :test #'equal)
+      (push (new-blocker :status "~a has the status ~a; a document is assigned a number once ~
+                              it is ~{~a~^, ~} (a person sets that status), or with --force"
+                     id (or status "(none)") +accepted-statuses+)
+            blockers))
+    (dolist (old olds)
+      (let ((assigned (ledger-alias-entry ledger old)))
+        (when assigned
+          (push (new-blocker :already-assigned "~a was already assigned ~a (~a line ~a)" old
+                         (ledger-entry-id assigned) (ledger-path ledger)
+                         (ledger-entry-line assigned))
+                blockers))))
+    (if (null olds)
+        (push (new-blocker :nothing-to-number
+                       "~a already has a number and defines no provisional record to number"
+                       id)
+              blockers)
+        (let ((shorts (short-references-to corpus olds)))
+          (when shorts
+            (let ((b (new-blocker :short-references
+                              "~d short reference~:p would change meaning once these records ~
+                               are numbered; write ~:*~[~;it~:;them~] as full identifiers ~
+                               first (or assign with --force):~%~a"
+                              (length shorts) (format-short-references shorts))))
+              (setf (blocker-data b) shorts)
+              (push b blockers)))))
+    (nreverse blockers)))
 
 ;;; Other files that name the old identifiers
 
@@ -163,98 +274,65 @@ preview: another branch may take the number before this one merges."
   "Plan assigning numbers to the document at the repository-relative PATH and to
 its provisional records (D24). Return an ALLOCATION; signal ALLOCATION-REFUSED
 when assigning is not allowed."
-  (require-ledger-namespaces corpus)
-  (let* ((document (document-at-path corpus path))
-         (ledger (corpus-ledger corpus)))
-    (unless (and document (member document (corpus-documents corpus)))
-      (refuse "~a is not a document of this corpus" path))
-    (unless (document-front-matter document)
-      (refuse "~a has front-matter the toolchain cannot read; run compass check" path))
-    (let* ((id (document-id document))
-           (identifier (parse-identifier id)))
-      (unless (and identifier (identifier-document-p identifier))
-        (refuse "~a declares no valid document identifier" path))
-      (let ((namespace (identifier-namespace identifier)))
-        (unless (corpus-owned-namespace-p corpus namespace)
-          (refuse "~a is in the ~a namespace, which compass.sexp does not list under ~
-                   :namespaces" id namespace))
-        (let ((status (document-status document)))
-          (unless (or force (member status +accepted-statuses+ :test #'string=))
-            (refuse "~a has the status ~a; a document is assigned a number once it is ~
-                     ~{~a~^, ~} (a person sets that status), or with --force"
-                    id (or status "(none)") +accepted-statuses+)))
-        (let ((problems (ledger-problems corpus))
-              (duplicates (duplicate-ledger-ids ledger)))
-          (when problems
-            (refuse "the ledger has ~a error~:p; fix ~:*~[~;it~:;them~] first (compass check ~
-                     ~a)" (length problems) (corpus-ledger-path corpus)))
-          (when duplicates
-            (refuse "the ledger allocates ~{~a~^, ~} more than once; run compass renumber"
-                    duplicates)))
-        (let* ((by (allocator corpus))
-               (base (base-or-default corpus base))
-               (base-entries (base-ledger-entries corpus base))
-               (next (make-counter corpus namespace base-entries))
-               (mapping '()) (entries '())
-               (new-id (if (identifier-provisional-p identifier)
-                           (funcall next :document)
-                           id)))
-          (when (identifier-provisional-p identifier)
-            (let ((assigned (ledger-alias-entry ledger id)))
-              (when assigned
-                (refuse "~a was already assigned ~a (~a line ~a)" id
-                        (ledger-entry-id assigned) (ledger-path ledger)
-                        (ledger-entry-line assigned))))
-            (push (list id new-id :document) mapping)
-            (push (make-ledger-entry :id new-id :kind :document :draft id :path path
-                                     :date today :by by)
-                  entries))
-          (dolist (record (document-records document))
-            (let ((rid (record-identifier record)))
-              (when (and (identifier-provisional-p rid)
-                         (not (and (eq (record-kind record) :memo)
-                                   (equal (record-field record "Status") "Draft"))))
-                (let ((assigned (ledger-alias-entry ledger (record-id record))))
-                  (when assigned
-                    (refuse "~a was already assigned ~a (~a line ~a)" (record-id record)
-                            (ledger-entry-id assigned) (ledger-path ledger)
-                            (ledger-entry-line assigned))))
-                (let ((new (funcall next (record-kind record))))
-                  (push (list (record-id record) new (record-kind record)) mapping)
-                  (push (make-ledger-entry :id new :kind (record-kind record)
-                                           :draft (record-id record) :host new-id
-                                           :date today :by by)
-                        entries)))))
-          (setf mapping (nreverse mapping) entries (nreverse entries))
-          (unless mapping
-            (refuse "~a already has a number and defines no provisional record to number"
-                    id))
-          (let ((shorts (short-references-to corpus (mapcar #'first mapping))))
-            (when (and shorts (not force))
-              (refuse "~d short reference~:p would change meaning once these records are ~
-                       numbered; write ~:*~[~;it~:;them~] as full identifiers first (or ~
-                       assign with --force):~%~a"
-                      (length shorts) (format-short-references shorts)))
-          (make-allocation
-           :command :assign :document document :mapping mapping :entries entries
-           :ledger-text (ledger-text-with-entries (and ledger (ledger-text ledger)) entries
-                                                  :namespaces (manifest-namespaces
-                                                               (corpus-manifest corpus)))
-           :rewrites (plan-rewrites
-                      corpus (mapcar (lambda (m) (cons (first m) (second m))) mapping))
-           :stale (stale-mentions corpus (mapcar #'first mapping))
-           :warnings (append
-                      (short-reference-warnings shorts)
-                      (unless base
-                        (list (format nil "no base revision was found (origin/HEAD, origin/main, or ~
-                               origin/master), so only this working tree's ledger was ~
-                               consulted; pass --base to name the branch you will merge ~
-                               into")))
-                      (unless (member (document-status document) +accepted-statuses+
-                                      :test #'string=)
-                        (list (format nil "~a has the status ~a; assigned with --force"
-                                      id (document-status document)))))
-           :base base)))))))
+  (let ((corpus-wide (corpus-blockers corpus)))
+    (refuse-for-blockers (remove :no-namespaces corpus-wide :key #'blocker-kind
+                                                            :test-not #'eq))
+    (let ((document (document-at-path corpus path))
+          (ledger (corpus-ledger corpus)))
+      (unless (and document (member document (corpus-documents corpus)))
+        (refuse "~a is not a document of this corpus" path))
+      (unless (document-front-matter document)
+        (refuse "~a has front-matter the toolchain cannot read; run compass check" path))
+      (let* ((id (document-id document))
+             (identifier (parse-identifier id)))
+        (unless (and identifier (identifier-document-p identifier))
+          (refuse "~a declares no valid document identifier" path))
+        (let ((namespace (identifier-namespace identifier)))
+          (unless (corpus-owned-namespace-p corpus namespace)
+            (refuse "~a is in the ~a namespace, which compass.sexp does not list under ~
+                     :namespaces" id namespace))
+          (let* ((blockers (append corpus-wide (document-blockers corpus document)))
+                 (by (progn (refuse-for-blockers blockers :force force)
+                            (corpus-git-name corpus)))
+                 (base (base-or-default corpus base))
+                 (base-entries (base-ledger-entries corpus base))
+                 (next (make-counter corpus namespace base-entries))
+                 (new-id (if (identifier-provisional-p identifier)
+                             (funcall next :document)
+                             id))
+                 (mapping '()) (entries '())
+                 (shorts (let ((b (find :short-references blockers :key #'blocker-kind)))
+                           (and b (blocker-data b)))))
+            (loop for (old kind) in (identifiers-to-number document)
+                  for new = (if (eq kind :document) new-id (funcall next kind))
+                  do (push (list old new kind) mapping)
+                     (push (if (eq kind :document)
+                               (make-ledger-entry :id new :kind kind :draft old :path path
+                                                  :date today :by by)
+                               (make-ledger-entry :id new :kind kind :draft old :host new-id
+                                                  :date today :by by))
+                           entries))
+            (setf mapping (nreverse mapping) entries (nreverse entries))
+            (make-allocation
+             :command :assign :document document :mapping mapping :entries entries
+             :ledger-text (ledger-text-with-entries (and ledger (ledger-text ledger)) entries
+                                                    :namespaces (manifest-namespaces
+                                                                 (corpus-manifest corpus)))
+             :rewrites (plan-rewrites
+                        corpus (mapcar (lambda (m) (cons (first m) (second m))) mapping))
+             :stale (stale-mentions corpus (mapcar #'first mapping))
+             :warnings (append
+                        (short-reference-warnings shorts)
+                        (unless base
+                          (list (format nil "no base revision was found (origin/HEAD, origin/main, or ~
+                                 origin/master), so only this working tree's ledger was ~
+                                 consulted; pass --base to name the branch you will merge ~
+                                 into")))
+                        (unless (member (document-status document) +accepted-statuses+
+                                        :test #'string=)
+                          (list (format nil "~a has the status ~a; assigned with --force"
+                                        id (document-status document)))))
+             :base base)))))))
 
 ;;; seed
 

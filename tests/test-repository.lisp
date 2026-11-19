@@ -34,7 +34,7 @@ the YAML subset (COMPASS-DRAFT-toolchain-D18)."
 (defparameter *format-control-positions*
   '(("FORMAT" 2) ("ERROR" 1) ("WARN" 1) ("CERROR" 2)
     ("EMIT" 3) ("EMIT-SEVERITY" 4) ("REFUSE" 1) ("NOTE" 2) ("USAGE-ERROR" 1)
-    ("YAML-FAIL" 3) ("FINDING" 3) ("FINDING-AT" 3) ("WARN-ABOUT" 2)
+    ("YAML-FAIL" 3) ("FINDING" 3) ("FINDING-AT" 3) ("WARN-ABOUT" 2) ("NEW-BLOCKER" 2)
     ;; Local functions of the same name in different files.
     ("PROBLEM" 1 2) ("WARNING" 1))
   "Operators whose arguments at the given positions are format controls, which

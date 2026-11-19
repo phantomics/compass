@@ -151,6 +151,8 @@
            #:allocation-warnings #:allocation-base #:allocation-document
            #:allocation-refused #:allocation-refused-message
            #:plan-assign #:plan-renumber #:plan-seed #:execute-allocation
+           #:blocker #:blocker-kind #:blocker-message #:blocker-forcible #:blocker-data
+           #:+blocker-kinds+ #:corpus-blockers #:document-blockers #:identifiers-to-number
            #:strip-conflict-markers
            #:rewrite #:rewrite-path #:rewrite-old-text #:rewrite-new-text
            #:rewrite-changed-lines #:plan-rewrites #:rewrite-line
