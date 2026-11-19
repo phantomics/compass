@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-migration
+id:            COMPASS-0016
 title:         Compass Migration — Bringing Existing Documents into a Compass Corpus
 genre:         Plan
 scope:         program
@@ -44,24 +44,24 @@ cites:
     locator:   "the --follow option and rename detection by similarity"
     external:  true
 decisions:
-  - COMPASS-DRAFT-migration-D1
-  - COMPASS-DRAFT-migration-D2
-  - COMPASS-DRAFT-migration-D3
-  - COMPASS-DRAFT-migration-D4
-  - COMPASS-DRAFT-migration-D5
-  - COMPASS-DRAFT-migration-D6
-  - COMPASS-DRAFT-migration-D7
-  - COMPASS-DRAFT-migration-D8
-  - COMPASS-DRAFT-migration-D9
-  - COMPASS-DRAFT-migration-D10
-  - COMPASS-DRAFT-migration-D11
+  - COMPASS-D68
+  - COMPASS-D69
+  - COMPASS-D70
+  - COMPASS-D71
+  - COMPASS-D72
+  - COMPASS-D73
+  - COMPASS-D74
+  - COMPASS-D75
+  - COMPASS-D76
+  - COMPASS-D77
+  - COMPASS-D78
 open-questions:
-  - COMPASS-DRAFT-migration-O1
-  - COMPASS-DRAFT-migration-O2
-  - COMPASS-DRAFT-migration-O3
-  - COMPASS-DRAFT-migration-O4
-  - COMPASS-DRAFT-migration-O5
-  - COMPASS-DRAFT-migration-O6
+  - COMPASS-O47
+  - COMPASS-O48
+  - COMPASS-O49
+  - COMPASS-O50
+  - COMPASS-O51
+  - COMPASS-O52
 ---
 
 # Compass Migration: Development Plan
@@ -128,18 +128,18 @@ All eleven decisions are proposals for the steward. Since the first draft of
 2026-11-17 they have changed three times, each from the
 [Case studies](#case-studies):
 
-- **From the two migrations (2026-11-18):** COMPASS-DRAFT-migration-D2,
-  COMPASS-DRAFT-migration-D3, COMPASS-DRAFT-migration-D4,
-  COMPASS-DRAFT-migration-D5, COMPASS-DRAFT-migration-D7, and
-  COMPASS-DRAFT-migration-D8 amended; COMPASS-DRAFT-migration-D9 to
-  COMPASS-DRAFT-migration-D11 added.
-- **After the Lexis trial (2026-11-18):** COMPASS-DRAFT-migration-D2 and
-  COMPASS-DRAFT-migration-D5 amended.
-- **After the Classic trial (2026-11-18):** COMPASS-DRAFT-migration-D2,
-  COMPASS-DRAFT-migration-D3, COMPASS-DRAFT-migration-D4,
-  COMPASS-DRAFT-migration-D5, and COMPASS-DRAFT-migration-D8 amended.
+- **From the two migrations (2026-11-18):** COMPASS-D69,
+  COMPASS-D70, COMPASS-D71,
+  COMPASS-D72, COMPASS-D74, and
+  COMPASS-D75 amended; COMPASS-D76 to
+  COMPASS-D78 added.
+- **After the Lexis trial (2026-11-18):** COMPASS-D69 and
+  COMPASS-D72 amended.
+- **After the Classic trial (2026-11-18):** COMPASS-D69,
+  COMPASS-D70, COMPASS-D71,
+  COMPASS-D72, and COMPASS-D75 amended.
 
-### COMPASS-DRAFT-migration-D1 — Migration is a skill, one document at a time
+### COMPASS-D68 — Migration is a skill, one document at a time
 
 **Status:** Proposed
 **Context:** COMPASS-O8 asks whether pre-Compass documents should get a legacy
@@ -165,9 +165,9 @@ accepting them); batches of one component's documents, as Classic migrated
 (rejected by the steward on 2026-11-18: Classic's batches worked, but its
 front-matter commit `56d400a` changed 39 files at once, the review this
 decision exists to avoid). A repository's own migration plan does not override
-this rule (COMPASS-DRAFT-migration-D10).
+this rule (COMPASS-D77).
 
-### COMPASS-DRAFT-migration-D2 — Migration reshapes form only
+### COMPASS-D69 — Migration reshapes form only
 
 **Status:** Proposed
 **Context:** COMPASS-0006 needed Classic's documents in Compass form for its
@@ -179,7 +179,7 @@ decided at the time.
 changes are:
 
 - adding front-matter, including an explicit `created` where the user accepts
-  an earlier date the original gives (COMPASS-DRAFT-migration-O4);
+  an earlier date the original gives (COMPASS-O50);
 - removing lines that state only what the front-matter now holds: a title line
   the new heading replaces, a version line (`schema-version` or
   `api-version`), and a status line, which would otherwise be a second,
@@ -192,7 +192,7 @@ changes are:
   the `genre` field now says what it said: the marker is form, not content;
 - renaming sections to follow the genre's §14 shape, keeping their text, and
   keeping section numbers that are cited elsewhere
-  (COMPASS-DRAFT-migration-D9). Text a renamed heading displaces, such as the
+  (COMPASS-D76). Text a renamed heading displaces, such as the
   expansion of a name, stays as a line under the new heading. A section is
   moved only where the original's order breaks the spine; sections already in
   an order the spine accepts, optional ones included, keep their places. In a
@@ -213,14 +213,14 @@ changes are:
   `Description:` after each diagram. Where the original introduces a table with
   a lead-in such as "Tag mappings:", the lead-in becomes the caption;
 - rewriting links, identifiers, and the original's own numbering as full
-  identifiers (COMPASS-DRAFT-migration-D6);
-- pinning code references (COMPASS-DRAFT-migration-D5);
-- moving and renaming the file (COMPASS-DRAFT-migration-D4).
+  identifiers (COMPASS-D73);
+- pinning code references (COMPASS-D72);
+- moving and renaming the file (COMPASS-D71).
 
 Nothing else changes. Stale facts, gaps, errors, and unclear prose stay as they
 are. The skill reports what it notices of them as notes, for the user to fix in
 a separate, ordinary edit after the reshape is committed, which then carries
-its own provenance (COMPASS-DRAFT-migration-D11).
+its own provenance (COMPASS-D78).
 **Alternatives:** Migrate and update in one pass (rejected: the reader cannot
 tell the original's knowledge from the assistant's, and the review against the
 original becomes a review of new content); allow updates when the user asks,
@@ -238,7 +238,7 @@ chapter was not normative); remove a whole status line that also states a fact
 (rejected after the Classic trial: "No implementation has begun." would be
 lost from the Survey that held it).
 
-### COMPASS-DRAFT-migration-D3 — A migrated document names its original in `provenance`
+### COMPASS-D70 — A migrated document names its original in `provenance`
 
 **Status:** Proposed
 **Context:** §22 requires `provenance:` on any document authored or reviewed
@@ -266,7 +266,7 @@ reviewer exactly what to compare against. It maps to PROV-O's
 content is later edited with an assistant's help, `migrated-from` stays, and
 the edit's history is in Git. Where the original was itself written with an
 assistant, a second key, `original-assistant`, names that assistant
-(COMPASS-DRAFT-migration-O6). §7 defines both keys, since Compass 0.5.0.
+(COMPASS-O52). §7 defines both keys, since Compass 0.5.0.
 
 `session` names the session that wrote the original, when the original was
 written with an assistant and the session is verified: its transcript shows the
@@ -291,7 +291,7 @@ written in Compass form);
 a top-level field (rejected: the fact belongs with the record of the assisted
 process).
 
-### COMPASS-DRAFT-migration-D4 — Move and rename first, in a commit of its own, and keep links to the document current
+### COMPASS-D71 — Move and rename first, in a commit of its own, and keep links to the document current
 
 **Status:** Proposed
 **Context:** Older documents often live outside the document directory, or
@@ -338,7 +338,7 @@ paths (rejected after the Classic trial: `Ref.Model` would keep "See
 `doc/Schema.md`" after the Schema had an identifier, invisible to
 `compass refs`).
 
-### COMPASS-DRAFT-migration-D5 — Code references are pinned to the revision the document describes
+### COMPASS-D72 — Code references are pinned to the revision the document describes
 
 **Status:** Proposed
 **Context:** Older documents cite code as `file:line`, `file`, or a function
@@ -355,7 +355,7 @@ commit before the work began, written as its own abbreviated hash
 (CLASSIC-D96). The work commit is found from the Log's own account and the
 history, and the report gives the evidence. Every other genre's references are
 pinned to the revision named in `migrated-from`, the last commit that changed
-the original before the migration touched it (COMPASS-DRAFT-migration-D3). In
+the original before the migration touched it (COMPASS-D70). In
 the Lexis Log the two were the same commit; in several of Classic's Logs they
 were not.
 
@@ -380,7 +380,7 @@ every genre to `migrated-from` (rejected: a Log edited after its work would
 point at code the work did not touch); leave references unpinned outside `Log`
 and `Plan` (rejected: the revision is known now and lost later).
 
-### COMPASS-DRAFT-migration-D6 — Records take provisional identifiers, keeping the original's numbering
+### COMPASS-D73 — Records take provisional identifiers, keeping the original's numbering
 
 **Status:** Proposed
 **Context:** Older documents number their decisions informally ("Decision 3",
@@ -401,7 +401,7 @@ and anything outside it that cites "Decision 3"); keep canonical-looking
 identifiers that do not collide (rejected: only the ledger allocates numbers,
 §13).
 
-### COMPASS-DRAFT-migration-D7 — The assistant proposes statuses; the steward sets them
+### COMPASS-D74 — The assistant proposes statuses; the steward sets them
 
 **Status:** Proposed
 **Context:** An older document often describes settled work: decisions in
@@ -418,7 +418,7 @@ becomes `Accepted` or `Implemented`. `Accepted` is not a Spec status: the Lexis
 Spec was first set to it and corrected to `Current` (`0efe8a8`). For a
 reference genre, the report also says whether the document matches the code
 as it is now, since `Current` claims that it does; where it does not, the
-proposal is to keep `Draft` until the revision of COMPASS-DRAFT-migration-D11
+proposal is to keep `Draft` until the revision of COMPASS-D78
 is done.
 **Alternatives:** Let the skill set the statuses the original implies
 (rejected: §6, and the original's wording is often ambiguous); leave statuses
@@ -427,7 +427,7 @@ again); propose `Accepted` for every genre and let the toolchain object
 (rejected: `vocab/status` reports the error only after the steward has set
 it).
 
-### COMPASS-DRAFT-migration-D8 — A migration Log records a large backlog; `AGENTS.md` records a small one
+### COMPASS-D75 — A migration Log records a large backlog; `AGENTS.md` records a small one
 
 **Status:** Proposed
 **Context:** Migration of a mature repository takes many sessions. Without a
@@ -452,7 +452,7 @@ record: it names the documents still unmarked and says that checks run with
 `--skip-unmarked`. The skill updates it with each move, and removes it, with
 the advice to use `--skip-unmarked`, when no unmarked document remains, as the
 Lexis Spec's reshape did. A repository whose own migration plan keeps a Log
-under another name uses that one (COMPASS-DRAFT-migration-D10).
+under another name uses that one (COMPASS-D77).
 **Alternatives:** No record, relying on `--skip-unmarked`'s count (rejected:
 a count gives no reasons); the name `Log.Migration.md` (rejected after the
 Classic trial: in a repository with a component for schema or data migration,
@@ -461,7 +461,7 @@ every migration, however small (rejected: for two documents it records less
 than the `AGENTS.md` line and Git already do); a Memo host (rejected: the
 backlog is history and progress, not durable properties of the system).
 
-### COMPASS-DRAFT-migration-D9 — Section numbers that are cited elsewhere are kept
+### COMPASS-D76 — Section numbers that are cited elsewhere are kept
 
 **Status:** Proposed
 **Context:** Older documents often number their sections, and other documents,
@@ -484,7 +484,7 @@ all be found or rewritten, and the rewrite is not form-only); keep the
 original headings (rejected: the genre's shape is part of the form the
 migration exists to give).
 
-### COMPASS-DRAFT-migration-D10 — A repository's own migration plan takes precedence
+### COMPASS-D77 — A repository's own migration plan takes precedence
 
 **Status:** Proposed
 **Context:** A repository may plan its migration itself before the skill is
@@ -499,19 +499,19 @@ own migration plan: a Plan, or a document the `AGENTS.md` migration line names,
 whose subject is the migration to Compass. Where the plan and these decisions
 differ, the plan's decision applies, and the report names each difference with
 both decisions' identifiers. The plan cannot relax what makes the skill safe:
-one document per request (COMPASS-DRAFT-migration-D1), form only
-(COMPASS-DRAFT-migration-D2), never committing, and never setting an
+one document per request (COMPASS-D68), form only
+(COMPASS-D69), never committing, and never setting an
 authoritative status or `approved-by` (§6). Where the plan calls for one of
 those, as Classic's batches did, the skill says so and keeps its own rule. A
 plan's choices of form do apply: Classic's removal of "Concept:" from its
 Surveys' titles is a genre marker leaving a title, which
-COMPASS-DRAFT-migration-D2 counts as form.
+COMPASS-D69 counts as form.
 **Alternatives:** The skill's decisions always apply (rejected: the
 repository's steward has already decided); the repository's plan always
 applies (rejected: a plan written before the skill may call for bulk changes or
 for an assistant to set statuses, which the skill must not do).
 
-### COMPASS-DRAFT-migration-D11 — The skill ends at the reshape; revision is a separate edit, before acceptance where it matters
+### COMPASS-D78 — The skill ends at the reshape; revision is a separate edit, before acceptance where it matters
 
 **Status:** Proposed
 **Context:** Both Lexis migrations were followed by review and revision before
@@ -529,17 +529,17 @@ Its report hands off: to `compass-review` for a review against the original,
 and, for content changes, to an ordinary assisted edit, with
 `compass-author` for any new document such as a split part or the migration
 Log. A split part carries `migrated-from` naming the same original
-(COMPASS-DRAFT-migration-O1). The report lists the notes on stale content as the starting point for that
+(COMPASS-O47). The report lists the notes on stale content as the starting point for that
 edit. For a reference genre whose content does not match the code, the report
 advises that the revision come after the reshape is committed and before the
-steward sets `Current` (COMPASS-DRAFT-migration-D7), so that the reshape commit
+steward sets `Current` (COMPASS-D74), so that the reshape commit
 remains the form-only state a reviewer compares with the original
-(COMPASS-DRAFT-migration-O3).
+(COMPASS-O49).
 **Alternatives:** The skill also revises content, as a second stage (rejected
 by the steward on 2026-11-18: content changes need the judgment
 `compass-review` and an ordinary edit already bring, and a migration skill that
-revises invites the improving that COMPASS-DRAFT-migration-D2 forbids);
-revision only after acceptance, as COMPASS-DRAFT-migration-D2 first said
+revises invites the improving that COMPASS-D69 forbids);
+revision only after acceptance, as COMPASS-D69 first said
 (rejected: a reference document would be accepted as `Current` while known to
 be wrong).
 
@@ -556,7 +556,7 @@ be wrong).
 - The working tree is clean, or holds only a rename of the document to be
   migrated, so that the move commit holds only the move.
 - If the repository has its own migration plan, the skill has read it
-  (COMPASS-DRAFT-migration-D10).
+  (COMPASS-D77).
 
 ### Workflow for one document
 
@@ -600,7 +600,7 @@ Documents that describe the current system come first, since agents and
 readers rely on them most; then documents of past work, as Logs; then the
 rest, or none of the rest. A repository need not migrate everything: a file
 left unmarked and recorded with its reason in the backlog record, the migration
-Log or the `AGENTS.md` line (COMPASS-DRAFT-migration-D8), is a decision, not a
+Log or the `AGENTS.md` line (COMPASS-D75), is a decision, not a
 backlog item. A document's migration may also wait on other work: whether
 Classic's `securityPoints.md` is migrated before or after the agent-context
 evaluation's seed corpora are frozen is COMPASS-O37.
@@ -638,17 +638,17 @@ Table: What the Lexis migrations showed, and the decision each bears on.
 
 | Finding | Decision |
 |---|---|
-| Moving first, then reshaping, kept the history: `git log --follow` traced the Spec through two renames to its first commit | COMPASS-DRAFT-migration-D4, confirmed |
-| Both times the steward made the rename before the skill's step, once committed and once only staged | COMPASS-DRAFT-migration-D4, amended to use such a rename |
-| The Spec's chapters are cited by number from a Log, a Plan, and a source comment, so their numbers were kept with "Required" headings | COMPASS-DRAFT-migration-D9, added |
-| Header lines for version, date, and status were removed; the Spec's author's date, a day before Git's, was lost with them | COMPASS-DRAFT-migration-D2, amended to keep date lines |
-| A table's lead-in became its `Table:` caption, and the old title's expansion stayed as a subtitle | COMPASS-DRAFT-migration-D2, amended |
-| The Spec could not be `Current` before its content was revised; the revision came after the reshape and before acceptance | COMPASS-DRAFT-migration-D11, added |
-| The Spec's `provenance.session` first named a session that had only extended it; the review found the one that wrote it | COMPASS-DRAFT-migration-D3, amended |
-| The Spec was first given the status `Accepted`, which is not in its genre's vocabulary | COMPASS-DRAFT-migration-D7, amended |
-| A migration Log for two documents would have recorded less than the `AGENTS.md` line did | COMPASS-DRAFT-migration-D8, amended |
+| Moving first, then reshaping, kept the history: `git log --follow` traced the Spec through two renames to its first commit | COMPASS-D71, confirmed |
+| Both times the steward made the rename before the skill's step, once committed and once only staged | COMPASS-D71, amended to use such a rename |
+| The Spec's chapters are cited by number from a Log, a Plan, and a source comment, so their numbers were kept with "Required" headings | COMPASS-D76, added |
+| Header lines for version, date, and status were removed; the Spec's author's date, a day before Git's, was lost with them | COMPASS-D69, amended to keep date lines |
+| A table's lead-in became its `Table:` caption, and the old title's expansion stayed as a subtitle | COMPASS-D69, amended |
+| The Spec could not be `Current` before its content was revised; the revision came after the reshape and before acceptance | COMPASS-D78, added |
+| The Spec's `provenance.session` first named a session that had only extended it; the review found the one that wrote it | COMPASS-D70, amended |
+| The Spec was first given the status `Accepted`, which is not in its genre's vocabulary | COMPASS-D74, amended |
+| A migration Log for two documents would have recorded less than the `AGENTS.md` line did | COMPASS-D75, amended |
 | Rewriting history to remove a committed transcript changed every hash, and each `migrated-from` and pin had to be re-pinned by hand | Roadmap step 2: check the pin |
-| The only link from outside, Seed's `SEED-0011` citing the old path, was reported and fixed in Seed after numbering | COMPASS-DRAFT-migration-O5 |
+| The only link from outside, Seed's `SEED-0011` citing the old path, was reported and fixed in Seed after numbering | COMPASS-O51 |
 
 ### Classic: twenty-six documents in batches
 
@@ -666,17 +666,17 @@ Table: What the Classic migration showed, and the decision each bears on.
 
 | Finding | Decision |
 |---|---|
-| Renames committed alone, with no content change, kept every document's history | COMPASS-DRAFT-migration-D4, confirmed |
-| Documents stayed in `doc/<component>/` subdirectories, renamed in place (CLASSIC-D93) | COMPASS-DRAFT-migration-D4, amended |
-| Paths in a Log's Files table were kept as records of their commits (CLASSIC-D98) | COMPASS-DRAFT-migration-D4, amended |
-| Logs were pinned to the commit of their work and its parent, which differs from their last change for several Logs (CLASSIC-D96) | COMPASS-DRAFT-migration-D5, amended |
-| About 95 decisions in four styles became records with no invented alternatives (CLASSIC-D95) | COMPASS-DRAFT-migration-D6, confirmed |
-| Every document was migrated as `Draft` and the steward set statuses (CLASSIC-D94) | COMPASS-DRAFT-migration-D7, confirmed |
-| In-body status lines were removed, but dates kept (CLASSIC-D109) | COMPASS-DRAFT-migration-D2, amended |
-| Its own plan made choices this plan's defaults would have undone | COMPASS-DRAFT-migration-D10, added |
-| Batches by component worked, but one commit changed 39 files | COMPASS-DRAFT-migration-D1, kept: the steward chose one at a time |
-| Two originals were split during migration (CLASSIC-D101, CLASSIC-D102), and the pieces do not record what they came from | COMPASS-DRAFT-migration-O1 |
-| A Log, CLASSIC-0036, recorded each batch's commits and what was left | COMPASS-DRAFT-migration-D8, confirmed for a large backlog |
+| Renames committed alone, with no content change, kept every document's history | COMPASS-D71, confirmed |
+| Documents stayed in `doc/<component>/` subdirectories, renamed in place (CLASSIC-D93) | COMPASS-D71, amended |
+| Paths in a Log's Files table were kept as records of their commits (CLASSIC-D98) | COMPASS-D71, amended |
+| Logs were pinned to the commit of their work and its parent, which differs from their last change for several Logs (CLASSIC-D96) | COMPASS-D72, amended |
+| About 95 decisions in four styles became records with no invented alternatives (CLASSIC-D95) | COMPASS-D73, confirmed |
+| Every document was migrated as `Draft` and the steward set statuses (CLASSIC-D94) | COMPASS-D74, confirmed |
+| In-body status lines were removed, but dates kept (CLASSIC-D109) | COMPASS-D69, amended |
+| Its own plan made choices this plan's defaults would have undone | COMPASS-D77, added |
+| Batches by component worked, but one commit changed 39 files | COMPASS-D68, kept: the steward chose one at a time |
+| Two originals were split during migration (CLASSIC-D101, CLASSIC-D102), and the pieces do not record what they came from | COMPASS-O47 |
+| A Log, CLASSIC-0036, recorded each batch's commits and what was left | COMPASS-D75, confirmed for a large backlog |
 
 ### Trial: Lexis replayed with the skill
 
@@ -697,21 +697,21 @@ Table: Where the skill's migration of Lexis differed from the steward's, and wha
 
 | Difference | Suggests |
 |---|---|
-| The skill left out the Log's `session:`: the transcript of that session ends at the plan for the work, before the Log was written. The steward's Log names it | COMPASS-DRAFT-migration-D3 working as intended |
-| The skill named the session that wrote the Spec, found in its transcript; the steward's reshape named one that had only extended it, which its review caught | COMPASS-DRAFT-migration-D3 working as intended |
-| The skill kept both date lines; the steward removed them | COMPASS-DRAFT-migration-D2 as amended |
-| The skill's search for cited section numbers also found citations in `README.md` and `examples/demo.lisp`, which the steward's plan had not listed | COMPASS-DRAFT-migration-D9 working as intended |
+| The skill left out the Log's `session:`: the transcript of that session ends at the plan for the work, before the Log was written. The steward's Log names it | COMPASS-D70 working as intended |
+| The skill named the session that wrote the Spec, found in its transcript; the steward's reshape named one that had only extended it, which its review caught | COMPASS-D70 working as intended |
+| The skill kept both date lines; the steward removed them | COMPASS-D69 as amended |
+| The skill's search for cited section numbers also found citations in `README.md` and `examples/demo.lisp`, which the steward's plan had not listed | COMPASS-D76 working as intended |
 | Where a decision's context or alternatives are given elsewhere in the original, the skill wrote "Not recorded in the original."; the steward wrote "See [Problem](#problem).", and in Outstanding Work, "Deferred; see" the record of the deferral | A pointer to where the original records it, rather than "Not recorded", which is untrue there |
 | The skill pinned only the paths the original names; the steward also added a pinned reference to each symbol the original names in a named file | Adding a pinned reference beside a symbol the original names, as a permitted addition |
 | Both moved sections the original already had in an order the Log spine accepts | Reordering only where the original's order breaks the spine |
 | The skill marked a Spec chapter "Required" only where its text states requirements, leaving chapters 3 and 7 unmarked; the steward marked both, and the review later found chapter 7 was not normative | Proposing each chapter's normativity, with its evidence, for the user to decide |
-| The skill kept the words of a heading and of a table's lead-in, such as "Core" and "Tag mappings."; the steward dropped "Core" and expanded the captions | COMPASS-DRAFT-migration-D2 working as intended |
+| The skill kept the words of a heading and of a table's lead-in, such as "Core" and "Tag mappings."; the steward dropped "Core" and expanded the captions | COMPASS-D69 working as intended |
 | The skill proposed the Spec first, as the order of migration says; the steward chose the Log first | The order is a proposal; the user names the document |
 
 The steward accepted the four suggestions in the middle of the Lexis table on
-2026-11-18. COMPASS-DRAFT-migration-D2 now permits pointers, moves only
+2026-11-18. COMPASS-D69 now permits pointers, moves only
 sections out of the spine's order, and marks a Spec chapter "Required" only by
-the user's decision; COMPASS-DRAFT-migration-D5 adds pinned references to the
+the user's decision; COMPASS-D72 adds pinned references to the
 symbols the original names; and the skill follows them.
 
 ### Trial: Classic replayed with the skill
@@ -726,7 +726,7 @@ tutorial), and `Survey.TTRPGHost` (a Survey already named and placed). It also
 began `Log.CompassMigration.md`, since 26 documents were unmarked. The final
 check reports no errors and one `vocab/pending` warning per migrated document.
 
-Classic's own plan, CLASSIC-0032, was in force (COMPASS-DRAFT-migration-D10):
+Classic's own plan, CLASSIC-0032, was in force (COMPASS-D77):
 its table gave each document's genre and component, `api-version` and
 `schema-version` came from `classic.asd`, and the Survey lost its "Concept:"
 prefix, as its Phase 2 provides. Its batches, and its separate passes for
@@ -755,14 +755,14 @@ Table: What the Classic trial found that the skill does not yet cover.
 | "Beside its first mention" was ambiguous where symbols are first named in a table, and one symbol the Log says was deleted is still defined | Pin a symbol where a passage names it with the file that defines it at the revision, and not where the text says it was removed |
 
 The steward accepted all eight suggestions on 2026-11-18.
-COMPASS-DRAFT-migration-D3 now defines the `migrated-from` revision as the
+COMPASS-D70 now defines the `migrated-from` revision as the
 last commit before the migration touched the original;
-COMPASS-DRAFT-migration-D4 has migrated documents' mentions of a document
+COMPASS-D71 has migrated documents' mentions of a document
 rewritten as identifier links once it is migrated;
-COMPASS-DRAFT-migration-D2 keeps the facts of a status line and lets a
-record's Alternatives point to its own Decision; COMPASS-DRAFT-migration-D5
+COMPASS-D69 keeps the facts of a status line and lets a
+record's Alternatives point to its own Decision; COMPASS-D72
 pins a symbol only where a passage names it with its file, and never one the
-text says was removed; COMPASS-DRAFT-migration-D8 names the migration Log
+text says was removed; COMPASS-D75 names the migration Log
 `Log.CompassMigration.md`; and the skill's check regenerates the index, checks
 the whole corpus, and checks its own links and relations.
 
@@ -772,15 +772,15 @@ On 2026-11-19 the rules added after the Classic trial and in Compass 0.5.0 were
 exercised in the same scratch clone of Classic, with the toolchain at
 `207b23c`:
 
-- **The `migrated-from` revision** (COMPASS-DRAFT-migration-D3): for the
+- **The `migrated-from` revision** (COMPASS-D70): for the
   unmarked `Survey.MusicPublishing.md`, the rule passed over the move
   `09356c7`, which had updated its links, and stopped at `1cabbcf`, which
   renamed fourteen documents but came before Classic adopted Compass.
-- **Later mentions** (COMPASS-DRAFT-migration-D4): of the three mentions of
+- **Later mentions** (COMPASS-D71): of the three mentions of
   `SchemaContract.md` in the migrated `Log.DistFactorization.md`, the one that
   cites the document became an identifier link and a `relates-to` entry; the
   account of the work's changes and the Files row stayed as history.
-- **Dates** (COMPASS-DRAFT-migration-O4): over every document present at
+- **Dates** (COMPASS-O50): over every document present at
   `dfeb862`, the signals flagged eight. Five have a date line earlier than
   Git's date: the two Surveys (2026-07-04 against 2026-08-24) and three Logs,
   whose date lines may give the date of the work rather than of the writing,
@@ -789,7 +789,7 @@ exercised in the same scratch clone of Classic, with the toolchain at
   eight documents of 2026-05-26 were not flagged. The Survey written with
   `created: 2026-07-04` is reported by `compass outline` as dated from its
   front-matter.
-- **`original-assistant`** (COMPASS-DRAFT-migration-O6): accepted on
+- **`original-assistant`** (COMPASS-O52): accepted on
   `Ref.Model`, and with it every migrated document checks with no warnings, now
   that `migrated-from` is no longer pending.
 
@@ -813,7 +813,7 @@ The review's lookup still finds each reshape commit after these later edits.
 
 ## Open Questions
 
-### COMPASS-DRAFT-migration-O1 — Documents that mix genres
+### COMPASS-O47 — Documents that mix genres
 
 A long-lived design document often holds a plan, a log of what was built, and
 reference material. The skill names the closest two genres and the user
@@ -825,7 +825,7 @@ Classic split two originals during its migration: its schema contract into a
 Spec, a Guide, and a Survey (CLASSIC-D101), and the planned persistence
 backends out of its persistence reference into an Arch (CLASSIC-D102). None of
 the new pieces records what it came from; each has only `provenance:
-assistant` and `relates-to`. Under COMPASS-DRAFT-migration-D11 the skill does
+assistant` and `relates-to`. Under COMPASS-D78 the skill does
 not split, and reports the mix instead. If a split is made in the edit that
 follows, should each new piece carry `migrated-from` naming the original, as
 the piece that keeps the original's history does?
@@ -837,7 +837,7 @@ from. §7 says so, `compass-author` sets it when it writes a split part, and
 `compass-review` judges each piece's text against the original, with the rest
 in the other pieces.
 
-### COMPASS-DRAFT-migration-O2 — Listing the backlog
+### COMPASS-O48 — Listing the backlog
 
 `--skip-unmarked` reports only a count. The skill can find files without
 front-matter itself, but a toolchain option listing them, and which of them the
@@ -851,10 +851,10 @@ COMPASS-DRAFT-pending-tool-D5 adds a group for the files without front-matter
 that a migration has still to reach. `compass pending` already lists what waits
 for a number; the files waiting for a migration are the step before it, and the
 same command lists both. It lists every such file, since the backlog record is
-prose; the record (COMPASS-DRAFT-migration-D8) says which are left
+prose; the record (COMPASS-D75) says which are left
 deliberately and why, so no declaration in `compass.sexp` is needed.
 
-### COMPASS-DRAFT-migration-O3 — Checking that a migration is form-only
+### COMPASS-O49 — Checking that a migration is form-only
 
 A reviewer compares the migrated document with its original at
 `migrated-from`. A mechanical aid could compare the two texts with front-matter,
@@ -863,10 +863,10 @@ words added. Should this be a toolchain rule, a `compass-review` dimension
 applied whenever `migrated-from` is present, or both?
 
 The Lexis Spec narrows the question. Its form-only state is the reshape commit
-`c471246`; the revision after it (COMPASS-DRAFT-migration-D11) differs from the
+`c471246`; the revision after it (COMPASS-D78) differs from the
 original by design. So the comparison is between the original at
 `migrated-from` and the reshape commit, not the current text. The migration
-Log records that commit (COMPASS-DRAFT-migration-D8); where there is no Log,
+Log records that commit (COMPASS-D75); where there is no Log,
 should the reshape commit be found from Git, as the first commit to give the
 file front-matter, or recorded in the front-matter beside `migrated-from`?
 
@@ -879,7 +879,7 @@ one a migration Log records. In Lexis this finds `c471246` for the Spec and
 `aea04fd` for the Log, and `git log -1 <move commit>^ -- <old path>` confirms
 both `migrated-from` revisions.
 
-### COMPASS-DRAFT-migration-O4 — Dates older than the repository
+### COMPASS-O50 — Dates older than the repository
 
 When a document was written long before it was committed, or was imported from
 another repository without its history, Git dates it from the commit. Should
@@ -888,7 +888,7 @@ import, and how is it to recognise one?
 
 **Partly resolved (2026-11-18):** in both Lexis migrations the steward chose
 Git's date over an explicit `created`, though the Spec's own date line was a
-day earlier, and COMPASS-DRAFT-migration-D2 now keeps such date lines in the
+day earlier, and COMPASS-D69 now keeps such date lines in the
 body. The skill therefore leaves `created` to Git and reports any date line
 that differs from it. A bulk import, where Git's date may be years late, is
 still open.
@@ -923,7 +923,7 @@ this. Classic's two Surveys keep Git's date of 2026-08-24 for now; proposing
 `created: 2026-07-04` for them is a follow-up for Classic's steward, not made
 here.
 
-### COMPASS-DRAFT-migration-O5 — Links from outside the repository
+### COMPASS-O51 — Links from outside the repository
 
 A move breaks links the skill cannot update: forge URLs, published sites, and
 other repositories' documents. Should the skill leave a stub at the old path
@@ -937,11 +937,11 @@ path with a `relates-to` entry. Neither case study left a stub.
 leaves no stub. The user applies whatever fix suits each one: an edit in the
 other repository, a redirect on the forge or site, or a stub of their own.
 
-### COMPASS-DRAFT-migration-O6 — Two assistants in one `provenance`
+### COMPASS-O52 — Two assistants in one `provenance`
 
 When the original was itself written with an assistant, a migrated document
 involves two: the one that wrote the original and the one that reshaped it.
-`assistant` names the second, and `session`, by COMPASS-DRAFT-migration-D3,
+`assistant` names the second, and `session`, by COMPASS-D70,
 the first's conversation. The Lexis Log carries both: `assistant:
 claude-opus-5-5` for the migration, and the session of the Claude Opus 4.6
 conversation that wrote the original. A reader may take the two fields to
@@ -953,7 +953,7 @@ enough?
 `original-assistant`. `assistant` names the assistant that reshaped the
 document, `original-assistant` the one that wrote the original, and `session`
 the session that wrote the original, where verified
-(COMPASS-DRAFT-migration-D3). §7 defines the key, since Compass 0.5.0.
+(COMPASS-D70). §7 defines the key, since Compass 0.5.0.
 
 ## Prior Art
 
@@ -976,7 +976,7 @@ Table: Prior systems and practices and what this plan draws from each.
    workflow, then the amendments from the [Case studies](#case-studies), for
    the steward's review.
 2. **Provenance key (done, 2026-11-18).** The toolchain accepts
-   `provenance.migrated-from` as pending, naming COMPASS-DRAFT-migration-D3
+   `provenance.migrated-from` as pending, naming COMPASS-D70
    (`vocab/pending`); `fm/types` checks that it is `<path>@<commit>`, and a new
    rule, `ref/migrated-from`, that the commit exists and that the path was a
    file there; `skills/reference/frontmatter.md`, `vocabularies.md`, and
@@ -990,7 +990,7 @@ Table: Prior systems and practices and what this plan draws from each.
    excluding others, as COMPASS-0003 found for `compass-adopt`.
 4. **Review (done, 2026-11-18).** `compass-review` gains a "Migration
    fidelity" dimension, which compares a migrated document at its reshape
-   commit with its original at `migrated-from`, as COMPASS-DRAFT-migration-O3
+   commit with its original at `migrated-from`, as COMPASS-O49
    was resolved.
 5. **Trials (done, 2026-11-18; see [Case studies](#case-studies)).** In
    scratch clones, so that neither repository changes:
@@ -1004,7 +1004,7 @@ Table: Prior systems and practices and what this plan draws from each.
 
    What they teach is recorded as updates to this plan.
 6. **Acceptance.** The steward accepts, amends, or rejects
-   COMPASS-DRAFT-migration-D1 to COMPASS-DRAFT-migration-D11.
+   COMPASS-D68 to COMPASS-D78.
 7. **COMPASS-O8.** The steward records this plan as its answer for documents,
    in COMPASS-0004. *Done (2026-11-19): COMPASS-O8 is resolved for documents,
    with source headers left open.*

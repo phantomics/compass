@@ -184,7 +184,7 @@ written at all).
   the result. Writes no documents and migrates none.
 - **`compass-migrate`** — brings one document written before Compass into the
   corpus, changing only its form, as planned in
-  [COMPASS-DRAFT-migration](Plan.Migration.md): proposes its genre, moves it
+  [COMPASS-0016](Plan.Migration.md): proposes its genre, moves it
   for the user to commit, then adds front-matter with
   `provenance.migrated-from`, the genre's section shape, records, and pinned
   code references, checks the result, and reports, handing content changes to
@@ -301,7 +301,7 @@ Table: Prior systems and what this plan draws from each.
 7. **Adoption skill (done, 2026-10-13).** `compass-adopt`
    (COMPASS-DRAFT-authoring-assistance-D1); the README describes it after the
    build instructions. A migration skill for existing documents is planned
-   separately, in [COMPASS-DRAFT-migration](Plan.Migration.md), whose
+   separately, in [COMPASS-0016](Plan.Migration.md), whose
    roadmap builds `compass-migrate` (drafted 2026-11-18) and tries it on
    scratch clones before acceptance.
 8. **Cross-harness adapters (future).** Re-envelope the neutral core for Claude

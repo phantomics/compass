@@ -25,12 +25,12 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0013](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Accepted | toolchain |
 | [COMPASS-0014](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Accepted | standard |
 | [COMPASS-0015](Log.Migration.md) | Compass Migration Skill Development Log | Log | component | Accepted | authoring-assistance |
+| [COMPASS-0016](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-emacs-review](Plan.EmacsReview.md) | Compass Review in Emacs — Write Commands and an Emacs Package | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-corpus-qa](Plan.EvalCorpusQA.md) | Compass Corpus Question-Answering Study — Does Project Knowledge Reach the Agent? | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md) | Compass Defect-Detection Study — Does Review Find What Is Wrong with a Document? | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-snapshot](Plan.EvalSnapshot.md) | Compass Snapshot Study — Planning Track 1 of the Agent-Context Evaluation | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
-| [COMPASS-DRAFT-migration](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Accepted | authoring-assistance |
 | [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md) | Compass Pending — Listing What Is Waiting for a Number | Plan | component | Draft | toolchain |
 | [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 
@@ -105,6 +105,17 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D65](Log.Migration.md#compass-d65--migrated-from-is-checked-by-a-rule-of-its-own) | Decision | migrated-from is checked by a rule of its own | Proposed | COMPASS-0015 |
 | [COMPASS-D66](Log.Migration.md#compass-d66--the-revision-is-a-commits-hash-never-a-branch-or-tag) | Decision | The revision is a commit's hash, never a branch or tag | Proposed | COMPASS-0015 |
 | [COMPASS-D67](Log.Migration.md#compass-d67--the-pending-check-for-provenance-keys-keeps-a-test-after-both-keys-are-accepted) | Decision | The pending check for provenance keys keeps a test after both keys are accepted | Proposed | COMPASS-0015 |
+| [COMPASS-D68](Plan.Migration.md#compass-d68--migration-is-a-skill-one-document-at-a-time) | Decision | Migration is a skill, one document at a time | Proposed | COMPASS-0016 |
+| [COMPASS-D69](Plan.Migration.md#compass-d69--migration-reshapes-form-only) | Decision | Migration reshapes form only | Proposed | COMPASS-0016 |
+| [COMPASS-D70](Plan.Migration.md#compass-d70--a-migrated-document-names-its-original-in-provenance) | Decision | A migrated document names its original in provenance | Proposed | COMPASS-0016 |
+| [COMPASS-D71](Plan.Migration.md#compass-d71--move-and-rename-first-in-a-commit-of-its-own-and-keep-links-to-the-document-current) | Decision | Move and rename first, in a commit of its own, and keep links to the document current | Proposed | COMPASS-0016 |
+| [COMPASS-D72](Plan.Migration.md#compass-d72--code-references-are-pinned-to-the-revision-the-document-describes) | Decision | Code references are pinned to the revision the document describes | Proposed | COMPASS-0016 |
+| [COMPASS-D73](Plan.Migration.md#compass-d73--records-take-provisional-identifiers-keeping-the-originals-numbering) | Decision | Records take provisional identifiers, keeping the original's numbering | Proposed | COMPASS-0016 |
+| [COMPASS-D74](Plan.Migration.md#compass-d74--the-assistant-proposes-statuses-the-steward-sets-them) | Decision | The assistant proposes statuses; the steward sets them | Proposed | COMPASS-0016 |
+| [COMPASS-D75](Plan.Migration.md#compass-d75--a-migration-log-records-a-large-backlog-agentsmd-records-a-small-one) | Decision | A migration Log records a large backlog; AGENTS.md records a small one | Proposed | COMPASS-0016 |
+| [COMPASS-D76](Plan.Migration.md#compass-d76--section-numbers-that-are-cited-elsewhere-are-kept) | Decision | Section numbers that are cited elsewhere are kept | Proposed | COMPASS-0016 |
+| [COMPASS-D77](Plan.Migration.md#compass-d77--a-repositorys-own-migration-plan-takes-precedence) | Decision | A repository's own migration plan takes precedence | Proposed | COMPASS-0016 |
+| [COMPASS-D78](Plan.Migration.md#compass-d78--the-skill-ends-at-the-reshape-revision-is-a-separate-edit-before-acceptance-where-it-matters) | Decision | The skill ends at the reshape; revision is a separate edit, before acceptance where it matters | Proposed | COMPASS-0016 |
 | [COMPASS-DRAFT-authoring-assistance-D1](Plan.AuthoringAssistance.md#compass-draft-authoring-assistance-d1--a-fifth-skill-sets-a-repository-up-for-compass) | Decision | A fifth skill sets a repository up for Compass | Proposed | COMPASS-0003 |
 | [COMPASS-DRAFT-emacs-review-D1](Plan.EmacsReview.md#compass-draft-emacs-review-d1--writes-live-in-the-toolchain-editors-drive-them) | Decision | Writes live in the toolchain; editors drive them | Proposed | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-D2](Plan.EmacsReview.md#compass-draft-emacs-review-d2--four-write-commands) | Decision | Four write commands | Proposed | COMPASS-DRAFT-emacs-review |
@@ -153,17 +164,6 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-D14](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d14--the-study-is-chronicled-in-this-plan-a-log-and-updates-to-compass-0006) | Decision | The study is chronicled in this Plan, a Log, and updates to COMPASS-0006 | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D15](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d15--the-paper-lives-in-pub-as-an-acm-preprint-derived-from-the-record) | Decision | The paper lives in pub/, as an ACM preprint derived from the record | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D16](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d16--the-compass-toolchain-and-skills-are-present-in-every-workspace) | Decision | The Compass toolchain and skills are present in every workspace | Proposed | COMPASS-DRAFT-eval-snapshot |
-| [COMPASS-DRAFT-migration-D1](Plan.Migration.md#compass-draft-migration-d1--migration-is-a-skill-one-document-at-a-time) | Decision | Migration is a skill, one document at a time | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D2](Plan.Migration.md#compass-draft-migration-d2--migration-reshapes-form-only) | Decision | Migration reshapes form only | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D3](Plan.Migration.md#compass-draft-migration-d3--a-migrated-document-names-its-original-in-provenance) | Decision | A migrated document names its original in provenance | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D4](Plan.Migration.md#compass-draft-migration-d4--move-and-rename-first-in-a-commit-of-its-own-and-keep-links-to-the-document-current) | Decision | Move and rename first, in a commit of its own, and keep links to the document current | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D5](Plan.Migration.md#compass-draft-migration-d5--code-references-are-pinned-to-the-revision-the-document-describes) | Decision | Code references are pinned to the revision the document describes | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D6](Plan.Migration.md#compass-draft-migration-d6--records-take-provisional-identifiers-keeping-the-originals-numbering) | Decision | Records take provisional identifiers, keeping the original's numbering | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D7](Plan.Migration.md#compass-draft-migration-d7--the-assistant-proposes-statuses-the-steward-sets-them) | Decision | The assistant proposes statuses; the steward sets them | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D8](Plan.Migration.md#compass-draft-migration-d8--a-migration-log-records-a-large-backlog-agentsmd-records-a-small-one) | Decision | A migration Log records a large backlog; AGENTS.md records a small one | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D9](Plan.Migration.md#compass-draft-migration-d9--section-numbers-that-are-cited-elsewhere-are-kept) | Decision | Section numbers that are cited elsewhere are kept | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D10](Plan.Migration.md#compass-draft-migration-d10--a-repositorys-own-migration-plan-takes-precedence) | Decision | A repository's own migration plan takes precedence | Proposed | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-D11](Plan.Migration.md#compass-draft-migration-d11--the-skill-ends-at-the-reshape-revision-is-a-separate-edit-before-acceptance-where-it-matters) | Decision | The skill ends at the reshape; revision is a separate edit, before acceptance where it matters | Proposed | COMPASS-DRAFT-migration |
 | [COMPASS-DRAFT-pending-tool-D1](Plan.PendingTool.md#compass-draft-pending-tool-d1--assigns-checks-are-factored-out-and-shared) | Decision | assign's checks are factored out and shared | Proposed | COMPASS-DRAFT-pending-tool |
 | [COMPASS-DRAFT-pending-tool-D2](Plan.PendingTool.md#compass-draft-pending-tool-d2--short-references-are-found-once-per-corpus) | Decision | Short references are found once per corpus | Proposed | COMPASS-DRAFT-pending-tool |
 | [COMPASS-DRAFT-pending-tool-D3](Plan.PendingTool.md#compass-draft-pending-tool-d3--the-note-counts-only-the-documents-check-checked) | Decision | The note counts only the documents check checked | Proposed | COMPASS-DRAFT-pending-tool |
@@ -216,6 +216,12 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-O44](Plan.Critique.md#compass-o44--open-findings-and-agents) | Open question | Open findings and agents | — | COMPASS-0014 |
 | [COMPASS-O45](Plan.Critique.md#compass-o45--stale-critiques) | Open question | Stale critiques | — | COMPASS-0014 |
 | [COMPASS-O46](Plan.Critique.md#compass-o46--critiques-of-the-standard-itself) | Open question | Critiques of the standard itself | — | COMPASS-0014 |
+| [COMPASS-O47](Plan.Migration.md#compass-o47--documents-that-mix-genres) | Open question | Documents that mix genres | — | COMPASS-0016 |
+| [COMPASS-O48](Plan.Migration.md#compass-o48--listing-the-backlog) | Open question | Listing the backlog | — | COMPASS-0016 |
+| [COMPASS-O49](Plan.Migration.md#compass-o49--checking-that-a-migration-is-form-only) | Open question | Checking that a migration is form-only | — | COMPASS-0016 |
+| [COMPASS-O50](Plan.Migration.md#compass-o50--dates-older-than-the-repository) | Open question | Dates older than the repository | — | COMPASS-0016 |
+| [COMPASS-O51](Plan.Migration.md#compass-o51--links-from-outside-the-repository) | Open question | Links from outside the repository | — | COMPASS-0016 |
+| [COMPASS-O52](Plan.Migration.md#compass-o52--two-assistants-in-one-provenance) | Open question | Two assistants in one provenance | — | COMPASS-0016 |
 | [COMPASS-DRAFT-emacs-review-O1](Plan.EmacsReview.md#compass-draft-emacs-review-o1--should-accepting-a-decision-update-its-hosts-approval) | Open question | Should accepting a decision update its host's approval? | — | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-O2](Plan.EmacsReview.md#compass-draft-emacs-review-o2--should-approval-also-record-the-approver-as-a-reviewer) | Open question | Should approval also record the approver as a reviewer? | — | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-O3](Plan.EmacsReview.md#compass-draft-emacs-review-o3--interim-language-features-in-emacs-lisp) | Open question | Interim language features in Emacs Lisp | — | COMPASS-DRAFT-emacs-review |
@@ -239,12 +245,6 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-O5](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o5--pre-registration-and-the-release-of-tasks) | Open question | Pre-registration and the release of tasks | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O6](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o6--the-budget-and-what-is-cut-first) | Open question | The budget and what is cut first | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O7](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o7--the-conference-and-anonymity) | Open question | The conference and anonymity | — | COMPASS-DRAFT-eval-snapshot |
-| [COMPASS-DRAFT-migration-O1](Plan.Migration.md#compass-draft-migration-o1--documents-that-mix-genres) | Open question | Documents that mix genres | — | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-O2](Plan.Migration.md#compass-draft-migration-o2--listing-the-backlog) | Open question | Listing the backlog | — | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-O3](Plan.Migration.md#compass-draft-migration-o3--checking-that-a-migration-is-form-only) | Open question | Checking that a migration is form-only | — | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-O4](Plan.Migration.md#compass-draft-migration-o4--dates-older-than-the-repository) | Open question | Dates older than the repository | — | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-O5](Plan.Migration.md#compass-draft-migration-o5--links-from-outside-the-repository) | Open question | Links from outside the repository | — | COMPASS-DRAFT-migration |
-| [COMPASS-DRAFT-migration-O6](Plan.Migration.md#compass-draft-migration-o6--two-assistants-in-one-provenance) | Open question | Two assistants in one provenance | — | COMPASS-DRAFT-migration |
 | [COMPASS-DRAFT-pending-tool-O1](Plan.PendingTool.md#compass-draft-pending-tool-o1--should-assign-warn-about-records-not-yet-accepted) | Open question | Should assign warn about records not yet accepted? | — | COMPASS-DRAFT-pending-tool |
 | [COMPASS-DRAFT-pending-tool-O2](Plan.PendingTool.md#compass-draft-pending-tool-o2--the-age-of-what-is-waiting) | Open question | The age of what is waiting | — | COMPASS-DRAFT-pending-tool |
 | [COMPASS-DRAFT-pending-tool-O3](Plan.PendingTool.md#compass-draft-pending-tool-o3--reminders-beyond-the-note) | Open question | Reminders beyond the note | — | COMPASS-DRAFT-pending-tool |

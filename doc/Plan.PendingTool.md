@@ -13,7 +13,7 @@ relates-to:
   - COMPASS-0004
   - COMPASS-0013
   - COMPASS-0003
-  - COMPASS-DRAFT-migration
+  - COMPASS-0016
 decisions:
   - COMPASS-DRAFT-pending-tool-D1
   - COMPASS-DRAFT-pending-tool-D2
@@ -60,7 +60,7 @@ on a document they have accepted (COMPASS-D28). Nothing tracks what is left:
   the index's table layout and cannot tell ready from blocked.
 - **The migration backlog is only counted.** `check --skip-unmarked` reports
   how many files it skipped for having no front-matter, not which
-  (COMPASS-DRAFT-migration-O2).
+  (COMPASS-O48).
 
 ## Goals
 
@@ -175,7 +175,7 @@ with the summary of the index).
 ### COMPASS-DRAFT-pending-tool-D5 — Files not yet migrated are listed as a fourth group
 
 **Status:** Proposed
-**Context:** COMPASS-DRAFT-migration-O2 asked for a listing of the migration
+**Context:** COMPASS-O48 asked for a listing of the migration
 backlog: the files without front-matter that `check --skip-unmarked` skips and
 reports only by count. It was resolved on 2026-11-19 by placing the listing in
 `compass pending`, since a file waiting for migration is at the step before a
@@ -188,7 +188,7 @@ front-matter, by path, in path order. The loader already records them, so
 listing them costs nothing. Since they have no namespace, they are listed only
 when `--namespace` is not given, and never with `--ready`; the summary line
 counts them separately. `pending` does not read the backlog record of
-COMPASS-DRAFT-migration-D8, which is prose: it lists every unmarked file, and
+COMPASS-D75, which is prose: it lists every unmarked file, and
 the backlog record says which are left deliberately and why. Files outside the
 document directory that the loader does not consider, such as `README.md`, are
 not listed.
@@ -196,7 +196,7 @@ not listed.
 files (rejected: two listings of one pipeline, and `check --format json`
 already lists them for tools); leave out the files the backlog record calls
 deliberate (rejected: the record is prose, and declaring them in
-`compass.sexp` was rejected by COMPASS-DRAFT-migration-O2's resolution); list
+`compass.sexp` was rejected by COMPASS-O48's resolution); list
 them under every `--namespace` (rejected: they belong to none).
 
 ## Design

@@ -14,7 +14,7 @@ reviewed:      2026-11-19
 provenance:
   assistant:   opencode
 relates-to:
-  - COMPASS-DRAFT-migration
+  - COMPASS-0016
   - COMPASS-0001
   - COMPASS-0003
   - COMPASS-0004
@@ -35,12 +35,12 @@ This document chronicles the building of the `compass-migrate` skill, from
 2026-11-18 to 2026-11-19, in eight commits from `6a7c860` to `5d746f3`: the
 toolchain's support for `provenance.migrated-from`, the skill and the review
 dimension that checks its work, two trials against migrations done by hand,
-the amendments to [COMPASS-DRAFT-migration](Plan.Migration.md) they led to,
+the amendments to [COMPASS-0016](Plan.Migration.md) they led to,
 and `Compass.md` 0.5.0, which defines the new keys.
 
 ## Problem
 
-[COMPASS-DRAFT-migration](Plan.Migration.md), written on 2026-11-17 and
+[COMPASS-0016](Plan.Migration.md), written on 2026-11-17 and
 committed at `c7e88a7`, planned a sixth skill to bring documents written
 before Compass into a corpus without changing their content. The skill did not
 exist, and the toolchain treated the plan's `provenance.migrated-from` as an
@@ -54,7 +54,7 @@ the plan had not yet used.
 ## Design Decisions
 
 These are the choices made while building; the skill's behaviour is decided in
-COMPASS-DRAFT-migration.
+COMPASS-0016.
 
 ### COMPASS-D65 — `migrated-from` is checked by a rule of its own
 
@@ -92,13 +92,13 @@ it; anything else is an `fm/types` error, and `ref/migrated-from` does not run
 on it.
 **Alternatives:** Accept any revision Git resolves (rejected: a branch name
 would pin nothing); accept tags (rejected: a tag can be moved or deleted, and
-COMPASS-DRAFT-migration-D3 pins the last commit that changed the original).
+COMPASS-D70 pins the last commit that changed the original).
 
 ### COMPASS-D67 — The pending check for `provenance` keys keeps a test after both keys are accepted
 
 **Status:** Proposed
 **Context:** `migrated-from` was first pending, naming
-COMPASS-DRAFT-migration-D3, and `vocab/pending` learned to report a pending key
+COMPASS-D70, and `vocab/pending` learned to report a pending key
 of `provenance` (`src/rules/frontmatter.lisp:vocab/pending@6a7c860`). With
 `Compass.md` 0.5.0 both keys are accepted, so no real key exercises that branch
 of the rule.
@@ -122,14 +122,14 @@ Before any code, the plan was amended from the two migrations:
 
 - a "Case studies" section, with a table for each, mapping every finding to the
   decision it bears on;
-- COMPASS-DRAFT-migration-D2, COMPASS-DRAFT-migration-D3,
-  COMPASS-DRAFT-migration-D4, COMPASS-DRAFT-migration-D5,
-  COMPASS-DRAFT-migration-D7, and COMPASS-DRAFT-migration-D8 amended, among
+- COMPASS-D69, COMPASS-D70,
+  COMPASS-D71, COMPASS-D72,
+  COMPASS-D74, and COMPASS-D75 amended, among
   them Log pins to the commit of the work, as Classic's plan had them, and a
   migration Log only for more than three documents;
-- three decisions added: COMPASS-DRAFT-migration-D9 (cited section numbers
-  are kept), COMPASS-DRAFT-migration-D10 (a repository's own plan takes
-  precedence, within limits), and COMPASS-DRAFT-migration-D11 (the skill ends
+- three decisions added: COMPASS-D76 (cited section numbers
+  are kept), COMPASS-D77 (a repository's own plan takes
+  precedence, within limits), and COMPASS-D78 (the skill ends
   at the reshape).
 
 ### `provenance.migrated-from` in the toolchain (`6a7c860`)
@@ -169,7 +169,7 @@ scan it, so it names only commands, options, and rules that exist.
 
 ### The review dimension (`50c15c4`)
 
-COMPASS-DRAFT-migration-O3 was resolved as a `compass-review` dimension,
+COMPASS-O49 was resolved as a `compass-review` dimension,
 "Migration fidelity" (`skills/compass-review/SKILL.md@50c15c4`), with no
 mechanical aid for now. It finds the reshape commit from Git, the oldest commit
 to add the `migrated-from:` line, which on Lexis found `c471246` and `aea04fd`,
@@ -197,12 +197,12 @@ The assistant followed the skill as written, step by step, in scratch clones.
 
 ### Resolutions and the plan's review (`892a18e`, `207b23c`)
 
-The Classic findings were written into COMPASS-DRAFT-migration-D2,
-COMPASS-DRAFT-migration-D3, COMPASS-DRAFT-migration-D4,
-COMPASS-DRAFT-migration-D5, and COMPASS-DRAFT-migration-D8 and into both
+The Classic findings were written into COMPASS-D69,
+COMPASS-D70, COMPASS-D71,
+COMPASS-D72, and COMPASS-D75 and into both
 skills. A `compass-review` of the plan then found five warnings and nine
 notes; the steward's answers produced, among other changes, the federation of
-Lexis in `compass.sexp`, a retitled COMPASS-DRAFT-migration-D4, and a
+Lexis in `compass.sexp`, a retitled COMPASS-D71, and a
 refinement found while testing the steward's rule for migration moves: only a
 rename made after the repository adopted Compass is one, since Classic's own
 `1cabbcf` renamed fourteen documents before.
@@ -212,7 +212,7 @@ rename made after the repository adopted Compass is one, since Classic's own
 The steward wrote [COMPASS-DRAFT-pending-tool](Plan.PendingTool.md) in
 `d9d09ba`, adding COMPASS-DRAFT-toolchain-D30 to
 [COMPASS-0004](Plan.Toolchain.md) with it. A review of the plan found that
-COMPASS-DRAFT-migration-O2's resolution relied on a group it did not plan. The
+COMPASS-O48's resolution relied on a group it did not plan. The
 steward chose to add it: COMPASS-DRAFT-pending-tool-D5 lists the files not yet
 migrated, and COMPASS-DRAFT-toolchain-D30 was amended to match.
 
@@ -225,12 +225,12 @@ mentions them; `schema-version` went from 0.4.0 to 0.5.0, a minor change. Both
 keys are accepted in `src/vocab.lisp:*provenance-keys*@f6cea01`,
 `original-assistant` is checked as a single value, the semantic binding,
 [COMPASS-0008](Spec.SemanticBinding.md), maps them, and the skills ask for the
-new key. COMPASS-O8 was resolved for documents, and COMPASS-DRAFT-migration-O1,
-COMPASS-DRAFT-migration-O5, and COMPASS-DRAFT-migration-O6 were resolved.
+new key. COMPASS-O8 was resolved for documents, and COMPASS-O47,
+COMPASS-O51, and COMPASS-O52 were resolved.
 
 ### Dates, and a check of the new rules (`5d746f3`)
 
-COMPASS-DRAFT-migration-O4 was resolved: a bulk addition is recognised by its
+COMPASS-O50 was resolved: a bulk addition is recognised by its
 commit, not its date, and the skill always proposes an earlier `created:` it
 has evidence for. The rules added after the trials were then exercised in the
 Classic clone: the `migrated-from` revision, the later-mention rewrite, the
@@ -249,7 +249,7 @@ table.
   the skill.
 - **Earlier moves change documents not yet migrated.** In the Classic trial,
   `git log -1 -- <path>` gave the move of another document as the
-  `migrated-from` revision of `Survey.TTRPGHost.md`; COMPASS-DRAFT-migration-D3
+  `migrated-from` revision of `Survey.TTRPGHost.md`; COMPASS-D70
   now defines the revision to exclude them.
 - **Renames before adoption look like migration moves.** The rule "a commit
   that renamed another document" would have passed over Classic's `1cabbcf`;
@@ -325,7 +325,7 @@ Table: Files added or changed in commits `6a7c860` to `5d746f3`, and this Log.
 
 - **Acceptance and numbers.** The steward recorded the plan's acceptance at
   `5d746f3`: its status, `approved-by`, and `reviewed`. The statuses of
-  COMPASS-DRAFT-migration-D1 to COMPASS-DRAFT-migration-D11, still Proposed, and
+  COMPASS-D68 to COMPASS-D78, still Proposed, and
   of this Log's records remain to be set, and `compass assign` follows. The
   skills then cite provisional identifiers that have become aliases, to be
   updated to the canonical ones.
@@ -344,4 +344,4 @@ Table: Files added or changed in commits `6a7c860` to `5d746f3`, and this Log.
   `original-assistant`.
 - **Source headers,** the plan's last stage, are deferred.
 - **A mechanical aid for the form-only comparison,** left for later by
-  COMPASS-DRAFT-migration-O3.
+  COMPASS-O49.

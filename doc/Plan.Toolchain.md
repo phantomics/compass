@@ -1282,7 +1282,7 @@ identifiers that are aliases-to-be.
 
   It also lists, by path, the files a migration has still to reach: those
   without front-matter that `check --skip-unmarked` skips, the step before a
-  number (COMPASS-DRAFT-migration-O2).
+  number (COMPASS-O48).
 - Readiness is decided by the same checks `assign` makes, so that the two
   cannot disagree. A problem in the ledger that blocks every assignment is
   reported once, not against each document.
@@ -1605,7 +1605,7 @@ Table: Initial rule set, with severity and the section each rule enforces.
 | `ref/prose-mention` | warning | §9 document named without a link |
 | `ref/code-pinned` | error in Log/Plan, else warning | §9 commit-pinned code references (COMPASS-D32) |
 | `ref/code-exists` | error; a missing symbol or line, warning | §9 the revision, path, and symbol exist (COMPASS-D32) |
-| `ref/migrated-from` | error | §7, §9 `provenance.migrated-from` names a commit that exists, and a file there (COMPASS-DRAFT-migration-D3) |
+| `ref/migrated-from` | error | §7, §9 `provenance.migrated-from` names a commit that exists, and a file there (COMPASS-D70) |
 | `cite/well-formed` | error | §9 `cites` entries have `title`, `locator`, `external: true` |
 | `git/derivable` | error | §7 `authors`/`created`/`updated` present or derivable (COMPASS-D31) |
 | `shape/sections` | warning | §14 spine sections present and in order |
@@ -1910,7 +1910,7 @@ header forms (see [COMPASS-0002](Spec.SourceHeaders.md#afterword-limits)),
 and most of the reshaping is mechanical enough for an assistant to propose.
 
 **Resolved for documents (2026-11-19):** by
-[COMPASS-DRAFT-migration](Plan.Migration.md), each of the three, in its own
+[COMPASS-0016](Plan.Migration.md), each of the three, in its own
 place:
 
 - **The legacy mode** is `compass check --skip-unmarked`, which skips files
@@ -1919,10 +1919,10 @@ place:
   front-matter that a migration has still to reach
   (COMPASS-DRAFT-toolchain-D30, COMPASS-DRAFT-pending-tool-D5).
 - **The conversion** is a skill, `compass-migrate`, not a `compass migrate`
-  command (COMPASS-DRAFT-migration-D1): one document at a time, form only, with
+  command (COMPASS-D68): one document at a time, form only, with
   `provenance.migrated-from` naming the original (§7, Compass 0.5.0).
 
-Source headers remain open: COMPASS-DRAFT-migration leaves them to a later
+Source headers remain open: COMPASS-0016 leaves them to a later
 stage, under the same form-only rule.
 
 ### COMPASS-O9 — Detecting stale source headers
