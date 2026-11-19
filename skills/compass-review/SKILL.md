@@ -208,9 +208,9 @@ toolchain does not check yet; the dimensions below cover it.
       changed the original before the migration touched it
       (COMPASS-DRAFT-migration-D3): `git log -1 --format=%h <move commit>^ --
       <old path>`, or, for a document not moved, the last commit before the
-      one the migration Log names as the migration's start. Commits in which
-      an earlier document's move only updated a link in this one do not
-      count. A later or an earlier pin is a WARNING.
+      one the migration Log names as the migration's start. A migration move,
+      a commit after `compass.sexp` was added that renamed another document
+      and so updated a link in this one, does not count. A later or an earlier pin is a WARNING.
     - **Links and relations.** Every document of the corpus the original
       names should be a link with its identifier as the text and be in
       `relates-to`; a path left for a document migrated since is a NOTE, for
@@ -221,14 +221,16 @@ toolchain does not check yet; the dimensions below cover it.
       line stays. A lost passage is an ERROR.
     - **Added text.** Allowed: front-matter, headings, field labels, record
       identifiers and full identifiers for the original's numbering, pinned
-      code references (including a symbol's pin beside its first mention),
+      code references (including a symbol's pin in a passage that names it
+      with the file that defines it),
       link targets, `Table:` captions and `Description:` paragraphs (a caption
       may replace a table's lead-in), a heading's displaced text kept as a line
       under it, a pointer to where the original gives a field ("See
       [Problem](#problem)."), and "Not recorded in the original.". Anything
       else is an ERROR when it adds or updates a fact, such as an alternative
       the original never gave or a corrected stale claim, and a WARNING when it
-      only rewords. A "Not recorded" for a field the original does give
+      only rewords. A genre marker removed from a title, such as "Concept:",
+      is form. A "Not recorded" for a field the original does give
       elsewhere is a WARNING: point to it instead.
     - **Order and normativity.** A section moved though the original's order
       already suits the spine is a NOTE. In a Spec, a chapter headed

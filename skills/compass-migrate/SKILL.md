@@ -123,9 +123,12 @@ Propose, giving the reasons, and let the user confirm or correct:
   it before the migration touched it (COMPASS-DRAFT-migration-D3). An earlier
   document's move may have updated a link in this one, and that commit does
   not count. Where the migration Log names the commit the migration began
-  from, use `git log -1 --format=%h <that commit> -- <path>`; otherwise list
-  `git log --format='%h %s' -- <path>` and take the first commit that is not a
-  move, reshape, or link update of the migration. If the user has already
+  from, use `git log -1 --format=%h <that commit> -- <path>`. Otherwise list
+  `git log --format=%h -- <path>`, newest first, and take the first commit that
+  is not a migration move: one later than the commit that added `compass.sexp`
+  (`git log --diff-filter=A --format=%h -- compass.sexp`) whose
+  `git show --stat -M <commit>` shows another document renamed. Renames before
+  adoption are the author's own, and count. If the user has already
   renamed it, read it through the rename, with `git log --follow`.
 - **Records.** The original's decisions, numbered or not, and its open
   questions, with the identifiers they will take. Numbered ones keep their
@@ -198,7 +201,8 @@ following any differences the repository's own plan makes:
   holds: a title line the new heading replaces, a version line, and a status
   line. Where a status line also states a fact, as "**Status:** Conceptual. No
   implementation has begun." does, remove only the status and keep the fact as
-  a line. Keep a line giving the author's date.
+  a line. Keep a line giving the author's date. Remove a genre marker from the
+  title, such as "Concept:" or "DevLog", since the `genre` field now says it.
 - **Sections:** rename them to follow the genre's §14 spine, keeping their text
   and any cited numbers, as in "4. Required Core Tag Vocabulary". Text a renamed
   heading displaces, such as the expansion of a name, stays as a line under the

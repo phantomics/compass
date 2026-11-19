@@ -7,7 +7,8 @@
  :doc-directory "doc/"
  :federation ((:namespace "CLASSIC" :path "../classic")
               (:namespace "ORIGIN" :path "../origin")
-              (:namespace "LEXTER" :path "../../chat/lexter"))
+              (:namespace "LEXTER" :path "../../chat/lexter")
+              (:namespace "LEXIS" :path "../lexis"))
  :commands ((:name :build :shell "make build"
              :doc "Build bin/compass")
             (:name :test :shell "make test"

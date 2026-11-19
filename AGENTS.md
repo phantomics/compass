@@ -35,8 +35,9 @@ Facts for this repository:
   PATH after `make install`. A stale `bin/compass` checks with old rules; rebuild
   after changing `src/`.
 - Federated repositories: CLASSIC (`../classic`), ORIGIN (`../origin`), LEXTER
-  (`../../chat/lexter`), as listed in `compass.sexp`. `compass check
-  --federation` checks references into them where they are checked out.
+  (`../../chat/lexter`), LEXIS (`../lexis`), as listed in `compass.sexp`.
+  `compass check --federation` checks references into them where they are
+  checked out.
 - Refer to a record by its full identifier, never a short form such as `D6`
   (`ref/short-record`). The corpus has none; keep it that way.
 - Most documents have canonical numbers (`COMPASS-0004` is the toolchain plan).
