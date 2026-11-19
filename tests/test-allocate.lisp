@@ -546,3 +546,31 @@ assignment, and say what to do."
                    :rules '("ref/short-record"))))
     (is (= 1 (length findings)))
     (is (search "probably TEST-D1" (finding-message (first findings))))))
+
+(test short-references-are-found-once-per-corpus
+  "A document's short references are found once per loaded corpus (COMPASS-D80):
+a second request, the rule, and short-references-to share one scan, and the
+rule's findings are the same whichever asks first. A corpus loaded again scans
+afresh."
+  (with-temp-repository (root *short-files*)
+    (let* ((corpus (load-corpus root))
+           (beta (find-document corpus "TEST-DRAFT-beta"))
+           (shorts (document-short-references corpus beta)))
+      (is (equal '("D1" "O1" "O2") (mapcar #'short-reference-text shorts)))
+      (is (eq shorts (document-short-references corpus beta))
+          "a second request returns the list already found")
+      (let ((to (short-references-to corpus '("TEST-DRAFT-beta-D1"))))
+        (is (= 1 (length to)))
+        (is (eq (first shorts) (second (first to))) "short-references-to uses the same scan"))
+      (let ((after (check-corpus corpus :only '("ref/short-record")))
+            (fresh (check-corpus (load-corpus root) :only '("ref/short-record"))))
+        (is (= 4 (length after)) (describe-findings after))
+        (is (equal (mapcar #'finding-message fresh) (mapcar #'finding-message after))
+            "the rule's findings do not depend on an earlier request")
+        (is (equal (mapcar #'short-reference-line shorts)
+                   (mapcar #'finding-line (remove "doc/Plan.B.md" after
+                                                  :key #'finding-path :test-not #'string=))))))
+    (let ((one (load-corpus root)) (two (load-corpus root)))
+      (is (not (eq (document-short-references one (find-document one "TEST-DRAFT-beta"))
+                   (document-short-references two (find-document two "TEST-DRAFT-beta"))))
+          "each corpus finds its own"))))

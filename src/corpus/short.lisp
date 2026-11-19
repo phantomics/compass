@@ -1,8 +1,9 @@
 ;;;; short.lisp — Find short record references, such as D6, and suggest the identifier each means
 ;;;;
 ;;;; Read-if: changing how short references are found or what is suggested for them
-;;;; See: COMPASS-DRAFT-toolchain-D26
+;;;; See: COMPASS-DRAFT-toolchain-D26, COMPASS-D80
 ;;;; Invariant: this file only finds and suggests; nothing here rewrites a document
+;;;; Invariant: a document's short references are found once per corpus, which is complete, with any federation loaded, before the first are found
 ;;;; Tests: tests/test-allocate.lisp
 
 (in-package #:compass.corpus)
@@ -150,6 +151,17 @@ record that already has a canonical number."
        (aref lines index)))
 
 (defun document-short-references (corpus document)
+  "The short record references in DOCUMENT's text and headings, as
+SHORT-REFERENCEs (see SCAN-SHORT-REFERENCES). They are found once per loaded
+CORPUS, and the list returned is shared: callers must not modify it."
+  (let ((table (corpus-cached corpus :short-references
+                              (lambda () (make-hash-table :test #'eq)))))
+    (multiple-value-bind (shorts found) (gethash document table)
+      (if found
+          shorts
+          (setf (gethash document table) (scan-short-references corpus document))))))
+
+(defun scan-short-references (corpus document)
   "The short record references in DOCUMENT's text and headings, other than in
 record headings (which `register/heading-form` reports), as SHORT-REFERENCEs.
 A short reference that its context ties to a document (a list continuing a full
