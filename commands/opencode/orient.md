@@ -21,7 +21,10 @@ Get acquainted with this repository's documentation before we work. Use the
    If it has no `compass.sexp`, say that this is not a Compass repository and
    stop.
 3. Run `compass index --stdout` and summarise the documents and records by
-   genre and status.
+   genre and status. Then, if `compass help` lists it, run `compass pending`
+   and report in one line how many documents are ready to be numbered, blocked,
+   and waiting, naming the ready ones, and how many files are not yet
+   migrated.
 4. Run `compass check` (with `--skip-unmarked` if files lack front-matter) and
    report its errors, warnings, skipped files, unverified references, and
    notes, one line each. Do not fix anything.

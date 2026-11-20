@@ -318,6 +318,10 @@ records, implausible cross-references, bare-line code refs in Log/Plan). Use
 optional-but-expected sections, style drift). Use **NOTE** for suggestions.
 
 Never recommend **Accept** while the files under review have a toolchain error.
+When you recommend **Accept**, name the step after it: once a person sets an
+accepted status, `compass pending --ready` shows whether `compass assign` would
+number the document now, or what blocks it, and running `assign` is theirs to
+ask for.
 
 ## Without the toolchain
 

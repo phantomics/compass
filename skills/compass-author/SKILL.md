@@ -198,7 +198,10 @@ The per-genre templates live in `../../templates/<Genre>.template.md`.
 10. **Report.** Give the path and provisional id, the `compass check` result
     (errors and warnings for the new file, and the toolchain version), and what
     the toolchain does not check yet (`../reference/toolchain.md`). Suggest
-    `compass-review` before acceptance.
+    `compass-review` before acceptance. Where you hand the document over for
+    acceptance, name the step after it: once a person sets an accepted status,
+    `compass pending --ready` shows whether `compass assign` would number it
+    now, and running `assign` is theirs to ask for.
 
 11. **Offer the AGENTS snippet (first document in a corpus).** When scaffolding
     a project's *first* Compass document, offer to install
