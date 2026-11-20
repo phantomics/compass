@@ -171,7 +171,8 @@ after `refs` in `compass help`, prints the groups as COMPASS-0017's design shows
 a failed lookup, exit 1. `skills/reference/toolchain.md` describes the command
 in the same commit, since the skills tests require it of every command. Its
 tests went into `tests/test-pending.lisp`, beside the repository they share,
-not into `tests/test-cli.lisp` as the plan's table of files has it.
+not into `tests/test-cli.lisp` as the plan's table of files first had it; the
+table was corrected after this Log was written.
 
 ### Stage 7: the note (`3c9d767`)
 
@@ -285,10 +286,8 @@ Table: Files added or changed in commits `1278fb3` to `7533822`, and with this L
 - **Statuses and numbers.** COMPASS-D79 to COMPASS-D83 are still `Proposed`,
   in an accepted plan, as are this Log's records. COMPASS-DRAFT-toolchain-D30
   is `Proposed` and provisional in COMPASS-0004, and
-  COMPASS-DRAFT-authoring-assistance-D1 in COMPASS-0003; `compass pending`
+  COMPASS-D84 in COMPASS-0003; `compass pending`
   lists both documents as ready, with those records flagged.
 - **The open questions** of COMPASS-0017: COMPASS-O53, whether `assign` should
   warn about records not yet accepted; COMPASS-O54, the age of what is waiting;
   and COMPASS-O55, reminders beyond the note.
-- **The plan's table of files** names `tests/test-cli.lisp` for the command's
-  tests, which are in `tests/test-pending.lisp`.

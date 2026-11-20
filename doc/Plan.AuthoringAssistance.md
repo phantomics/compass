@@ -22,7 +22,7 @@ decisions:
   - COMPASS-D2
   - COMPASS-D3
   - COMPASS-D4
-  - COMPASS-DRAFT-authoring-assistance-D1
+  - COMPASS-D84
 open-questions:
   - COMPASS-O1
   - COMPASS-O2
@@ -132,9 +132,9 @@ read on demand. The OpenCode `SKILL.md` layout is the reference implementation
 duplication drifts); one reference file (rejected: coarse; four focused files
 map to the concerns skills actually query).
 
-### COMPASS-DRAFT-authoring-assistance-D1 — A fifth skill sets a repository up for Compass
+### COMPASS-D84 — A fifth skill sets a repository up for Compass
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** COMPASS-D1 splits the layer into four skills for drafting,
 review, retrieval, and derivation, all of which assume a repository already
 set up for Compass. Setting one up takes several steps that must happen in
@@ -177,7 +177,7 @@ written at all).
   admission, cross-reference plausibility (§9), and prior-art coverage; emits a
   report for the §6 editor. Never sets `approved-by`.
 - **`compass-adopt`** — sets a folder up for Compass
-  (COMPASS-DRAFT-authoring-assistance-D1): confirms the namespace, steward,
+  (COMPASS-D84): confirms the namespace, steward,
   approval mode, document directory, and federation, then writes a
   `.mailmap`, the manifest (`compass init`), the ledger
   (`compass init --ledger`), and the Compass block of `AGENTS.md`, and checks
@@ -299,7 +299,7 @@ Table: Prior systems and what this plan draws from each.
      and dates from `outline`, and the manifest from `manifest --json`. See
      [COMPASS-0013](Log.Ledger.md).
 7. **Adoption skill (done, 2026-10-13).** `compass-adopt`
-   (COMPASS-DRAFT-authoring-assistance-D1); the README describes it after the
+   (COMPASS-D84); the README describes it after the
    build instructions. A migration skill for existing documents is planned
    separately, in [COMPASS-0016](Plan.Migration.md), whose
    roadmap builds `compass-migrate` (drafted 2026-11-18) and tries it on

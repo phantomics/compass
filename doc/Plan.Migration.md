@@ -155,7 +155,7 @@ works on one document per request, which the user names or chooses from a list
 the skill proposes, and never on a whole directory at once. It proposes every
 change, makes them once the user confirms, and checks the result with
 `compass check`. It never commits. This adds a sixth skill to the five of
-COMPASS-D1 and COMPASS-DRAFT-authoring-assistance-D1 in COMPASS-0003.
+COMPASS-D1 and COMPASS-D84 in COMPASS-0003.
 **Alternatives:** A `compass migrate` command (rejected: genre, records, and
 symbol anchors are judgments, and a command that guesses them would write
 plausible but wrong documents with the toolchain's authority); bulk migration
