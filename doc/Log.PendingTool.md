@@ -1,12 +1,16 @@
 ---
-id:            COMPASS-DRAFT-pending-tool-log
+id:            COMPASS-0018
 title:         Compass Pending Development Log
 genre:         Log
 scope:         component
 program:       Compass
 component:     toolchain
 language:      en
-status:        Draft
+status:        Implemented
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-19
 provenance:
   assistant:   opencode
 relates-to:
@@ -15,10 +19,10 @@ relates-to:
   - COMPASS-0013
   - COMPASS-0016
 decisions:
-  - COMPASS-DRAFT-pending-tool-log-D1
-  - COMPASS-DRAFT-pending-tool-log-D2
-  - COMPASS-DRAFT-pending-tool-log-D3
-  - COMPASS-DRAFT-pending-tool-log-D4
+  - COMPASS-D85
+  - COMPASS-D86
+  - COMPASS-D87
+  - COMPASS-D88
 ---
 
 # Compass Pending: Development Log
@@ -47,9 +51,9 @@ COMPASS-0017 planned a read-only command for all four. It was written in
 The design is decided in COMPASS-0017 (COMPASS-D79 to COMPASS-D83). These are
 the choices made while building it.
 
-### COMPASS-DRAFT-pending-tool-log-D1 — Without Git, the `user.name` blocker says Git was not found
+### COMPASS-D85 — Without Git, the `user.name` blocker says Git was not found
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** COMPASS-D79 makes a Git without `user.name` a blocker of every
 assignment, found by asking Git for the name. `assign` refuses before that
 outside a Git repository, but `pending` lists without needing Git, as the
@@ -66,9 +70,9 @@ reason, that the ledger cannot record who allocated a number, and would add a
 kind COMPASS-D79 does not list); let `pending` fail without Git (rejected: the
 listing needs nothing of Git but the name, and `check` would fail with it).
 
-### COMPASS-DRAFT-pending-tool-log-D2 — The missing `user.name` message names `.mailmap`
+### COMPASS-D86 — The missing `user.name` message names `.mailmap`
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** COMPASS-D79 keeps the messages `assign` refuses with unchanged,
 and also asks that the `user.name` blocker say that the repository's `.mailmap`
 maps the name to the one the ledger records. The blocker's message is the one
@@ -79,9 +83,9 @@ test had checked the message before; one now does.
 **Alternatives:** A separate remedy for `pending` alone (rejected: the two would
 give different advice for one problem, against the purpose of COMPASS-D79).
 
-### COMPASS-DRAFT-pending-tool-log-D3 — The summary counts the whole listing, even with `--ready`
+### COMPASS-D87 — The summary counts the whole listing, even with `--ready`
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** With `--ready`, COMPASS-0017 prints only the ready group and the
 summary line, and filters the JSON's documents, but does not say what the
 summary counts. `/orient` reports the ready, blocked, and waiting counts
@@ -93,9 +97,9 @@ documents in each group, and the files not yet migrated.
 waiting" would be untrue); leave the JSON without a summary (rejected: a tool
 would have to count the groups itself, and could not with `--ready`).
 
-### COMPASS-DRAFT-pending-tool-log-D4 — The note is skipped when no checked document could be ready
+### COMPASS-D88 — The note is skipped when no checked document could be ready
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** The note shares the scan for short references with
 `ref/short-record` (COMPASS-D80), so a full check cost no more with it. But a
 check that excludes that rule, or is limited to one file that cannot be ready,
@@ -160,14 +164,14 @@ unless a namespace or `:ready` is given (COMPASS-D83). A test checks that
 blocked one with the first blocker listed
 (`tests/test-pending.lisp:pending-agrees-with-assign@e9d379e`). The same commit
 made the `user.name` blocker safe without Git
-(COMPASS-DRAFT-pending-tool-log-D1).
+(COMPASS-D85).
 
 ### Stage 6: the command (`a0b6dee`)
 
 `compass pending [--namespace NS] [--ready] [--format text|json] [--root DIR]`,
 after `refs` in `compass help`, prints the groups as COMPASS-0017's design shows
 (`src/cli.lisp:write-pending-text@a0b6dee`) or their JSON
-(COMPASS-DRAFT-pending-tool-log-D3). A namespace the repository does not own is
+(COMPASS-D87). A namespace the repository does not own is
 a failed lookup, exit 1. `skills/reference/toolchain.md` describes the command
 in the same commit, since the skills tests require it of every command. Its
 tests went into `tests/test-pending.lisp`, beside the repository they share,
@@ -181,7 +185,7 @@ numbered with `compass assign`, and that `compass pending --ready` lists them,
 counting only the paths given
 (`src/cli.lisp:document-selected-p@3c9d767`); the note never changes the exit
 status (COMPASS-D81), and is skipped when no checked document could be ready
-(COMPASS-DRAFT-pending-tool-log-D4). `toolchain.md` and Step 1 of
+(COMPASS-D88). `toolchain.md` and Step 1 of
 `compass-review` now describe two kinds of note: those that say what the check
 could not do, and those that give information about what it checked.
 
@@ -217,7 +221,7 @@ that holds this Log. The release binaries of v0.2.1 are not yet built.
   rebuilt so that the figures before the change belong to `1278fb3`.
 - **Sharing a scan moves its cost.** The note made a check that excludes
   `ref/short-record` scan anyway, which only measuring found
-  (COMPASS-DRAFT-pending-tool-log-D4).
+  (COMPASS-D88).
 
 ## Verification
 

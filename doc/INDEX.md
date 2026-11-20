@@ -23,15 +23,15 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0012](Log.AuthoringAssistance.md) | Compass Authoring-Assistance Development Log | Log | component | Accepted | authoring-assistance |
 | [COMPASS-0013](Log.Ledger.md) | Compass Ledger Development Log | Log | component | Accepted | toolchain |
 | [COMPASS-0014](Plan.Critique.md) | Compass Critique — Adversarial Evaluation of a Project's Own Systems | Plan | program | Accepted | standard |
-| [COMPASS-0015](Log.Migration.md) | Compass Migration Skill Development Log | Log | component | Accepted | authoring-assistance |
-| [COMPASS-0016](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Accepted | authoring-assistance |
-| [COMPASS-0017](Plan.PendingTool.md) | Compass Pending — Listing What Is Waiting for a Number | Plan | component | Accepted | toolchain |
+| [COMPASS-0015](Log.Migration.md) | Compass Migration Skill Development Log | Log | component | Implemented | authoring-assistance |
+| [COMPASS-0016](Plan.Migration.md) | Compass Migration — Bringing Existing Documents into a Compass Corpus | Plan | program | Implemented | authoring-assistance |
+| [COMPASS-0017](Plan.PendingTool.md) | Compass Pending — Listing What Is Waiting for a Number | Plan | component | Implemented | toolchain |
+| [COMPASS-0018](Log.PendingTool.md) | Compass Pending Development Log | Log | component | Implemented | toolchain |
+| [COMPASS-0019](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Accepted | toolchain |
 | [COMPASS-DRAFT-emacs-review](Plan.EmacsReview.md) | Compass Review in Emacs — Write Commands and an Emacs Package | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-corpus-qa](Plan.EvalCorpusQA.md) | Compass Corpus Question-Answering Study — Does Project Knowledge Reach the Agent? | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md) | Compass Defect-Detection Study — Does Review Find What Is Wrong with a Document? | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-snapshot](Plan.EvalSnapshot.md) | Compass Snapshot Study — Planning Track 1 of the Agent-Context Evaluation | Plan | program | Draft | agent-context |
-| [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Accepted | toolchain |
-| [COMPASS-DRAFT-pending-tool-log](Log.PendingTool.md) | Compass Pending Development Log | Log | component | Draft | toolchain |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
 
@@ -56,10 +56,10 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D46](Log.Toolchain.md#compass-d46--problems-found-while-loading-are-rules-too) | Decision | Problems found while loading are rules too | Accepted | COMPASS-0011 |
 | [COMPASS-D47](Log.Toolchain.md#compass-d47--checking-one-path-still-checks-the-whole-corpus) | Decision | Checking one path still checks the whole corpus | Accepted | COMPASS-0011 |
 | [COMPASS-D48](Log.Toolchain.md#compass-d48--a-closed-output-stream-ends-the-command-quietly) | Decision | A closed output stream ends the command quietly | Accepted | COMPASS-0011 |
-| [COMPASS-D49](Log.AuthoringAssistance.md#compass-d49--one-shared-toolchain-guide-and-a-short-summary-in-each-skill) | Decision | One shared toolchain guide, and a short summary in each skill | Accepted | COMPASS-0012 |
-| [COMPASS-D50](Log.AuthoringAssistance.md#compass-d50--review-checks-the-whole-corpus-and-separates-the-changes-findings) | Decision | Review checks the whole corpus and separates the change's findings | Accepted | COMPASS-0012 |
+| [COMPASS-D49](Log.AuthoringAssistance.md#compass-d49--one-shared-toolchain-guide-and-a-short-summary-in-each-skill) | Decision | One shared toolchain guide, and a short summary in each skill | Implemented | COMPASS-0012 |
+| [COMPASS-D50](Log.AuthoringAssistance.md#compass-d50--review-checks-the-whole-corpus-and-separates-the-changes-findings) | Decision | Review checks the whole corpus and separates the change's findings | Implemented | COMPASS-0012 |
 | [COMPASS-D51](Log.AuthoringAssistance.md#compass-d51--drift-tests-accept-what-exists-or-what-the-plan-lists) | Decision | Drift tests accept what exists or what the plan lists | Proposed | COMPASS-0012 |
-| [COMPASS-D52](Log.AuthoringAssistance.md#compass-d52--templates-give-new-decisions-the-status-proposed) | Decision | Templates give new decisions the status Proposed | Accepted | COMPASS-0012 |
+| [COMPASS-D52](Log.AuthoringAssistance.md#compass-d52--templates-give-new-decisions-the-status-proposed) | Decision | Templates give new decisions the status Proposed | Implemented | COMPASS-0012 |
 | [COMPASS-D53](Log.Ledger.md#compass-d53--seeding-refuses-a-number-defined-twice) | Decision | Seeding refuses a number defined twice | Accepted | COMPASS-0013 |
 | [COMPASS-D54](Log.Ledger.md#compass-d54--the-check-after-an-allocation-uses-the-allocations-base) | Decision | The check after an allocation uses the allocation's base | Accepted | COMPASS-0013 |
 | [COMPASS-D55](Log.Ledger.md#compass-d55--an-uppercase-prefix-in-a-code-span-is-a-namespace-only-when-known-or-when-a-path-follows) | Decision | An uppercase prefix in a code span is a namespace only when known, or when a path follows | Proposed | COMPASS-0013 |
@@ -72,26 +72,30 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D62](Plan.Critique.md#compass-d62--findings-are-open-question-records-and-a-person-disposes-of-each) | Decision | Findings are open-question records, and a person disposes of each | Accepted | COMPASS-0014 |
 | [COMPASS-D63](Plan.Critique.md#compass-d63--a-threat-model-is-a-critique-of-security-with-its-own-method) | Decision | A threat model is a critique of security, with its own method | Accepted | COMPASS-0014 |
 | [COMPASS-D64](Plan.Critique.md#compass-d64--the-conversation-is-scratch-the-critique-is-its-distillation) | Decision | The conversation is scratch; the critique is its distillation | Accepted | COMPASS-0014 |
-| [COMPASS-D65](Log.Migration.md#compass-d65--migrated-from-is-checked-by-a-rule-of-its-own) | Decision | migrated-from is checked by a rule of its own | Proposed | COMPASS-0015 |
-| [COMPASS-D66](Log.Migration.md#compass-d66--the-revision-is-a-commits-hash-never-a-branch-or-tag) | Decision | The revision is a commit's hash, never a branch or tag | Proposed | COMPASS-0015 |
-| [COMPASS-D67](Log.Migration.md#compass-d67--the-pending-check-for-provenance-keys-keeps-a-test-after-both-keys-are-accepted) | Decision | The pending check for provenance keys keeps a test after both keys are accepted | Proposed | COMPASS-0015 |
-| [COMPASS-D68](Plan.Migration.md#compass-d68--migration-is-a-skill-one-document-at-a-time) | Decision | Migration is a skill, one document at a time | Proposed | COMPASS-0016 |
-| [COMPASS-D69](Plan.Migration.md#compass-d69--migration-reshapes-form-only) | Decision | Migration reshapes form only | Proposed | COMPASS-0016 |
-| [COMPASS-D70](Plan.Migration.md#compass-d70--a-migrated-document-names-its-original-in-provenance) | Decision | A migrated document names its original in provenance | Proposed | COMPASS-0016 |
-| [COMPASS-D71](Plan.Migration.md#compass-d71--move-and-rename-first-in-a-commit-of-its-own-and-keep-links-to-the-document-current) | Decision | Move and rename first, in a commit of its own, and keep links to the document current | Proposed | COMPASS-0016 |
-| [COMPASS-D72](Plan.Migration.md#compass-d72--code-references-are-pinned-to-the-revision-the-document-describes) | Decision | Code references are pinned to the revision the document describes | Proposed | COMPASS-0016 |
-| [COMPASS-D73](Plan.Migration.md#compass-d73--records-take-provisional-identifiers-keeping-the-originals-numbering) | Decision | Records take provisional identifiers, keeping the original's numbering | Proposed | COMPASS-0016 |
-| [COMPASS-D74](Plan.Migration.md#compass-d74--the-assistant-proposes-statuses-the-steward-sets-them) | Decision | The assistant proposes statuses; the steward sets them | Proposed | COMPASS-0016 |
-| [COMPASS-D75](Plan.Migration.md#compass-d75--a-migration-log-records-a-large-backlog-agentsmd-records-a-small-one) | Decision | A migration Log records a large backlog; AGENTS.md records a small one | Proposed | COMPASS-0016 |
-| [COMPASS-D76](Plan.Migration.md#compass-d76--section-numbers-that-are-cited-elsewhere-are-kept) | Decision | Section numbers that are cited elsewhere are kept | Proposed | COMPASS-0016 |
-| [COMPASS-D77](Plan.Migration.md#compass-d77--a-repositorys-own-migration-plan-takes-precedence) | Decision | A repository's own migration plan takes precedence | Proposed | COMPASS-0016 |
-| [COMPASS-D78](Plan.Migration.md#compass-d78--the-skill-ends-at-the-reshape-revision-is-a-separate-edit-before-acceptance-where-it-matters) | Decision | The skill ends at the reshape; revision is a separate edit, before acceptance where it matters | Proposed | COMPASS-0016 |
-| [COMPASS-D79](Plan.PendingTool.md#compass-d79--assigns-checks-are-factored-out-and-shared) | Decision | assign's checks are factored out and shared | Proposed | COMPASS-0017 |
-| [COMPASS-D80](Plan.PendingTool.md#compass-d80--short-references-are-found-once-per-corpus) | Decision | Short references are found once per corpus | Proposed | COMPASS-0017 |
-| [COMPASS-D81](Plan.PendingTool.md#compass-d81--the-note-counts-only-the-documents-check-checked) | Decision | The note counts only the documents check checked | Proposed | COMPASS-0017 |
-| [COMPASS-D82](Plan.PendingTool.md#compass-d82--orient-runs-pending-as-a-read-only-step) | Decision | /orient runs pending as a read-only step | Proposed | COMPASS-0017 |
-| [COMPASS-D83](Plan.PendingTool.md#compass-d83--files-not-yet-migrated-are-listed-as-a-fourth-group) | Decision | Files not yet migrated are listed as a fourth group | Proposed | COMPASS-0017 |
+| [COMPASS-D65](Log.Migration.md#compass-d65--migrated-from-is-checked-by-a-rule-of-its-own) | Decision | migrated-from is checked by a rule of its own | Implemented | COMPASS-0015 |
+| [COMPASS-D66](Log.Migration.md#compass-d66--the-revision-is-a-commits-hash-never-a-branch-or-tag) | Decision | The revision is a commit's hash, never a branch or tag | Implemented | COMPASS-0015 |
+| [COMPASS-D67](Log.Migration.md#compass-d67--the-pending-check-for-provenance-keys-keeps-a-test-after-both-keys-are-accepted) | Decision | The pending check for provenance keys keeps a test after both keys are accepted | Implemented | COMPASS-0015 |
+| [COMPASS-D68](Plan.Migration.md#compass-d68--migration-is-a-skill-one-document-at-a-time) | Decision | Migration is a skill, one document at a time | Implemented | COMPASS-0016 |
+| [COMPASS-D69](Plan.Migration.md#compass-d69--migration-reshapes-form-only) | Decision | Migration reshapes form only | Implemented | COMPASS-0016 |
+| [COMPASS-D70](Plan.Migration.md#compass-d70--a-migrated-document-names-its-original-in-provenance) | Decision | A migrated document names its original in provenance | Implemented | COMPASS-0016 |
+| [COMPASS-D71](Plan.Migration.md#compass-d71--move-and-rename-first-in-a-commit-of-its-own-and-keep-links-to-the-document-current) | Decision | Move and rename first, in a commit of its own, and keep links to the document current | Implemented | COMPASS-0016 |
+| [COMPASS-D72](Plan.Migration.md#compass-d72--code-references-are-pinned-to-the-revision-the-document-describes) | Decision | Code references are pinned to the revision the document describes | Implemented | COMPASS-0016 |
+| [COMPASS-D73](Plan.Migration.md#compass-d73--records-take-provisional-identifiers-keeping-the-originals-numbering) | Decision | Records take provisional identifiers, keeping the original's numbering | Implemented | COMPASS-0016 |
+| [COMPASS-D74](Plan.Migration.md#compass-d74--the-assistant-proposes-statuses-the-steward-sets-them) | Decision | The assistant proposes statuses; the steward sets them | Implemented | COMPASS-0016 |
+| [COMPASS-D75](Plan.Migration.md#compass-d75--a-migration-log-records-a-large-backlog-agentsmd-records-a-small-one) | Decision | A migration Log records a large backlog; AGENTS.md records a small one | Implemented | COMPASS-0016 |
+| [COMPASS-D76](Plan.Migration.md#compass-d76--section-numbers-that-are-cited-elsewhere-are-kept) | Decision | Section numbers that are cited elsewhere are kept | Implemented | COMPASS-0016 |
+| [COMPASS-D77](Plan.Migration.md#compass-d77--a-repositorys-own-migration-plan-takes-precedence) | Decision | A repository's own migration plan takes precedence | Implemented | COMPASS-0016 |
+| [COMPASS-D78](Plan.Migration.md#compass-d78--the-skill-ends-at-the-reshape-revision-is-a-separate-edit-before-acceptance-where-it-matters) | Decision | The skill ends at the reshape; revision is a separate edit, before acceptance where it matters | Implemented | COMPASS-0016 |
+| [COMPASS-D79](Plan.PendingTool.md#compass-d79--assigns-checks-are-factored-out-and-shared) | Decision | assign's checks are factored out and shared | Implemented | COMPASS-0017 |
+| [COMPASS-D80](Plan.PendingTool.md#compass-d80--short-references-are-found-once-per-corpus) | Decision | Short references are found once per corpus | Implemented | COMPASS-0017 |
+| [COMPASS-D81](Plan.PendingTool.md#compass-d81--the-note-counts-only-the-documents-check-checked) | Decision | The note counts only the documents check checked | Implemented | COMPASS-0017 |
+| [COMPASS-D82](Plan.PendingTool.md#compass-d82--orient-runs-pending-as-a-read-only-step) | Decision | /orient runs pending as a read-only step | Implemented | COMPASS-0017 |
+| [COMPASS-D83](Plan.PendingTool.md#compass-d83--files-not-yet-migrated-are-listed-as-a-fourth-group) | Decision | Files not yet migrated are listed as a fourth group | Implemented | COMPASS-0017 |
 | [COMPASS-D84](Plan.AuthoringAssistance.md#compass-d84--a-fifth-skill-sets-a-repository-up-for-compass) | Decision | A fifth skill sets a repository up for Compass | Implemented | COMPASS-0003 |
+| [COMPASS-D85](Log.PendingTool.md#compass-d85--without-git-the-username-blocker-says-git-was-not-found) | Decision | Without Git, the user.name blocker says Git was not found | Implemented | COMPASS-0018 |
+| [COMPASS-D86](Log.PendingTool.md#compass-d86--the-missing-username-message-names-mailmap) | Decision | The missing user.name message names .mailmap | Implemented | COMPASS-0018 |
+| [COMPASS-D87](Log.PendingTool.md#compass-d87--the-summary-counts-the-whole-listing-even-with---ready) | Decision | The summary counts the whole listing, even with --ready | Implemented | COMPASS-0018 |
+| [COMPASS-D88](Log.PendingTool.md#compass-d88--the-note-is-skipped-when-no-checked-document-could-be-ready) | Decision | The note is skipped when no checked document could be ready | Implemented | COMPASS-0018 |
 | [COMPASS-DRAFT-emacs-review-D1](Plan.EmacsReview.md#compass-draft-emacs-review-d1--writes-live-in-the-toolchain-editors-drive-them) | Decision | Writes live in the toolchain; editors drive them | Proposed | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-D2](Plan.EmacsReview.md#compass-draft-emacs-review-d2--four-write-commands) | Decision | Four write commands | Proposed | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-D3](Plan.EmacsReview.md#compass-draft-emacs-review-d3--acts-reserved-for-people-are-enforced-by-the-commands) | Decision | Acts reserved for people are enforced by the commands | Proposed | COMPASS-DRAFT-emacs-review |
@@ -139,10 +143,6 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-D14](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d14--the-study-is-chronicled-in-this-plan-a-log-and-updates-to-compass-0006) | Decision | The study is chronicled in this Plan, a Log, and updates to COMPASS-0006 | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D15](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d15--the-paper-lives-in-pub-as-an-acm-preprint-derived-from-the-record) | Decision | The paper lives in pub/, as an ACM preprint derived from the record | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D16](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d16--the-compass-toolchain-and-skills-are-present-in-every-workspace) | Decision | The Compass toolchain and skills are present in every workspace | Proposed | COMPASS-DRAFT-eval-snapshot |
-| [COMPASS-DRAFT-pending-tool-log-D1](Log.PendingTool.md#compass-draft-pending-tool-log-d1--without-git-the-username-blocker-says-git-was-not-found) | Decision | Without Git, the user.name blocker says Git was not found | Proposed | COMPASS-DRAFT-pending-tool-log |
-| [COMPASS-DRAFT-pending-tool-log-D2](Log.PendingTool.md#compass-draft-pending-tool-log-d2--the-missing-username-message-names-mailmap) | Decision | The missing user.name message names .mailmap | Proposed | COMPASS-DRAFT-pending-tool-log |
-| [COMPASS-DRAFT-pending-tool-log-D3](Log.PendingTool.md#compass-draft-pending-tool-log-d3--the-summary-counts-the-whole-listing-even-with---ready) | Decision | The summary counts the whole listing, even with --ready | Proposed | COMPASS-DRAFT-pending-tool-log |
-| [COMPASS-DRAFT-pending-tool-log-D4](Log.PendingTool.md#compass-draft-pending-tool-log-d4--the-note-is-skipped-when-no-checked-document-could-be-ready) | Decision | The note is skipped when no checked document could be ready | Proposed | COMPASS-DRAFT-pending-tool-log |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |

@@ -760,7 +760,7 @@ Resolves COMPASS-O4. Amends §7 (minor) to state the subset.
 
 ### COMPASS-D23 — Portable binary distribution
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Compass is meant for projects in any language. A project that is
 not written in Lisp should be able to run `compass check` without installing a
@@ -861,7 +861,7 @@ development and testing. Apple notarization needs a paid developer account.
 
 ### COMPASS-D24 — Vocabulary values carry a standing
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The toolchain must recognise vocabulary that decisions have
 introduced but the standard has not yet adopted: the `Superseded` status (COMPASS-D9),
@@ -889,7 +889,7 @@ its statuses, M-records, and the `memos:` field are accepted
 
 ### COMPASS-D25 — Implementation conventions for the baseline
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** Building v0.1 requires several choices that the decisions above
 leave open. Each affects more than one command, or a later release, so they are
@@ -1173,7 +1173,7 @@ outside any repository, a renamed file, or a shallow clone.
 
 ### COMPASS-D32 — Which code references are checked, and how deeply
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** §9 makes commit-pinned code references mandatory in `Log` and
 `Plan` and recommended elsewhere. COMPASS-O7 asks how deeply a
@@ -1221,7 +1221,7 @@ Resolves COMPASS-O7.
 
 ### COMPASS-D33 — Federation checks are opt-in and one hop deep
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** The manifests of COMPASS-D8 list the local paths of
 federated repositories, and that decision has federation-level checks run "when
@@ -1260,7 +1260,7 @@ the federation.
 
 ### COMPASS-DRAFT-toolchain-D30 — `compass pending` lists what is waiting for a number
 
-**Status:** Proposed
+**Status:** Implemented
 
 **Context:** A document keeps its provisional identifier, and a record added to
 a numbered document keeps its own (COMPASS-D27), until the steward runs

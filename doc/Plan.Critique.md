@@ -374,7 +374,7 @@ Table: The fields of a finding record.
 
 An illustrative finding, in a critique of the ledger, with a placeholder
 identifier (it is an example, not a finding of
-[COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md)):
+[COMPASS-0019](Eval.Critique.Ledger.md)):
 
 ```
 ### <NS>-DRAFT-<slug>-O1 — One ledger serializes unrelated namespaces
@@ -533,6 +533,6 @@ Table: Prior systems and what this plan draws from each.
 6. **Checks**, if COMPASS-O41 settles on them.
 7. **First critiques.** A critique of part of Compass, such as the ledger, as
    the worked example, begun as
-   [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md): a scaffold with its
+   [COMPASS-0019](Eval.Critique.Ledger.md): a scaffold with its
    method, scenario, and rubric, and no findings yet; and, at Classic's choice,
    its `securityPoints.md` rewritten as a `threat-model` Eval (COMPASS-O37).

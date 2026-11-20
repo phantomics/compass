@@ -6,7 +6,7 @@ scope:         component
 program:       Compass
 component:     toolchain
 language:      en
-status:        Accepted
+status:        Implemented
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
@@ -87,7 +87,7 @@ COMPASS-DRAFT-toolchain-D30 is built; the command's behaviour is decided there.
 
 ### COMPASS-D79 — `assign`'s checks are factored out and shared
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** `plan-assign` (`src/corpus/allocate.lisp:plan-assign@2e839c9`)
 decides whether a document may be numbered inside one function, refusing at
 the first failure: a manifest without `:namespaces`, the document's identifier
@@ -128,7 +128,7 @@ reimplement the checks in `pending` (rejected: the two would drift).
 
 ### COMPASS-D80 — Short references are found once per corpus
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** The short-reference blocker searches the whole corpus
 (`src/corpus/short.lisp:short-references-to@2e839c9`), and finding short
 references is already the slowest part of `check` (about 210 ms of about
@@ -152,7 +152,7 @@ note would count as ready a document `assign` refuses).
 
 ### COMPASS-D81 — The note counts only the documents `check` checked
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** `check` can be limited to paths, and is run so in hooks and on a
 single file by the skills. A note counting the whole corpus there would
 report documents the user did not ask about.
@@ -177,7 +177,7 @@ the report, where redefining notes costs two paragraphs of the skills).
 
 ### COMPASS-D82 — `/orient` runs `pending` as a read-only step
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** `/orient` (`commands/opencode/orient.md`) orients an agent in a
 repository by running only commands that read; its step 4 already reports
 `check`'s notes, so the note arrives there unaided. The note says only how many
@@ -194,7 +194,7 @@ with the summary of the index).
 
 ### COMPASS-D83 — Files not yet migrated are listed as a fourth group
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** COMPASS-O48 asked for a listing of the migration
 backlog: the files without front-matter that `check --skip-unmarked` skips and
 reports only by count. It was resolved on 2026-11-19 by placing the listing in

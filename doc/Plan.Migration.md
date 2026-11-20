@@ -6,7 +6,7 @@ scope:         program
 program:       Compass
 component:     authoring-assistance
 language:      en
-status:        Accepted
+status:        Implemented
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
@@ -141,7 +141,7 @@ All eleven decisions are proposals for the steward. Since the first draft of
 
 ### COMPASS-D68 — Migration is a skill, one document at a time
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** COMPASS-O8 asks whether pre-Compass documents should get a legacy
 mode in the validator, a migration backlog report, or a `compass migrate`
 assistant. The legacy mode exists: `--skip-unmarked` skips files without
@@ -169,7 +169,7 @@ this rule (COMPASS-D77).
 
 ### COMPASS-D69 — Migration reshapes form only
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** COMPASS-0006 needed Classic's documents in Compass form for its
 seed corpora, and ruled that migration "reshapes form only" and "MUST NOT add
 facts that the historical document did not contain". The same rule protects
@@ -240,7 +240,7 @@ lost from the Survey that held it).
 
 ### COMPASS-D70 — A migrated document names its original in `provenance`
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** §22 requires `provenance:` on any document authored or reviewed
 with LLM help, and a migration is assisted. But `provenance: { assistant: ... }`
 alone says the assistant may have written the content, which is false for a
@@ -293,7 +293,7 @@ process).
 
 ### COMPASS-D71 — Move and rename first, in a commit of its own, and keep links to the document current
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** Older documents often live outside the document directory, or
 are named without a genre prefix (§10), so the toolchain does not check them in
 place. The toolchain derives `authors` and `created` with `git log --follow`,
@@ -340,7 +340,7 @@ paths (rejected after the Classic trial: `Ref.Model` would keep "See
 
 ### COMPASS-D72 — Code references are pinned to the revision the document describes
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** Older documents cite code as `file:line`, `file`, or a function
 name. §9 requires references in `Log` and `Plan` to be pinned to a revision,
 and recommends it elsewhere. A line number means something only at the revision
@@ -382,7 +382,7 @@ and `Plan` (rejected: the revision is known now and lost later).
 
 ### COMPASS-D73 — Records take provisional identifiers, keeping the original's numbering
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** Older documents number their decisions informally ("Decision 3",
 or a bare letter and number) or not at all, and refer to them by those
 numbers. Some, like four of Classic's Surveys, use identifiers that look
@@ -403,7 +403,7 @@ identifiers that do not collide (rejected: only the ledger allocates numbers,
 
 ### COMPASS-D74 — The assistant proposes statuses; the steward sets them
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** An older document often describes settled work: decisions in
 force, a design that matches the code, a finished piece of work. Its Compass
 statuses would be authoritative (`Accepted`, `Implemented`, `Current`), which
@@ -429,7 +429,7 @@ it).
 
 ### COMPASS-D75 — A migration Log records a large backlog; `AGENTS.md` records a small one
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** Migration of a mature repository takes many sessions. Without a
 record, it is unclear which unmarked files are waiting, which were left
 deliberately, and why: an unmarked file looks neglected either way. For a
@@ -463,7 +463,7 @@ backlog is history and progress, not durable properties of the system).
 
 ### COMPASS-D76 — Section numbers that are cited elsewhere are kept
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** Older documents often number their sections, and other documents,
 source comments, and commit messages cite them by number: "§4.3", "per spec
 Section 3.3". The Lexis Spec was cited by section number from a Log, a Plan, and
@@ -486,7 +486,7 @@ migration exists to give).
 
 ### COMPASS-D77 — A repository's own migration plan takes precedence
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** A repository may plan its migration itself before the skill is
 used, as Classic did in
 [CLASSIC-0032](../../classic/doc/Plan.CompassMigration.md). Such a plan
@@ -513,7 +513,7 @@ for an assistant to set statuses, which the skill must not do).
 
 ### COMPASS-D78 — The skill ends at the reshape; revision is a separate edit, before acceptance where it matters
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** Both Lexis migrations were followed by review and revision before
 acceptance. The Spec's reshape was form-only (`c471246`), but its content
 described tags the code did not implement, so accepting it as `Current` straight

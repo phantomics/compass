@@ -6,7 +6,7 @@ scope:         component
 program:       Compass
 component:     authoring-assistance
 language:      en
-status:        Accepted
+status:        Implemented
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
@@ -58,7 +58,7 @@ COMPASS-0016.
 
 ### COMPASS-D65 — `migrated-from` is checked by a rule of its own
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** A `migrated-from` value is a path at a revision, as a pinned code
 reference is, and `ref/code-exists` already resolves those against Git in one
 batched process per repository. But the value lives in front-matter, not in a
@@ -82,7 +82,7 @@ a pin left stale).
 
 ### COMPASS-D66 — The revision is a commit's hash, never a branch or tag
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** A code reference may be pinned to `HEAD` or a tag, which move, or
 are moved. `migrated-from` states what the original was when it was reshaped,
 and must keep meaning that.
@@ -96,7 +96,7 @@ COMPASS-D70 pins the last commit that changed the original).
 
 ### COMPASS-D67 — The pending check for `provenance` keys keeps a test after both keys are accepted
 
-**Status:** Proposed
+**Status:** Implemented
 **Context:** `migrated-from` was first pending, naming
 COMPASS-D70, and `vocab/pending` learned to report a pending key
 of `provenance` (`src/rules/frontmatter.lisp:vocab/pending@6a7c860`). With

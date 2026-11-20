@@ -89,7 +89,7 @@ steward.
 
 ### COMPASS-D49 — One shared toolchain guide, and a short summary in each skill
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** Three skills run `compass` and need the same facts: where the
 executable is, which commands it has, what each exit code means, how to read
@@ -114,7 +114,7 @@ both sections.
 
 ### COMPASS-D50 — Review checks the whole corpus and separates the change's findings
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** A review concerns the documents a change touches, but a
 repository that is migrating to Compass may have many errors elsewhere: Classic
@@ -160,7 +160,7 @@ be described in the guide.
 
 ### COMPASS-D52 — Templates give new decisions the status Proposed
 
-**Status:** Accepted
+**Status:** Implemented
 
 **Context:** The Plan, Log, and Architecture templates set `**Status:**
 Accepted` on their decision record. An agent filling in a template would set

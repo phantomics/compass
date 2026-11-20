@@ -1,5 +1,5 @@
 ---
-id:            COMPASS-DRAFT-ledger-critique
+id:            COMPASS-0019
 title:         The Allocation Ledger — Critique
 genre:         Eval
 subtype:       critique
