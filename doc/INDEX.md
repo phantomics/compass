@@ -32,6 +32,7 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md) | Compass Defect-Detection Study — Does Review Find What Is Wrong with a Document? | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-snapshot](Plan.EvalSnapshot.md) | Compass Snapshot Study — Planning Track 1 of the Agent-Context Evaluation | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
+| [COMPASS-DRAFT-pending-tool-log](Log.PendingTool.md) | Compass Pending Development Log | Log | component | Draft | toolchain |
 | [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
@@ -169,6 +170,10 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-D14](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d14--the-study-is-chronicled-in-this-plan-a-log-and-updates-to-compass-0006) | Decision | The study is chronicled in this Plan, a Log, and updates to COMPASS-0006 | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D15](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d15--the-paper-lives-in-pub-as-an-acm-preprint-derived-from-the-record) | Decision | The paper lives in pub/, as an ACM preprint derived from the record | Proposed | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-D16](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-d16--the-compass-toolchain-and-skills-are-present-in-every-workspace) | Decision | The Compass toolchain and skills are present in every workspace | Proposed | COMPASS-DRAFT-eval-snapshot |
+| [COMPASS-DRAFT-pending-tool-log-D1](Log.PendingTool.md#compass-draft-pending-tool-log-d1--without-git-the-username-blocker-says-git-was-not-found) | Decision | Without Git, the user.name blocker says Git was not found | Proposed | COMPASS-DRAFT-pending-tool-log |
+| [COMPASS-DRAFT-pending-tool-log-D2](Log.PendingTool.md#compass-draft-pending-tool-log-d2--the-missing-username-message-names-mailmap) | Decision | The missing user.name message names .mailmap | Proposed | COMPASS-DRAFT-pending-tool-log |
+| [COMPASS-DRAFT-pending-tool-log-D3](Log.PendingTool.md#compass-draft-pending-tool-log-d3--the-summary-counts-the-whole-listing-even-with---ready) | Decision | The summary counts the whole listing, even with --ready | Proposed | COMPASS-DRAFT-pending-tool-log |
+| [COMPASS-DRAFT-pending-tool-log-D4](Log.PendingTool.md#compass-draft-pending-tool-log-d4--the-note-is-skipped-when-no-checked-document-could-be-ready) | Decision | The note is skipped when no checked document could be ready | Proposed | COMPASS-DRAFT-pending-tool-log |
 | [COMPASS-DRAFT-toolchain-D30](Plan.Toolchain.md#compass-draft-toolchain-d30--compass-pending-lists-what-is-waiting-for-a-number) | Decision | compass pending lists what is waiting for a number | Proposed | COMPASS-0004 |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |

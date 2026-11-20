@@ -6,7 +6,7 @@ Compass is a formalized methodology for documenting software projects. It includ
 
 ## The toolchain
 
-`compass` checks a repository's documents against the standard, shows documents and records by identifier, generates the namespace index, and assigns identifiers through an append-only ledger, so that no number is ever allocated twice. Version 0.2 adds the ledger and its rules, `assign` and `renumber`, fields derived from Git, checks of commit-pinned code references, federation, and CI; see [COMPASS-0004](doc/Plan.Toolchain.md) for the plan and its later releases, and [COMPASS-0013](doc/Log.Ledger.md) for how version 0.2 was built.
+`compass` checks a repository's documents against the standard, shows documents and records by identifier, generates the namespace index, and assigns identifiers through an append-only ledger, so that no number is ever allocated twice. Version 0.2 adds the ledger and its rules, `assign` and `renumber`, fields derived from Git, checks of commit-pinned code references, federation, and CI; see [COMPASS-0004](doc/Plan.Toolchain.md) for the plan and its later releases, and [COMPASS-0013](doc/Log.Ledger.md) for how version 0.2 was built. `compass pending` lists what is waiting for a number: which documents holding provisional identifiers `assign` would number now, which it would refuse and why, which wait for acceptance, and the files not yet migrated; `compass check` notes how many of the documents it checked are ready ([COMPASS-0017](doc/Plan.PendingTool.md)).
 
 Build and test it with SBCL and Quicklisp:
 
@@ -26,7 +26,7 @@ The `compass-adopt` skill sets a folder up for Compass in one step. This reposit
 
 The skill asks for the namespace the project will own, its steward, and whether the steward approves alone, then writes a `.mailmap`, the manifest `compass.sexp` (with `compass init`), the `doc/` directory with an empty allocation ledger (with `compass init --ledger`), and the Compass block of `AGENTS.md`, and runs `compass check`. It commits nothing: review the files, commit them, and restart the session so that `AGENTS.md` is loaded. Write the first document with the `compass-author` skill, usually a Survey or a Plan.
 
-A mature codebase with many existing documents needs more than this. The skill sets Compass up beside them and leaves them untouched, checking with `compass check --skip-unmarked`. The `compass-migrate` skill then converts them, one document at a time, changing only their form: it proposes each document's genre, moves it for you to commit, adds front-matter that names the original it came from (`provenance.migrated-from`), the genre's sections, decision records, and pinned code references, and reports what it noticed for you to revise afterwards. Its plan is [COMPASS-0016](doc/Plan.Migration.md).
+A mature codebase with many existing documents needs more than this. The skill sets Compass up beside them and leaves them untouched, checking with `compass check --skip-unmarked`. The `compass-migrate` skill then converts them, one document at a time, changing only their form: it proposes each document's genre, moves it for you to commit, adds front-matter that names the original it came from (`provenance.migrated-from`), the genre's sections, decision records, and pinned code references, and reports what it noticed for you to revise afterwards. `compass pending` lists the files still to migrate. Its plan is [COMPASS-0016](doc/Plan.Migration.md).
 
 Use `compass` from anywhere inside a repository:
 
@@ -42,6 +42,7 @@ compass index           # writes doc/INDEX.md
 compass index --check   # exits 1 if doc/INDEX.md is stale
 compass next COMPASS --kind decision                      # preview the next number
 compass next --in doc/Plan.Toolchain.md --kind decision   # next provisional record id
+compass pending [--ready]                      # what is waiting for a number, and what is not yet migrated
 compass assign doc/Plan.Example.md --dry-run   # number an accepted document and its records
 compass renumber --dry-run                     # after a merge conflict in the ledger
 compass init --namespace NS   # write a starting compass.sexp
@@ -66,4 +67,4 @@ The build uses Quicklisp by default. To use the versions pinned in `ocicl.csv` i
 
 ### Orienting an agent
 
-`/orient` asks an OpenCode agent to get acquainted with a Compass repository's documentation, read-only: the manifest, the index, the check, and the documents that count most, with an optional topic (`/orient the ledger`). It is defined in `commands/opencode/orient.md` and available in this repository through `.opencode/command/`; to use it in any repository, copy it to `~/.config/opencode/command/`. It is provisional, standing in for the session catalog the agent-context evaluation will settle (COMPASS-D14, COMPASS-D15, COMPASS-D43).
+`/orient` asks an OpenCode agent to get acquainted with a Compass repository's documentation, read-only: the manifest, the index, what `compass pending` lists, the check, and the documents that count most, with an optional topic (`/orient the ledger`). It is defined in `commands/opencode/orient.md` and available in this repository through `.opencode/command/`; to use it in any repository, copy it to `~/.config/opencode/command/`. It is provisional, standing in for the session catalog the agent-context evaluation will settle (COMPASS-D14, COMPASS-D15, COMPASS-D43).
