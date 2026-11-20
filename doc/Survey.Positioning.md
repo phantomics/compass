@@ -11,8 +11,6 @@ authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
 reviewed:      2026-10-19
-authors:
-  - Andrew Sengul
 provenance:
   assistant:   opencode
 relates-to:

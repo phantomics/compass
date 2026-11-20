@@ -28,7 +28,7 @@ decisions:
 # Compass Pending: Development Log
 
 This document chronicles the building of `compass pending` on 2026-11-19, in
-six commits from `1278fb3` to `7533822`: `assign`'s checks shared as blockers,
+six commits from `1278fb3` to `6c2009c`: `assign`'s checks shared as blockers,
 a cache of short references, the listing, the command, the note `compass check`
 adds, and the skills and `/orient` that point to it. The plan is
 [COMPASS-0017](Plan.PendingTool.md), its stages 3 to 8; the command's behaviour
@@ -189,7 +189,7 @@ status (COMPASS-D81), and is skipped when no checked document could be ready
 `compass-review` now describe two kinds of note: those that say what the check
 could not do, and those that give information about what it checked.
 
-### Stage 8: the skills and `/orient` (`7533822`)
+### Stage 8: the skills and `/orient` (`6c2009c`)
 
 Step 3 of `/orient` runs `compass pending`, where `compass help` lists it, and
 reports the counts in one line, naming the ready documents (COMPASS-D82).
@@ -226,14 +226,14 @@ that holds this Log. The release binaries of v0.2.1 are not yet built.
 ## Verification
 
 Run via `make test`. Before the work, at `a54ff53`, the suite ran 1317 checks,
-all passing; at `7533822` it runs 1458, all passing, under `DEPS=ql` and, from
+all passing; at `6c2009c` it runs 1458, all passing, under `DEPS=ql` and, from
 a clean clone with the pinned `ocicl.csv`, under `DEPS=ocicl`. Each commit was
 run again from a clean clone: 1339 checks at `1278fb3`, 1347 at `be934c5`, 1388
-at `e9d379e`, 1441 at `a0b6dee`, 1453 at `3c9d767`, and 1458 at `7533822`, every
+at `e9d379e`, 1441 at `a0b6dee`, 1453 at `3c9d767`, and 1458 at `6c2009c`, every
 one passing. `compass check --federation` reports no errors and no warnings,
 and `compass index --check` finds the index current. Once this Log is
 committed, the suite runs one check more, since
-`tests/test-repository.lisp:every-front-matter-block-parses@7533822` makes one
+`tests/test-repository.lisp:every-front-matter-block-parses@6c2009c` makes one
 for each document.
 
 Table: The time of `bin/compass check` on this repository's 23 documents, the median of seven runs.
@@ -253,7 +253,7 @@ drafts as waiting; `compass assign --dry-run` accepts both ready documents.
 
 ## Files
 
-Table: Files added or changed in commits `1278fb3` to `7533822`, and with this Log.
+Table: Files added or changed in commits `1278fb3` to `6c2009c`, and with this Log.
 
 | File | Action | Description |
 |------|--------|-------------|

@@ -10,7 +10,6 @@ status:        Accepted
 authors:
   - Andrew Sengul
 approved-by:   Andrew Sengul
-reviewed:      2026-10-07
 reviewed:      2026-10-19
 provenance:
   assistant:   opencode
