@@ -13,7 +13,6 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-0001](../Compass.md) | Compass: Common Ontological Model for Prose Artifacts by Structural Standard | Spec | program | Draft | — |
 | [COMPASS-0002](Spec.SourceHeaders.md) | Compass Source Headers and Source Map | Spec | program | Current | source-map |
 | [COMPASS-0003](Plan.AuthoringAssistance.md) | Compass Authoring-Assistance Layer | Plan | program | Implemented | authoring-assistance |
-| [COMPASS-0004](Plan.Toolchain.md) | Compass Validation Toolchain | Plan | program | Accepted | toolchain |
 | [COMPASS-0005](Survey.OperatorMemory.md) | Operator Memory and Compass as Agent Context | Survey | program | Accepted | authoring-assistance |
 | [COMPASS-0006](Eval.AgentContext.md) | Compass as Agent Context — Evaluating Quality Over Time | Eval (comparison) | program | Accepted | agent-context |
 | [COMPASS-0007](Plan.AgentWorkflow.md) | Compass Agent Workflow — Memos, Review Gates, and the Maintenance Loop | Plan | program | Accepted | authoring-assistance |
@@ -31,9 +30,8 @@ Table: Documents in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-corpus-qa](Plan.EvalCorpusQA.md) | Compass Corpus Question-Answering Study — Does Project Knowledge Reach the Agent? | Plan | program | Draft | agent-context |
 | [COMPASS-DRAFT-eval-defect-detection](Plan.EvalDefectDetection.md) | Compass Defect-Detection Study — Does Review Find What Is Wrong with a Document? | Plan | program | Draft | authoring-assistance |
 | [COMPASS-DRAFT-eval-snapshot](Plan.EvalSnapshot.md) | Compass Snapshot Study — Planning Track 1 of the Agent-Context Evaluation | Plan | program | Draft | agent-context |
-| [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Draft | toolchain |
+| [COMPASS-DRAFT-ledger-critique](Eval.Critique.Ledger.md) | The Allocation Ledger — Critique | Eval (critique) | component | Accepted | toolchain |
 | [COMPASS-DRAFT-pending-tool-log](Log.PendingTool.md) | Compass Pending Development Log | Log | component | Draft | toolchain |
-| [COMPASS-DRAFT-positioning](Survey.Positioning.md) | Compass Among Agent-Memory Tools — Positioning the Engineering Record | Survey | program | Draft | standard |
 
 Table: Decision, open-question, and memo records in the COMPASS namespace.
 
@@ -43,35 +41,6 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D2](Plan.AuthoringAssistance.md#compass-d2--advisory-only-until-the-toolchain-exists) | Decision | Advisory-only until the toolchain exists | Implemented | COMPASS-0003 |
 | [COMPASS-D3](Plan.AuthoringAssistance.md#compass-d3--build-authorreviewlookup-now-defer-derive) | Decision | Build author/review/lookup now; defer derive | Implemented | COMPASS-0003 |
 | [COMPASS-D4](Plan.AuthoringAssistance.md#compass-d4--harness-neutral-core-plus-shared-reference-bundle) | Decision | Harness-neutral core plus shared reference bundle | Implemented | COMPASS-0003 |
-| [COMPASS-D5](Plan.Toolchain.md#compass-d5--merge-time-ledger-plus-required-ci-as-the-uniqueness-authority) | Decision | Merge-time ledger plus required CI as the uniqueness authority | Implemented | COMPASS-0004 |
-| [COMPASS-D6](Plan.Toolchain.md#compass-d6--provisional-identifiers-for-register-entries) | Decision | Provisional identifiers for register entries | Implemented | COMPASS-0004 |
-| [COMPASS-D7](Plan.Toolchain.md#compass-d7--the-allocation-ledger-holds-immutable-facts-only) | Decision | The allocation ledger holds immutable facts only | Implemented | COMPASS-0004 |
-| [COMPASS-D8](Plan.Toolchain.md#compass-d8--a-project-manifest-declares-namespace-ownership-and-federation) | Decision | A project manifest declares namespace ownership and federation | Implemented | COMPASS-0004 |
-| [COMPASS-D9](Plan.Toolchain.md#compass-d9--supersession-uses-a-plain-status-plus-the-existing-field) | Decision | Supersession uses a plain status plus the existing field | Implemented | COMPASS-0004 |
-| [COMPASS-D10](Plan.Toolchain.md#compass-d10--checkable-conventions-for-12-and-generated-indexes) | Decision | Checkable conventions for §12, and generated indexes | Implemented | COMPASS-0004 |
-| [COMPASS-D11](Plan.Toolchain.md#compass-d11--common-lisp-with-purpose-built-parsers) | Decision | Common Lisp, with purpose-built parsers | Implemented | COMPASS-0004 |
-| [COMPASS-D12](Plan.Toolchain.md#compass-d12--manager-agnostic-system-first-class-on-both-quicklisp-and-ocicl) | Decision | Manager-agnostic system, first-class on both Quicklisp and ocicl | Implemented | COMPASS-0004 |
-| [COMPASS-D13](Plan.Toolchain.md#compass-d13--bootstrapping-the-compass-namespace) | Decision | Bootstrapping the COMPASS namespace | Implemented | COMPASS-0004 |
-| [COMPASS-D14](Plan.Toolchain.md#compass-d14--agent-context-outputs-are-generated-and-committed) | Decision | Agent-context outputs are generated and committed | Implemented | COMPASS-0004 |
-| [COMPASS-D15](Plan.Toolchain.md#compass-d15--catalog-contents-scope-and-budget) | Decision | Catalog contents, scope, and budget | Implemented | COMPASS-0004 |
-| [COMPASS-D16](Plan.Toolchain.md#compass-d16--authority-weight-is-derived-from-genre-and-status) | Decision | Authority weight is derived from genre and status | Implemented | COMPASS-0004 |
-| [COMPASS-D17](Plan.Toolchain.md#compass-d17--unknown-front-matter-keys-warn-read-if-is-a-registered-extension) | Decision | Unknown front-matter keys warn; read-if: is a registered extension | Accepted | COMPASS-0004 |
-| [COMPASS-D18](Plan.Toolchain.md#compass-d18--the-source-map-is-extracted-from-source-headers) | Decision | The source map is extracted from source headers | Implemented | COMPASS-0004 |
-| [COMPASS-D19](Plan.Toolchain.md#compass-d19--manifest-keys-for-commands-map-catalog-and-stewards) | Decision | Manifest keys for commands, map, catalog, and stewards | Implemented | COMPASS-0004 |
-| [COMPASS-D20](Plan.Toolchain.md#compass-d20--register-record-headings-carry-the-full-identifier) | Decision | Register record headings carry the full identifier | Implemented | COMPASS-0004 |
-| [COMPASS-D21](Plan.Toolchain.md#compass-d21--rdf-export-implements-the-semantic-binding) | Decision | RDF export implements the semantic binding | Proposed | COMPASS-0004 |
-| [COMPASS-D22](Plan.Toolchain.md#compass-d22--a-strict-yaml-subset-parser-written-in-lisp) | Decision | A strict YAML-subset parser written in Lisp | Implemented | COMPASS-0004 |
-| [COMPASS-D23](Plan.Toolchain.md#compass-d23--portable-binary-distribution) | Decision | Portable binary distribution | Proposed | COMPASS-0004 |
-| [COMPASS-D24](Plan.Toolchain.md#compass-d24--vocabulary-values-carry-a-standing) | Decision | Vocabulary values carry a standing | Proposed | COMPASS-0004 |
-| [COMPASS-D25](Plan.Toolchain.md#compass-d25--implementation-conventions-for-the-baseline) | Decision | Implementation conventions for the baseline | Proposed | COMPASS-0004 |
-| [COMPASS-D26](Plan.Toolchain.md#compass-d26--one-ledger-per-repository-one-entry-per-line) | Decision | One ledger per repository, one entry per line | Implemented | COMPASS-0004 |
-| [COMPASS-D27](Plan.Toolchain.md#compass-d27--provisional-records-in-a-numbered-document-reuse-its-alias) | Decision | Provisional records in a numbered document reuse its alias | Implemented | COMPASS-0004 |
-| [COMPASS-D28](Plan.Toolchain.md#compass-d28--what-compass-assign-does) | Decision | What compass assign does | Implemented | COMPASS-0004 |
-| [COMPASS-D29](Plan.Toolchain.md#compass-d29--concurrent-allocations-are-recovered-by-keeping-both-and-renumbering) | Decision | Concurrent allocations are recovered by keeping both and renumbering | Implemented | COMPASS-0004 |
-| [COMPASS-D30](Plan.Toolchain.md#compass-d30--records-are-referred-to-by-full-identifier-short-forms-are-found-not-rewritten) | Decision | Records are referred to by full identifier; short forms are found, not rewritten | Implemented | COMPASS-0004 |
-| [COMPASS-D31](Plan.Toolchain.md#compass-d31--git-derived-fields-including-for-files-not-yet-committed) | Decision | Git-derived fields, including for files not yet committed | Implemented | COMPASS-0004 |
-| [COMPASS-D32](Plan.Toolchain.md#compass-d32--which-code-references-are-checked-and-how-deeply) | Decision | Which code references are checked, and how deeply | Proposed | COMPASS-0004 |
-| [COMPASS-D33](Plan.Toolchain.md#compass-d33--federation-checks-are-opt-in-and-one-hop-deep) | Decision | Federation checks are opt-in and one hop deep | Proposed | COMPASS-0004 |
 | [COMPASS-D34](Plan.AgentWorkflow.md#compass-d34--a-memo-genre-for-durable-system-knowledge) | Decision | A Memo genre for durable system knowledge | Accepted | COMPASS-0007 |
 | [COMPASS-D35](Plan.AgentWorkflow.md#compass-d35--memos-are-numbered-records-in-a-host-document) | Decision | Memos are numbered records in a host document | Accepted | COMPASS-0007 |
 | [COMPASS-D36](Plan.AgentWorkflow.md#compass-d36--four-admission-tests-and-a-mandatory-basis) | Decision | Four admission tests, and a mandatory basis | Accepted | COMPASS-0007 |
@@ -122,7 +91,7 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-D81](Plan.PendingTool.md#compass-d81--the-note-counts-only-the-documents-check-checked) | Decision | The note counts only the documents check checked | Proposed | COMPASS-0017 |
 | [COMPASS-D82](Plan.PendingTool.md#compass-d82--orient-runs-pending-as-a-read-only-step) | Decision | /orient runs pending as a read-only step | Proposed | COMPASS-0017 |
 | [COMPASS-D83](Plan.PendingTool.md#compass-d83--files-not-yet-migrated-are-listed-as-a-fourth-group) | Decision | Files not yet migrated are listed as a fourth group | Proposed | COMPASS-0017 |
-| [COMPASS-DRAFT-authoring-assistance-D1](Plan.AuthoringAssistance.md#compass-draft-authoring-assistance-d1--a-fifth-skill-sets-a-repository-up-for-compass) | Decision | A fifth skill sets a repository up for Compass | Proposed | COMPASS-0003 |
+| [COMPASS-D84](Plan.AuthoringAssistance.md#compass-d84--a-fifth-skill-sets-a-repository-up-for-compass) | Decision | A fifth skill sets a repository up for Compass | Implemented | COMPASS-0003 |
 | [COMPASS-DRAFT-emacs-review-D1](Plan.EmacsReview.md#compass-draft-emacs-review-d1--writes-live-in-the-toolchain-editors-drive-them) | Decision | Writes live in the toolchain; editors drive them | Proposed | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-D2](Plan.EmacsReview.md#compass-draft-emacs-review-d2--four-write-commands) | Decision | Four write commands | Proposed | COMPASS-DRAFT-emacs-review |
 | [COMPASS-DRAFT-emacs-review-D3](Plan.EmacsReview.md#compass-draft-emacs-review-d3--acts-reserved-for-people-are-enforced-by-the-commands) | Decision | Acts reserved for people are enforced by the commands | Proposed | COMPASS-DRAFT-emacs-review |
@@ -174,17 +143,9 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-pending-tool-log-D2](Log.PendingTool.md#compass-draft-pending-tool-log-d2--the-missing-username-message-names-mailmap) | Decision | The missing user.name message names .mailmap | Proposed | COMPASS-DRAFT-pending-tool-log |
 | [COMPASS-DRAFT-pending-tool-log-D3](Log.PendingTool.md#compass-draft-pending-tool-log-d3--the-summary-counts-the-whole-listing-even-with---ready) | Decision | The summary counts the whole listing, even with --ready | Proposed | COMPASS-DRAFT-pending-tool-log |
 | [COMPASS-DRAFT-pending-tool-log-D4](Log.PendingTool.md#compass-draft-pending-tool-log-d4--the-note-is-skipped-when-no-checked-document-could-be-ready) | Decision | The note is skipped when no checked document could be ready | Proposed | COMPASS-DRAFT-pending-tool-log |
-| [COMPASS-DRAFT-toolchain-D30](Plan.Toolchain.md#compass-draft-toolchain-d30--compass-pending-lists-what-is-waiting-for-a-number) | Decision | compass pending lists what is waiting for a number | Proposed | COMPASS-0004 |
 | [COMPASS-O1](Plan.AuthoringAssistance.md#compass-o1--advisory-mode-conformance-signalling) | Open question | Advisory-mode conformance signalling | — | COMPASS-0003 |
 | [COMPASS-O2](Plan.AuthoringAssistance.md#compass-o2--registry-access-before-the-toolchain-exists) | Open question | Registry access before the toolchain exists | — | COMPASS-0003 |
 | [COMPASS-O3](Plan.AuthoringAssistance.md#compass-o3--provenance-depth-for-llm-assistance) | Open question | Provenance depth for LLM assistance | — | COMPASS-0003 |
-| [COMPASS-O4](Plan.Toolchain.md#compass-o4--native-yaml-or-a-pure-lisp-subset-parser) | Open question | Native YAML or a pure-Lisp subset parser | — | COMPASS-0004 |
-| [COMPASS-O5](Plan.Toolchain.md#compass-o5--distributing-the-checker-to-downstream-repositories) | Open question | Distributing the checker to downstream repositories | — | COMPASS-0004 |
-| [COMPASS-O6](Plan.Toolchain.md#compass-o6--where-the-namespace-table-is-authoritative) | Open question | Where the namespace table is authoritative | — | COMPASS-0004 |
-| [COMPASS-O7](Plan.Toolchain.md#compass-o7--depth-of-code-reference-verification) | Open question | Depth of code-reference verification | — | COMPASS-0004 |
-| [COMPASS-O8](Plan.Toolchain.md#compass-o8--treatment-of-pre-compass-documents) | Open question | Treatment of pre-Compass documents | — | COMPASS-0004 |
-| [COMPASS-O9](Plan.Toolchain.md#compass-o9--detecting-stale-source-headers) | Open question | Detecting stale source headers | — | COMPASS-0004 |
-| [COMPASS-O10](Plan.Toolchain.md#compass-o10--catalog-freshness-in-a-working-tree) | Open question | Catalog freshness in a working tree | — | COMPASS-0004 |
 | [COMPASS-O11](Survey.OperatorMemory.md#compass-o11--import-coexist-or-both) | Open question | Import, coexist, or both | — | COMPASS-0005 |
 | [COMPASS-O12](Survey.OperatorMemory.md#compass-o12--shape-and-budget-of-the-session-catalog) | Open question | Shape and budget of the session catalog | — | COMPASS-0005 |
 | [COMPASS-O13](Survey.OperatorMemory.md#compass-o13--is-a-codebase-map-a-compass-concern) | Open question | Is a codebase map a Compass concern? | — | COMPASS-0005 |
@@ -253,9 +214,3 @@ Table: Decision, open-question, and memo records in the COMPASS namespace.
 | [COMPASS-DRAFT-eval-snapshot-O5](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o5--pre-registration-and-the-release-of-tasks) | Open question | Pre-registration and the release of tasks | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O6](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o6--the-budget-and-what-is-cut-first) | Open question | The budget and what is cut first | — | COMPASS-DRAFT-eval-snapshot |
 | [COMPASS-DRAFT-eval-snapshot-O7](Plan.EvalSnapshot.md#compass-draft-eval-snapshot-o7--the-conference-and-anonymity) | Open question | The conference and anonymity | — | COMPASS-DRAFT-eval-snapshot |
-| [COMPASS-DRAFT-positioning-O1](Survey.Positioning.md#compass-draft-positioning-o1--which-name-to-lead-with) | Open question | Which name to lead with | — | COMPASS-DRAFT-positioning |
-| [COMPASS-DRAFT-positioning-O2](Survey.Positioning.md#compass-draft-positioning-o2--integrate-with-memory-tools-or-compete) | Open question | Integrate with memory tools, or compete | — | COMPASS-DRAFT-positioning |
-| [COMPASS-DRAFT-positioning-O3](Survey.Positioning.md#compass-draft-positioning-o3--agent-journals-and-decision-records) | Open question | Agent journals and decision records | — | COMPASS-DRAFT-positioning |
-| [COMPASS-DRAFT-positioning-O4](Survey.Positioning.md#compass-draft-positioning-o4--the-first-proof-of-the-records-value) | Open question | The first proof of the record's value | — | COMPASS-DRAFT-positioning |
-| [COMPASS-DRAFT-positioning-O5](Survey.Positioning.md#compass-draft-positioning-o5--becoming-a-standard-in-fact) | Open question | Becoming a standard in fact | — | COMPASS-DRAFT-positioning |
-| [COMPASS-DRAFT-positioning-O6](Survey.Positioning.md#compass-draft-positioning-o6--stating-the-positioning-in-the-standard) | Open question | Stating the positioning in the standard | — | COMPASS-DRAFT-positioning |

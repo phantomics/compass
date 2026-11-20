@@ -1,0 +1,124 @@
+# release-spike.yml — Build, test, and measure the compass executable on each release target
+#
+# The spike of COMPASS-0004's roadmap step 7, before the release workflow of
+# COMPASS-D23: on each target, does an unsigned SBCL executable build, run,
+# pass the tests, and invoke Git, and how large is its archive? Started by hand;
+# it publishes nothing. Each job's summary holds the results, and its artifact
+# the archive and logs. Retire this workflow when the release workflow exists.
+
+name: release-spike
+
+on:
+  workflow_dispatch:
+    inputs:
+      sbcl:
+        description: SBCL version to build with
+        default: 2.6.10
+
+permissions:
+  contents: read
+
+env:
+  SBCL_VERSION: ${{ inputs.sbcl }}
+
+jobs:
+  linux:
+    name: spike (linux-${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    # An old glibc, so the executable also runs on Debian 11 and later (COMPASS-D23).
+    container: debian:11
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    steps:
+      - name: Install Git and the build tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git ca-certificates curl bzip2 \
+                  make gcc libc6-dev binutils sbcl
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build SBCL from source, with Debian's SBCL as the host
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          start=$SECONDS
+          curl -fsSL -o /tmp/sbcl.tar.bz2 \
+               "https://downloads.sourceforge.net/project/sbcl/sbcl/${SBCL_VERSION}/sbcl-${SBCL_VERSION}-source.tar.bz2"
+          tar -xjf /tmp/sbcl.tar.bz2 -C /tmp
+          (cd "/tmp/sbcl-${SBCL_VERSION}" && sh make.sh --prefix=/usr/local > /tmp/sbcl-build.log 2>&1 \
+             && sh install.sh > /dev/null) || { tail -40 /tmp/sbcl-build.log; exit 1; }
+          apt-get remove -y sbcl > /dev/null
+          echo "SBCL built in $((SECONDS - start)) s: $(sbcl --version)"
+
+      - name: Spike
+        run: bash scripts/release-spike.sh "linux-${{ matrix.arch }}"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: spike-linux-${{ matrix.arch }}
+          path: dist/
+          retention-days: 14
+
+  native:
+    name: spike (${{ matrix.target }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: macos-arm64
+            runner: macos-15          # Homebrew has SBCL bottles for macOS 15 and later
+          - target: windows-x86_64
+            runner: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install SBCL (macOS, Homebrew)
+        if: runner.os == 'macOS'
+        run: |
+          brew install sbcl
+          sbcl --version
+          case "$(sbcl --version)" in
+            *"$SBCL_VERSION"*) ;;
+            *) echo "::warning::Homebrew's SBCL is not $SBCL_VERSION" ;;
+          esac
+
+      - name: Download SBCL (Windows, the official installer)
+        if: runner.os == 'Windows'
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/sbcl.msi" \
+               "https://downloads.sourceforge.net/project/sbcl/sbcl/${SBCL_VERSION}/sbcl-${SBCL_VERSION}-x86-64-windows-binary.msi"
+
+      - name: Install SBCL (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Start-Process msiexec.exe -Wait -ArgumentList '/i', "$env:RUNNER_TEMP\sbcl.msi", '/qn', '/norestart'
+          $exe = Get-ChildItem 'C:\Program Files\Steel Bank Common Lisp' -Recurse -Filter sbcl.exe | Select-Object -First 1
+          $exe.DirectoryName | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "SBCL_HOME=$($exe.DirectoryName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & $exe.FullName --version
+
+      - name: Spike
+        run: bash scripts/release-spike.sh "${{ matrix.target }}"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: spike-${{ matrix.target }}
+          path: dist/
+          retention-days: 14

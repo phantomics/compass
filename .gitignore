@@ -11,6 +11,7 @@
 
 # Build outputs
 /bin/
+/dist/
 
 # ocicl dependency tree (ocicl.csv is committed)
 /ocicl/

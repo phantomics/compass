@@ -304,7 +304,7 @@ Table: The files each part of the work touches.
 | The note (COMPASS-D81) | the `check` command in `src/cli.lisp` |
 | `/orient` (COMPASS-D82) | `commands/opencode/orient.md` |
 | Skills' reference | `skills/reference/toolchain.md` |
-| Tests | `tests/test-allocate.lisp`, `tests/test-pending.lisp` (new), `tests/test-cli.lisp`, `tests/test-skills.lisp` |
+| Tests | `tests/test-allocate.lisp`, `tests/test-pending.lisp` (new), `tests/test-skills.lisp` |
 
 The new source file opens with a source header naming
 COMPASS-DRAFT-toolchain-D30 and this plan's decisions, and is listed in

@@ -6,7 +6,11 @@ scope:         program
 program:       Compass
 component:     standard
 language:      en
-status:        Draft
+status:        Accepted
+authors:
+  - Andrew Sengul
+approved-by:   Andrew Sengul
+reviewed:      2026-10-19
 authors:
   - Andrew Sengul
 provenance:

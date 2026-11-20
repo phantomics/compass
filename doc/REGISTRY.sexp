@@ -156,3 +156,4 @@
 (:id "COMPASS-O53" :kind :open-question :draft "COMPASS-DRAFT-pending-tool-O1" :host "COMPASS-0017" :date "2026-11-19" :by "Andrew Sengul")
 (:id "COMPASS-O54" :kind :open-question :draft "COMPASS-DRAFT-pending-tool-O2" :host "COMPASS-0017" :date "2026-11-19" :by "Andrew Sengul")
 (:id "COMPASS-O55" :kind :open-question :draft "COMPASS-DRAFT-pending-tool-O3" :host "COMPASS-0017" :date "2026-11-19" :by "Andrew Sengul")
+(:id "COMPASS-D84" :kind :decision :draft "COMPASS-DRAFT-authoring-assistance-D1" :host "COMPASS-0003" :date "2026-11-19" :by "Andrew Sengul")
