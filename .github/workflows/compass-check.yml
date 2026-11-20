@@ -41,11 +41,21 @@ jobs:
           sbcl --non-interactive --load /tmp/quicklisp.lisp \
                --eval '(quicklisp-quickstart:install :dist-url "http://beta.quicklisp.org/dist/quicklisp/2023-06-18/distinfo.txt")'
 
+      # A prebuilt release, checked against its published SHA256SUMS: building
+      # ocicl from source with the runner's SBCL broke when SBCL 2.6.0 met the
+      # older named-readtables that ocicl v2.6.6 bundled.
       - name: Install ocicl and the pinned dependencies
         if: matrix.deps == 'ocicl'
+        env:
+          OCICL_VERSION: 2.21.0
+          OCICL_SHA256: a395043d1fe9cdb946a9434340b5965889ad7c8f99e42ce2cebc32038cf692e5
         run: |
-          git clone --depth 1 --branch v2.6.6 https://github.com/ocicl/ocicl.git /tmp/ocicl
-          (cd /tmp/ocicl && sbcl --non-interactive --load setup.lisp)
+          archive="ocicl-${OCICL_VERSION}-linux-amd64.tar.gz"
+          curl -fsSL -o "/tmp/$archive" \
+               "https://github.com/ocicl/ocicl/releases/download/v${OCICL_VERSION}/$archive"
+          echo "$OCICL_SHA256  /tmp/$archive" | sha256sum --check --strict
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf "/tmp/$archive" -C "$HOME/.local/bin" ./ocicl
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           "$HOME/.local/bin/ocicl" setup > /dev/null
           OCICL_LOCAL_ONLY= "$HOME/.local/bin/ocicl" install
